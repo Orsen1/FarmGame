@@ -1,0 +1,58 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Meta name="ExplicitAutoJoints">true</Meta>
+	<External>null</External>
+	<External>nil</External>
+	<Item class="Camera" referent="RBX42C3648AC3114892AD10C7165E487D12">
+		<Properties>
+			<CoordinateFrame name="CFrame">
+				<X>-19.6960945</X>
+				<Y>14.0916243</Y>
+				<Z>-19.3038864</Z>
+				<R00>-0.706150889</R00>
+				<R01>0.31296578</R01>
+				<R02>-0.635140419</R02>
+				<R10>1.4901163e-08</R10>
+				<R11>0.897013187</R11>
+				<R12>0.442003727</R12>
+				<R20>0.708061397</R20>
+				<R21>0.312121332</R21>
+				<R22>-0.633426666</R22>
+			</CoordinateFrame>
+			<Ref name="CameraSubject">null</Ref>
+			<token name="CameraType">0</token>
+			<float name="FieldOfView">70</float>
+			<token name="FieldOfViewMode">0</token>
+			<CoordinateFrame name="Focus">
+				<X>-18.4258137</X>
+				<Y>13.2076168</Y>
+				<Z>-18.0370331</Z>
+				<R00>1</R00>
+				<R01>0</R01>
+				<R02>0</R02>
+				<R10>0</R10>
+				<R11>1</R11>
+				<R12>0</R12>
+				<R20>0</R20>
+				<R21>0</R21>
+				<R22>1</R22>
+			</CoordinateFrame>
+			<bool name="HeadLocked">true</bool>
+			<float name="HeadScale">1</float>
+			<token name="OrthographicMode">0</token>
+			<float name="OrthographicSize">300</float>
+			<token name="ProjectionType">0</token>
+			<bool name="VRTiltAndRollEnabled">false</bool>
+			<float name="ViewStretch">1</float>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<string name="Name">Camera</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+		</Properties>
+	</Item>
+	<SharedStrings>
+		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
+	</SharedStrings>
+</roblox>

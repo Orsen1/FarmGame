@@ -2,26 +2,26 @@
   "name": "FarmGame",
   "tree": {
     "$className": "DataModel",
-
     "ServerScriptService": {
       "$path": "src/server",
       "$ignoreUnknownInstances": true
     },
-
     "ReplicatedStorage": {
       "$path": "src/shared",
       "$ignoreUnknownInstances": true
     },
-
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "$path": "src/client",
         "$ignoreUnknownInstances": true
       }
     },
-    
     "StarterGui": {
       "$path": "src/gui",
+      "$ignoreUnknownInstances": true
+    },
+    "Workspace": {
+      "$path": "src/workspace",
       "$ignoreUnknownInstances": true
     }
   }
