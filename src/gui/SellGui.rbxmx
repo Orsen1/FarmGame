@@ -3256,9 +3256,7 @@ local inventory = player:WaitForChild("Inventory")
 local remoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
 local sellItemEvent = remoteEvents:WaitForChild("SellItemEvent")
 
-local SellPrices = require(
-	ReplicatedStorage:WaitForChild("Configs"):WaitForChild("SellPrices")
-)
+local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
 local itemSellFrame = script.Parent
 local mainFrame = itemSellFrame.Parent
@@ -3311,7 +3309,8 @@ local function updateItemSellFrame()
 		return
 	end
 
-	local price = SellPrices[itemName]
+	local item = ItemDefinitions[itemName]
+	local price = item and item.SellPriceCents
 
 	if not price then
 		warn("No sell price for item:", itemName)
