@@ -3,37 +3,48 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local MoneyService = require(ServerScriptService:WaitForChild("MoneyService"))
-
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
 local SellService = {}
+local MAX_INTEGER = 9007199254740991
 
 function SellService.SellItem(player, itemName, amount)
-    local item = ItemDefinitions[itemName]
-    local price = item and item.SellPriceCents
+	if typeof(itemName) ~= "string" then
+		return false, "InvalidItem"
+	end
 
-    if price == nil then
-        print("Item cannot be sold:", itemName)
-        return false
-    end
+	if typeof(amount) ~= "number" or amount < 1
+		or amount > MAX_INTEGER or amount % 1 ~= 0 then
+		return false, "InvalidAmount"
+	end
 
-    if typeof(amount) ~= "number" or amount <= 0 or amount % 1 ~= 0 then
-        return false
-    end
+	local item = ItemDefinitions[itemName]
+	local price = item and item.SellPriceCents
 
-    local removed = InventoryService.RemoveItem(player, itemName, amount)
+	if typeof(price) ~= "number" or price < 0
+		or price > MAX_INTEGER or price % 1 ~= 0 then
+		return false, "ItemCannotBeSold"
+	end
 
-    if not removed then
-        print("Player does not have item:", itemName)
-        return false
-    end
+	local totalPrice = price * amount
+	if not MoneyService.CanAddMoney(player, totalPrice) then
+		return false, "InvalidBalanceOrAmountTooLarge"
+	end
 
-    local totalPrice = price * amount
-    MoneyService.AddMoney(player, totalPrice)
+	local removed, reason = InventoryService.RemoveItem(player, itemName, amount)
+	if not removed then
+		return false, reason
+	end
 
-    print(player.Name .. " sold " .. amount .. "x " .. itemName .. " for " .. totalPrice .. " cents")
+	local added = MoneyService.AddMoney(player, totalPrice)
+	if not added then
+		InventoryService.AddItem(player, itemName, amount)
+		return false, "MoneyCouldNotBeAdded"
+	end
 
-    return true
+	print(player.Name .. " sold " .. amount .. "x " .. itemName
+		.. " for " .. totalPrice .. " cents")
+	return true
 end
 
 return SellService
