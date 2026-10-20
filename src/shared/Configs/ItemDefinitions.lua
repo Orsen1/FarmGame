@@ -3,7 +3,7 @@ local ItemDefinitions = {
         DisplayName = "Морковь",
         Type = "Product",
         SellPriceCents = 5,
-        Icon = "",
+        Icon = "🥕",
     },
 
     CarrotSeed = {
@@ -11,14 +11,14 @@ local ItemDefinitions = {
         Type = "Seed",
         BuyPriceCents = 2,
         PlantId = "Carrot",
-        Icon = "",
+        Icon = "🌱",
     },
 
     Potato = {
         DisplayName = "Картофель",
         Type = "Product",
         SellPriceCents = 8,
-        Icon = "",
+        Icon = "🥔",
     },
 
     PotatoSeed = {
@@ -26,7 +26,7 @@ local ItemDefinitions = {
         Type = "Seed",
         BuyPriceCents = 4,
         PlantId = "Potato",
-        Icon = "",
+        Icon = "🌱",
     },
 }
 

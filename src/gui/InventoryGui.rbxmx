@@ -2814,6 +2814,7 @@
 			<Properties>
 				<ProtectedString name="Source"><![CDATA[local replicatedStorage = game:GetService("ReplicatedStorage")
 local setSelectedSlotEvent = replicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
+local ItemDefinitions = require(replicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
 local player = game.Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
@@ -2841,13 +2842,9 @@ local function isSeed(itemName)
 end
 
 local function getIcon(itemName)
-	if itemName == "CarrotSeed" then
-		return "🌱"
-	elseif itemName == "Carrot" then
-		return "🥕"
-	end
-
-	return ""
+	local itemDefinition = ItemDefinitions[itemName]
+	local icon = itemDefinition.Icon
+	return icon
 end
 
 
