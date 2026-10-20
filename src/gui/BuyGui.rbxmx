@@ -5867,10 +5867,7 @@
 			</Item>
 			<Item class="UISizeConstraint" referent="RBX814DE5983EA84BB6AE72E6C0F64CBB28">
 				<Properties>
-					<Vector2 name="MaxSize">
-						<X>800</X>
-						<Y>560</Y>
-					</Vector2>
+					<Vector2 name="MaxSize"><X>1080</X><Y>756</Y></Vector2>
 					<Vector2 name="MinSize">
 						<X>0</X>
 						<Y>0</Y>
@@ -6595,27 +6592,29 @@ local function resize()
     if size.X <= 0 or size.Y <= 0 then return end
     local narrow = size.X < 600
     local short = size.Y < 500
-    main.UISizeConstraint.MaxSize = Vector2.new(800, narrow and 720 or 560)
-    main.Size = UDim2.new(0.94, 0, narrow and 0.94 or short and 0.92 or 0.88, 0)
+    local desktopScale = math.clamp(math.min(size.X / 1366, size.Y / 768), 1, 1.35)
+    main.UISizeConstraint.MaxSize = Vector2.new(800 * desktopScale, narrow and 720 or 560 * desktopScale)
+    main.Size = UDim2.new(narrow and 0.9 or short and 0.86 or 0.86, 0, narrow and 0.84 or short and 0.8 or 0.82, 0)
+    main.Position = UDim2.fromScale(0.5, short and not narrow and 0.41 or 0.48)
     local compact = short and main.AbsoluteSize.X >= 500
     main:SetAttribute("LayoutProfile", narrow and "PhonePortrait" or short and "ShortLandscape" or "Desktop")
-    main.HeaderFrame.Size = UDim2.new(0.5, 0, 0, compact and 44 or 56)
+    main.HeaderFrame.Size = UDim2.new(0.5, 0, 0, compact and 36 or 56)
     main.HeaderFrame.Position = UDim2.new(0.5, 0, 0, compact and 8 or 12)
-    main.CloseButton.Size = UDim2.new(0, compact and 44 or 48, 0, compact and 44 or 48)
+    main.CloseButton.Size = UDim2.new(0, compact and 36 or 48, 0, compact and 36 or 48)
     main.CloseButton.Position = UDim2.new(1, compact and -60 or -64, 0, compact and 8 or 16)
     for _, frame in ipairs({main.InnerFrame, main.ItemBuyFrame}) do
-        frame.Position = UDim2.new(0, 15, 0, compact and 64 or 80)
-        frame.Size = UDim2.new(1, -30, 1, compact and -110 or -126)
+        frame.Position = UDim2.new(0, 15, 0, compact and 52 or 80)
+        frame.Size = UDim2.new(1, -30, 1, compact and -94 or -126)
     end
     main.FooterFrame.HintLabel.Visible = main.AbsoluteSize.X >= 500
     main.FooterFrame.MoneyLabel.Size = UDim2.new(main.AbsoluteSize.X >= 500 and 0.5 or 1, 0, 1, 0)
     for _, frame in ipairs(grids) do
         -- Relative cell widths stay correct when the viewport changes.
-        local twoColumns = frame.AbsoluteSize.X >= 580
+        local twoColumns = frame.AbsoluteSize.X >= (compact and 480 or 580)
         frame.UIGridLayout.FillDirectionMaxCells = twoColumns and 2 or 1
         frame.UIGridLayout.CellSize = UDim2.new(twoColumns and 0.5 or 1, twoColumns and -14 or -16, 0, frame.Name == "CategoriesFrame" and 104 or 118)
     end
-    local scale = compact and 1 or math.clamp((details.Parent.AbsoluteSize.Y - 8) / 412, 0.75, 1)
+    local scale = compact and math.clamp((details.Parent.AbsoluteSize.Y - 4) / 188, 0.5, 1) or math.clamp((details.Parent.AbsoluteSize.Y - 8) / 412, 0.75, desktopScale)
     details.UIScale.Scale = scale
     local width = math.max(1, details.AbsoluteSize.X / scale)
     local column = compact and width / 2 or width
@@ -6744,7 +6743,7 @@ gui.Overlay.Visible = main.Visible
 					<G>0</G>
 					<B>0</B>
 				</Color3>
-				<float name="BackgroundTransparency">0.600000024</float>
+				<float name="BackgroundTransparency">1</float>
 				<Color3 name="BorderColor3">
 					<R>0.105882354</R>
 					<G>0.164705887</G>

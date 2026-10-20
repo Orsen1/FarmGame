@@ -55,23 +55,13 @@
 				<Ref name="NextSelectionLeft">null</Ref>
 				<Ref name="NextSelectionRight">null</Ref>
 				<Ref name="NextSelectionUp">null</Ref>
-				<UDim2 name="Position">
-					<XS>0.5</XS>
-					<XO>0</XO>
-					<YS>1</YS>
-					<YO>-20</YO>
-				</UDim2>
+				<UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0.98</YS><YO>0</YO></UDim2>
 				<float name="Rotation">0</float>
 				<bool name="Selectable">false</bool>
 				<Ref name="SelectionImageObject">null</Ref>
 				<int name="SelectionOrder">0</int>
 				<token name="Sink">0</token>
-				<UDim2 name="Size">
-					<XS>0</XS>
-					<XO>600</XO>
-					<YS>0</YS>
-					<YO>90</YO>
-				</UDim2>
+				<UDim2 name="Size"><XS>0.92</XS><XO>0</XO><YS>0.18</YS><YO>0</YO></UDim2>
 				<token name="SizeConstraint">0</token>
 				<bool name="Visible">true</bool>
 				<int name="ZIndex">1</int>
@@ -144,22 +134,10 @@
 			</Item>
 			<Item class="UIPadding" referent="RBXD0C88AB2AAEF49B7896E3A4A19203F2F">
 				<Properties>
-					<UDim name="PaddingBottom">
-						<S>0</S>
-						<O>8</O>
-					</UDim>
-					<UDim name="PaddingLeft">
-						<S>0</S>
-						<O>40</O>
-					</UDim>
-					<UDim name="PaddingRight">
-						<S>0</S>
-						<O>40</O>
-					</UDim>
-					<UDim name="PaddingTop">
-						<S>0</S>
-						<O>8</O>
-					</UDim>
+					<UDim name="PaddingBottom"><S>0.0888888888889</S><O>0</O></UDim>
+					<UDim name="PaddingLeft"><S>0.0666666666667</S><O>0</O></UDim>
+					<UDim name="PaddingRight"><S>0.0666666666667</S><O>0</O></UDim>
+					<UDim name="PaddingTop"><S>0.0888888888889</S><O>0</O></UDim>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
@@ -172,10 +150,7 @@
 				<Properties>
 					<token name="HorizontalFlex">0</token>
 					<token name="ItemLineAlignment">0</token>
-					<UDim name="Padding">
-						<S>0</S>
-						<O>20</O>
-					</UDim>
+					<UDim name="Padding"><S>0.0384615384615</S><O>0</O></UDim>
 					<token name="VerticalFlex">0</token>
 					<bool name="Wraps">false</bool>
 					<token name="FillDirection">0</token>
@@ -231,12 +206,7 @@
 					<Ref name="SelectionImageObject">null</Ref>
 					<int name="SelectionOrder">0</int>
 					<token name="Sink">0</token>
-					<UDim2 name="Size">
-						<XS>0</XS>
-						<XO>70</XO>
-						<YS>0</YS>
-						<YO>70</YO>
-					</UDim2>
+					<UDim2 name="Size"><XS>0.134615384615</XS><XO>0</XO><YS>0.945945945946</YS><YO>0</YO></UDim2>
 					<token name="SizeConstraint">0</token>
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">1</int>
@@ -367,23 +337,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>1</XS>
-							<XO>-34</XO>
-							<YS>1</YS>
-							<YO>-26</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.514285714286</XS><XO>0</XO><YS>0.628571428571</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>30</XO>
-							<YS>0</YS>
-							<YO>24</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.428571428571</XS><XO>0</XO><YS>0.342857142857</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -423,7 +383,7 @@
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">30</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -463,23 +423,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>0.5</XS>
-							<XO>0</XO>
-							<YS>0.5</YS>
-							<YO>-3</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0.457142857143</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>50</XO>
-							<YS>0</YS>
-							<YO>50</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.714285714286</XS><XO>0</XO><YS>0.714285714286</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -497,7 +447,8 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
-				</Item>
+				<Item class="UITextSizeConstraint" referent="RBX_StarterGui_InventoryGui_HotbarFrame_Slot1_ItemIcon_ResponsiveTextSize"><Properties><string name="Name">ResponsiveTextSize</string><int name="MaxTextSize">39</int><int name="MinTextSize">1</int></Properties></Item>
+</Item>
 				<Item class="TextButton" referent="RBX16F5256F12E34F288B2BCBCCF3A91A20">
 					<Properties>
 						<Font name="FontFace">
@@ -642,12 +593,7 @@
 					<Ref name="SelectionImageObject">null</Ref>
 					<int name="SelectionOrder">0</int>
 					<token name="Sink">0</token>
-					<UDim2 name="Size">
-						<XS>0</XS>
-						<XO>70</XO>
-						<YS>0</YS>
-						<YO>70</YO>
-					</UDim2>
+					<UDim2 name="Size"><XS>0.134615384615</XS><XO>0</XO><YS>0.945945945946</YS><YO>0</YO></UDim2>
 					<token name="SizeConstraint">0</token>
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">1</int>
@@ -739,7 +685,7 @@
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">30</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -779,23 +725,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>0.5</XS>
-							<XO>0</XO>
-							<YS>0.5</YS>
-							<YO>-3</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0.457142857143</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>50</XO>
-							<YS>0</YS>
-							<YO>50</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.714285714286</XS><XO>0</XO><YS>0.714285714286</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -813,7 +749,8 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
-				</Item>
+				<Item class="UITextSizeConstraint" referent="RBX_StarterGui_InventoryGui_HotbarFrame_Slot2_ItemIcon_ResponsiveTextSize"><Properties><string name="Name">ResponsiveTextSize</string><int name="MaxTextSize">39</int><int name="MinTextSize">1</int></Properties></Item>
+</Item>
 				<Item class="TextLabel" referent="RBXB26F1D86E47445688ED0D899F9CBF2D5">
 					<Properties>
 						<Font name="FontFace">
@@ -874,23 +811,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>1</XS>
-							<XO>-34</XO>
-							<YS>1</YS>
-							<YO>-26</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.514285714286</XS><XO>0</XO><YS>0.628571428571</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>30</XO>
-							<YS>0</YS>
-							<YO>24</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.428571428571</XS><XO>0</XO><YS>0.342857142857</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -1053,12 +980,7 @@
 					<Ref name="SelectionImageObject">null</Ref>
 					<int name="SelectionOrder">0</int>
 					<token name="Sink">0</token>
-					<UDim2 name="Size">
-						<XS>0</XS>
-						<XO>70</XO>
-						<YS>0</YS>
-						<YO>70</YO>
-					</UDim2>
+					<UDim2 name="Size"><XS>0.134615384615</XS><XO>0</XO><YS>0.945945945946</YS><YO>0</YO></UDim2>
 					<token name="SizeConstraint">0</token>
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">1</int>
@@ -1150,7 +1072,7 @@
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">30</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -1190,23 +1112,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>0.5</XS>
-							<XO>0</XO>
-							<YS>0.5</YS>
-							<YO>-3</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0.457142857143</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>50</XO>
-							<YS>0</YS>
-							<YO>50</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.714285714286</XS><XO>0</XO><YS>0.714285714286</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -1224,7 +1136,8 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
-				</Item>
+				<Item class="UITextSizeConstraint" referent="RBX_StarterGui_InventoryGui_HotbarFrame_Slot3_ItemIcon_ResponsiveTextSize"><Properties><string name="Name">ResponsiveTextSize</string><int name="MaxTextSize">39</int><int name="MinTextSize">1</int></Properties></Item>
+</Item>
 				<Item class="TextLabel" referent="RBX6ED6E3FC87944C4B9BA016B8571ECD91">
 					<Properties>
 						<Font name="FontFace">
@@ -1285,23 +1198,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>1</XS>
-							<XO>-34</XO>
-							<YS>1</YS>
-							<YO>-26</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.514285714286</XS><XO>0</XO><YS>0.628571428571</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>30</XO>
-							<YS>0</YS>
-							<YO>24</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.428571428571</XS><XO>0</XO><YS>0.342857142857</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -1464,12 +1367,7 @@
 					<Ref name="SelectionImageObject">null</Ref>
 					<int name="SelectionOrder">0</int>
 					<token name="Sink">0</token>
-					<UDim2 name="Size">
-						<XS>0</XS>
-						<XO>70</XO>
-						<YS>0</YS>
-						<YO>70</YO>
-					</UDim2>
+					<UDim2 name="Size"><XS>0.134615384615</XS><XO>0</XO><YS>0.945945945946</YS><YO>0</YO></UDim2>
 					<token name="SizeConstraint">0</token>
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">1</int>
@@ -1561,7 +1459,7 @@
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">30</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -1601,23 +1499,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>0.5</XS>
-							<XO>0</XO>
-							<YS>0.5</YS>
-							<YO>-3</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0.457142857143</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>50</XO>
-							<YS>0</YS>
-							<YO>50</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.714285714286</XS><XO>0</XO><YS>0.714285714286</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -1635,7 +1523,8 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
-				</Item>
+				<Item class="UITextSizeConstraint" referent="RBX_StarterGui_InventoryGui_HotbarFrame_Slot4_ItemIcon_ResponsiveTextSize"><Properties><string name="Name">ResponsiveTextSize</string><int name="MaxTextSize">39</int><int name="MinTextSize">1</int></Properties></Item>
+</Item>
 				<Item class="TextLabel" referent="RBX5B47743021D04F5DA3DE56EA7F2A223C">
 					<Properties>
 						<Font name="FontFace">
@@ -1696,23 +1585,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>1</XS>
-							<XO>-34</XO>
-							<YS>1</YS>
-							<YO>-26</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.514285714286</XS><XO>0</XO><YS>0.628571428571</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>30</XO>
-							<YS>0</YS>
-							<YO>24</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.428571428571</XS><XO>0</XO><YS>0.342857142857</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -1875,12 +1754,7 @@
 					<Ref name="SelectionImageObject">null</Ref>
 					<int name="SelectionOrder">0</int>
 					<token name="Sink">0</token>
-					<UDim2 name="Size">
-						<XS>0</XS>
-						<XO>70</XO>
-						<YS>0</YS>
-						<YO>70</YO>
-					</UDim2>
+					<UDim2 name="Size"><XS>0.134615384615</XS><XO>0</XO><YS>0.945945945946</YS><YO>0</YO></UDim2>
 					<token name="SizeConstraint">0</token>
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">1</int>
@@ -1972,7 +1846,7 @@
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">30</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -2012,23 +1886,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>0.5</XS>
-							<XO>0</XO>
-							<YS>0.5</YS>
-							<YO>-3</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0.457142857143</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>50</XO>
-							<YS>0</YS>
-							<YO>50</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.714285714286</XS><XO>0</XO><YS>0.714285714286</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -2046,7 +1910,8 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
-				</Item>
+				<Item class="UITextSizeConstraint" referent="RBX_StarterGui_InventoryGui_HotbarFrame_Slot5_ItemIcon_ResponsiveTextSize"><Properties><string name="Name">ResponsiveTextSize</string><int name="MaxTextSize">39</int><int name="MinTextSize">1</int></Properties></Item>
+</Item>
 				<Item class="TextLabel" referent="RBX016DD285011E4DCEA3E6A06CF0560305">
 					<Properties>
 						<Font name="FontFace">
@@ -2107,23 +1972,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>1</XS>
-							<XO>-34</XO>
-							<YS>1</YS>
-							<YO>-26</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.514285714286</XS><XO>0</XO><YS>0.628571428571</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>30</XO>
-							<YS>0</YS>
-							<YO>24</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.428571428571</XS><XO>0</XO><YS>0.342857142857</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -2286,12 +2141,7 @@
 					<Ref name="SelectionImageObject">null</Ref>
 					<int name="SelectionOrder">0</int>
 					<token name="Sink">0</token>
-					<UDim2 name="Size">
-						<XS>0</XS>
-						<XO>70</XO>
-						<YS>0</YS>
-						<YO>70</YO>
-					</UDim2>
+					<UDim2 name="Size"><XS>0.134615384615</XS><XO>0</XO><YS>0.945945945946</YS><YO>0</YO></UDim2>
 					<token name="SizeConstraint">0</token>
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">1</int>
@@ -2383,7 +2233,7 @@
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">30</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -2423,23 +2273,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>0.5</XS>
-							<XO>0</XO>
-							<YS>0.5</YS>
-							<YO>-3</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0.457142857143</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>50</XO>
-							<YS>0</YS>
-							<YO>50</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.714285714286</XS><XO>0</XO><YS>0.714285714286</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -2457,7 +2297,8 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
-				</Item>
+				<Item class="UITextSizeConstraint" referent="RBX_StarterGui_InventoryGui_HotbarFrame_Slot6_ItemIcon_ResponsiveTextSize"><Properties><string name="Name">ResponsiveTextSize</string><int name="MaxTextSize">39</int><int name="MinTextSize">1</int></Properties></Item>
+</Item>
 				<Item class="TextLabel" referent="RBX9699254C3C1E4370807708AC66B73408">
 					<Properties>
 						<Font name="FontFace">
@@ -2518,23 +2359,13 @@
 						<Ref name="NextSelectionLeft">null</Ref>
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>1</XS>
-							<XO>-34</XO>
-							<YS>1</YS>
-							<YO>-26</YO>
-						</UDim2>
+						<UDim2 name="Position"><XS>0.514285714286</XS><XO>0</XO><YS>0.628571428571</YS><YO>0</YO></UDim2>
 						<float name="Rotation">0</float>
 						<bool name="Selectable">false</bool>
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<token name="Sink">0</token>
-						<UDim2 name="Size">
-							<XS>0</XS>
-							<XO>30</XO>
-							<YS>0</YS>
-							<YO>24</YO>
-						</UDim2>
+						<UDim2 name="Size"><XS>0.428571428571</XS><XO>0</XO><YS>0.342857142857</YS><YO>0</YO></UDim2>
 						<token name="SizeConstraint">0</token>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
@@ -2656,7 +2487,9 @@
 					</Properties>
 				</Item>
 			</Item>
-		</Item>
+		<Item class="UIAspectRatioConstraint" referent="RBX_StarterGui_InventoryGui_HotbarFrame_ResponsiveAspect"><Properties><string name="Name">ResponsiveAspect</string><float name="AspectRatio">6.666666666666667</float><token name="AspectType">0</token><token name="DominantAxis">0</token></Properties></Item>
+<Item class="UISizeConstraint" referent="RBX_StarterGui_InventoryGui_HotbarFrame_ResponsiveMaxSize"><Properties><string name="Name">ResponsiveMaxSize</string><Vector2 name="MaxSize"><X>780</X><Y>117</Y></Vector2><Vector2 name="MinSize"><X>0</X><Y>0</Y></Vector2></Properties></Item>
+</Item>
 		<Item class="LocalScript" referent="RBX8AAC1235D42E44A98F5971CDA01F442C">
 			<Properties>
 				<ProtectedString name="Source"><![CDATA[local replicatedStorage = game:GetService("ReplicatedStorage")
@@ -2816,7 +2649,26 @@ selectSlot(1)]]></ProtectedString>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
 		</Item>
-	</Item>
+	<Item class="LocalScript" referent="RBX_StarterGui_InventoryGui_ResponsiveLayout"><Properties><string name="Name">ResponsiveLayout</string><ProtectedString name="Source"><![CDATA[local UserInputService = game:GetService("UserInputService")
+
+local gui = script.Parent
+local hotbar = gui:WaitForChild("HotbarFrame")
+
+local function updatePosition()
+    local screenSize = gui.AbsoluteSize
+
+    if UserInputService.TouchEnabled and screenSize.Y > screenSize.X then
+        hotbar.Position = UDim2.new(0.5, 0, 1, -112)
+    else
+        hotbar.Position = UDim2.fromScale(0.5, 0.98)
+    end
+end
+
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(updatePosition)
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(updatePosition)
+updatePosition()
+]]></ProtectedString></Properties></Item>
+</Item>
 	<SharedStrings>
 		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
 	</SharedStrings>
