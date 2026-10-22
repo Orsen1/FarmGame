@@ -5,7 +5,6 @@ local ItemDefinitions = {
         SellPriceCents = 5,
         Icon = "🥕",
     },
-
     CarrotSeed = {
         DisplayName = "Семена моркови",
         Type = "Seed",
@@ -13,20 +12,24 @@ local ItemDefinitions = {
         PlantId = "Carrot",
         Icon = "🌱",
     },
-
     Potato = {
         DisplayName = "Картофель",
         Type = "Product",
         SellPriceCents = 8,
         Icon = "🥔",
     },
-
     PotatoSeed = {
         DisplayName = "Семена картофеля",
         Type = "Seed",
         BuyPriceCents = 4,
         PlantId = "Potato",
         Icon = "🌱",
+    },
+    GardenBed = {
+        DisplayName = "Грядка",
+        Type = "GardenBed",
+        BuyPriceCents = 39,
+        Icon = "🪴",
     },
 }
 

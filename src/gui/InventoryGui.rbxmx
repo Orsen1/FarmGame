@@ -2815,6 +2815,7 @@
 				<ProtectedString name="Source"><![CDATA[local replicatedStorage = game:GetService("ReplicatedStorage")
 local setSelectedSlotEvent = replicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
 local ItemDefinitions = require(replicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local PlacementController = require(replicatedStorage:WaitForChild("PlacementController"))
 
 local player = game.Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
@@ -2890,7 +2891,7 @@ local function isValidSlotNumber(slotNumber)
 	return typeof(slotNumber) == "number" and slotNumber >= 1 and slotNumber <= 6
 end
 
-local function selectSlot(slotNumber)
+local function selectSlot(slotNumber, activatePlacement)
 	if not isValidSlotNumber(slotNumber) then
 		warn("Invalid slot number:", slotNumber)
 		return
@@ -2920,6 +2921,16 @@ local function selectSlot(slotNumber)
 		end
 	end
 	setSelectedSlotEvent:FireServer(slotNumber)
+
+	PlacementController.cancelPlacement()
+
+	if activatePlacement ~= false then
+    	local selectedSlot = inventory:FindFirstChild("Slot" .. slotNumber)
+
+    	if selectedSlot and selectedSlot.ItemName.Value == "GardenBed" and selectedSlot.Amount.Value > 0 then
+    	    PlacementController.startPlacement("GardenBed")
+    	end
+	end
 end
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -2953,7 +2964,7 @@ for i = 1, 6 do
 	end
 end
 
-selectSlot(1)]]></ProtectedString>
+selectSlot(1, false)]]></ProtectedString>
 				<bool name="Disabled">false</bool>
 				<Content name="LinkedSource"><null></null></Content>
 				<token name="RunContext">0</token>
