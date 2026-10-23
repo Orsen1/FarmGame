@@ -20,7 +20,6 @@ local function onPlayerAdded(player)
 end
 
 Players.PlayerAdded:Connect(onPlayerAdded)
-Players.PlayerRemoving:Connect(PlayerPlotService.releasePlot)
 
 for _, player in ipairs(Players:GetPlayers()) do
     onPlayerAdded(player)
