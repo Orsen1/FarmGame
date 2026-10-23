@@ -289,7 +289,7 @@ ZQIAAAAADgAAAFJlYWR5VG9IYXJ2ZXN0AwA=]]></BinaryString>
 						<token name="GamepadKeyCode">1000</token>
 						<float name="HoldDuration">0</float>
 						<token name="KeyboardKeyCode">101</token>
-						<float name="MaxActivationDistance">8</float>
+						<float name="MaxActivationDistance">10</float>
 						<float name="MaxIndicatorDistance">0</float>
 						<string name="ObjectText">Garden bed</string>
 						<bool name="RequiresLineOfSight">true</bool>
@@ -315,43 +315,31 @@ local serverScriptService = game:GetService("ServerScriptService")
 local PlantService = require(serverScriptService:WaitForChild("PlantService"))
 
 prompt.Triggered:Connect(function(player)
-	print("GardenBedPromt triggered")
 	local gardenBed = prompt.Parent.Parent.Parent
-	local isReady = gardenBed:GetAttribute("ReadyToHarvest")
-	
-	if isReady then
-		print("GardenBedPromt opens havrest function in service (server to server)")
-		PlantService.Harvest(player, gardenBed)
-		return
-	end
-	
-	if gardenBed:GetAttribute("Occupied") then
-		return
-	end
-	
-	local selectedSlotNumber = player:GetAttribute("SelectedSlot")
-	if not selectedSlotNumber then
-		return
-	end
-	
-	local inventory = player:WaitForChild("Inventory")
-	local selectedSlot = inventory:FindFirstChild("Slot" .. selectedSlotNumber)
 
-	if not selectedSlot then
-		return
-	end
+	local inventory = player:FindFirstChild("Inventory")
+    local slotNumber = player:GetAttribute("SelectedSlot") or 1
+    local slot = inventory and inventory:FindFirstChild("Slot" .. slotNumber)
+	local itemName = slot.ItemName.Value
 
-	local itemName = selectedSlot.ItemName.Value
-	local amount = selectedSlot.Amount.Value
+	if not slot then
+        return
+    end
 
-	if itemName == "" or amount <= 0 then
+	if itemName == "Shovel" then
+        -- Окно подтверждения открывает клиент.
+        return
+    end
+
+	if gardenBed:GetAttribute("ReadyToHarvest") then
+        PlantService.Harvest(player, gardenBed)
+        return
+    end
+	
+	if gardenBed:GetAttribute("Occupied") or slot.Amount.Value <= 0 or not itemName:match("Seed$") then
 		return
 	end
 
-	if not itemName:match("Seed$") then
-		return
-	end
-	print("GardenBedPromt opens plant function in service (server to server)")
 	PlantService.Plant(player, gardenBed, itemName)
 end)]]></ProtectedString>
 							<bool name="Disabled">false</bool>

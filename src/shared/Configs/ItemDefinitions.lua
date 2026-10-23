@@ -3,35 +3,43 @@ local ItemDefinitions = {
         DisplayName = "Морковь",
         Type = "Product",
         SellPriceCents = 5,
-        Icon = "🥕",
+        Icon = "🥕"
     },
     CarrotSeed = {
         DisplayName = "Семена моркови",
         Type = "Seed",
         BuyPriceCents = 2,
         PlantId = "Carrot",
-        Icon = "🌱",
+        Icon = "🌱"
     },
     Potato = {
         DisplayName = "Картофель",
         Type = "Product",
         SellPriceCents = 8,
-        Icon = "🥔",
+        Icon = "🥔"
     },
     PotatoSeed = {
         DisplayName = "Семена картофеля",
         Type = "Seed",
         BuyPriceCents = 4,
         PlantId = "Potato",
-        Icon = "🌱",
+        Icon = "🌱"
     },
     GardenBed = {
         DisplayName = "Грядка",
         Type = "GardenBed",
         BuyPriceCents = 39,
         Icon = "🪴",
-        Placeable = true,
+        Placeable = true
     },
+    Shovel = {
+        DisplayName = "Shovel",
+        Type = "Tool",
+        BuyPriceCents = 1,
+        Icon = "🛠",
+        ShopCategory = "Equipment",
+        Placeable = false
+    }
 }
 
 return ItemDefinitions

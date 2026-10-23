@@ -1,0 +1,1695 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Tool" referent="RBX00000000000000000000000000000001">
+    <Properties>
+      <string name="Name">Shovel</string>
+      <bool name="CanBeDropped">false</bool>
+      <bool name="RequiresHandle">true</bool>
+      <bool name="Enabled">true</bool>
+      <bool name="ManualActivationOnly">true</bool>
+      <string name="ToolTip">Remove garden beds</string>
+      <CoordinateFrame name="Grip">
+        <X>0</X>
+        <Y>0</Y>
+        <Z>0</Z>
+        <R00>1.0</R00>
+        <R01>0.0</R01>
+        <R02>0.0</R02>
+        <R10>0.0</R10>
+        <R11>0.9510565162951535</R11>
+        <R12>0.3090169943749474</R12>
+        <R20>0.0</R20>
+        <R21>-0.3090169943749474</R21>
+        <R22>0.9510565162951535</R22>
+      </CoordinateFrame>
+    </Properties>
+    <Item class="Part" referent="RBX00000000000000000000000000000002">
+      <Properties>
+        <string name="Name">Handle</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">false</bool>
+        <token name="shape">1</token>
+        <token name="Material">272</token>
+        <float name="Transparency">1</float>
+        <float name="Reflectance">0</float>
+        <Color3uint8 name="Color3uint8">4288047674</Color3uint8>
+        <Vector3 name="size">
+          <X>0.18</X>
+          <Y>0.18</Y>
+          <Z>0.18</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000003">
+      <Properties>
+        <string name="Name">WoodenShaft</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">512</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0</float>
+        <Color3uint8 name="Color3uint8">4288901953</Color3uint8>
+        <Vector3 name="size">
+          <X>1.82</X>
+          <Y>0.18</Y>
+          <Z>0.18</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.0</X>
+          <Y>-0.39</Y>
+          <Z>0.0</Z>
+          <R00>0.0</R00>
+          <R01>-1.0</R01>
+          <R02>0.0</R02>
+          <R10>1.0</R10>
+          <R11>0.0</R11>
+          <R12>-0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000004">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.0</X>
+            <Y>-0.39</Y>
+            <Z>0.0</Z>
+            <R00>0.0</R00>
+            <R01>-1.0</R01>
+            <R02>0.0</R02>
+            <R10>1.0</R10>
+            <R11>0.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000003</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000005">
+      <Properties>
+        <string name="Name">WoodHighlight</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">512</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0</float>
+        <Color3uint8 name="Color3uint8">4290876250</Color3uint8>
+        <Vector3 name="size">
+          <X>1.5499999999999998</X>
+          <Y>0.025</Y>
+          <Z>0.025</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>-0.035</X>
+          <Y>-0.37499999999999994</Y>
+          <Z>0.08</Z>
+          <R00>0.0</R00>
+          <R01>-1.0</R01>
+          <R02>0.0</R02>
+          <R10>1.0</R10>
+          <R11>0.0</R11>
+          <R12>-0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000006">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>-0.035</X>
+            <Y>-0.37499999999999994</Y>
+            <Z>0.08</Z>
+            <R00>0.0</R00>
+            <R01>-1.0</R01>
+            <R02>0.0</R02>
+            <R10>1.0</R10>
+            <R11>0.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000005</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000007">
+      <Properties>
+        <string name="Name">GripLeft</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">272</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0</float>
+        <Color3uint8 name="Color3uint8">4282406464</Color3uint8>
+        <Vector3 name="size">
+          <X>0.49244289008980524</X>
+          <Y>0.1</Y>
+          <Z>0.1</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>-0.21</X>
+          <Y>0.685</Y>
+          <Z>0.0</Z>
+          <R00>-0.4061384660534476</R00>
+          <R01>-0.9138115486202572</R01>
+          <R02>0.0</R02>
+          <R10>0.9138115486202572</R10>
+          <R11>-0.4061384660534476</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000008">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>-0.21</X>
+            <Y>0.685</Y>
+            <Z>0.0</Z>
+            <R00>-0.4061384660534476</R00>
+            <R01>-0.9138115486202572</R01>
+            <R02>0.0</R02>
+            <R10>0.9138115486202572</R10>
+            <R11>-0.4061384660534476</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000007</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000009">
+      <Properties>
+        <string name="Name">GripRight</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">272</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0</float>
+        <Color3uint8 name="Color3uint8">4282406464</Color3uint8>
+        <Vector3 name="size">
+          <X>0.49244289008980524</X>
+          <Y>0.1</Y>
+          <Z>0.1</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.21</X>
+          <Y>0.685</Y>
+          <Z>0.0</Z>
+          <R00>0.4061384660534476</R00>
+          <R01>-0.9138115486202572</R01>
+          <R02>0.0</R02>
+          <R10>0.9138115486202572</R10>
+          <R11>0.4061384660534476</R11>
+          <R12>-0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX0000000000000000000000000000000A">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.21</X>
+            <Y>0.685</Y>
+            <Z>0.0</Z>
+            <R00>0.4061384660534476</R00>
+            <R01>-0.9138115486202572</R01>
+            <R02>0.0</R02>
+            <R10>0.9138115486202572</R10>
+            <R11>0.4061384660534476</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000009</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX0000000000000000000000000000000B">
+      <Properties>
+        <string name="Name">GripTop</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">512</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0</float>
+        <Color3uint8 name="Color3uint8">4286008876</Color3uint8>
+        <Vector3 name="size">
+          <X>0.62</X>
+          <Y>0.17</Y>
+          <Z>0.17</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.0</X>
+          <Y>0.94</Y>
+          <Z>0.0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX0000000000000000000000000000000C">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.0</X>
+            <Y>0.94</Y>
+            <Z>0.0</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX0000000000000000000000000000000B</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX0000000000000000000000000000000D">
+      <Properties>
+        <string name="Name">GripTopAccent</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">512</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0</float>
+        <Color3uint8 name="Color3uint8">4290546510</Color3uint8>
+        <Vector3 name="size">
+          <X>0.46</X>
+          <Y>0.025</Y>
+          <Z>0.025</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.0</X>
+          <Y>0.965</Y>
+          <Z>0.065</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX0000000000000000000000000000000E">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.0</X>
+            <Y>0.965</Y>
+            <Z>0.065</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX0000000000000000000000000000000D</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX0000000000000000000000000000000F">
+      <Properties>
+        <string name="Name">GripSocket</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">272</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0</float>
+        <Color3uint8 name="Color3uint8">4282406464</Color3uint8>
+        <Vector3 name="size">
+          <X>0.19999999999999996</X>
+          <Y>0.235</Y>
+          <Z>0.235</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.0</X>
+          <Y>0.48</Y>
+          <Z>0.0</Z>
+          <R00>0.0</R00>
+          <R01>-1.0</R01>
+          <R02>0.0</R02>
+          <R10>1.0</R10>
+          <R11>0.0</R11>
+          <R12>-0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000010">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.0</X>
+            <Y>0.48</Y>
+            <Z>0.0</Z>
+            <R00>0.0</R00>
+            <R01>-1.0</R01>
+            <R02>0.0</R02>
+            <R10>1.0</R10>
+            <R11>0.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX0000000000000000000000000000000F</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000011">
+      <Properties>
+        <string name="Name">SteelSocket</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4282339667</Color3uint8>
+        <Vector3 name="size">
+          <X>0.26</X>
+          <Y>0.27</Y>
+          <Z>0.27</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.0</X>
+          <Y>-1.29</Y>
+          <Z>0.0</Z>
+          <R00>0.0</R00>
+          <R01>-1.0</R01>
+          <R02>0.0</R02>
+          <R10>1.0</R10>
+          <R11>0.0</R11>
+          <R12>-0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000012">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.0</X>
+            <Y>-1.29</Y>
+            <Z>0.0</Z>
+            <R00>0.0</R00>
+            <R01>-1.0</R01>
+            <R02>0.0</R02>
+            <R10>1.0</R10>
+            <R11>0.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000011</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000013">
+      <Properties>
+        <string name="Name">SocketBand</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">2</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4288719773</Color3uint8>
+        <Vector3 name="size">
+          <X>0.06000000000000005</X>
+          <Y>0.285</Y>
+          <Z>0.285</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.0</X>
+          <Y>-1.19</Y>
+          <Z>0.0</Z>
+          <R00>0.0</R00>
+          <R01>-1.0</R01>
+          <R02>0.0</R02>
+          <R10>1.0</R10>
+          <R11>0.0</R11>
+          <R12>-0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000014">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.0</X>
+            <Y>-1.19</Y>
+            <Z>0.0</Z>
+            <R00>0.0</R00>
+            <R01>-1.0</R01>
+            <R02>0.0</R02>
+            <R10>1.0</R10>
+            <R11>0.0</R11>
+            <R12>-0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000013</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000015">
+      <Properties>
+        <string name="Name">SocketRivet1</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">0</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4291219139</Color3uint8>
+        <Vector3 name="size">
+          <X>0.065</X>
+          <Y>0.065</Y>
+          <Z>0.035</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>-1.3</Y>
+          <Z>0.143</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000016">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0</X>
+            <Y>-1.3</Y>
+            <Z>0.143</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000015</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000017">
+      <Properties>
+        <string name="Name">SocketRivet2</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">0</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4291219139</Color3uint8>
+        <Vector3 name="size">
+          <X>0.065</X>
+          <Y>0.065</Y>
+          <Z>0.035</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>-1.37</Y>
+          <Z>0.143</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000018">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0</X>
+            <Y>-1.37</Y>
+            <Z>0.143</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000017</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000019">
+      <Properties>
+        <string name="Name">Blade</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">1</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4282339667</Color3uint8>
+        <Vector3 name="size">
+          <X>0.94</X>
+          <Y>0.66</Y>
+          <Z>0.12</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>-1.72</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX0000000000000000000000000000001A">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0</X>
+            <Y>-1.72</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000019</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX0000000000000000000000000000001B">
+      <Properties>
+        <string name="Name">BladeFace</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">1</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4287274652</Color3uint8>
+        <Vector3 name="size">
+          <X>0.84</X>
+          <Y>0.59</Y>
+          <Z>0.028</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>-1.72</Y>
+          <Z>0.073</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX0000000000000000000000000000001C">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0</X>
+            <Y>-1.72</Y>
+            <Z>0.073</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX0000000000000000000000000000001B</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX0000000000000000000000000000001D">
+      <Properties>
+        <string name="Name">BladeBack</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">1</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4284445556</Color3uint8>
+        <Vector3 name="size">
+          <X>0.84</X>
+          <Y>0.59</Y>
+          <Z>0.028</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>-1.72</Y>
+          <Z>-0.073</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX0000000000000000000000000000001E">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0</X>
+            <Y>-1.72</Y>
+            <Z>-0.073</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX0000000000000000000000000000001D</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX0000000000000000000000000000001F">
+      <Properties>
+        <string name="Name">FootStep</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">1</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4282339667</Color3uint8>
+        <Vector3 name="size">
+          <X>1.08</X>
+          <Y>0.075</Y>
+          <Z>0.235</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>-1.385</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000020">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0</X>
+            <Y>-1.385</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX0000000000000000000000000000001F</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX00000000000000000000000000000021">
+      <Properties>
+        <string name="Name">FootStepTop</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">1</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4287338382</Color3uint8>
+        <Vector3 name="size">
+          <X>0.96</X>
+          <Y>0.025</Y>
+          <Z>0.19</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>-1.345</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000022">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0</X>
+            <Y>-1.345</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000021</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="WedgePart" referent="RBX00000000000000000000000000000023">
+      <Properties>
+        <string name="Name">BladeTipLeft</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4282339667</Color3uint8>
+        <Vector3 name="size">
+          <X>0.12</X>
+          <Y>0.37</Y>
+          <Z>0.47</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>-0.235</X>
+          <Y>-2.235</Y>
+          <Z>0</Z>
+          <R00>0.0</R00>
+          <R01>0.0</R01>
+          <R02>1.0</R02>
+          <R10>0.0</R10>
+          <R11>-1.0</R11>
+          <R12>0.0</R12>
+          <R20>1.0</R20>
+          <R21>0.0</R21>
+          <R22>0.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000024">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>-0.235</X>
+            <Y>-2.235</Y>
+            <Z>0</Z>
+            <R00>0.0</R00>
+            <R01>0.0</R01>
+            <R02>1.0</R02>
+            <R10>0.0</R10>
+            <R11>-1.0</R11>
+            <R12>0.0</R12>
+            <R20>1.0</R20>
+            <R21>0.0</R21>
+            <R22>0.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000023</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="WedgePart" referent="RBX00000000000000000000000000000025">
+      <Properties>
+        <string name="Name">BladeTipFaceLeft</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4287274652</Color3uint8>
+        <Vector3 name="size">
+          <X>0.028</X>
+          <Y>0.28</Y>
+          <Z>0.42</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>-0.21</X>
+          <Y>-2.19</Y>
+          <Z>0.075</Z>
+          <R00>0.0</R00>
+          <R01>0.0</R01>
+          <R02>1.0</R02>
+          <R10>0.0</R10>
+          <R11>-1.0</R11>
+          <R12>0.0</R12>
+          <R20>1.0</R20>
+          <R21>0.0</R21>
+          <R22>0.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000026">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>-0.21</X>
+            <Y>-2.19</Y>
+            <Z>0.075</Z>
+            <R00>0.0</R00>
+            <R01>0.0</R01>
+            <R02>1.0</R02>
+            <R10>0.0</R10>
+            <R11>-1.0</R11>
+            <R12>0.0</R12>
+            <R20>1.0</R20>
+            <R21>0.0</R21>
+            <R22>0.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000025</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="WedgePart" referent="RBX00000000000000000000000000000027">
+      <Properties>
+        <string name="Name">BladeTipRight</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4282339667</Color3uint8>
+        <Vector3 name="size">
+          <X>0.12</X>
+          <Y>0.37</Y>
+          <Z>0.47</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.235</X>
+          <Y>-2.235</Y>
+          <Z>0</Z>
+          <R00>0.0</R00>
+          <R01>0.0</R01>
+          <R02>-1.0</R02>
+          <R10>0.0</R10>
+          <R11>-1.0</R11>
+          <R12>0.0</R12>
+          <R20>-1.0</R20>
+          <R21>0.0</R21>
+          <R22>0.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX00000000000000000000000000000028">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.235</X>
+            <Y>-2.235</Y>
+            <Z>0</Z>
+            <R00>0.0</R00>
+            <R01>0.0</R01>
+            <R02>-1.0</R02>
+            <R10>0.0</R10>
+            <R11>-1.0</R11>
+            <R12>0.0</R12>
+            <R20>-1.0</R20>
+            <R21>0.0</R21>
+            <R22>0.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000027</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="WedgePart" referent="RBX00000000000000000000000000000029">
+      <Properties>
+        <string name="Name">BladeTipFaceRight</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4287274652</Color3uint8>
+        <Vector3 name="size">
+          <X>0.028</X>
+          <Y>0.28</Y>
+          <Z>0.42</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0.21</X>
+          <Y>-2.19</Y>
+          <Z>0.075</Z>
+          <R00>0.0</R00>
+          <R01>0.0</R01>
+          <R02>-1.0</R02>
+          <R10>0.0</R10>
+          <R11>-1.0</R11>
+          <R12>0.0</R12>
+          <R20>-1.0</R20>
+          <R21>0.0</R21>
+          <R22>0.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX0000000000000000000000000000002A">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0.21</X>
+            <Y>-2.19</Y>
+            <Z>0.075</Z>
+            <R00>0.0</R00>
+            <R01>0.0</R01>
+            <R02>-1.0</R02>
+            <R10>0.0</R10>
+            <R11>-1.0</R11>
+            <R12>0.0</R12>
+            <R20>-1.0</R20>
+            <R21>0.0</R21>
+            <R22>0.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX00000000000000000000000000000029</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX0000000000000000000000000000002B">
+      <Properties>
+        <string name="Name">BladeRib</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="shape">1</token>
+        <token name="Material">1088</token>
+        <float name="Transparency">0</float>
+        <float name="Reflectance">0.035</float>
+        <Color3uint8 name="Color3uint8">4289313198</Color3uint8>
+        <Vector3 name="size">
+          <X>0.085</X>
+          <Y>0.67</Y>
+          <Z>0.035</Z>
+        </Vector3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>-1.76</Y>
+          <Z>0.1</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <CoordinateFrame name="PivotOffset">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0.0</R01>
+          <R02>0.0</R02>
+          <R10>0.0</R10>
+          <R11>1.0</R11>
+          <R12>0.0</R12>
+          <R20>0.0</R20>
+          <R21>0.0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+        <token name="LeftSurface">0</token>
+        <token name="RightSurface">0</token>
+        <token name="FrontSurface">0</token>
+        <token name="BackSurface">0</token>
+      </Properties>
+      <Item class="WeldConstraint" referent="RBX0000000000000000000000000000002C">
+        <Properties>
+          <string name="Name">HandleWeld</string>
+          <CoordinateFrame name="CFrame0">
+            <X>0</X>
+            <Y>-1.76</Y>
+            <Z>0.1</Z>
+            <R00>1.0</R00>
+            <R01>0.0</R01>
+            <R02>0.0</R02>
+            <R10>0.0</R10>
+            <R11>1.0</R11>
+            <R12>0.0</R12>
+            <R20>0.0</R20>
+            <R21>0.0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+          <Ref name="Part0Internal">RBX00000000000000000000000000000002</Ref>
+          <Ref name="Part1Internal">RBX0000000000000000000000000000002B</Ref>
+          <int name="State">3</int>
+        </Properties>
+      </Item>
+    </Item>
+  </Item>
+</roblox>
