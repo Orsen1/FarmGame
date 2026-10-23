@@ -3,20 +3,24 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local PlacementService = require(ServerScriptService:WaitForChild("PlacementService"))
-local PlaceGardenBedEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PlaceGardenBedEvent")
+local PlaceEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PlaceEvent")
 
 local lastRequest = {}
 
-PlaceGardenBedEvent.OnServerEvent:Connect(function(player, position)
+PlaceEvent.OnServerEvent:Connect(function(player, itemName, position)
     local now = os.clock()
 
     if now - (lastRequest[player] or -math.huge) < 0.25 then
-        event:FireClient(player, false, "Please wait a moment")
+        PlaceEvent:FireClient(player, false, "Please wait a moment")
         return
     end
 
     lastRequest[player] = now
 
-    local success, reason = PlacementService.placeGardenBed(player, position)
-    PlaceGardenBedEvent:FireClient(player, success, reason)
+    local success, reason = PlacementService.placeItem(player, itemName, position)
+    PlaceEvent:FireClient(player, success, reason)
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    lastRequest[player] = nil
 end)

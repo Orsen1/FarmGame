@@ -3,17 +3,22 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
-local PlacementRules = require(ReplicatedStorage:WaitForChild("PlacementRules"))
-local template = ReplicatedStorage:WaitForChild("PlaceableModels"):WaitForChild("GardenBed")
+local PlacementRules = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementRules"))
+local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+
+local models = ReplicatedStorage:WaitForChild("PlaceableModels")
 local plots = workspace:WaitForChild("Plots")
 
 local PlacementService = {}
 
-function PlacementService.placeGardenBed(player, position)
+function PlacementService.placeItem(player, itemName, position)
     if player.Parent ~= Players
         or player:GetAttribute("DataLoaded") ~= true then
         return false, "Player data is not ready"
     end
+
+    local definition = ItemDefinitions[itemName]
+    local template = models:FindFirstChild(itemName)
 
     local plotName = player:GetAttribute("PlotName")
     local plot = plotName and plots:FindFirstChild(plotName)
@@ -28,37 +33,41 @@ function PlacementService.placeGardenBed(player, position)
         return false, "PlacedObjects folder is missing"
     end
 
-    local pivot, valid, reason = PlacementRules.getPlacement(plot, position)
+    local pivot, valid, reason = PlacementRules.getPlacement(plot, position, template)
 
     if not valid then
         return false, reason
     end
 
-    local bed = template:Clone()
+    local placedModel = template:Clone()
 
-    bed:SetAttribute("OwnerUserId", player.UserId)
-    bed:SetAttribute("Occupied", false)
-    bed:SetAttribute("ReadyToHarvest", false)
-    bed:SetAttribute("PlantType", "")
-    bed:SetAttribute("GrowthStage", 0)
+    placedModel:SetAttribute("OwnerUserId", player.UserId)
+    placedModel:SetAttribute("ItemName", itemName)
 
-    for _, object in ipairs(bed:GetDescendants()) do
+    if definition.Type == "GardenBed" then
+        placedModel:SetAttribute("Occupied", false)
+        placedModel:SetAttribute("ReadyToHarvest", false)
+        placedModel:SetAttribute("PlantType", "")
+        placedModel:SetAttribute("GrowthStage", 0)
+    end
+
+    for _, object in ipairs(placedModel:GetDescendants()) do
         if object:IsA("BasePart") then
             object.Anchored = true
             object.CanQuery = true
         end
     end
 
-    bed:PivotTo(pivot)
+    placedModel:PivotTo(pivot)
 
-    if not InventoryService.RemoveItem(player, "GardenBed", 1) then
-        bed:Destroy()
-        return false, "You have no garden beds"
+    if not InventoryService.RemoveItem(player, itemName, 1) then
+        placedModel:Destroy()
+        return false, "You do not have this item"
     end
 
-    bed.Parent = placedObjects
+    placedModel.Parent = placedObjects
 
-    return true, "Garden bed placed"
+    return true, "Item placed"
 end
 
 return PlacementService

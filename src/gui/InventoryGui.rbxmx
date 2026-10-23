@@ -2815,7 +2815,7 @@
 				<ProtectedString name="Source"><![CDATA[local replicatedStorage = game:GetService("ReplicatedStorage")
 local setSelectedSlotEvent = replicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
 local ItemDefinitions = require(replicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
-local PlacementController = require(replicatedStorage:WaitForChild("PlacementController"))
+local PlacementController = require(replicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementController"))
 
 local player = game.Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
@@ -2927,8 +2927,12 @@ local function selectSlot(slotNumber, activatePlacement)
 	if activatePlacement ~= false then
     	local selectedSlot = inventory:FindFirstChild("Slot" .. slotNumber)
 
-    	if selectedSlot and selectedSlot.ItemName.Value == "GardenBed" and selectedSlot.Amount.Value > 0 then
-    	    PlacementController.startPlacement("GardenBed")
+    	if selectedSlot and selectedSlot.Amount.Value > 0 then
+			local itemName = selectedSlot.ItemName.Value
+			local itemDefinition = ItemDefinitions[itemName]
+			if itemDefinition and itemDefinition.Placeable == true then
+				PlacementController.startPlacement(itemName)
+			end
     	end
 	end
 end

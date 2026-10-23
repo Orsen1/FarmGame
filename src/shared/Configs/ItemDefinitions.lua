@@ -30,6 +30,7 @@ local ItemDefinitions = {
         Type = "GardenBed",
         BuyPriceCents = 39,
         Icon = "🪴",
+        Placeable = true,
     },
 }
 

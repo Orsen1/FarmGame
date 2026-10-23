@@ -5,11 +5,13 @@ local UserInputService = game:GetService("UserInputService")
 local ContextActionService = game:GetService("ContextActionService")
 
 local player = Players.LocalPlayer
-local rules = require(ReplicatedStorage:WaitForChild("PlacementRules"))
-local template = ReplicatedStorage:WaitForChild("PlaceableModels"):WaitForChild("GardenBed")
-local PlaceGardenBedEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PlaceGardenBedEvent")
+local rules = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementRules"))
+local models = ReplicatedStorage:WaitForChild("PlaceableModels")
+local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local PlaceEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PlaceEvent")
 local PlacementController = {}
 
+local placingItemName
 local preview
 local connection
 local position
@@ -30,24 +32,42 @@ function PlacementController.cancelPlacement()
 
     canPlace = false
     position = nil
+    placingItemName = nil
 
-    ContextActionService:UnbindAction("ConfirmGardenBed")
-    ContextActionService:UnbindAction("CancelGardenBed")
+    ContextActionService:UnbindAction("ConfirmPlacement")
+    ContextActionService:UnbindAction("CancelPlacement")
 end
 
 local function confirmPlacement()
     if preview and canPlace and not pending then
         pending = true
-        PlaceGardenBedEvent:FireServer(position)
+        PlaceEvent:FireServer(placingItemName, position)
     end
 end 
 
 function PlacementController.startPlacement(itemName)
-    if pending or itemName ~= "GardenBed" then
+    if pending then
         return
     end
 
     PlacementController.cancelPlacement()
+
+    if typeof(itemName) ~= "string" then
+        return
+    end
+
+    local definition = ItemDefinitions[itemName]
+
+    if not definition or definition.Placeable ~= true then
+        return
+    end
+
+    local template = models:FindFirstChild(itemName)
+
+    if not template or not template:IsA("Model") then
+        warn("[PLACEMENT] Model is missing for", itemName)
+        return
+    end
 
     local plotName = player:GetAttribute("PlotName")
     local plot = plotName and workspace:WaitForChild("Plots")
@@ -60,6 +80,7 @@ function PlacementController.startPlacement(itemName)
         return
     end
 
+    placingItemName = itemName
     preview = template:Clone()
 
     local parts = {}
@@ -97,12 +118,12 @@ function PlacementController.startPlacement(itemName)
     end
 
     bindButton(
-        "ConfirmGardenBed", "Place", Enum.KeyCode.E,
+        "ConfirmPlacement", "Place", Enum.KeyCode.E,
         0.45, confirmPlacement
     )
 
     bindButton(
-        "CancelGardenBed", "Cancel", Enum.KeyCode.Q,
+        "CancelPlacement", "Cancel", Enum.KeyCode.Q,
         0.62, PlacementController.cancelPlacement
     )
 
@@ -151,7 +172,7 @@ function PlacementController.startPlacement(itemName)
 
         position = ray.Origin + ray.Direction * distance
 
-        local pivot, valid = rules.getPlacement(plot, position, preview)
+        local pivot, valid = rules.getPlacement(plot, position, template, preview)
         canPlace = valid
 
         if not pivot then
@@ -172,13 +193,13 @@ function PlacementController.startPlacement(itemName)
     end)
 end
 
-PlaceGardenBedEvent.OnClientEvent:Connect(function(success, message)
+PlaceEvent.OnClientEvent:Connect(function(success, message)
     pending = false
 
     if success then
         PlacementController.cancelPlacement()
     else
-        warn("[PLACEMENT] Failed to place garden bed:", message)
+        warn("[PLACEMENT] Failed to place item:", message)
     end
 end)
 
