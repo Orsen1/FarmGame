@@ -320,11 +320,12 @@ prompt.Triggered:Connect(function(player)
 	local inventory = player:FindFirstChild("Inventory")
     local slotNumber = player:GetAttribute("SelectedSlot") or 1
     local slot = inventory and inventory:FindFirstChild("Slot" .. slotNumber)
-	local itemName = slot.ItemName.Value
 
 	if not slot then
         return
     end
+	
+	local itemName = slot.ItemName.Value
 
 	if itemName == "Shovel" then
         -- Окно подтверждения открывает клиент.

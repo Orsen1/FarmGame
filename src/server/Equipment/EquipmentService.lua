@@ -45,10 +45,41 @@ function EquipmentService.update(player)
     end
 
     local tool = template:Clone()
-
     tool.Name = "EquippedItem"
     tool.CanBeDropped = false
     tool:SetAttribute("ItemName", itemName)
+    local handle = tool:FindFirstChild("Handle")
+
+    if not handle or not handle:IsA("BasePart") then
+        warn("[EQUIPMENT] Handle missing:", itemName)
+        tool:Destroy()
+        return
+    end
+
+    for _, object in ipairs(tool:GetDescendants()) do
+        if object:IsA("WeldConstraint") then
+            object:Destroy()
+        end
+    end
+
+    for _, part in ipairs(tool:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Anchored = false
+            part.CanCollide = false
+            part.CanTouch = false
+            part.Massless = true
+
+            if part ~= handle then
+                local weld = Instance.new("WeldConstraint")
+                weld.Name = "HandleWeld"
+                weld.Part0 = handle
+                weld.Part1 = part
+                weld.Enabled = true
+                weld.Parent = part
+            end
+        end
+    end
+
     tool.Parent = character
 end
 
