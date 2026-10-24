@@ -74,10 +74,12 @@ function PlantService.Plant(player, gardenBed, seedType)
     end
 
     local plantType = getPlantTypeFromSeed(seedType)
+    local plantingSpots = gardenBed:WaitForChild("PlantingSpots")
+    local spots = plantingSpots:GetChildren()
 
-    local removed = InventoryService.RemoveItem(player, seedType, 1)
+    local removed = InventoryService.RemoveItem(player, seedType, #spots)
     if not removed then
-        print("No seeds left:", seedType)
+        print("Not enough seeds:", seedType)
         return
     end
 
@@ -92,16 +94,17 @@ function PlantService.Plant(player, gardenBed, seedType)
 end
 
 function PlantService.Harvest(player, gardenBed)
+    local plantingSpots = gardenBed:WaitForChild("PlantingSpots")
+    local spots = plantingSpots:GetChildren()
+
     if player:GetAttribute("DataLoaded") ~= true or gardenBed:GetAttribute("OwnerUserId") ~= player.UserId then
         return
     end
 
-    if gardenBed:GetAttribute("ReadyToHarvest") ~= true then
+    if not gardenBed:GetAttribute("ReadyToHarvest") then
         return
     end
 
-    local plantPosition = gardenBed:WaitForChild("PlantPosition")
-    local plant = plantPosition:FindFirstChildWhichIsA("Model")
     local plantType = gardenBed:GetAttribute("PlantType")
 
     if not plantType or plantType == "" then
@@ -109,21 +112,24 @@ function PlantService.Harvest(player, gardenBed)
         return
     end
 
-    local added = InventoryService.AddItem(player, plantType, 1)
+    local added = InventoryService.AddItem(player, plantType, #spots)
     if not added then
         print("Failed to add item")
         return
     end
 
-    if plant then
-        plant:Destroy()
+    for _, spot in ipairs(spots) do
+        local plantPosition = spot:WaitForChild("PlantPosition")
+        local plant = plantPosition:FindFirstChildWhichIsA("Model")
+        if plant then
+            plant:Destroy()
+        end
     end
 
     gardenBed:SetAttribute("Occupied", false)
     gardenBed:SetAttribute("PlantType", "")
     gardenBed:SetAttribute("GrowthStage", 0)
     gardenBed:SetAttribute("ReadyToHarvest", false)
-
 end
 
 return PlantService

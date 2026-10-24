@@ -30,7 +30,16 @@ local ItemDefinitions = {
     GardenBed = {
         DisplayName = "Грядка",
         Type = "GardenBed",
-        BuyPriceCents = 39,
+        BuyPriceCents = 30,
+        Icon = "🪴",
+        Placeable = true,
+        Plantable = true,
+        ShopCategory = "Equipment"
+    },
+    FieldBed10 = {
+        DisplayName = "Грядка 10 мест",
+        Type = "GardenBed",
+        BuyPriceCents = 100,
         Icon = "🪴",
         Placeable = true,
         Plantable = true,
