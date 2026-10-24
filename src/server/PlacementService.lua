@@ -44,7 +44,7 @@ function PlacementService.placeItem(player, itemName, position)
     placedModel:SetAttribute("OwnerUserId", player.UserId)
     placedModel:SetAttribute("ItemName", itemName)
 
-    if definition.Type == "GardenBed" then
+    if definition.Plantable == true then
         placedModel:SetAttribute("Occupied", false)
         placedModel:SetAttribute("ReadyToHarvest", false)
         placedModel:SetAttribute("PlantType", "")

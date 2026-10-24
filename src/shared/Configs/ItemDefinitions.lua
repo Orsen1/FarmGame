@@ -10,7 +10,8 @@ local ItemDefinitions = {
         Type = "Seed",
         BuyPriceCents = 2,
         PlantId = "Carrot",
-        Icon = "🌱"
+        Icon = "🌱",
+        ShopCategory = "Seeds"
     },
     Potato = {
         DisplayName = "Картофель",
@@ -23,22 +24,24 @@ local ItemDefinitions = {
         Type = "Seed",
         BuyPriceCents = 4,
         PlantId = "Potato",
-        Icon = "🌱"
+        Icon = "🌱",
+        ShopCategory = "Seeds"
     },
     GardenBed = {
         DisplayName = "Грядка",
         Type = "GardenBed",
         BuyPriceCents = 39,
         Icon = "🪴",
-        Placeable = true
+        Placeable = true,
+        Plantable = true,
+        ShopCategory = "Equipment"
     },
     Shovel = {
         DisplayName = "Shovel",
         Type = "Tool",
         BuyPriceCents = 1,
         Icon = "🛠",
-        ShopCategory = "Equipment",
-        Placeable = false
+        ShopCategory = "Equipment"
     }
 }
 

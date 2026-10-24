@@ -25,7 +25,9 @@ local function getStages(plantFolder)
 end
 
 function PlantService.Grow(gardenBed, plantType, startStage)
-    local plantPosition = gardenBed:WaitForChild("PlantPosition")
+    local plantingSpots = gardenBed:WaitForChild("PlantingSpots")
+    local spots = plantingSpots:GetChildren()
+
     local plantFolder = PlantsFolder:WaitForChild(plantType)
     local stages = getStages(plantFolder)
     startStage = math.clamp(startStage or 1, 1, #stages)
@@ -35,15 +37,20 @@ function PlantService.Grow(gardenBed, plantType, startStage)
             return
         end
 
-        local oldPlant = plantPosition:FindFirstChildWhichIsA("Model")
-        if oldPlant then
-            oldPlant:Destroy()
+        for spotIndex = 1, #spots do
+            local spot = spots[spotIndex]
+            local plantPosition = spot:WaitForChild("PlantPosition")
+
+            local oldPlant = plantPosition:FindFirstChildWhichIsA("Model")
+            if oldPlant then
+                oldPlant:Destroy()
+            end
+
+            local newStage = stages[i]:Clone()
+
+            newStage:PivotTo(plantPosition.CFrame)
+            newStage.Parent = plantPosition
         end
-
-        local newStage = stages[i]:Clone()
-
-        newStage:PivotTo(plantPosition.CFrame)
-        newStage.Parent = plantPosition
 
         gardenBed:SetAttribute("GrowthStage", i)
         gardenBed:SetAttribute("ReadyToHarvest", i == #stages)
