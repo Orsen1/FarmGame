@@ -27,6 +27,20 @@ local ItemDefinitions = {
         Icon = "🌱",
         ShopCategory = "Seeds"
     },
+    Wheat = {
+        DisplayName = "Пшеница",
+        Type = "Product",
+        SellPriceCents = 8,
+        Icon = "🌾"
+    },
+    WheatSeed = {
+        DisplayName = "Семена пшеницы",
+        Type = "Seed",
+        BuyPriceCents = 1,
+        PlantId = "Wheat",
+        Icon = "🌱",
+        ShopCategory = "Seeds"
+    },
     GardenBed = {
         DisplayName = "Грядка",
         Type = "GardenBed",
