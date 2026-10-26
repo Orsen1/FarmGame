@@ -59,6 +59,14 @@ local ItemDefinitions = {
         Plantable = true,
         ShopCategory = "Equipment"
     },
+    HandMill = {
+        DisplayName = "Жернов",
+        Type = "Tool",
+        BuyPriceCents = 50,
+        Icon = "🛠",
+        ShopCategory = "Equipment",
+        Placeable = true
+    },
     Shovel = {
         DisplayName = "Shovel",
         Type = "Tool",
