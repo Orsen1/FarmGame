@@ -48,6 +48,106 @@ local function findTargetSlot(inventory, itemName)
     return emptySlot
 end
 
+local function planExchange(player, inputs, outputs)
+    if typeof(inputs) ~= "table" or typeof(outputs) ~= "table" then
+        return nil, "InvalidRecipeItems"
+    end
+
+    local data = InventoryService.GetInventory(player)
+
+    if not data then
+        return nil, "InventoryNotReady"
+    end
+
+    for itemName, amount in pairs(inputs) do
+        if not isValidItemName(itemName) or not isValidAmount(amount) then
+            return nil, "InvalidItemOrAmount"
+        end
+
+        local remaining = amount
+
+        for _, slot in ipairs(data) do
+            if slot.ItemName == itemName then
+                local taken = math.min(slot.Amount, remaining)
+
+                slot.Amount = slot.Amount - taken
+                remaining = remaining - taken
+
+                if slot.Amount == 0 then
+                    slot.ItemName = ""
+                end
+
+                if remaining == 0 then
+                    break
+                end
+            end
+        end
+
+        if remaining > 0 then
+            return nil, "NotEnoughItems: " .. itemName
+        end
+    end
+
+    for itemName, amount in pairs(outputs) do
+        if not isValidItemName(itemName) or not isValidAmount(amount) then
+            return nil, "InvalidItemOrAmount"
+        end
+
+        local target
+        local empty
+
+        for _, slot in ipairs(data) do
+            if slot.ItemName == itemName then
+                target = slot
+                break
+            end
+
+            if slot.ItemName == "" and not empty then
+                empty = slot
+            end
+        end
+
+        target = target or empty
+
+        if not target then
+            return nil, "InventoryFull"
+        end
+
+        if target.Amount > MAX_INTEGER - amount then
+            return nil, "AmountTooLarge"
+        end
+
+        target.ItemName = itemName
+        target.Amount = target.Amount + amount
+    end
+
+    return data
+end
+
+function InventoryService.CanExchangeItems(player, inputs, outputs)
+    local data, reason = planExchange(player, inputs, outputs)
+
+    return data ~= nil, reason
+end
+
+function InventoryService.ExchangeItems(player, inputs, outputs)
+    local data, reason = planExchange(player, inputs, outputs)
+
+    if not data then
+        return false, reason
+    end
+
+    local inventory = player.Inventory
+
+    for slotNumber, savedSlot in ipairs(data) do
+        local slot = inventory:FindFirstChild("Slot" .. slotNumber)
+        slot.ItemName.Value = savedSlot.ItemName
+        slot.Amount.Value = savedSlot.Amount
+    end
+
+    return true
+end
+
 function InventoryService.Initialize(player)
     if player:FindFirstChild("Inventory") then
         return

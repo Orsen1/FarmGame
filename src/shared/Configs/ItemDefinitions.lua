@@ -33,6 +33,12 @@ local ItemDefinitions = {
         SellPriceCents = 8,
         Icon = "🌾"
     },
+    Flour = {
+        DisplayName = "Мука",
+        Type = "Product",
+        SellPriceCents = 12,
+        Icon = "🌾"
+    },
     WheatSeed = {
         DisplayName = "Семена пшеницы",
         Type = "Seed",
@@ -65,7 +71,8 @@ local ItemDefinitions = {
         BuyPriceCents = 50,
         Icon = "🛠",
         ShopCategory = "Equipment",
-        Placeable = true
+        Placeable = true,
+        Recipes = {"WheatToFlour"},
     },
     Shovel = {
         DisplayName = "Shovel",
