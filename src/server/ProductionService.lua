@@ -104,7 +104,7 @@ function ProductionService.Start(player, station, recipeId)
         return false, recipeError
     end
 
-    local canExchange, exchangeError = InventoryService.CanExchangeItems(player, recipe.Inputs, recipe.Outputs)
+    local canExchange, exchangeError = InventoryService.CanExchangeItems(player, recipe.Inputs, {}) -- now we dont need that for handmill
 
     if not canExchange then
         return false, exchangeError
@@ -135,7 +135,44 @@ function ProductionService.Start(player, station, recipeId)
             return false, cancelReason
         end
 
-        return InventoryService.ExchangeItems(player, recipe.Inputs, recipe.Outputs)
+        local outputInventory = station:FindFirstChild("OutputInventory")
+
+        if not outputInventory or not outputInventory:IsA("Folder") then
+            return false, "OutputInventory is missing"
+        end
+
+        for itemName, amount in pairs(recipe.Outputs) do
+            if typeof(amount) ~= "number" or amount < 1 or amount % 1 ~= 0 then
+                return false, "Invalid output amount"
+            end
+
+            local storedItem = outputInventory:FindFirstChild(itemName)
+
+            if storedItem and not storedItem:IsA("IntValue") then
+                return false, "Invalid output item: " .. itemName
+            end
+        end
+
+        local removed, removeError = InventoryService.ExchangeItems(player, recipe.Inputs, {})
+
+        if not removed then
+            return false, removeError
+        end
+
+        for itemName, amount in pairs(recipe.Outputs) do
+            local storedItem = outputInventory:FindFirstChild(itemName)
+
+            if not storedItem then
+                storedItem = Instance.new("IntValue")
+                storedItem.Name = itemName
+                storedItem.Value = 0
+                storedItem.Parent = outputInventory
+            end
+
+            storedItem.Value = storedItem.Value + amount
+        end
+
+        return true
     end, debug.traceback)
 
     activeStations[station] = nil
@@ -156,6 +193,60 @@ function ProductionService.Start(player, station, recipeId)
     end
 
     return true, "Production completed"
+end
+
+function ProductionService.Collect(player, station)
+    if typeof(station) ~= "Instance" or not station:IsA("Model") then
+        return false, "Invalid station"
+    end
+
+    local allowed, reason = canUse(player, station)
+
+    if not allowed then
+        return false, reason
+    end
+
+    local outputInventory = station:FindFirstChild("OutputInventory")
+
+    if not outputInventory or not outputInventory:IsA("Folder") then
+        return false, "OutputInventory is missing"
+    end
+
+    local outputs = {}
+    local storedItems = {}
+
+    for _, storedItem in ipairs(outputInventory:GetChildren()) do
+        if storedItem:IsA("IntValue") and storedItem.Value > 0 then
+            if not ItemDefinitions[storedItem.Name] then
+                return false, "Unknown output item: " .. storedItem.Name
+            end
+
+            outputs[storedItem.Name] =
+                (outputs[storedItem.Name] or 0) + storedItem.Value
+
+            table.insert(storedItems, storedItem)
+        end
+    end
+
+    if next(outputs) == nil then
+        return false, "Nothing to collect"
+    end
+
+    local added, addError = InventoryService.ExchangeItems(
+        player,
+        {},
+        outputs
+    )
+
+    if not added then
+        return false, addError
+    end
+
+    for _, storedItem in ipairs(storedItems) do
+        storedItem.Value = 0
+    end
+
+    return true, "Items collected"
 end
 
 return ProductionService

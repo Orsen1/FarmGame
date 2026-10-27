@@ -4,6 +4,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
 local PlantDataService = require(ServerScriptService:WaitForChild("PlantDataService"))
+local ProductionDataService = require(ServerScriptService:WaitForChild("ProductionDataService"))
 local PlantService = require(ServerScriptService:WaitForChild("PlantService"))
 
 local models = ReplicatedStorage:WaitForChild("PlaceableModels")
@@ -48,6 +49,14 @@ function PlotDataService.getData(player)
         }
 
         savedObject.Plant = PlantDataService.getData(object)
+
+        if definition.Recipes then
+            local outputData, outputError = ProductionDataService.getData(object)
+            if not outputData then
+                return nil, outputError
+            end
+            savedObject.OutputInventory = outputData
+        end
 
         table.insert(result, savedObject)
     end
@@ -96,6 +105,14 @@ function PlotDataService.loadData(player, savedObjects)
 
         object:SetAttribute("OwnerUserId", player.UserId)
         object:SetAttribute("ItemName", savedObject.ItemName)
+
+        if definition.Recipes then
+            local success, errorMessage = ProductionDataService.loadData(object, savedObject)
+            if not success then
+                object:Destroy()
+                return false, errorMessage
+            end
+        end
 
         for _, part in ipairs(object:GetDescendants()) do
             if part:IsA("BasePart") then
