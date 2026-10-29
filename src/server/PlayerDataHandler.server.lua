@@ -7,6 +7,8 @@ local PlayerDataService = require(ServerScriptService:WaitForChild("PlayerDataSe
 local PlayerPlotService = require(ServerScriptService:WaitForChild("PlayerPlotService"))
 local PlotDataService = require(ServerScriptService:WaitForChild("PlotDataService"))
 
+local ProductionService = require(ServerScriptService:WaitForChild("ProductionService"))
+
 local savingPlayers = {}
 
 local function loadPlayerData(player)
@@ -67,6 +69,8 @@ local function savePlayerData(player)
     if savingPlayers[player] or player:GetAttribute("DataLoaded") ~= true then
         return
     end
+
+    ProductionService.Close(player, "Saving")
 
     local inventoryData = InventoryService.GetInventory(player)
     local placedObjects, reason = PlotDataService.getData(player)

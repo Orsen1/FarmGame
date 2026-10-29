@@ -49,7 +49,6 @@ function ProductionDataService.loadData(object, savedObject)
         return false, "Invalid saved output inventory"
     end
 
-    -- Сначала проверяем весь запас, затем восстанавливаем.
     for itemName, amount in pairs(data) do
         if not isValidEntry(itemName, amount) then
             return false, "Invalid saved output item: " .. tostring(itemName)
@@ -69,6 +68,10 @@ function ProductionDataService.loadData(object, savedObject)
 
     object:SetAttribute("Busy", false)
     object:SetAttribute("ActiveRecipe", nil)
+    object:SetAttribute("OperatorUserId", nil)
+    object:SetAttribute("ProductionStartedAt", nil)
+    object:SetAttribute("ProductionDuration", nil)
+    object:SetAttribute("ProductionAngle", 0)
 
     return true
 end
