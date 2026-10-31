@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
+local RunService = game:GetService("RunService")
 
 local configs = ReplicatedStorage:WaitForChild("Configs")
 local ItemDefinitions = require(configs:WaitForChild("ItemDefinitions"))
