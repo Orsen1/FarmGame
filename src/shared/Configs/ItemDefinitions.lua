@@ -72,14 +72,31 @@ local ItemDefinitions = {
         Icon = "rbxassetid://70965951401388",
         ShopCategory = "Equipment",
         Placeable = true,
-        Recipes = {"WheatToFlour"},
+        Recipes = {"WheatToFlour"}
     },
     Shovel = {
-        DisplayName = "Shovel",
+        DisplayName = "Лопата",
         Type = "Tool",
         BuyPriceCents = 1,
         Icon = "rbxassetid://103783030397569",
         ShopCategory = "Equipment"
+    },
+    WarehouseBlueprint = {
+        DisplayName = "Чертёж склада",
+        Type = "Blueprint",
+        BuyPriceCents = 500,
+        Icon = "",
+        Placeable = true,
+        BuildsInto = "Warehouse",
+        ModelFolder = "WarehouseStages",
+        ShopCategory = "Equipment"
+    },
+    Warehouse = {
+        DisplayName = "Склад",
+        Type = "Building",
+        BuyPriceCents = 500,
+        Icon = "",
+        Placeable = true
     }
 }
 
