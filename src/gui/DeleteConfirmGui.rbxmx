@@ -562,7 +562,11 @@ end
 
 ProximityPromptService.PromptTriggered:Connect(function(prompt, who)
     if who ~= player or pending or gui.Enabled
-        or prompt.Name ~= "GardenBedPrompt"
+        or (
+          prompt.Name ~= "GardenBedPrompt"
+          and prompt.Name ~= "MillPrompt"
+          and prompt.Name ~= "ProductionPrompt"
+        )
         or player:GetAttribute("DataLoaded") ~= true
         or not hasShovel() then
         return
@@ -575,7 +579,7 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, who)
     end
 
     target = bed
-    message.Text = "The garden bed and any crops will be permanently lost."
+    message.Text = "The object and everything inside it will be permanently lost."
     gui.Enabled = true
 
     targetConnection = bed.AncestryChanged:Connect(function()

@@ -29,6 +29,11 @@ local function getGardenBedFromPrompt(prompt)
     return prompt.Parent.Parent.Parent
 end
 
+local function isSupportedPrompt(object)
+    return object:IsA("ProximityPrompt") and
+               (object.Name == "GardenBedPrompt" or object.Name == "MillPrompt" or object.Name == "ProductionPrompt")
+end
+
 local function updatePrompt(prompt)
     local gardenBed = getGardenBedFromPrompt(prompt)
 
@@ -42,6 +47,15 @@ local function updatePrompt(prompt)
     end
 
     local selectedItemName, selectedAmount = getSelectedItemName()
+
+    if prompt.Name == "MillPrompt" or prompt.Name == "ProductionPrompt" then
+
+        local hasShovel = selectedItemName == "Shovel" and selectedAmount > 0
+
+        prompt.Enabled = true
+        prompt.ActionText = hasShovel and "Remove" or "Work"
+        return
+    end
 
     if selectedItemName == "Shovel" and selectedAmount > 0 then
         prompt.Enabled = true
@@ -66,7 +80,7 @@ end
 
 local function updateAllPrompts()
     for _, object in ipairs(workspace:GetDescendants()) do
-        if object:IsA("ProximityPrompt") and object.Name == "GardenBedPrompt" then
+        if isSupportedPrompt(object) then
             updatePrompt(object)
         end
     end
@@ -89,13 +103,13 @@ local function bindGardenBedPrompt(prompt)
 end
 
 for _, object in ipairs(workspace:GetDescendants()) do
-    if object:IsA("ProximityPrompt") and object.Name == "GardenBedPrompt" then
+    if isSupportedPrompt(object) then
         bindGardenBedPrompt(object)
     end
 end
 
 workspace.DescendantAdded:Connect(function(object)
-    if object:IsA("ProximityPrompt") and object.Name == "GardenBedPrompt" then
+    if isSupportedPrompt(object) then
         task.wait()
         bindGardenBedPrompt(object)
     end

@@ -28,8 +28,8 @@ function ObjectRemovalService.remove(player, object)
     local itemName = object:GetAttribute("ItemName") or object.Name
     local definition = ItemDefinitions[itemName]
 
-    if not definition or definition.Type ~= "GardenBed" then
-        return false, "The shovel can only remove garden beds."
+    if not definition or definition.Placeable ~= true then
+        return false, "This object cannot be removed."
     end
 
     local character = player.Character
@@ -50,22 +50,23 @@ function ObjectRemovalService.remove(player, object)
         return false, "Your character is not ready."
     end
 
-    local prompt = object:FindFirstChild("GardenBedPrompt", true)
+    local prompt = object:FindFirstChild("GardenBedPrompt", true) or object:FindFirstChild("MillPrompt", true) or
+                       object:FindFirstChild("ProductionPrompt", true)
     local attachment = prompt and prompt.Parent
 
     if not prompt or not prompt:IsA("ProximityPrompt") or not attachment or not attachment:IsA("Attachment") then
-        return false, "Garden bed prompt is missing."
+        return false, " prompt is missing."
     end
 
     local distance = (root.Position - attachment.WorldPosition).Magnitude
 
     if distance ~= distance or distance > MAX_DISTANCE then
-        return false, "Move closer to the garden bed."
+        return false, "Move closer to the object."
     end
 
     object:Destroy()
 
-    return true, "Garden bed removed."
+    return true, "Object removed."
 end
 
 return ObjectRemovalService
