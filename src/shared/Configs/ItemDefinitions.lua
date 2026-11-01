@@ -97,6 +97,17 @@ local ItemDefinitions = {
         BuyPriceCents = 500,
         Icon = "",
         Placeable = true
+    },
+    Wood = {
+        DisplayName = "Древесина",
+        Type = "Material",
+        Icon = ""
+    },
+
+    Stone = {
+        DisplayName = "Камень",
+        Type = "Material",
+        Icon = ""
     }
 }
 

@@ -2,6 +2,8 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local ConstructionDefinitions = require(ReplicatedStorage:WaitForChild("Configs")
+    :WaitForChild("ConstructionDefinitions"))
 
 local player = Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
@@ -76,14 +78,24 @@ local function updatePrompt(prompt)
         return
     end
 
+    if definition.BuildsInto then
+        local construction = ConstructionDefinitions[itemName]
+        local stage = object:GetAttribute("ConstructionStage") or 0
+        local step = construction and construction.Stages and construction.Stages[stage + 1]
+        if step then
+            prompt.ActionText = "Build: " .. step.DisplayName
+            prompt.Enabled = true
+        end
+        return
+    end
+
     if definition.Plantable == true then
         local selectedDefinition = ItemDefinitions[selectedItemName]
 
         prompt.ActionText = "Plant"
-        prompt.Enabled = object:GetAttribute("Occupied") ~= true 
-            and selectedAmount > 0 
-            and selectedDefinition ~= nil 
-            and selectedDefinition.Type == "Seed"
+        prompt.Enabled =
+            object:GetAttribute("Occupied") ~= true and selectedAmount > 0 and selectedDefinition ~= nil and
+                selectedDefinition.Type == "Seed"
 
     elseif definition.Recipes then
         prompt.ActionText = "Work"

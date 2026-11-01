@@ -6,7 +6,7 @@ local ContextActionService = game:GetService("ContextActionService")
 
 local player = Players.LocalPlayer
 local rules = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementRules"))
-local models = ReplicatedStorage:WaitForChild("PlaceableModels")
+local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local PlaceEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PlaceEvent")
 local PlacementController = {}
@@ -43,7 +43,7 @@ local function confirmPlacement()
         pending = true
         PlaceEvent:FireServer(placingItemName, position)
     end
-end 
+end
 
 function PlacementController.startPlacement(itemName)
     if pending then
@@ -62,7 +62,7 @@ function PlacementController.startPlacement(itemName)
         return
     end
 
-    local template = models:FindFirstChild(itemName)
+    local template = PlacementModels.getTemplate(itemName)
 
     if not template or not template:IsA("Model") then
         warn("[PLACEMENT] Model is missing for", itemName)
@@ -70,8 +70,7 @@ function PlacementController.startPlacement(itemName)
     end
 
     local plotName = player:GetAttribute("PlotName")
-    local plot = plotName and workspace:WaitForChild("Plots")
-        :FindFirstChild(plotName)
+    local plot = plotName and workspace:WaitForChild("Plots"):FindFirstChild(plotName)
 
     local ground = plot and plot:FindFirstChild("Ground")
 
@@ -86,8 +85,7 @@ function PlacementController.startPlacement(itemName)
     local parts = {}
 
     for _, object in ipairs(preview:GetDescendants()) do
-        if object:IsA("LuaSourceContainer")
-            or object:IsA("ProximityPrompt") then
+        if object:IsA("LuaSourceContainer") or object:IsA("ProximityPrompt") then
             object:Destroy()
 
         elseif object:IsA("BasePart") then
@@ -101,8 +99,7 @@ function PlacementController.startPlacement(itemName)
         end
     end
 
-    local touch = UserInputService.TouchEnabled
-        and not UserInputService.MouseEnabled
+    local touch = UserInputService.TouchEnabled and not UserInputService.MouseEnabled
 
     local function bindButton(name, title, key, y, callback)
         ContextActionService:BindAction(name, function(_, state)
@@ -117,19 +114,12 @@ function PlacementController.startPlacement(itemName)
         ContextActionService:SetPosition(name, UDim2.fromScale(0.75, y))
     end
 
-    bindButton(
-        "ConfirmPlacement", "Place", Enum.KeyCode.E,
-        0.45, confirmPlacement
-    )
+    bindButton("ConfirmPlacement", "Place", Enum.KeyCode.E, 0.45, confirmPlacement)
 
-    bindButton(
-        "CancelPlacement", "Cancel", Enum.KeyCode.Q,
-        0.62, PlacementController.cancelPlacement
-    )
+    bindButton("CancelPlacement", "Cancel", Enum.KeyCode.Q, 0.62, PlacementController.cancelPlacement)
 
     connection = RunService.RenderStepped:Connect(function()
-        if player:GetAttribute("DataLoaded") ~= true
-            or plot:GetAttribute("OwnerUserId") ~= player.UserId then
+        if player:GetAttribute("DataLoaded") ~= true or plot:GetAttribute("OwnerUserId") ~= player.UserId then
             PlacementController.cancelPlacement()
             return
         end
@@ -142,10 +132,7 @@ function PlacementController.startPlacement(itemName)
         local ray
 
         if touch then
-            ray = camera:ViewportPointToRay(
-                camera.ViewportSize.X / 2,
-                camera.ViewportSize.Y / 2
-            )
+            ray = camera:ViewportPointToRay(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
         else
             local mouse = UserInputService:GetMouseLocation()
             ray = camera:ViewportPointToRay(mouse.X, mouse.Y)
@@ -153,9 +140,7 @@ function PlacementController.startPlacement(itemName)
 
         local normal = ground.CFrame.UpVector
 
-        local top = ground.CFrame:PointToWorldSpace(
-            Vector3.new(0, ground.Size.Y / 2, 0)
-        )
+        local top = ground.CFrame:PointToWorldSpace(Vector3.new(0, ground.Size.Y / 2, 0))
 
         local denominator = ray.Direction:Dot(normal)
         local distance = -1
@@ -183,9 +168,7 @@ function PlacementController.startPlacement(itemName)
         preview:PivotTo(pivot)
         preview.Parent = workspace
 
-        local color = valid
-            and Color3.fromRGB(75, 210, 100)
-            or Color3.fromRGB(230, 75, 75)
+        local color = valid and Color3.fromRGB(75, 210, 100) or Color3.fromRGB(230, 75, 75)
 
         for _, part in ipairs(parts) do
             part.Color = color
@@ -204,8 +187,7 @@ PlaceEvent.OnClientEvent:Connect(function(success, message)
 end)
 
 UserInputService.InputBegan:Connect(function(input, processed)
-    if not processed
-        and input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if not processed and input.UserInputType == Enum.UserInputType.MouseButton1 then
         confirmPlacement()
     end
 end)

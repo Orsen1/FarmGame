@@ -5,6 +5,7 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitFo
 
 local PlantService = require(script.Parent:WaitForChild("PlantService"))
 local ProductionService = require(script.Parent:WaitForChild("ProductionService"))
+local ConstructionService = require(script.Parent:WaitForChild("ConstructionService"))
 
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
@@ -84,7 +85,14 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local tool = character:FindFirstChild("EquippedItem")
 
     if selectedItemName == "Shovel" or (tool and tool:IsA("Tool") and tool:GetAttribute("ItemName") == "Shovel") then
-        -- Подтверждение удаления открывает DeleteConfirmGui.
+        return
+    end
+
+    if definition.BuildsInto then
+        local success, reason = ConstructionService.Build(player, object)
+        if not success then
+            warn("[CONSTRUCTION]", reason)
+        end
         return
     end
 

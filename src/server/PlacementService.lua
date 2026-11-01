@@ -6,19 +6,22 @@ local InventoryService = require(ServerScriptService:WaitForChild("InventoryServ
 local PlacementRules = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementRules"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
-local models = ReplicatedStorage:WaitForChild("PlaceableModels")
+local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 local plots = workspace:WaitForChild("Plots")
 
 local PlacementService = {}
 
 function PlacementService.placeItem(player, itemName, position)
-    if player.Parent ~= Players
-        or player:GetAttribute("DataLoaded") ~= true then
+    if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true then
         return false, "Player data is not ready"
     end
 
     local definition = ItemDefinitions[itemName]
-    local template = models:FindFirstChild(itemName)
+    local template = PlacementModels.getTemplate(itemName)
+
+    if not definition or definition.Placeable ~= true or not template then
+        return false, "Missing placeable definition or model"
+    end
 
     local plotName = player:GetAttribute("PlotName")
     local plot = plotName and plots:FindFirstChild(plotName)
@@ -43,6 +46,10 @@ function PlacementService.placeItem(player, itemName, position)
 
     placedModel:SetAttribute("OwnerUserId", player.UserId)
     placedModel:SetAttribute("ItemName", itemName)
+
+    if definition.BuildsInto then
+        placedModel:SetAttribute("ConstructionStage", 0)
+    end
 
     if definition.Plantable == true then
         placedModel:SetAttribute("Occupied", false)

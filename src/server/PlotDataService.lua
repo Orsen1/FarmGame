@@ -6,6 +6,7 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitFo
 local PlantDataService = require(ServerScriptService:WaitForChild("PlantDataService"))
 local ProductionDataService = require(ServerScriptService:WaitForChild("ProductionDataService"))
 local PlantService = require(ServerScriptService:WaitForChild("PlantService"))
+local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 
 local models = ReplicatedStorage:WaitForChild("PlaceableModels")
 local plants = ReplicatedStorage:WaitForChild("Plants")
@@ -58,6 +59,17 @@ function PlotDataService.getData(player)
             savedObject.OutputInventory = outputData
         end
 
+        if definition.BuildsInto then
+            local stage = object:GetAttribute("ConstructionStage")
+            if stage == nil then
+                stage = 0
+            end
+            if not PlacementModels.getTemplate(itemName, stage) then
+                return nil, "Invalid construction stage in " .. itemName
+            end
+            savedObject.ConstructionStage = stage
+        end
+
         table.insert(result, savedObject)
     end
 
@@ -83,8 +95,7 @@ function PlotDataService.loadData(player, savedObjects)
         end
 
         local definition = ItemDefinitions[savedObject.ItemName]
-        local template = models:FindFirstChild(savedObject.ItemName)
-
+        local template = PlacementModels.getTemplate(savedObject.ItemName, savedObject.ConstructionStage)
         if not definition or definition.Placeable ~= true or not template or not template:IsA("Model") then
             return false, "Missing definition or model: " .. savedObject.ItemName
         end
@@ -105,6 +116,16 @@ function PlotDataService.loadData(player, savedObjects)
 
         object:SetAttribute("OwnerUserId", player.UserId)
         object:SetAttribute("ItemName", savedObject.ItemName)
+
+        object.Name = savedObject.ItemName
+
+        if definition.BuildsInto then
+            local stage = savedObject.ConstructionStage
+            if stage == nil then
+                stage = 0
+            end
+            object:SetAttribute("ConstructionStage", stage)
+        end
 
         if definition.Recipes then
             local success, errorMessage = ProductionDataService.loadData(object, savedObject)
