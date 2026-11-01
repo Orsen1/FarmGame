@@ -50,8 +50,7 @@ function ObjectRemovalService.remove(player, object)
         return false, "Your character is not ready."
     end
 
-    local prompt = object:FindFirstChild("GardenBedPrompt", true) or object:FindFirstChild("MillPrompt", true) or
-                       object:FindFirstChild("ProductionPrompt", true)
+    local prompt = object:FindFirstChild("ActionPrompt", true)
     local attachment = prompt and prompt.Parent
 
     if not prompt or not prompt:IsA("ProximityPrompt") or not attachment or not attachment:IsA("Attachment") then

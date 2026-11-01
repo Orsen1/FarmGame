@@ -562,11 +562,7 @@ end
 
 ProximityPromptService.PromptTriggered:Connect(function(prompt, who)
     if who ~= player or pending or gui.Enabled
-        or (
-          prompt.Name ~= "GardenBedPrompt"
-          and prompt.Name ~= "MillPrompt"
-          and prompt.Name ~= "ProductionPrompt"
-        )
+        or prompt.Name ~= "ActionPrompt"
         or player:GetAttribute("DataLoaded") ~= true
         or not hasShovel() then
         return
