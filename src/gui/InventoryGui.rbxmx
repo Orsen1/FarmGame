@@ -1,4 +1,5 @@
-<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+<?xml version='1.0' encoding='utf-8'?>
+<roblox xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
@@ -9,7 +10,7 @@
 			<token name="SafeAreaCompatibility">1</token>
 			<token name="ScreenInsets">2</token>
 			<bool name="Enabled">true</bool>
-			<bool name="ResetOnSpawn">true</bool>
+			<bool name="ResetOnSpawn">false</bool>
 			<token name="ZIndexBehavior">1</token>
 			<bool name="AutoLocalize">true</bool>
 			<Ref name="RootLocalizationTable">null</Ref>
@@ -18,17 +19,17 @@
 			<token name="SelectionBehaviorRight">0</token>
 			<token name="SelectionBehaviorUp">0</token>
 			<bool name="SelectionGroup">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<string name="Name">InventoryGui</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 		</Properties>
 		<Item class="LocalScript" referent="RBX318DACEE0B2A4368BA6B79B83A5CB5E9">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[local replicatedStorage = game:GetService("ReplicatedStorage")
+				<ProtectedString name="Source">local replicatedStorage = game:GetService("ReplicatedStorage")
 local setSelectedSlotEvent = replicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
 local ItemDefinitions = require(replicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local PlacementController = require(replicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementController"))
@@ -87,7 +88,7 @@ local function updateSlot(slotData)
 	local itemName = slotData.ItemName.Value
 	local amount = slotData.Amount.Value
 
-	if itemName == "" or amount <= 0 then
+	if itemName == "" or amount &lt;= 0 then
 		itemIcon.Image = ""
 		amountText.Text = ""
 		return
@@ -114,11 +115,11 @@ for _, slotData in ipairs(inventory:GetChildren()) do
 end
 
 local function isValidSlotNumber(slotNumber)
-	return typeof(slotNumber) == "number" and slotNumber >= 1 and slotNumber <= 6
+	return typeof(slotNumber) == "number" and slotNumber &gt;= 1 and slotNumber &lt;= 6
 end
 
 local function selectSlot(slotNumber, activatePlacement)
-	if dragging then
+	if dragging or player:GetAttribute("StorageOpen") == true then
         return
     end
 
@@ -157,7 +158,7 @@ local function selectSlot(slotNumber, activatePlacement)
 	if activatePlacement ~= false then
     	local selectedSlot = inventory:FindFirstChild("Slot" .. slotNumber)
 
-    	if selectedSlot and selectedSlot.Amount.Value > 0 then
+    	if selectedSlot and selectedSlot.Amount.Value &gt; 0 then
 			local itemName = selectedSlot.ItemName.Value
 			local itemDefinition = ItemDefinitions[itemName]
 			if itemDefinition and itemDefinition.Placeable == true then
@@ -188,17 +189,24 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 end)
 
 local press = nil
+local pendingMove = false
 local DRAG_DISTANCE = 8
 
+-- Отдельный слой позволяет видеть перетаскиваемую иконку над окном склада.
+local dragGui = Instance.new("ScreenGui")
+dragGui.Name = "InventoryDragGui"
+dragGui.DisplayOrder = 50
+dragGui.ResetOnSpawn = false
+dragGui.ScreenInsets = script.Parent.ScreenInsets
+dragGui.Parent = player.PlayerGui
+
 local dragIcon = Instance.new("ImageLabel")
-dragIcon.Name = "InventoryDragIcon"
 dragIcon.Size = UDim2.fromOffset(64, 64)
 dragIcon.AnchorPoint = Vector2.new(0.5, 0.5)
 dragIcon.BackgroundColor3 = normalColor
 dragIcon.BackgroundTransparency = 0.15
-dragIcon.ZIndex = 100
 dragIcon.Visible = false
-dragIcon.Parent = script.Parent
+dragIcon.Parent = dragGui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 10)
@@ -211,119 +219,170 @@ dragAmount.BackgroundTransparency = 1
 dragAmount.TextColor3 = Color3.fromRGB(60, 40, 20)
 dragAmount.TextScaled = true
 dragAmount.Font = Enum.Font.GothamBold
-dragAmount.ZIndex = 101
 dragAmount.Parent = dragIcon
 
-local function getPoint(input)
-    return Vector2.new(input.Position.X, input.Position.Y)
+local function getStorage()
+    local gui = player.PlayerGui:FindFirstChild("StorageGui")
+    local panel = gui and gui:FindFirstChild("Panel")
+    local value = gui and gui:FindFirstChild("StorageObject")
+    local object = value and value.Value
+    if gui and gui.Enabled and panel and panel.Visible and object then
+        return object:FindFirstChild("StorageInventory"), panel.Grid, object
+    end
 end
 
-local function readSlot(index)
-    local slot = inventory:FindFirstChild("Slot" .. index)
-
-    if not slot then
+local function readSlot(index, area)
+    local folder = inventory
+    if area == "Storage" then
+        folder = getStorage()
+    end
+    if not folder then
         return nil
     end
-
-    return {
-        ItemName = slot.ItemName.Value,
-        Amount = slot.Amount.Value,
-    }
+    local slot = folder:FindFirstChild("Slot" .. index)
+    local name = slot and slot:FindFirstChild("ItemName")
+    local amount = slot and slot:FindFirstChild("Amount")
+    if name and amount then
+        return {ItemName = name.Value, Amount = amount.Value}
+    end
 end
 
-local function findSlotAt(screenPoint)
-    local objects = player.PlayerGui:GetGuiObjectsAtPosition(
-        screenPoint.X,
-        screenPoint.Y
-    )
-
-    for _, object in ipairs(objects) do
-        for index = 1, 6 do
-            local slot = hotbarFrame:FindFirstChild("Slot" .. index)
-
-            if slot and (object == slot or object:IsDescendantOf(slot)) then
-                return index
+local function findSlotAt(point)
+    local _, storageGrid = getStorage()
+    for _, hit in ipairs(player.PlayerGui:GetGuiObjectsAtPosition(point.X, point.Y)) do
+        local object = hit
+        while object do
+            local area
+            if object.Parent == hotbarFrame then
+                area = "Player"
+            elseif storageGrid and object.Parent == storageGrid then
+                area = "Storage"
             end
+            if area then
+                local index = tonumber(object.Name:match("^Slot(%d+)$"))
+                if index then
+                    return index, area
+                end
+            end
+            object = object.Parent
         end
     end
-
-    return nil
 end
 
 local function cancelDrag()
+    if press and press.Grid then
+        press.Grid.ScrollingEnabled = true
+    end
     press = nil
     dragging = false
     dragIcon.Visible = false
 end
 
-for index = 1, 6 do
-    local slotIndex = index
-    local guiSlot = hotbarFrame:WaitForChild("Slot" .. slotIndex)
-    local button = guiSlot:WaitForChild("TextButton")
+local function startDrag()
+    if not press or dragging or press.Data.ItemName == "" or press.Data.Amount &lt;= 0 then
+        return
+    end
+    if player:GetAttribute("ProductionMode") == true
+        or not hotbarFrame.Visible or not script.Parent.Enabled then
+        cancelDrag()
+        return
+    end
+    press.Moved = true
+    dragging = true
+    if press.Grid then
+        press.Grid.ScrollingEnabled = false
+    end
+    PlacementController.cancelPlacement()
+    dragIcon.Image = getIcon(press.Data.ItemName)
+    dragAmount.Text = tostring(press.Data.Amount)
+    dragIcon.Position = UDim2.fromOffset(press.Point.X, press.Point.Y)
+    dragIcon.Visible = true
+end
 
+local function bindButton(button, index, area)
     button.InputBegan:Connect(function(input)
         local isMouse = input.UserInputType == Enum.UserInputType.MouseButton1
         local isTouch = input.UserInputType == Enum.UserInputType.Touch
-
         if not isMouse and not isTouch then
             return
         end
-
-        if press
-            or player:GetAttribute("DataLoaded") ~= true
+        if press or pendingMove or player:GetAttribute("DataLoaded") ~= true
             or player:GetAttribute("ProductionMode") == true then
             return
         end
 
-        press = {
-            Input = input,
-            Index = slotIndex,
-            Data = readSlot(slotIndex),
-            Start = getPoint(input),
-            Moved = false,
+        local data = readSlot(index, area)
+        if not data then
+            return
+        end
+        local _, storageGrid, storageObject = getStorage()
+        local point = Vector2.new(input.Position.X, input.Position.Y)
+        local state = {
+            Input = input, Index = index, Area = area, Data = data,
+            Start = point, Point = point, Moved = false,
+            StorageObject = storageObject,
+            Grid = area == "Storage" and storageGrid or nil,
+            TouchStorage = isTouch and area == "Storage",
         }
+        press = state
+
+        -- Короткое движение пальцем прокручивает склад; удержание берёт предмет.
+        if state.TouchStorage then
+            task.delay(0.25, function()
+                if press == state then
+                    startDrag()
+                end
+            end)
+        end
     end)
+end
+
+for index = 1, 6 do
+    bindButton(hotbarFrame:WaitForChild("Slot" .. index):WaitForChild("TextButton"), index, "Player")
+end
+
+local boundStorageGuis = setmetatable({}, {__mode = "k"})
+local function bindStorageGui(gui)
+    if gui.Name ~= "StorageGui" or not gui:IsA("ScreenGui") or boundStorageGuis[gui] then
+        return
+    end
+    boundStorageGuis[gui] = true
+    local grid = gui:WaitForChild("Panel"):WaitForChild("Grid")
+    for index = 1, 24 do
+        bindButton(grid:WaitForChild("Slot" .. index):WaitForChild("TextButton"), index, "Storage")
+    end
+end
+player.PlayerGui.ChildAdded:Connect(bindStorageGui)
+local storageGui = player.PlayerGui:FindFirstChild("StorageGui")
+if storageGui then
+    task.spawn(bindStorageGui, storageGui)
 end
 
 UserInputService.InputChanged:Connect(function(input)
     if not press then
         return
     end
-
-    local isMouseMove =
-        press.Input.UserInputType == Enum.UserInputType.MouseButton1
+    local mouseMove = press.Input.UserInputType == Enum.UserInputType.MouseButton1
         and input.UserInputType == Enum.UserInputType.MouseMovement
-
-    if not isMouseMove and input ~= press.Input then
+    if not mouseMove and input ~= press.Input then
         return
     end
-
     if player:GetAttribute("ProductionMode") == true
-        or not hotbarFrame.Visible
-        or not script.Parent.Enabled then
+        or not hotbarFrame.Visible or not script.Parent.Enabled then
         cancelDrag()
         return
     end
 
-    local point = getPoint(input)
-
-    if not press.Moved
-        and (point - press.Start).Magnitude >= DRAG_DISTANCE then
+    local point = Vector2.new(input.Position.X, input.Position.Y)
+    press.Point = point
+    if not dragging and (point - press.Start).Magnitude &gt;= DRAG_DISTANCE then
         press.Moved = true
-
-        local data = press.Data
-
-        if data and data.ItemName ~= "" and data.Amount > 0 then
-            dragging = true
-
-            PlacementController.cancelPlacement()
-
-            dragIcon.Image = getIcon(data.ItemName)
-            dragAmount.Text = tostring(data.Amount)
-            dragIcon.Visible = true
+        if press.TouchStorage then
+            cancelDrag()
+            return
         end
+        startDrag()
     end
-
     if dragging then
         dragIcon.Position = UDim2.fromOffset(point.X, point.Y)
     end
@@ -333,96 +392,92 @@ UserInputService.InputEnded:Connect(function(input)
     if not press then
         return
     end
-
-    local isMouse =
-        press.Input.UserInputType == Enum.UserInputType.MouseButton1
-
-    if isMouse then
+    local mouse = press.Input.UserInputType == Enum.UserInputType.MouseButton1
+    if mouse then
         if input.UserInputType ~= Enum.UserInputType.MouseButton1 then
             return
         end
-    else
-        if input ~= press.Input then
-            return
-        end
-    end
-
-    local finished = press
-    local wasDragging = dragging
-
-    local screenPoint
-
-    if isMouse then
-    	local inset = GuiService:GetGuiInset()
-   		screenPoint = UserInputService:GetMouseLocation() - inset
-	else
-    	screenPoint = Vector2.new(input.Position.X, input.Position.Y)
-	end
-
-    cancelDrag()
-
-    if player:GetAttribute("ProductionMode") == true
-        or not hotbarFrame.Visible
-        or not script.Parent.Enabled then
+    elseif input ~= press.Input then
         return
     end
 
-    local targetIndex = findSlotAt(screenPoint)
+    local finished, wasDragging = press, dragging
+    local point = Vector2.new(input.Position.X, input.Position.Y)
+    if mouse then
+        local inset = GuiService:GetGuiInset()
+        point = UserInputService:GetMouseLocation() - inset
+    end
+    cancelDrag()
 
-	print(
-    "[DRAG TARGET]",
-    "From:", finished.Index,
-    "To:", targetIndex,
-    "Moved:", finished.Moved,
-    "Position:", screenPoint
-)
-
+    if player:GetAttribute("ProductionMode") == true
+        or not hotbarFrame.Visible or not script.Parent.Enabled then
+        return
+    end
+    local targetIndex, targetArea = findSlotAt(point)
+    if not targetIndex then
+        return
+    end
     if wasDragging then
-        if not targetIndex or targetIndex == finished.Index then
+        if targetIndex == finished.Index and targetArea == finished.Area then
             return
         end
-
-        local targetData = readSlot(targetIndex)
-
+        local _, _, storageObject = getStorage()
+        if (finished.Area == "Storage" or targetArea == "Storage")
+            and (not storageObject or storageObject ~= finished.StorageObject) then
+            return
+        end
+        local targetData = readSlot(targetIndex, targetArea)
         if targetData then
+            pendingMove = true
             moveInventorySlotEvent:FireServer(
-                finished.Index,
-                targetIndex,
-                finished.Data,
-                targetData
+                finished.Index, targetIndex, finished.Data, targetData,
+                finished.Area, targetArea, storageObject
             )
         end
-    elseif not finished.Moved and targetIndex == finished.Index then
+    elseif not finished.Moved and finished.Area == "Player"
+        and targetArea == "Player" and targetIndex == finished.Index then
         selectSlot(finished.Index)
     end
 end)
 
+player:GetAttributeChangedSignal("StorageOpen"):Connect(function()
+    if player:GetAttribute("StorageOpen") ~= true then
+        cancelDrag()
+    end
+end)
 UserInputService.WindowFocusReleased:Connect(cancelDrag)
 player.CharacterRemoving:Connect(cancelDrag)
 
 moveInventorySlotEvent.OnClientEvent:Connect(function(success, reason)
+    pendingMove = false
     if not success then
-        warn("[INVENTORY] Перенос отменён:", reason)
+        warn("[INVENTORY] Move cancelled:", reason)
     end
 end)
 
-selectSlot(1, false)]]></ProtectedString>
+script.Destroying:Connect(function()
+    cancelDrag()
+    dragGui:Destroy()
+end)
+
+selectSlot(1, false)
+</ProtectedString>
 				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
+				<Content name="LinkedSource"><null /></Content>
 				<token name="RunContext">0</token>
 				<string name="ScriptGuid">{C6E1E022-24DE-4AA1-944D-56EE8509960D}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">InventoryOnChangeScript</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
 		</Item>
 		<Item class="LocalScript" referent="RBX97FE8277A0474BA18B842BB771AE7973">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[local UserInputService = game:GetService("UserInputService")
+				<ProtectedString name="Source">local UserInputService = game:GetService("UserInputService")
 
 local gui = script.Parent
 local hotbar = gui:WaitForChild("HotbarFrame")
@@ -430,7 +485,7 @@ local hotbar = gui:WaitForChild("HotbarFrame")
 local function updatePosition()
     local screenSize = gui.AbsoluteSize
 
-    if UserInputService.TouchEnabled and screenSize.Y > screenSize.X then
+    if UserInputService.TouchEnabled and screenSize.Y &gt; screenSize.X then
         hotbar.Position = UDim2.new(0.5, 0, 1, -112)
     else
         hotbar.Position = UDim2.fromScale(0.5, 0.98)
@@ -440,16 +495,16 @@ end
 gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(updatePosition)
 UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(updatePosition)
 updatePosition()
-]]></ProtectedString>
+</ProtectedString>
 				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
+				<Content name="LinkedSource"><null /></Content>
 				<token name="RunContext">0</token>
 				<string name="ScriptGuid">{85010144-37CD-4CBF-8925-D4CA4CC467F3}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">ResponsiveLayout</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
@@ -511,11 +566,11 @@ updatePosition()
 				<token name="SelectionBehaviorRight">0</token>
 				<token name="SelectionBehaviorUp">0</token>
 				<bool name="SelectionGroup">false</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">HotbarFrame</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
@@ -537,11 +592,11 @@ updatePosition()
 						<S>0</S>
 						<O>18</O>
 					</UDim>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">UICorner</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -565,11 +620,11 @@ updatePosition()
 					<float name="Thickness">5</float>
 					<float name="Transparency">0</float>
 					<int name="ZIndex">1</int>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">UIStroke</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -592,11 +647,11 @@ updatePosition()
 						<S>0.088888891</S>
 						<O>0</O>
 					</UDim>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">UIPadding</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -615,11 +670,11 @@ updatePosition()
 					<token name="HorizontalAlignment">1</token>
 					<token name="SortOrder">2</token>
 					<token name="VerticalAlignment">0</token>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">UIListLayout</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -681,11 +736,11 @@ updatePosition()
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">Slot1</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -707,11 +762,11 @@ updatePosition()
 							<S>0</S>
 							<O>12</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -735,11 +790,11 @@ updatePosition()
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -752,12 +807,12 @@ updatePosition()
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.352941185</R>
 							<G>0.235294119</G>
@@ -831,11 +886,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">AmountText</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -849,12 +904,12 @@ updatePosition()
 							<CachedFaceId><url>rbxasset://fonts/Arimo-Regular.ttf</url></CachedFaceId>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.105882362</R>
 							<G>0.164705887</G>
@@ -934,18 +989,18 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">TextButton</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="ImageLabel" referent="RBX30F9835E736245508C547291985C7D0B">
 					<Properties>
-						<Content name="Image"><null></null></Content>
+						<Content name="Image"><null /></Content>
 						<Color3 name="ImageColor3">
 							<R>1</R>
 							<G>1</G>
@@ -1033,11 +1088,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">ItemIcon</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1045,11 +1100,11 @@ updatePosition()
 						<Properties>
 							<int name="MaxTextSize">39</int>
 							<int name="MinTextSize">1</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">ResponsiveTextSize</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -1113,11 +1168,11 @@ updatePosition()
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">Slot2</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -1139,11 +1194,11 @@ updatePosition()
 							<S>0</S>
 							<O>12</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1167,11 +1222,11 @@ updatePosition()
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1184,12 +1239,12 @@ updatePosition()
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.352941185</R>
 							<G>0.235294119</G>
@@ -1263,11 +1318,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">AmountText</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1281,12 +1336,12 @@ updatePosition()
 							<CachedFaceId><url>rbxasset://fonts/Arimo-Regular.ttf</url></CachedFaceId>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.105882362</R>
 							<G>0.164705887</G>
@@ -1366,18 +1421,18 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">TextButton</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="ImageLabel" referent="RBX31F24B82B21A4866B4E2F83E99901D68">
 					<Properties>
-						<Content name="Image"><null></null></Content>
+						<Content name="Image"><null /></Content>
 						<Color3 name="ImageColor3">
 							<R>1</R>
 							<G>1</G>
@@ -1465,11 +1520,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">ItemIcon</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1477,11 +1532,11 @@ updatePosition()
 						<Properties>
 							<int name="MaxTextSize">39</int>
 							<int name="MinTextSize">1</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">ResponsiveTextSize</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -1545,11 +1600,11 @@ updatePosition()
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">Slot3</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -1571,11 +1626,11 @@ updatePosition()
 							<S>0</S>
 							<O>12</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1599,11 +1654,11 @@ updatePosition()
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1616,12 +1671,12 @@ updatePosition()
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.352941185</R>
 							<G>0.235294119</G>
@@ -1695,11 +1750,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">AmountText</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1713,12 +1768,12 @@ updatePosition()
 							<CachedFaceId><url>rbxasset://fonts/Arimo-Regular.ttf</url></CachedFaceId>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.105882362</R>
 							<G>0.164705887</G>
@@ -1798,18 +1853,18 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">TextButton</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="ImageLabel" referent="RBX582DA4204D2D46F088799006DC1B7B01">
 					<Properties>
-						<Content name="Image"><null></null></Content>
+						<Content name="Image"><null /></Content>
 						<Color3 name="ImageColor3">
 							<R>1</R>
 							<G>1</G>
@@ -1897,11 +1952,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">ItemIcon</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -1909,11 +1964,11 @@ updatePosition()
 						<Properties>
 							<int name="MaxTextSize">39</int>
 							<int name="MinTextSize">1</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">ResponsiveTextSize</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -1977,11 +2032,11 @@ updatePosition()
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">Slot4</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -2003,11 +2058,11 @@ updatePosition()
 							<S>0</S>
 							<O>12</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2031,11 +2086,11 @@ updatePosition()
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2048,12 +2103,12 @@ updatePosition()
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.352941185</R>
 							<G>0.235294119</G>
@@ -2127,11 +2182,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">AmountText</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2145,12 +2200,12 @@ updatePosition()
 							<CachedFaceId><url>rbxasset://fonts/Arimo-Regular.ttf</url></CachedFaceId>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.105882362</R>
 							<G>0.164705887</G>
@@ -2230,18 +2285,18 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">TextButton</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="ImageLabel" referent="RBX502A693F73E34BFC8B8717C0909CCA56">
 					<Properties>
-						<Content name="Image"><null></null></Content>
+						<Content name="Image"><null /></Content>
 						<Color3 name="ImageColor3">
 							<R>1</R>
 							<G>1</G>
@@ -2329,11 +2384,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">ItemIcon</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2341,11 +2396,11 @@ updatePosition()
 						<Properties>
 							<int name="MaxTextSize">39</int>
 							<int name="MinTextSize">1</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">ResponsiveTextSize</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -2409,11 +2464,11 @@ updatePosition()
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">Slot5</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -2435,11 +2490,11 @@ updatePosition()
 							<S>0</S>
 							<O>12</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2463,11 +2518,11 @@ updatePosition()
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2480,12 +2535,12 @@ updatePosition()
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.352941185</R>
 							<G>0.235294119</G>
@@ -2559,11 +2614,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">AmountText</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2577,12 +2632,12 @@ updatePosition()
 							<CachedFaceId><url>rbxasset://fonts/Arimo-Regular.ttf</url></CachedFaceId>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.105882362</R>
 							<G>0.164705887</G>
@@ -2662,18 +2717,18 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">TextButton</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="ImageLabel" referent="RBX979839203383419CA936727819D5ECBE">
 					<Properties>
-						<Content name="Image"><null></null></Content>
+						<Content name="Image"><null /></Content>
 						<Color3 name="ImageColor3">
 							<R>1</R>
 							<G>1</G>
@@ -2761,11 +2816,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">ItemIcon</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2773,11 +2828,11 @@ updatePosition()
 						<Properties>
 							<int name="MaxTextSize">39</int>
 							<int name="MinTextSize">1</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">ResponsiveTextSize</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -2841,11 +2896,11 @@ updatePosition()
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">Slot6</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -2867,11 +2922,11 @@ updatePosition()
 							<S>0</S>
 							<O>12</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2895,11 +2950,11 @@ updatePosition()
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2912,12 +2967,12 @@ updatePosition()
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.352941185</R>
 							<G>0.235294119</G>
@@ -2991,11 +3046,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">AmountText</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -3009,12 +3064,12 @@ updatePosition()
 							<CachedFaceId><url>rbxasset://fonts/Arimo-Regular.ttf</url></CachedFaceId>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
-						<string name="Text"></string>
+						<string name="Text" />
 						<Color3 name="TextColor3">
 							<R>0.105882362</R>
 							<G>0.164705887</G>
@@ -3094,18 +3149,18 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">TextButton</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="ImageLabel" referent="RBXD3BC70D3EAFD4F37A4B1A121C47B482D">
 					<Properties>
-						<Content name="Image"><null></null></Content>
+						<Content name="Image"><null /></Content>
 						<Color3 name="ImageColor3">
 							<R>1</R>
 							<G>1</G>
@@ -3193,11 +3248,11 @@ updatePosition()
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">ItemIcon</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -3205,11 +3260,11 @@ updatePosition()
 						<Properties>
 							<int name="MaxTextSize">39</int>
 							<int name="MinTextSize">1</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">ResponsiveTextSize</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -3221,11 +3276,11 @@ updatePosition()
 					<float name="AspectRatio">6.66666651</float>
 					<token name="AspectType">0</token>
 					<token name="DominantAxis">0</token>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">ResponsiveAspect</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -3240,11 +3295,11 @@ updatePosition()
 						<X>0</X>
 						<Y>0</Y>
 					</Vector2>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">ResponsiveMaxSize</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -3252,6 +3307,6 @@ updatePosition()
 		</Item>
 	</Item>
 	<SharedStrings>
-		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
+		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA==" />
 	</SharedStrings>
 </roblox>

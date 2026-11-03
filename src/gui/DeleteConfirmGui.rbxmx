@@ -466,7 +466,7 @@
       <Properties>
         <string name="Name">ResponsiveLayout</string>
         <bool name="Disabled">false</bool>
-        <ProtectedString name="Source">-- Layout is independent of inventory and server events.
+        <ProtectedString name="Source">
 local gui = script.Parent
 local dialog = gui:WaitForChild("Dialog")
 local scale = dialog:WaitForChild("UIScale")

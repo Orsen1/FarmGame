@@ -3,7 +3,7 @@ local SLOT_COUNT = 6
 local MAX_INTEGER = 9007199254740991
 
 local function isValidAmount(amount)
-    return typeof(amount) == "number" and amount >= 1 and amount <= MAX_INTEGER and amount % 1 == 0
+    return typeof(amount) == "number" and amount >= 1 and amount % 1 == 0
 end
 
 local function isValidItemName(itemName)
@@ -113,10 +113,6 @@ local function planExchange(player, inputs, outputs)
             return nil, "InventoryFull"
         end
 
-        if target.Amount > MAX_INTEGER - amount then
-            return nil, "AmountTooLarge"
-        end
-
         target.ItemName = itemName
         target.Amount = target.Amount + amount
     end
@@ -178,7 +174,7 @@ function InventoryService.CanAddItem(player, itemName, amount)
     end
 
     local currentAmount = slot.Amount.Value
-    if currentAmount < 0 or currentAmount % 1 ~= 0 or currentAmount > MAX_INTEGER - amount then
+    if currentAmount < 0 or currentAmount % 1 ~= 0 then
         return false, "AmountTooLarge"
     end
 
@@ -202,31 +198,9 @@ function InventoryService.RemoveItem(player, itemName, amount)
         return false, "InvalidItemOrAmount"
     end
 
-    local inventory = player:FindFirstChild("Inventory")
-    if not inventory then
-        return false, "InventoryNotReady"
-    end
-
-    for slotNumber = 1, SLOT_COUNT do
-        local slot = inventory:FindFirstChild("Slot" .. slotNumber)
-        local nameValue = slot and slot:FindFirstChild("ItemName")
-        local amountValue = slot and slot:FindFirstChild("Amount")
-
-        if nameValue and amountValue and nameValue.Value == itemName then
-            if amountValue.Value < amount then
-                return false, "NotEnoughItems"
-            end
-
-            amountValue.Value = amountValue.Value - amount
-            if amountValue.Value == 0 then
-                nameValue.Value = ""
-            end
-
-            return true
-        end
-    end
-
-    return false, "NotEnoughItems"
+    return InventoryService.ExchangeItems(player, {
+        [itemName] = amount
+    }, {})
 end
 
 function InventoryService.GetInventory(player)
@@ -260,70 +234,76 @@ function InventoryService.GetInventory(player)
     return inventoryData
 end
 
-function InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, expectedTo)
-    local function isValidIndex(index)
-        return typeof(index) == "number"
-            and index % 1 == 0
-            and index >= 1
-            and index <= SLOT_COUNT
+function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCount, fromIndex, toIndex, expectedFrom,
+    expectedTo)
+    local function validIndex(index, count)
+        return typeof(index) == "number" and index % 1 == 0 and index >= 1 and index <= count
     end
 
-    if not isValidIndex(fromIndex) or not isValidIndex(toIndex) then
+    if not validIndex(fromIndex, fromCount) or not validIndex(toIndex, toCount) or typeof(expectedFrom) ~= "table" or
+        typeof(expectedTo) ~= "table" then
         return false, "InvalidSlot"
     end
 
-    if fromIndex == toIndex then
-        return true
-    end
-
-    if typeof(expectedFrom) ~= "table" or typeof(expectedTo) ~= "table" then
-        return false, "InvalidSlotData"
-    end
-
-    local data = InventoryService.GetInventory(player)
-
-    if not data then
+    if not fromFolder or not toFolder then
         return false, "InventoryNotReady"
     end
 
-    local from = data[fromIndex]
-    local to = data[toIndex]
+    local from = fromFolder:FindFirstChild("Slot" .. fromIndex)
+    local to = toFolder:FindFirstChild("Slot" .. toIndex)
 
-    if from.ItemName ~= expectedFrom.ItemName
-        or from.Amount ~= expectedFrom.Amount
-        or to.ItemName ~= expectedTo.ItemName
-        or to.Amount ~= expectedTo.Amount then
+    if not from or not to then
+        return false, "InvalidSlot"
+    end
+
+    local fromName = from:FindFirstChild("ItemName")
+    local fromAmount = from:FindFirstChild("Amount")
+    local toName = to:FindFirstChild("ItemName")
+    local toAmount = to:FindFirstChild("Amount")
+
+    if not fromName or not fromAmount or not toName or not toAmount then
+        return false, "InvalidSlot"
+    end
+
+    if fromName.Value ~= expectedFrom.ItemName or fromAmount.Value ~= expectedFrom.Amount or toName.Value ~=
+        expectedTo.ItemName or toAmount.Value ~= expectedTo.Amount then
         return false, "InventoryChanged"
     end
 
-    if from.ItemName == "" or from.Amount <= 0 then
+    if fromName.Value == "" or not isValidAmount(fromAmount.Value) then
         return false, "SourceSlotEmpty"
     end
 
-    if from.ItemName == to.ItemName then
-        if to.Amount > MAX_INTEGER - from.Amount then
-            return false, "AmountTooLarge"
-        end
-
-        to.Amount = to.Amount + from.Amount
-        from.ItemName = ""
-        from.Amount = 0
-    else
-        from.ItemName, to.ItemName = to.ItemName, from.ItemName
-        from.Amount, to.Amount = to.Amount, from.Amount
+    if (toName.Value == "" and toAmount.Value ~= 0) or (toName.Value ~= "" and not isValidAmount(toAmount.Value)) then
+        return false, "InvalidSlot"
     end
 
-    local inventory = player.Inventory
-    local fromSlot = inventory:FindFirstChild("Slot" .. fromIndex)
-    local toSlot = inventory:FindFirstChild("Slot" .. toIndex)
+    if from == to then
+        return true
+    end
 
-    fromSlot.ItemName.Value = from.ItemName
-    fromSlot.Amount.Value = from.Amount
+    local aName, aAmount = fromName.Value, fromAmount.Value
+    local bName, bAmount = toName.Value, toAmount.Value
 
-    toSlot.ItemName.Value = to.ItemName
-    toSlot.Amount.Value = to.Amount
+    if aName == bName then
+        aName, aAmount, bAmount = "", 0, bAmount + aAmount
+    else
+        aName, aAmount, bName, bAmount = bName, bAmount, aName, aAmount
+    end
+
+    fromName.Value = aName
+    fromAmount.Value = aAmount
+    toName.Value = bName
+    toAmount.Value = bAmount
 
     return true
+end
+
+function InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, expectedTo)
+    local inventory = player:FindFirstChild("Inventory")
+
+    return InventoryService.MoveBetweenSlots(inventory, SLOT_COUNT, inventory, SLOT_COUNT, fromIndex, toIndex,
+        expectedFrom, expectedTo)
 end
 
 return InventoryService

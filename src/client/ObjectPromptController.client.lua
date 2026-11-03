@@ -12,7 +12,8 @@ local plots = workspace:WaitForChild("Plots")
 local boundPrompts = {}
 
 local function isSupportedPrompt(object)
-    return object:IsA("ProximityPrompt") and (object.Name == "ActionPrompt" or object.Name == "CollectPrompt")
+    return object:IsA("ProximityPrompt") and
+               (object.Name == "ActionPrompt" or object.Name == "CollectPrompt" or object.Name == "StoragePrompt")
 end
 
 local function getSelectedItem()
@@ -45,7 +46,8 @@ local function updatePrompt(prompt)
     local object = prompt:FindFirstAncestorOfClass("Model")
     prompt.Enabled = false
 
-    if not object or player:GetAttribute("DataLoaded") ~= true or object:GetAttribute("OwnerUserId") ~= player.UserId then
+    if not object or player:GetAttribute("DataLoaded") ~= true or player:GetAttribute("StorageOpen") == true or
+        object:GetAttribute("OwnerUserId") ~= player.UserId then
         return
     end
 
@@ -57,6 +59,16 @@ local function updatePrompt(prompt)
     end
 
     prompt.ObjectText = definition.DisplayName or itemName
+
+    if prompt.Name == "StoragePrompt" then
+        local selectedItemName, selectedAmount = getSelectedItem()
+
+        prompt.ActionText = "Открыть"
+        prompt.Enabled = typeof(definition.StorageSlots) == "number" and definition.StorageSlots > 0 and
+                             not (selectedItemName == "Shovel" and selectedAmount > 0)
+
+        return
+    end
 
     if prompt.Name == "CollectPrompt" then
         if definition.Plantable == true then
@@ -162,6 +174,7 @@ end
 
 player:GetAttributeChangedSignal("SelectedSlot"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("DataLoaded"):Connect(updateAllPrompts)
+player:GetAttributeChangedSignal("StorageOpen"):Connect(updateAllPrompts)
 
 for i = 1, 6 do
     local slot = inventory:WaitForChild("Slot" .. i)

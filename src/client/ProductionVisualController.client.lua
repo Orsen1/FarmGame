@@ -1,4 +1,3 @@
--- Вращение видит каждый игрок. Камера и персонаж здесь не изменяются.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local plots = workspace:WaitForChild("Plots")

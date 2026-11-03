@@ -95,7 +95,8 @@ local ItemDefinitions = {
         DisplayName = "Склад",
         Type = "Building",
         Icon = "",
-        Placeable = true
+        Placeable = true,
+        StorageSlots = 24
     },
     Wood = {
         DisplayName = "Древесина",

@@ -7,6 +7,7 @@ local PlantDataService = require(ServerScriptService:WaitForChild("PlantDataServ
 local ProductionDataService = require(ServerScriptService:WaitForChild("ProductionDataService"))
 local PlantService = require(ServerScriptService:WaitForChild("PlantService"))
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
+local StorageService = require(ServerScriptService:WaitForChild("StorageService"))
 
 local models = ReplicatedStorage:WaitForChild("PlaceableModels")
 local plants = ReplicatedStorage:WaitForChild("Plants")
@@ -68,6 +69,16 @@ function PlotDataService.getData(player)
                 return nil, "Invalid construction stage in " .. itemName
             end
             savedObject.ConstructionStage = stage
+        end
+
+        if definition.StorageSlots then
+            local data, reason = StorageService.getData(object)
+
+            if not data then
+                return nil, reason
+            end
+
+            savedObject.StorageInventory = data
         end
 
         table.insert(result, savedObject)
@@ -132,6 +143,14 @@ function PlotDataService.loadData(player, savedObjects)
             if not success then
                 object:Destroy()
                 return false, errorMessage
+            end
+        end
+
+        if definition.StorageSlots then
+            local success, reason = StorageService.loadData(object, savedObject)
+            if not success then
+                object:Destroy()
+                return false, reason
             end
         end
 

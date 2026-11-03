@@ -42,7 +42,6 @@ local function validateData(template, plant)
         end
     end
 
-    -- Пустая грядка тоже является корректным сохранением.
     if plant == nil then
         return true
     end

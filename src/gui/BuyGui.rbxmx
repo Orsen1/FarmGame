@@ -6582,7 +6582,7 @@
 		</Item>
 		<Item class="LocalScript" referent="RBX25E2343A242B4AFEAEA6CB6EFF57A26E">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[-- Layout runs independently of inventory/remotes, including in the phone emulator.
+				<ProtectedString name="Source"><![CDATA[
 local gui = script.Parent
 local bounds = gui.ViewportBounds
 local main = gui.MainFrame
@@ -6612,7 +6612,6 @@ local function resize()
     main.FooterFrame.HintLabel.Visible = main.AbsoluteSize.X >= 500
     main.FooterFrame.MoneyLabel.Size = UDim2.new(main.AbsoluteSize.X >= 500 and 0.5 or 1, 0, 1, 0)
     for _, frame in ipairs(grids) do
-        -- Relative cell widths stay correct when the viewport changes.
         local twoColumns = frame.AbsoluteSize.X >= (compact and 480 or 580)
         frame.UIGridLayout.FillDirectionMaxCells = twoColumns and 2 or 1
         frame.UIGridLayout.CellSize = UDim2.new(twoColumns and 0.5 or 1, twoColumns and -14 or -16, 0, frame.Name == "CategoriesFrame" and 104 or 118)
@@ -6734,7 +6733,7 @@ gui.Overlay.Visible = main.Visible
 		</Item>
 		<Item class="LocalScript" referent="RBX3F048CE582D841D481F0162D831A1BF1">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[-- Reads the existing ItemDefinitions and uses the existing shop remotes.
+				<ProtectedString name="Source"><![CDATA[
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -6852,7 +6851,7 @@ local function refresh()
 
     local text, color = message, messageColor
     if pending then text, color = "Waiting for the server...", MUTED
-    elseif text ~= "" then -- Keep the latest server response visible.
+    elseif text ~= "" then
     elseif not room then text, color = "Inventory full. Free a slot to buy this item.", RED
     elseif maximum == 0 then text, color = "Not enough money.", RED
     else text, color = "Choose an amount, then press Buy.", MUTED end
@@ -7016,7 +7015,6 @@ buyEvent.OnClientEvent:Connect(function(result)
     refresh()
 end)
 
--- Follow existing and newly created inventory values without rebuilding the UI.
 local watched = {}
 local function watch(value)
     if value:IsA("ValueBase") and not watched[value] then

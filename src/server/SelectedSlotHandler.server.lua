@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local EquipmentService = require(ServerScriptService:WaitForChild("Equipment"):WaitForChild("EquipmentService"))
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
+local StorageService = require(ServerScriptService:WaitForChild("StorageService"))
 
 local moveInventorySlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("MoveInventorySlotEvent")
 local setSelectedSlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
@@ -22,8 +23,24 @@ setSelectedSlotEvent.OnServerEvent:Connect(function(player, slotNumber)
     player:SetAttribute("SelectedSlot", slotNumber)
 end)
 
-moveInventorySlotEvent.OnServerEvent:Connect(function(player, fromIndex, toIndex, expectedFrom, expectedTo)
-    local success, reason = InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, expectedTo)
+moveInventorySlotEvent.OnServerEvent:Connect(function(player, fromIndex, toIndex, expectedFrom, expectedTo, fromArea,
+    toArea, storageObject)
+    if player:GetAttribute("DataLoaded") ~= true or player:GetAttribute("ProductionMode") == true then
+        moveInventorySlotEvent:FireClient(player, false, "Inventory is not available")
+        return
+    end
+
+    fromArea = fromArea or "Player"
+    toArea = toArea or "Player"
+
+    local success, reason
+
+    if fromArea == "Player" and toArea == "Player" then
+        success, reason = InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, expectedTo)
+    else
+        success, reason = StorageService.MoveSlot(player, storageObject, fromArea, toArea, fromIndex, toIndex,
+            expectedFrom, expectedTo)
+    end
 
     moveInventorySlotEvent:FireClient(player, success, reason)
 end)
