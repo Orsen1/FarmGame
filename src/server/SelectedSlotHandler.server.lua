@@ -2,7 +2,9 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local EquipmentService = require(ServerScriptService:WaitForChild("Equipment"):WaitForChild("EquipmentService"))
+local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 
+local moveInventorySlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("MoveInventorySlotEvent")
 local setSelectedSlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
 
 local watched = {}
@@ -18,6 +20,12 @@ setSelectedSlotEvent.OnServerEvent:Connect(function(player, slotNumber)
     end
 
     player:SetAttribute("SelectedSlot", slotNumber)
+end)
+
+moveInventorySlotEvent.OnServerEvent:Connect(function(player, fromIndex, toIndex, expectedFrom, expectedTo)
+    local success, reason = InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, expectedTo)
+
+    moveInventorySlotEvent:FireClient(player, success, reason)
 end)
 
 local function bindPlayer(player)

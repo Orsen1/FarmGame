@@ -43,6 +43,11 @@ local selectedColor = Color3.fromRGB(220, 180, 110)
 local normalStrokeColor = Color3.fromRGB(190, 140, 70)
 local selectedStrokeColor = Color3.fromRGB(120, 80, 35)
 
+local GuiService = game:GetService("GuiService")
+local moveInventorySlotEvent = replicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("MoveInventorySlotEvent")
+
+local dragging = false
+
 
 local function getSelectedItemName()
 	local selectedSlot = inventory:FindFirstChild("Slot" .. selectedSlotNumber)
@@ -62,7 +67,6 @@ local function getIcon(itemName)
 	local itemDefinition = ItemDefinitions[itemName]
 	local icon = itemDefinition and itemDefinition.Icon
 
-	-- Для ImageLabel нужна ссылка на картинку, а не эмодзи.
 	if typeof(icon) == "string" and icon:find("://", 1, true) then
 		return icon
 	end
@@ -114,6 +118,10 @@ local function isValidSlotNumber(slotNumber)
 end
 
 local function selectSlot(slotNumber, activatePlacement)
+	if dragging then
+        return
+    end
+
 	if not isValidSlotNumber(slotNumber) then
 		warn("Invalid slot number:", slotNumber)
 		return
@@ -179,16 +187,224 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 	end
 end)
 
-for i = 1, 6 do
-	local slot = hotbarFrame:FindFirstChild("Slot" .. i)
-	if slot then
-		local clickButton = slot:WaitForChild("TextButton")
+local press = nil
+local DRAG_DISTANCE = 8
 
-		clickButton.MouseButton1Click:Connect(function()
-			selectSlot(i)
-		end)
-	end
+local dragIcon = Instance.new("ImageLabel")
+dragIcon.Name = "InventoryDragIcon"
+dragIcon.Size = UDim2.fromOffset(64, 64)
+dragIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+dragIcon.BackgroundColor3 = normalColor
+dragIcon.BackgroundTransparency = 0.15
+dragIcon.ZIndex = 100
+dragIcon.Visible = false
+dragIcon.Parent = script.Parent
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = dragIcon
+
+local dragAmount = Instance.new("TextLabel")
+dragAmount.Size = UDim2.fromScale(1, 0.3)
+dragAmount.Position = UDim2.fromScale(0, 0.7)
+dragAmount.BackgroundTransparency = 1
+dragAmount.TextColor3 = Color3.fromRGB(60, 40, 20)
+dragAmount.TextScaled = true
+dragAmount.Font = Enum.Font.GothamBold
+dragAmount.ZIndex = 101
+dragAmount.Parent = dragIcon
+
+local function getPoint(input)
+    return Vector2.new(input.Position.X, input.Position.Y)
 end
+
+local function readSlot(index)
+    local slot = inventory:FindFirstChild("Slot" .. index)
+
+    if not slot then
+        return nil
+    end
+
+    return {
+        ItemName = slot.ItemName.Value,
+        Amount = slot.Amount.Value,
+    }
+end
+
+local function findSlotAt(screenPoint)
+    local objects = player.PlayerGui:GetGuiObjectsAtPosition(
+        screenPoint.X,
+        screenPoint.Y
+    )
+
+    for _, object in ipairs(objects) do
+        for index = 1, 6 do
+            local slot = hotbarFrame:FindFirstChild("Slot" .. index)
+
+            if slot and (object == slot or object:IsDescendantOf(slot)) then
+                return index
+            end
+        end
+    end
+
+    return nil
+end
+
+local function cancelDrag()
+    press = nil
+    dragging = false
+    dragIcon.Visible = false
+end
+
+for index = 1, 6 do
+    local slotIndex = index
+    local guiSlot = hotbarFrame:WaitForChild("Slot" .. slotIndex)
+    local button = guiSlot:WaitForChild("TextButton")
+
+    button.InputBegan:Connect(function(input)
+        local isMouse = input.UserInputType == Enum.UserInputType.MouseButton1
+        local isTouch = input.UserInputType == Enum.UserInputType.Touch
+
+        if not isMouse and not isTouch then
+            return
+        end
+
+        if press
+            or player:GetAttribute("DataLoaded") ~= true
+            or player:GetAttribute("ProductionMode") == true then
+            return
+        end
+
+        press = {
+            Input = input,
+            Index = slotIndex,
+            Data = readSlot(slotIndex),
+            Start = getPoint(input),
+            Moved = false,
+        }
+    end)
+end
+
+UserInputService.InputChanged:Connect(function(input)
+    if not press then
+        return
+    end
+
+    local isMouseMove =
+        press.Input.UserInputType == Enum.UserInputType.MouseButton1
+        and input.UserInputType == Enum.UserInputType.MouseMovement
+
+    if not isMouseMove and input ~= press.Input then
+        return
+    end
+
+    if player:GetAttribute("ProductionMode") == true
+        or not hotbarFrame.Visible
+        or not script.Parent.Enabled then
+        cancelDrag()
+        return
+    end
+
+    local point = getPoint(input)
+
+    if not press.Moved
+        and (point - press.Start).Magnitude >= DRAG_DISTANCE then
+        press.Moved = true
+
+        local data = press.Data
+
+        if data and data.ItemName ~= "" and data.Amount > 0 then
+            dragging = true
+
+            PlacementController.cancelPlacement()
+
+            dragIcon.Image = getIcon(data.ItemName)
+            dragAmount.Text = tostring(data.Amount)
+            dragIcon.Visible = true
+        end
+    end
+
+    if dragging then
+        dragIcon.Position = UDim2.fromOffset(point.X, point.Y)
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if not press then
+        return
+    end
+
+    local isMouse =
+        press.Input.UserInputType == Enum.UserInputType.MouseButton1
+
+    if isMouse then
+        if input.UserInputType ~= Enum.UserInputType.MouseButton1 then
+            return
+        end
+    else
+        if input ~= press.Input then
+            return
+        end
+    end
+
+    local finished = press
+    local wasDragging = dragging
+
+    local screenPoint
+
+    if isMouse then
+    	local inset = GuiService:GetGuiInset()
+   		screenPoint = UserInputService:GetMouseLocation() - inset
+	else
+    	screenPoint = Vector2.new(input.Position.X, input.Position.Y)
+	end
+
+    cancelDrag()
+
+    if player:GetAttribute("ProductionMode") == true
+        or not hotbarFrame.Visible
+        or not script.Parent.Enabled then
+        return
+    end
+
+    local targetIndex = findSlotAt(screenPoint)
+
+	print(
+    "[DRAG TARGET]",
+    "From:", finished.Index,
+    "To:", targetIndex,
+    "Moved:", finished.Moved,
+    "Position:", screenPoint
+)
+
+    if wasDragging then
+        if not targetIndex or targetIndex == finished.Index then
+            return
+        end
+
+        local targetData = readSlot(targetIndex)
+
+        if targetData then
+            moveInventorySlotEvent:FireServer(
+                finished.Index,
+                targetIndex,
+                finished.Data,
+                targetData
+            )
+        end
+    elseif not finished.Moved and targetIndex == finished.Index then
+        selectSlot(finished.Index)
+    end
+end)
+
+UserInputService.WindowFocusReleased:Connect(cancelDrag)
+player.CharacterRemoving:Connect(cancelDrag)
+
+moveInventorySlotEvent.OnClientEvent:Connect(function(success, reason)
+    if not success then
+        warn("[INVENTORY] Перенос отменён:", reason)
+    end
+end)
 
 selectSlot(1, false)]]></ProtectedString>
 				<bool name="Disabled">false</bool>

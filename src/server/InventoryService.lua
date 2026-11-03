@@ -260,4 +260,70 @@ function InventoryService.GetInventory(player)
     return inventoryData
 end
 
+function InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, expectedTo)
+    local function isValidIndex(index)
+        return typeof(index) == "number"
+            and index % 1 == 0
+            and index >= 1
+            and index <= SLOT_COUNT
+    end
+
+    if not isValidIndex(fromIndex) or not isValidIndex(toIndex) then
+        return false, "InvalidSlot"
+    end
+
+    if fromIndex == toIndex then
+        return true
+    end
+
+    if typeof(expectedFrom) ~= "table" or typeof(expectedTo) ~= "table" then
+        return false, "InvalidSlotData"
+    end
+
+    local data = InventoryService.GetInventory(player)
+
+    if not data then
+        return false, "InventoryNotReady"
+    end
+
+    local from = data[fromIndex]
+    local to = data[toIndex]
+
+    if from.ItemName ~= expectedFrom.ItemName
+        or from.Amount ~= expectedFrom.Amount
+        or to.ItemName ~= expectedTo.ItemName
+        or to.Amount ~= expectedTo.Amount then
+        return false, "InventoryChanged"
+    end
+
+    if from.ItemName == "" or from.Amount <= 0 then
+        return false, "SourceSlotEmpty"
+    end
+
+    if from.ItemName == to.ItemName then
+        if to.Amount > MAX_INTEGER - from.Amount then
+            return false, "AmountTooLarge"
+        end
+
+        to.Amount = to.Amount + from.Amount
+        from.ItemName = ""
+        from.Amount = 0
+    else
+        from.ItemName, to.ItemName = to.ItemName, from.ItemName
+        from.Amount, to.Amount = to.Amount, from.Amount
+    end
+
+    local inventory = player.Inventory
+    local fromSlot = inventory:FindFirstChild("Slot" .. fromIndex)
+    local toSlot = inventory:FindFirstChild("Slot" .. toIndex)
+
+    fromSlot.ItemName.Value = from.ItemName
+    fromSlot.Amount.Value = from.Amount
+
+    toSlot.ItemName.Value = to.ItemName
+    toSlot.Amount.Value = to.Amount
+
+    return true
+end
+
 return InventoryService
