@@ -82,10 +82,10 @@ local ItemDefinitions = {
         ShopCategory = "Equipment"
     },
     WarehouseBlueprint = {
-        DisplayName = "Чертёж склада",
+        DisplayName = "Warehouse",
         Type = "Blueprint",
         BuyPriceCents = 500,
-        Icon = "",
+        Icon = "rbxassetid://90973533858262",
         Placeable = true,
         BuildsInto = "Warehouse",
         ModelFolder = "WarehouseStages",
@@ -94,20 +94,19 @@ local ItemDefinitions = {
     Warehouse = {
         DisplayName = "Склад",
         Type = "Building",
-        BuyPriceCents = 500,
         Icon = "",
         Placeable = true
     },
     Wood = {
         DisplayName = "Древесина",
         Type = "Material",
-        Icon = ""
+        Icon = "rbxassetid://127192346292041"
     },
 
     Stone = {
         DisplayName = "Камень",
         Type = "Material",
-        Icon = ""
+        Icon = "rbxassetid://70839780443591"
     }
 }
 
