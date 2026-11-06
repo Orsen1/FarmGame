@@ -1,0 +1,34 @@
+{
+  "name": "FarmGameResources",
+  "tree": {
+    "$className": "DataModel",
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "$ignoreUnknownInstances": true,
+      "WorldTravelService": {
+        "$path": "src/server/WorldTravelService.lua"
+      },
+      "PortalHandler": {
+        "$path": "src/server/PortalHandler.server.lua"
+      }
+    },
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "$ignoreUnknownInstances": true,
+      "Configs": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true,
+        "WorldTravelConfig": {
+          "$path": "src/shared/Configs/WorldTravelConfig.lua"
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$ignoreUnknownInstances": true,
+      "TravelPortals": {
+        "$path": "src/places/ResourceWorld/TravelPortals"
+      }
+    }
+  }
+}
