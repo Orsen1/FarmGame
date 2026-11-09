@@ -118,10 +118,6 @@ function WorldTravelService.Travel(player, destination)
     }
 
     if destination == "Resources" and game.PlaceId == Config.FarmPlaceId then
-        if player:GetAttribute("DataLoaded") ~= true or not prepareData or not restoreData then
-            return false, "Farm data is not ready"
-        end
-
         context.PlaceId = Config.ResourcesPlaceId
         context.ReturnFarmPlaceId = game.PlaceId
         context.ReturnFarmJobId = game.JobId
@@ -141,20 +137,20 @@ function WorldTravelService.Travel(player, destination)
         return false, "This portal destination is not available here"
     end
 
+    if player:GetAttribute("DataLoaded") ~= true or not prepareData or not restoreData then
+        return false, "Player data is not ready"
+    end
+
     pending[player] = context
     player:SetAttribute("Teleporting", true)
 
-    if destination == "Resources" then
-        local ok, saved = pcall(prepareData, player)
-
-        if not ok or saved ~= true then
-            finish(player, context, "Farm could not be saved; teleport cancelled")
-            return false, "Save failed"
-        end
-
-        context.Prepared = true
+    local ok, saved = pcall(prepareData, player)
+    if not ok or saved ~= true then
+        finish(player, context, "Player data could not be saved; teleport cancelled")
+        return false, "Save failed"
     end
 
+    context.Prepared = true
     send(player, context)
     return true
 end

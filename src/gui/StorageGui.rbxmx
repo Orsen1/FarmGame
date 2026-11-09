@@ -11233,9 +11233,9 @@ storageEvent.OnClientEvent:Connect(function(object, success, reason)
     for index, row in ipairs(rows) do
         local guiSlot = grid:FindFirstChild("Slot" .. index)
         local function refresh()
+            local occupied = row.Name.Value ~= "" and row.Amount.Value &gt; 0
             local definition = ItemDefinitions[row.Name.Value]
             local icon = definition and definition.Icon
-            local occupied = row.Name.Value ~= "" and row.Amount.Value &gt; 0
             guiSlot.ItemIcon.Image = occupied and typeof(icon) == "string" and icon or ""
             guiSlot.AmountText.Text = occupied and tostring(row.Amount.Value) or ""
         end

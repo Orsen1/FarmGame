@@ -10,6 +10,27 @@
       },
       "PortalHandler": {
         "$path": "src/server/PortalHandler.server.lua"
+      },
+      "InventoryService": {
+        "$path": "src/server/InventoryService.lua"
+      },
+      "MoneyService": {
+        "$path": "src/server/MoneyService.lua"
+      },
+      "PlayerDataService": {
+        "$path": "src/server/PlayerDataService.lua"
+      },
+      "PlayerDataHandler": {
+        "$path": "src/server/PlayerDataHandler.server.lua"
+      },
+      "SelectedSlotHandler": {
+        "$path": "src/server/SelectedSlotHandler.server.lua"
+      },
+      "Equipment": {
+        "$path": "src/server/Equipment"
+      },
+      "ResourceGatherHandler": {
+        "$path": "src/places/ResourceWorld/ResourceGatherHandler.server.lua"
       }
     },
     "ReplicatedStorage": {
@@ -20,6 +41,25 @@
         "$ignoreUnknownInstances": true,
         "WorldTravelConfig": {
           "$path": "src/shared/Configs/WorldTravelConfig.lua"
+        },
+        "ItemDefinitions": {
+          "$path": "src/shared/Configs/ItemDefinitions.lua"
+        },
+        "ResourceDefinitions": {
+          "$path": "src/shared/Configs/ResourceDefinitions.lua"
+        }
+      },
+      "Tools": {
+        "$path": "src/shared/Tools"
+      },
+      "RemoteEvents": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true,
+        "SetSelectedSlotEvent": {
+          "$path": "src/shared/RemoteEvents/SetSelectedSlotEvent.model.json"
+        },
+        "MoveInventorySlotEvent": {
+          "$path": "src/shared/RemoteEvents/MoveInventorySlotEvent.model.json"
         }
       }
     },
@@ -28,6 +68,27 @@
       "$ignoreUnknownInstances": true,
       "TravelPortals": {
         "$path": "src/places/ResourceWorld/TravelPortals"
+      },
+      "ResourceNodes": {
+        "$path": "src/places/ResourceWorld/ResourceNodes"
+      }
+    },
+    "StarterGui": {
+      "$className": "StarterGui",
+      "$ignoreUnknownInstances": true,
+      "InventoryGui": {
+        "$path": "src/gui/InventoryGui.rbxmx"
+      }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "$ignoreUnknownInstances": true,
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "$ignoreUnknownInstances": true,
+        "ResourceGatherVisual": {
+          "$path": "src/places/ResourceWorld/ResourceGatherVisual.client.lua"
+        }
       }
     }
   }

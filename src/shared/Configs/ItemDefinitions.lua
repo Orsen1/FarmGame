@@ -81,6 +81,20 @@ local ItemDefinitions = {
         Icon = "rbxassetid://103783030397569",
         ShopCategory = "Equipment"
     },
+    Axe = {
+        DisplayName = "Axe",
+        Type = "Tool",
+        BuyPriceCents = 50,
+        Icon = "rbxassetid://122173156042257",
+        ShopCategory = "Equipment"
+    },
+    Pickaxe = {
+        DisplayName = "Pickaxe",
+        Type = "Tool",
+        BuyPriceCents = 50,
+        Icon = "rbxassetid://119718856891391",
+        ShopCategory = "Equipment"
+    },
     WarehouseBlueprint = {
         DisplayName = "Warehouse",
         Type = "Blueprint",
@@ -99,13 +113,13 @@ local ItemDefinitions = {
         StorageSlots = 24
     },
     Wood = {
-        DisplayName = "Древесина",
+        DisplayName = "Wood",
         Type = "Material",
         Icon = "rbxassetid://127192346292041"
     },
 
     Stone = {
-        DisplayName = "Камень",
+        DisplayName = "Stone",
         Type = "Material",
         Icon = "rbxassetid://70839780443591"
     }

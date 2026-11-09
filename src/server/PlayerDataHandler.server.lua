@@ -4,11 +4,14 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local MoneyService = require(ServerScriptService:WaitForChild("MoneyService"))
 local PlayerDataService = require(ServerScriptService:WaitForChild("PlayerDataService"))
-local PlayerPlotService = require(ServerScriptService:WaitForChild("PlayerPlotService"))
-local PlotDataService = require(ServerScriptService:WaitForChild("PlotDataService"))
-local ProductionService = require(ServerScriptService:WaitForChild("ProductionService"))
 local TravelService = require(ServerScriptService:WaitForChild("WorldTravelService"))
 
+local plotModule = ServerScriptService:FindFirstChild("PlayerPlotService")
+local PlayerPlotService = plotModule and require(plotModule)
+local PlotDataService = plotModule and require(ServerScriptService:WaitForChild("PlotDataService"))
+local ProductionService = plotModule and require(ServerScriptService:WaitForChild("ProductionService"))
+
+local loadedData = {}
 local savingPlayers = {}
 
 local function loadPlayerData(player)
@@ -29,11 +32,13 @@ local function loadPlayerData(player)
         return
     end
 
-    PlayerPlotService.assignPlotToPlayer(player)
+    if PlayerPlotService then
+        PlayerPlotService.assignPlotToPlayer(player)
 
-    if not player:GetAttribute("PlotName") then
-        player:Kick("No free plots. Please try another server.")
-        return
+        if not player:GetAttribute("PlotName") then
+            player:Kick("No free plots. Please try another server.")
+            return
+        end
     end
 
     InventoryService.Initialize(player)
@@ -51,22 +56,22 @@ local function loadPlayerData(player)
         end
     end
 
-    local success, reason = PlotDataService.loadData(
-        player,
-        data.PlacedObjects or {}
-    )
+    if PlotDataService then
+        local success, reason = PlotDataService.loadData(player, data.PlacedObjects or {})
 
-    if not success then
-        warn("[PLOT LOAD ERROR]", player.UserId, reason)
-        player:Kick("Failed to load your farm. Please try again later.")
-        return
+        if not success then
+            warn("[PLOT LOAD ERROR]", player.UserId, reason)
+            player:Kick("Failed to load your farm. Please try again later.")
+            return
+        end
     end
 
+    loadedData[player] = data
     player:SetAttribute("DataLoaded", true)
 end
 
 local function savePlayerData(player, preparingTeleport)
-    if savingPlayers[player] or player:GetAttribute("DataLoaded") ~= true then
+    if savingPlayers[player] or player:GetAttribute("DataLoaded") ~= true or not loadedData[player] then
         return false
     end
 
@@ -77,22 +82,28 @@ local function savePlayerData(player, preparingTeleport)
     local releasedPlot = false
 
     local ok, result = pcall(function()
-        ProductionService.Close(player, "Saving")
+        if ProductionService then
+            ProductionService.Close(player, "Saving")
+        end
 
         local inventoryData = InventoryService.GetInventory(player)
-        local placedObjects = PlotDataService.getData(player)
-
-        if inventoryData == nil or placedObjects == nil then
+        if inventoryData == nil then
             return false
         end
 
-        data = {
-            Money = MoneyService.GetMoney(player),
-            Inventory = inventoryData,
-            PlacedObjects = placedObjects,
-        }
+        data = table.clone(loadedData[player])
+        data.Money = MoneyService.GetMoney(player)
+        data.Inventory = inventoryData
 
-        if not preparingTeleport then
+        if PlotDataService then
+            local placedObjects = PlotDataService.getData(player)
+            if placedObjects == nil then
+                return false
+            end
+            data.PlacedObjects = placedObjects
+        end
+
+        if PlayerPlotService and not preparingTeleport then
             PlayerPlotService.releasePlot(player)
             releasedPlot = true
         end
@@ -103,13 +114,16 @@ local function savePlayerData(player, preparingTeleport)
     local success = ok and result == true
     savingPlayers[player] = nil
 
-    if not preparingTeleport and not releasedPlot then
+    if PlayerPlotService and not preparingTeleport and not releasedPlot then
         PlayerPlotService.releasePlot(player)
     elseif preparingTeleport and not success and player.Parent == Players then
         player:SetAttribute("DataLoaded", true)
     end
 
     if success then
+        if player.Parent == Players then
+            loadedData[player] = data
+        end
         print("[SAVE OK]", player.UserId, "Money:", data.Money)
     else
         warn("[SAVE FAILED]", player.UserId, ok and "Save rejected" or result)
@@ -132,7 +146,10 @@ end)
 
 Players.PlayerRemoving:Connect(function(player)
     savePlayerData(player)
-    PlayerPlotService.releasePlot(player)
+    loadedData[player] = nil
+    if PlayerPlotService then
+        PlayerPlotService.releasePlot(player)
+    end
 end)
 
 game:BindToClose(function()

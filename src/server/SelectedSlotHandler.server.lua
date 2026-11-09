@@ -3,7 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local EquipmentService = require(ServerScriptService:WaitForChild("Equipment"):WaitForChild("EquipmentService"))
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
-local StorageService = require(ServerScriptService:WaitForChild("StorageService"))
+local storageModule = ServerScriptService:FindFirstChild("StorageService")
+local StorageService = storageModule and require(storageModule)
 
 local moveInventorySlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("MoveInventorySlotEvent")
 local setSelectedSlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
@@ -16,7 +17,7 @@ setSelectedSlotEvent.OnServerEvent:Connect(function(player, slotNumber)
         return
     end
 
-    if slotNumber < 1 or slotNumber > 6 then
+    if slotNumber < 1 or slotNumber > 6 or slotNumber % 1 ~= 0 then
         return
     end
 
@@ -37,9 +38,11 @@ moveInventorySlotEvent.OnServerEvent:Connect(function(player, fromIndex, toIndex
 
     if fromArea == "Player" and toArea == "Player" then
         success, reason = InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, expectedTo)
-    else
+    elseif StorageService then
         success, reason = StorageService.MoveSlot(player, storageObject, fromArea, toArea, fromIndex, toIndex,
             expectedFrom, expectedTo)
+    else
+        success, reason = false, "Storage is not available"
     end
 
     moveInventorySlotEvent:FireClient(player, success, reason)

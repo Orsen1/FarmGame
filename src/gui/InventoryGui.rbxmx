@@ -30,9 +30,13 @@
 		<Item class="LocalScript" referent="RBX318DACEE0B2A4368BA6B79B83A5CB5E9">
 			<Properties>
 				<ProtectedString name="Source">local replicatedStorage = game:GetService("ReplicatedStorage")
+local StarterGui = game:GetService("StarterGui")
+StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
+
 local setSelectedSlotEvent = replicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
 local ItemDefinitions = require(replicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
-local PlacementController = require(replicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementController"))
+local placementScripts = replicatedStorage:FindFirstChild("PlacementScripts")
+local PlacementController = placementScripts and require(placementScripts:WaitForChild("PlacementController"))
 
 local player = game.Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
@@ -65,8 +69,8 @@ local function isSeed(itemName)
 end
 
 local function getIcon(itemName)
-	local itemDefinition = ItemDefinitions[itemName]
-	local icon = itemDefinition and itemDefinition.Icon
+	local item = ItemDefinitions[itemName]
+	local icon = item and item.Icon
 
 	if typeof(icon) == "string" and icon:find("://", 1, true) then
 		return icon
@@ -74,7 +78,6 @@ local function getIcon(itemName)
 
 	return ""
 end
-
 
 local function updateSlot(slotData)
 	local guiSlot = hotbarFrame:FindFirstChild(slotData.Name)
@@ -152,6 +155,10 @@ local function selectSlot(slotNumber, activatePlacement)
 		end
 	end
 	setSelectedSlotEvent:FireServer(slotNumber)
+
+	if not PlacementController then
+		return
+	end
 
 	PlacementController.cancelPlacement()
 
@@ -292,7 +299,9 @@ local function startDrag()
     if press.Grid then
         press.Grid.ScrollingEnabled = false
     end
-    PlacementController.cancelPlacement()
+    if PlacementController then
+        PlacementController.cancelPlacement()
+    end
     dragIcon.Image = getIcon(press.Data.ItemName)
     dragAmount.Text = tostring(press.Data.Amount)
     dragIcon.Position = UDim2.fromOffset(press.Point.X, press.Point.Y)

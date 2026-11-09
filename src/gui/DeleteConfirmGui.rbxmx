@@ -521,7 +521,6 @@ resize()
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local UserInputService = game:GetService("UserInputService")
-local StarterGui = game:GetService("StarterGui")
 
 local player = Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
@@ -537,7 +536,6 @@ local targetConnection
 local pending = false
 
 gui.Enabled = false
-StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 
 local function closeDialog()
     gui.Enabled = false
