@@ -6,11 +6,11 @@ local ItemDefinitions = {
         Icon = "rbxassetid://76765094849929"
     },
     CarrotSeed = {
-        DisplayName = "Семена моркови",
+        DisplayName = "Carrot Seeds",
         Type = "Seed",
         BuyPriceCents = 2,
         PlantId = "Carrot",
-        Icon = "rbxassetid://130132495563432",
+        Icon = "rbxassetid://85530631371345",
         ShopCategory = "Seeds"
     },
     Potato = {
@@ -20,11 +20,11 @@ local ItemDefinitions = {
         Icon = "rbxassetid://120795864424521"
     },
     PotatoSeed = {
-        DisplayName = "Семена картофеля",
+        DisplayName = "Potato Seeds",
         Type = "Seed",
         BuyPriceCents = 4,
         PlantId = "Potato",
-        Icon = "rbxassetid://90550923694140",
+        Icon = "rbxassetid://116900701663231",
         ShopCategory = "Seeds"
     },
     Wheat = {
@@ -40,11 +40,11 @@ local ItemDefinitions = {
         Icon = "rbxassetid://106543136566763"
     },
     WheatSeed = {
-        DisplayName = "Семена пшеницы",
+        DisplayName = "Wheat Seeds",
         Type = "Seed",
         BuyPriceCents = 1,
         PlantId = "Wheat",
-        Icon = "rbxassetid://86719338895075",
+        Icon = "rbxassetid://126196049850469",
         ShopCategory = "Seeds"
     },
     Strawberry = {

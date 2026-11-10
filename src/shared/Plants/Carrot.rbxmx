@@ -1,1421 +1,1322 @@
-<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
-	<Meta name="ExplicitAutoJoints">true</Meta>
-	<External>null</External>
-	<External>nil</External>
-	<Item class="Folder" referent="RBX11E66247282B436CB7A6D0E952A5BB3D">
-		<Properties>
-			<Color3 name="IconTint">
-				<R>0</R>
-				<G>0</G>
-				<B>0</B>
-			</Color3>
-			<BinaryString name="AttributesSerialize"></BinaryString>
-			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-			<bool name="DefinesCapabilities">false</bool>
-			<string name="Name">Carrot</string>
-			<int64 name="SourceAssetId">-1</int64>
-			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-		</Properties>
-		<Item class="Model" referent="RBX969CEA36F5914DEA9C79E9E1CDC04F7A">
-			<Properties>
-				<token name="LevelOfDetail">0</token>
-				<CoordinateFrame name="ModelMeshCFrame">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-					<R00>1</R00>
-					<R01>0</R01>
-					<R02>0</R02>
-					<R10>0</R10>
-					<R11>1</R11>
-					<R12>0</R12>
-					<R20>0</R20>
-					<R21>0</R21>
-					<R22>1</R22>
-				</CoordinateFrame>
-				<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<Vector3 name="ModelMeshSize">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-				</Vector3>
-				<token name="ModelStreamingMode">0</token>
-				<bool name="NeedsPivotMigration">false</bool>
-				<Ref name="PrimaryPart">RBX2769FD82592D482BB57A991EA7A04A13</Ref>
-				<float name="ScaleFactor">1</float>
-				<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<OptionalCoordinateFrame name="WorldPivotData"></OptionalCoordinateFrame>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<string name="Name">Stage1</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			</Properties>
-			<Item class="Part" referent="RBX2769FD82592D482BB57A991EA7A04A13">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0</X>
-						<Y>0.275000006</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>0.978147626</R11>
-						<R12>0.2079117</R12>
-						<R20>0</R20>
-						<R21>-0.2079117</R21>
-						<R22>0.978147626</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.550000012</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">SmallSprout</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBX821169D2963344F1B3364B05CB36D14E">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0.0799999982</X>
-						<Y>0.174999997</Y>
-						<Z>0</Z>
-						<R00>0.927183867</R00>
-						<R01>-0.37460658</R01>
-						<R02>0</R02>
-						<R10>0.356272042</R10>
-						<R11>0.881804287</R11>
-						<R12>-0.309017003</R12>
-						<R20>0.115759805</R20>
-						<R21>0.286515594</R21>
-						<R22>0.95105654</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.349999994</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">TinyLeaf</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-		</Item>
-		<Item class="Model" referent="RBX9A3992BDB9EA43EE999136BA51AA9317">
-			<Properties>
-				<token name="LevelOfDetail">0</token>
-				<CoordinateFrame name="ModelMeshCFrame">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-					<R00>1</R00>
-					<R01>0</R01>
-					<R02>0</R02>
-					<R10>0</R10>
-					<R11>1</R11>
-					<R12>0</R12>
-					<R20>0</R20>
-					<R21>0</R21>
-					<R22>1</R22>
-				</CoordinateFrame>
-				<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<Vector3 name="ModelMeshSize">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-				</Vector3>
-				<token name="ModelStreamingMode">0</token>
-				<bool name="NeedsPivotMigration">false</bool>
-				<Ref name="PrimaryPart">RBX866503E69AE540B2840EBD940F7AA563</Ref>
-				<float name="ScaleFactor">1</float>
-				<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<OptionalCoordinateFrame name="WorldPivotData"></OptionalCoordinateFrame>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<string name="Name">Stage2</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			</Properties>
-			<Item class="Part" referent="RBX866503E69AE540B2840EBD940F7AA563">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0</X>
-						<Y>0.449999988</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>0.95105654</R11>
-						<R12>0.309017003</R12>
-						<R20>0</R20>
-						<R21>-0.309017003</R21>
-						<R22>0.95105654</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.899999976</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf1</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBXC1611017C3244174B3D5B5101F6F390B">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0.119999997</X>
-						<Y>0.375</Y>
-						<Z>0.0299999993</Z>
-						<R00>0.906307757</R00>
-						<R01>-0.42261827</R01>
-						<R02>0</R02>
-						<R10>0.413383067</R10>
-						<R11>0.886502802</R11>
-						<R12>-0.2079117</R12>
-						<R20>0.0878672823</R20>
-						<R21>0.188431993</R21>
-						<R22>0.978147626</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.75</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf2</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBX698189B815804224875F0354E629624F">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>-0.119999997</X>
-						<Y>0.375</Y>
-						<Z>-0.0199999996</Z>
-						<R00>0.906307757</R00>
-						<R01>0.42261827</R01>
-						<R02>0</R02>
-						<R10>-0.408217907</R10>
-						<R11>0.875426054</R11>
-						<R12>-0.258819044</R12>
-						<R20>-0.109381653</R20>
-						<R21>0.234569713</R21>
-						<R22>0.965925813</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.75</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf3</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBXC6012C6F8E2846ECADB7F565F06AF7A0">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0.0299999993</X>
-						<Y>0.300000012</Y>
-						<Z>-0.119999997</Z>
-						<R00>0.707106769</R00>
-						<R01>-0.707106769</R01>
-						<R02>0</R02>
-						<R10>0.696364224</R10>
-						<R11>0.696364224</R11>
-						<R12>0.173648179</R12>
-						<R20>-0.122787803</R20>
-						<R21>-0.122787803</R21>
-						<R22>0.98480773</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.600000024</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf4</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-		</Item>
-		<Item class="Model" referent="RBX9C2DCBA09E34427E9336FA3A8488B9D6">
-			<Properties>
-				<token name="LevelOfDetail">0</token>
-				<CoordinateFrame name="ModelMeshCFrame">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-					<R00>1</R00>
-					<R01>0</R01>
-					<R02>0</R02>
-					<R10>0</R10>
-					<R11>1</R11>
-					<R12>0</R12>
-					<R20>0</R20>
-					<R21>0</R21>
-					<R22>1</R22>
-				</CoordinateFrame>
-				<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<Vector3 name="ModelMeshSize">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-				</Vector3>
-				<token name="ModelStreamingMode">0</token>
-				<bool name="NeedsPivotMigration">false</bool>
-				<Ref name="PrimaryPart">RBX29A29285E6B249DCAF2C7E9EA5630625</Ref>
-				<float name="ScaleFactor">1</float>
-				<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<OptionalCoordinateFrame name="WorldPivotData"></OptionalCoordinateFrame>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<string name="Name">Stage3</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			</Properties>
-			<Item class="Part" referent="RBX29A29285E6B249DCAF2C7E9EA5630625">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0</X>
-						<Y>0.140000001</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4293620505</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.419999987</X>
-						<Y>0.280000001</Y>
-						<Z>0.419999987</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">CarrotTop</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBXFFFCF590007B4AA1AADA82F5FCBCCE55">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0</X>
-						<Y>-0.0500000007</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4292632340</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.319999993</X>
-						<Y>0.219999999</Y>
-						<Z>0.319999993</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">CarrotMiddle</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBX54BE90F3731F4B0D8521E8707D68F054">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0</X>
-						<Y>0.474999994</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>0.95105654</R11>
-						<R12>0.309017003</R12>
-						<R20>0</R20>
-						<R21>-0.309017003</R21>
-						<R22>0.95105654</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.949999988</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf1</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBXD77BD7C2EBE14BCABFA23584FBFB1A82">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0.159999996</X>
-						<Y>0.400000006</Y>
-						<Z>0.0199999996</Z>
-						<R00>0.882947564</R00>
-						<R01>-0.469471574</R01>
-						<R02>0</R02>
-						<R10>0.455526263</R10>
-						<R11>0.856720269</R11>
-						<R12>-0.241921902</R12>
-						<R20>0.113575459</R20>
-						<R21>0.213604361</R21>
-						<R22>0.970295727</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.800000012</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf2</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBX5BFCBCB607B2476891A439CAC11F5062">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>-0.159999996</X>
-						<Y>0.400000006</Y>
-						<Z>0.0199999996</Z>
-						<R00>0.882947564</R00>
-						<R01>0.469471574</R01>
-						<R02>0</R02>
-						<R10>-0.451285034</R10>
-						<R11>0.848743677</R11>
-						<R12>-0.275637358</R12>
-						<R20>-0.129403904</R20>
-						<R21>0.243373334</R21>
-						<R22>0.96126169</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.800000012</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf3</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBX84930D305DBC4BFB85A11B1EA05AE2DE">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>0.0299999993</X>
-						<Y>0.324999988</Y>
-						<Z>-0.159999996</Z>
-						<R00>0.707106769</R00>
-						<R01>-0.707106769</R01>
-						<R02>0</R02>
-						<R10>0.700225234</R10>
-						<R11>0.700225234</R11>
-						<R12>0.139173105</R12>
-						<R20>-0.0984102413</R20>
-						<R21>-0.0984102413</R21>
-						<R22>0.990268052</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.649999976</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf4</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-			<Item class="Part" referent="RBX45F558A958E949D887C1BEBB5B16E8AE">
-				<Properties>
-					<token name="shape">1</token>
-					<token name="formFactorRaw">1</token>
-					<bool name="Anchored">true</bool>
-					<bool name="AudioCanCollide">true</bool>
-					<float name="BackParamA">-0.5</float>
-					<float name="BackParamB">0.5</float>
-					<token name="BackSurface">0</token>
-					<token name="BackSurfaceInput">0</token>
-					<float name="BottomParamA">-0.5</float>
-					<float name="BottomParamB">0.5</float>
-					<token name="BottomSurface">4</token>
-					<token name="BottomSurfaceInput">0</token>
-					<CoordinateFrame name="CFrame">
-						<X>-0.0299999993</X>
-						<Y>0.324999988</Y>
-						<Z>-0.140000001</Z>
-						<R00>0.707106769</R00>
-						<R01>0.707106769</R01>
-						<R02>0</R02>
-						<R10>-0.700225234</R10>
-						<R11>0.700225234</R11>
-						<R12>0.139173105</R12>
-						<R20>0.0984102413</R20>
-						<R21>-0.0984102413</R21>
-						<R22>0.990268052</R22>
-					</CoordinateFrame>
-					<bool name="CanCollide">false</bool>
-					<bool name="CanQuery">true</bool>
-					<bool name="CanTouch">true</bool>
-					<bool name="CastShadow">true</bool>
-					<string name="CollisionGroup">Default</string>
-					<int name="CollisionGroupId">0</int>
-					<Color3uint8 name="Color3uint8">4282492215</Color3uint8>
-					<PhysicalProperties name="CustomPhysicalProperties">
-						<CustomPhysics>false</CustomPhysics>
-					</PhysicalProperties>
-					<bool name="EnableFluidForces">true</bool>
-					<float name="FrontParamA">-0.5</float>
-					<float name="FrontParamB">0.5</float>
-					<token name="FrontSurface">0</token>
-					<token name="FrontSurfaceInput">0</token>
-					<float name="LeftParamA">-0.5</float>
-					<float name="LeftParamB">0.5</float>
-					<token name="LeftSurface">0</token>
-					<token name="LeftSurfaceInput">0</token>
-					<bool name="Locked">false</bool>
-					<bool name="Massless">false</bool>
-					<token name="Material">272</token>
-					<string name="MaterialVariantSerialized"></string>
-					<CoordinateFrame name="PivotOffset">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<float name="Reflectance">0</float>
-					<float name="RightParamA">-0.5</float>
-					<float name="RightParamB">0.5</float>
-					<token name="RightSurface">0</token>
-					<token name="RightSurfaceInput">0</token>
-					<int name="RootPriority">0</int>
-					<Vector3 name="RotVelocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<float name="TopParamA">-0.5</float>
-					<float name="TopParamB">0.5</float>
-					<token name="TopSurface">3</token>
-					<token name="TopSurfaceInput">0</token>
-					<float name="Transparency">0</float>
-					<Vector3 name="Velocity">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<Vector3 name="size">
-						<X>0.140000001</X>
-						<Y>0.649999976</Y>
-						<Z>0.140000001</Z>
-					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<string name="Name">Leaf5</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				</Properties>
-			</Item>
-		</Item>
-	</Item>
-	<SharedStrings>
-		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
-	</SharedStrings>
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Folder" referent="RBX00000000000000000000000000000001">
+    <Properties>
+      <string name="Name">Carrot</string>
+    </Properties>
+    <Item class="Model" referent="RBX00000000000000000000000000000002">
+      <Properties>
+        <string name="Name">Stage1</string>
+        <Ref name="PrimaryPart">RBX00000000000000000000000000000003</Ref>
+        <bool name="NeedsPivotMigration">false</bool>
+      </Properties>
+      <Item class="Part" referent="RBX00000000000000000000000000000003">
+        <Properties>
+          <string name="Name">Root</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">false</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+          <float name="Transparency">1</float>
+          <Vector3 name="size"><X>0.05</X><Y>0.05</Y><Z>0.05</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000004">
+        <Properties>
+          <string name="Name">Shoot</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910928</Color3uint8>
+          <Vector3 name="size"><X>0.2707397</X><Y>0.055</Y><Z>0.055</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0.135</Y><Z>0.01</Z><R00>0</R00><R01>0</R01><R02>1</R02><R10>0.9972678</R10><R11>-0.07387169</R11><R12>0</R12><R20>0.07387169</R20><R21>0.9972678</R21><R22>0</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000005">
+        <Properties>
+          <string name="Name">SeedLeaf</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286162784</Color3uint8>
+          <Vector3 name="size"><X>0.3244996</X><Y>0.085</Y><Z>0.14</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.13</X><Y>0.345</Y><Z>0.04</Z><R00>0.8012336</R00><R01>-0.5787083</R01><R02>-0.1520572</R02><R10>0.5855169</R10><R11>0.8106602</R11><R12>0</R12><R20>0.1232667</R20><R21>-0.08903205</R21><R22>0.9883717</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000006">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000007">
+        <Properties>
+          <string name="Name">SeedLeaf</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284192343</Color3uint8>
+          <Vector3 name="size"><X>0.2596151</X><Y>0.073</Y><Z>0.13</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.105</X><Y>0.315</Y><Z>0.06</Z><R00>-0.8088898</R00><R01>0.4679366</R01><R02>-0.3559953</R02><R10>0.5007413</R10><R11>0.865597</R11><R12>0</R12><R20>0.3081485</R20><R21>-0.1782616</R21><R22>-0.9344877</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000008">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+    <Item class="Model" referent="RBX00000000000000000000000000000009">
+      <Properties>
+        <string name="Name">Stage2</string>
+        <Ref name="PrimaryPart">RBX0000000000000000000000000000000A</Ref>
+        <bool name="NeedsPivotMigration">false</bool>
+      </Properties>
+      <Item class="Part" referent="RBX0000000000000000000000000000000A">
+        <Properties>
+          <string name="Name">Root</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">false</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+          <float name="Transparency">1</float>
+          <Vector3 name="size"><X>0.05</X><Y>0.05</Y><Z>0.05</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000000B">
+        <Properties>
+          <string name="Name">CarrotShoulder</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4293430593</Color3uint8>
+          <Vector3 name="size"><X>0.3283</X><Y>0.3216</Y><Z>0.2948</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0.09</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000000C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000000D">
+        <Properties>
+          <string name="Name">TaperedRoot</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4292442165</Color3uint8>
+          <Vector3 name="size"><X>0.2345</X><Y>0.3819</Y><Z>0.2144</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>-0.0574</Y><Z>0.015</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000000E">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000000F">
+        <Properties>
+          <string name="Name">RootTip</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4291258417</Color3uint8>
+          <Vector3 name="size"><X>0.1139</X><Y>0.2144</Y><Z>0.1072</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.022</X><Y>-0.2115</Y><Z>0.02</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000010">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000011">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284584781</Color3uint8>
+          <Vector3 name="size"><X>0.3334554</X><Y>0.046</Y><Z>0.046</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.06211587</X><Y>0.3417</Y><Z>0.01389032</Z><R00>0.3725588</R00><R01>-0.9019844</R01><R02>-0.2182296</R02><R10>0.9242614</R10><R11>0.3817602</R11><R12>0</R12><R20>0.08331137</R20><R21>-0.2017012</R21><R22>0.9758974</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000012">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285045070</Color3uint8>
+          <Vector3 name="size"><X>0.3507756</X><Y>0.035</Y><Z>0.035</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2059632</X><Y>0.6499</Y><Z>0.04605736</Z><R00>0.466004</R00><R01>-0.8574474</R01><R02>-0.2182296</R02><R10>0.8786245</R10><R11>0.4775133</R11><R12>0</R12><R20>0.1042076</R20><R21>-0.1917419</R21><R22>0.9758974</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000013">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.207808</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2277424</X><Y>0.6097</Y><Z>-0.03733556</Z><R00>0.6029112</R00><R01>-0.2286905</R01><R02>0.7643289</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>-0.7146457</R20><R21>0.2710725</R21><R22>0.6448265</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000014">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000015">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.207808</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.1901476</X><Y>0.6097</Y><Z>0.1307839</Z><R00>0.2410891</R00><R01>-0.09144761</R01><R02>-0.966185</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>0.9033805</R20><R21>-0.3426616</R21><R22>0.25785</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000016">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000017">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.1688413</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2693721</X><Y>0.706716</Y><Z>-0.01067806</Z><R00>0.596204</R00><R01>-0.2456463</R01><R02>0.7643289</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>-0.7066954</R20><R21>0.2911706</R21><R22>0.6448265</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000018">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000019">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.1688413</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2391667</X><Y>0.706716</Y><Z>0.1243972</Z><R00>0.2384071</R00><R01>-0.09822781</R01><R02>-0.966185</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>0.8933306</R20><R21>-0.3680676</R21><R22>0.25785</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000001A">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000001B">
+        <Properties>
+          <string name="Name">FrondTip</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.1993374</X><Y>0.057</Y><Z>0.0804</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2917811</X><Y>0.773515</Y><Z>0.06524793</Z><R00>0.6150232</R00><R01>-0.7577086</R01><R02>-0.2182296</R02><R10>0.7764223</R10><R11>0.6302129</R11><R12>0</R12><R20>0.1375311</R20><R21>-0.1694384</R21><R22>0.9758974</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000001C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000001D">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284584781</Color3uint8>
+          <Vector3 name="size"><X>0.3334554</X><Y>0.046</Y><Z>0.046</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.04240847</X><Y>0.3417</Y><Z>0.04746414</Z><R00>-0.2543576</R00><R01>0.6158132</R01><R02>-0.7457052</R02><R10>0.9242614</R10><R11>0.3817602</R11><R12>0</R12><R20>0.2846805</R20><R21>-0.6892266</R21><R22>-0.666276</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000001E">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285045070</Color3uint8>
+          <Vector3 name="size"><X>0.3507756</X><Y>0.035</Y><Z>0.035</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1406176</X><Y>0.6499</Y><Z>0.1573811</Z><R00>-0.3181557</R00><R01>0.5854064</R01><R02>-0.7457052</R02><R10>0.8786245</R10><R11>0.4775133</R11><R12>0</R12><R20>0.3560842</R20><R21>-0.6551949</R21><R22>-0.666276</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000001F">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.207808</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.07842141</X><Y>0.6097</Y><Z>0.2170498</Z><R00>0.3300723</R00><R01>-0.1251998</R01><R02>-0.935616</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>0.8747986</R20><R21>-0.3318202</R21><R22>0.3530194</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000020">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000021">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.207808</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2068852</X><Y>0.6097</Y><Z>0.1022693</Z><R00>-0.906298</R00><R01>0.3437682</R01><R02>0.2458605</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>-0.229879</R20><R21>0.08719547</R21><R22>-0.9693052</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000022">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000023">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.1688413</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1219907</X><Y>0.706716</Y><Z>0.240403</Z><R00>0.3264003</R00><R01>-0.1344825</R01><R02>-0.935616</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>0.8650667</R20><R21>-0.3564223</R21><R22>0.3530194</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000024">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000025">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.1688413</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2252048</X><Y>0.706716</Y><Z>0.1481829</Z><R00>-0.8962156</R00><R01>0.3692562</R01><R02>0.2458605</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>-0.2273216</R20><R21>0.09366041</R21><R22>-0.9693052</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000026">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000027">
+        <Properties>
+          <string name="Name">FrondTip</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.1993374</X><Y>0.057</Y><Z>0.0804</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1992082</X><Y>0.773515</Y><Z>0.2229565</Z><R00>-0.4198958</R00><R01>0.5173116</R01><R02>-0.7457052</R02><R10>0.7764223</R10><R11>0.6302129</R11><R12>0</R12><R20>0.4699531</R20><R21>-0.5789822</R21><R22>-0.666276</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000028">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000029">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284584781</Color3uint8>
+          <Vector3 name="size"><X>0.3334554</X><Y>0.046</Y><Z>0.046</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.01773612</X><Y>0.3417</Y><Z>-0.06112898</Z><R00>-0.1063778</R00><R01>0.2575462</R01><R02>0.9603925</R02><R10>0.9242614</R10><R11>0.3817602</R11><R12>0</R12><R20>-0.3666396</R20><R21>0.8876537</R21><R22>-0.2786508</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000002A">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285045070</Color3uint8>
+          <Vector3 name="size"><X>0.3507756</X><Y>0.035</Y><Z>0.035</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.05880925</X><Y>0.6499</Y><Z>-0.2026908</Z><R00>-0.1330595</R00><R01>0.2448294</R01><R02>0.9603925</R02><R10>0.8786245</R10><R11>0.4775133</R11><R12>0</R12><R20>-0.4586002</R20><R21>0.8438244</R21><R22>-0.2786508</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000002B">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.207808</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1423848</X><Y>0.6097</Y><Z>-0.1816235</Z><R00>-0.9166545</R00><R01>0.3476965</R01><R02>0.1971082</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>-0.1842957</R20><R21>0.06990525</R21><R22>-0.9803817</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000002C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000002D">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.207808</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.02306352</X><Y>0.6097</Y><Z>-0.2296271</Z><R00>0.6756647</R00><R01>-0.2562866</R01><R02>0.6912268</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>-0.6462953</R20><R21>0.2451465</R21><R22>0.7226379</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000002E">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000002F">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.1688413</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1390669</X><Y>0.706716</Y><Z>-0.2309454</Z><R00>-0.9064569</R00><R01>0.3734758</R01><R02>0.1971082</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>-0.1822454</R20><R21>0.07508824</R21><R22>-0.9803817</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000030">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000031">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.1688413</X><Y>0.057</Y><Z>0.08576</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.00613767</X><Y>0.706716</Y><Z>-0.2695138</Z><R00>0.668148</R00><R01>-0.2752885</R01><R02>0.6912268</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>-0.6391054</R20><R21>0.2633224</R21><R22>0.7226379</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000032">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000033">
+        <Properties>
+          <string name="Name">FrondTip</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.1993374</X><Y>0.057</Y><Z>0.0804</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.08331311</X><Y>0.773515</Y><Z>-0.2871453</Z><R00>-0.1756093</R00><R01>0.2163507</R01><R02>0.9603925</R02><R10>0.7764223</R10><R11>0.6302129</R11><R12>0</R12><R20>-0.6052518</R20><R21>0.7456702</R21><R22>-0.2786508</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000034">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+    <Item class="Model" referent="RBX00000000000000000000000000000035">
+      <Properties>
+        <string name="Name">Stage3</string>
+        <Ref name="PrimaryPart">RBX00000000000000000000000000000036</Ref>
+        <bool name="NeedsPivotMigration">false</bool>
+      </Properties>
+      <Item class="Part" referent="RBX00000000000000000000000000000036">
+        <Properties>
+          <string name="Name">Root</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">false</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+          <float name="Transparency">1</float>
+          <Vector3 name="size"><X>0.05</X><Y>0.05</Y><Z>0.05</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000037">
+        <Properties>
+          <string name="Name">CarrotShoulder</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4293430593</Color3uint8>
+          <Vector3 name="size"><X>0.49</X><Y>0.48</Y><Z>0.44</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0.14</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000038">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000039">
+        <Properties>
+          <string name="Name">TaperedRoot</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4292442165</Color3uint8>
+          <Vector3 name="size"><X>0.35</X><Y>0.57</Y><Z>0.32</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>-0.08</Y><Z>0.015</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000003A">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000003B">
+        <Properties>
+          <string name="Name">RootTip</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4291258417</Color3uint8>
+          <Vector3 name="size"><X>0.17</X><Y>0.32</Y><Z>0.16</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.022</X><Y>-0.31</Y><Z>0.02</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000003C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000003D">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284584781</Color3uint8>
+          <Vector3 name="size"><X>0.4976947</X><Y>0.046</Y><Z>0.046</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.09271026</X><Y>0.51</Y><Z>0.02073181</Z><R00>0.3725588</R00><R01>-0.9019844</R01><R02>-0.2182296</R02><R10>0.9242614</R10><R11>0.3817602</R11><R12>0</R12><R20>0.08331137</R20><R21>-0.2017012</R21><R22>0.9758974</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000003E">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285045070</Color3uint8>
+          <Vector3 name="size"><X>0.5235456</X><Y>0.035</Y><Z>0.035</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3074077</X><Y>0.97</Y><Z>0.06874233</Z><R00>0.466004</R00><R01>-0.8574474</R01><R02>-0.2182296</R02><R10>0.8786245</R10><R11>0.4775133</R11><R12>0</R12><R20>0.1042076</R20><R21>-0.1917419</R21><R22>0.9758974</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000003F">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.3101612</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.339914</X><Y>0.91</Y><Z>-0.05572472</Z><R00>0.6029112</R00><R01>-0.2286905</R01><R02>0.7643289</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>-0.7146457</R20><R21>0.2710725</R21><R22>0.6448265</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000040">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000041">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.3101612</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2838024</X><Y>0.91</Y><Z>0.1951998</Z><R00>0.2410891</R00><R01>-0.09144761</R01><R02>-0.966185</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>0.9033805</R20><R21>-0.3426616</R21><R22>0.25785</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000042">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000043">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.252002</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.4020479</X><Y>1.0548</Y><Z>-0.0159374</Z><R00>0.596204</R00><R01>-0.2456463</R01><R02>0.7643289</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>-0.7066954</R20><R21>0.2911706</R21><R22>0.6448265</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000044">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000045">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.252002</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3569652</X><Y>1.0548</Y><Z>0.1856675</Z><R00>0.2384071</R00><R01>-0.09822781</R01><R02>-0.966185</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>0.8933306</R20><R21>-0.3680676</R21><R22>0.25785</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000046">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000047">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.1941649</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.4324653</X><Y>1.1398</Y><Z>0.01675746</Z><R00>0.5845005</R00><R01>-0.2723241</R01><R02>0.7643289</R02><R10>0.4223215</R10><R11>0.9064461</R11><R12>0</R12><R20>-0.692823</R20><R21>0.3227925</R21><R22>0.6448265</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000048">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000049">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.1941649</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3984113</X><Y>1.1398</Y><Z>0.1690427</Z><R00>0.2337272</R00><R01>-0.1088956</R01><R02>-0.966185</R02><R10>0.4223215</R10><R11>0.9064461</R11><R12>0</R12><R20>0.8757946</R20><R21>-0.4080407</R21><R22>0.25785</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000004A">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000004B">
+        <Properties>
+          <string name="Name">FrondTip</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284058446</Color3uint8>
+          <Vector3 name="size"><X>0.2975185</X><Y>0.057</Y><Z>0.12</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.4354942</X><Y>1.1545</Y><Z>0.09738497</Z><R00>0.6150232</R00><R01>-0.7577086</R01><R02>-0.2182296</R02><R10>0.7764223</R10><R11>0.6302129</R11><R12>0</R12><R20>0.1375311</R20><R21>-0.1694384</R21><R22>0.9758974</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000004C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000004D">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284584781</Color3uint8>
+          <Vector3 name="size"><X>0.4976947</X><Y>0.046</Y><Z>0.046</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.06329622</X><Y>0.51</Y><Z>0.070842</Z><R00>-0.2543576</R00><R01>0.6158132</R01><R02>-0.7457052</R02><R10>0.9242614</R10><R11>0.3817602</R11><R12>0</R12><R20>0.2846805</R20><R21>-0.6892266</R21><R22>-0.666276</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000004E">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285045070</Color3uint8>
+          <Vector3 name="size"><X>0.5235456</X><Y>0.035</Y><Z>0.035</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2098769</X><Y>0.97</Y><Z>0.2348971</Z><R00>-0.3181557</R00><R01>0.5854064</R01><R02>-0.7457052</R02><R10>0.8786245</R10><R11>0.4775133</R11><R12>0</R12><R20>0.3560842</R20><R21>-0.6551949</R21><R22>-0.666276</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000004F">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.3101612</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1170469</X><Y>0.91</Y><Z>0.3239549</Z><R00>0.3300723</R00><R01>-0.1251998</R01><R02>-0.935616</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>0.8747986</R20><R21>-0.3318202</R21><R22>0.3530194</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000050">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000051">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.3101612</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.308784</X><Y>0.91</Y><Z>0.1526408</Z><R00>-0.906298</R00><R01>0.3437682</R01><R02>0.2458605</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>-0.229879</R20><R21>0.08719547</R21><R22>-0.9693052</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000052">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000053">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.252002</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1820757</X><Y>1.0548</Y><Z>0.3588105</Z><R00>0.3264003</R00><R01>-0.1344825</R01><R02>-0.935616</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>0.8650667</R20><R21>-0.3564223</R21><R22>0.3530194</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000054">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000055">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.252002</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.3361265</X><Y>1.0548</Y><Z>0.2211685</Z><R00>-0.8962156</R00><R01>0.3692562</R01><R02>0.2458605</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>-0.2273216</R20><R21>0.09366041</R21><R22>-0.9693052</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000056">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000057">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.1941649</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2254506</X><Y>1.1398</Y><Z>0.3694307</Z><R00>0.3199931</R00><R01>-0.1490877</R01><R02>-0.935616</R02><R10>0.4223215</R10><R11>0.9064461</R11><R12>0</R12><R20>0.8480855</R20><R21>-0.3951307</R21><R22>0.3530194</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000058">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000059">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.1941649</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.3418151</X><Y>1.1398</Y><Z>0.2654608</Z><R00>-0.878623</R00><R01>0.4093584</R01><R02>0.2458605</R02><R10>0.4223215</R10><R11>0.9064461</R11><R12>0</R12><R20>-0.2228593</R20><R21>0.1038322</R21><R22>-0.9693052</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000005A">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000005B">
+        <Properties>
+          <string name="Name">FrondTip</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285572436</Color3uint8>
+          <Vector3 name="size"><X>0.2975185</X><Y>0.057</Y><Z>0.12</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2973257</X><Y>1.1545</Y><Z>0.332771</Z><R00>-0.4198958</R00><R01>0.5173116</R01><R02>-0.7457052</R02><R10>0.7764223</R10><R11>0.6302129</R11><R12>0</R12><R20>0.4699531</R20><R21>-0.5789822</R21><R22>-0.666276</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000005C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000005D">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284584781</Color3uint8>
+          <Vector3 name="size"><X>0.4976947</X><Y>0.046</Y><Z>0.046</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.02647183</X><Y>0.51</Y><Z>-0.09123729</Z><R00>-0.1063778</R00><R01>0.2575462</R01><R02>0.9603925</R02><R10>0.9242614</R10><R11>0.3817602</R11><R12>0</R12><R20>-0.3666396</R20><R21>0.8876537</R21><R22>-0.2786508</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000005E">
+        <Properties>
+          <string name="Name">FrondStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285045070</Color3uint8>
+          <Vector3 name="size"><X>0.5235456</X><Y>0.035</Y><Z>0.035</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.087775</X><Y>0.97</Y><Z>-0.3025236</Z><R00>-0.1330595</R00><R01>0.2448294</R01><R02>0.9603925</R02><R10>0.8786245</R10><R11>0.4775133</R11><R12>0</R12><R20>-0.4586002</R20><R21>0.8438244</R21><R22>-0.2786508</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000005F">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.3101612</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2125147</X><Y>0.91</Y><Z>-0.2710798</Z><R00>-0.9166545</R00><R01>0.3476965</R01><R02>0.1971082</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>-0.1842957</R20><R21>0.06990525</R21><R22>-0.9803817</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000060">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000061">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.3101612</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.03442317</X><Y>0.91</Y><Z>-0.342727</Z><R00>0.6756647</R00><R01>-0.2562866</R01><R02>0.6912268</R02><R10>0.3546542</R10><R11>0.9349975</R11><R12>0</R12><R20>-0.6462953</R20><R21>0.2451465</R21><R22>0.7226379</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000062">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000063">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.252002</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2075625</X><Y>1.0548</Y><Z>-0.3446946</Z><R00>-0.9064569</R00><R01>0.3734758</R01><R02>0.1971082</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>-0.1822454</R20><R21>0.07508824</R21><R22>-0.9803817</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000064">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000065">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.252002</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.009160702</X><Y>1.0548</Y><Z>-0.4022594</Z><R00>0.668148</R00><R01>-0.2752885</R01><R02>0.6912268</R02><R10>0.3809494</R10><R11>0.9245959</R11><R12>0</R12><R20>-0.6391054</R20><R21>0.2633224</R21><R22>0.7226379</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000066">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000067">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.1941649</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1935542</X><Y>1.1398</Y><Z>-0.3870966</Z><R00>-0.8886632</R00><R01>0.4140363</R01><R02>0.1971082</R02><R10>0.4223215</R10><R11>0.9064461</R11><R12>0</R12><R20>-0.1786679</R20><R21>0.08324302</R21><R22>-0.9803817</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000068">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000069">
+        <Properties>
+          <string name="Name">CarrotLeaflet</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.1941649</X><Y>0.057</Y><Z>0.128</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.04368842</X><Y>1.1398</Y><Z>-0.4305791</Z><R00>0.6550323</R00><R01>-0.3051855</R01><R02>0.6912268</R02><R10>0.4223215</R10><R11>0.9064461</R11><R12>0</R12><R20>-0.6265598</R20><R21>0.2919199</R21><R22>0.7226379</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006A">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000006B">
+        <Properties>
+          <string name="Name">FrondTip</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286229088</Color3uint8>
+          <Vector3 name="size"><X>0.2975185</X><Y>0.057</Y><Z>0.12</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1243479</X><Y>1.1545</Y><Z>-0.4285751</Z><R00>-0.1756093</R00><R01>0.2163507</R01><R02>0.9603925</R02><R10>0.7764223</R10><R11>0.6302129</R11><R12>0</R12><R20>-0.6052518</R20><R21>0.7456702</R21><R22>-0.2786508</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000006D">
+        <Properties>
+          <string name="Name">RootMark</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4291195191</Color3uint8>
+          <Vector3 name="size"><X>0.092</X><Y>0.026</Y><Z>0.025</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.07</X><Y>0.24</Y><Z>0.206</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006E">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000006F">
+        <Properties>
+          <string name="Name">RootMark</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4291195191</Color3uint8>
+          <Vector3 name="size"><X>0.092</X><Y>0.026</Y><Z>0.025</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.09</X><Y>0.16</Y><Z>0.205</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000070">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000071">
+        <Properties>
+          <string name="Name">RootMark</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4291195191</Color3uint8>
+          <Vector3 name="size"><X>0.092</X><Y>0.026</Y><Z>0.025</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.19</X><Y>0.15</Y><Z>-0.04</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000072">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+  </Item>
 </roblox>

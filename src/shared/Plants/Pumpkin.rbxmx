@@ -771,8 +771,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4286816599</Color3uint8>
-          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.5003</X><Y>0.1829</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.3599</X><Y>0.374296</Y><Z>0.352702</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.422366</X><Y>0.223138</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX00000000000000000000000000000044">
           <Properties>
@@ -793,8 +793,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4287670627</Color3uint8>
-          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.45015</X><Y>0.1829</Y><Z>-0.01313765</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.3599</X><Y>0.374296</Y><Z>0.352702</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.361183</X><Y>0.223138</Y><Z>0.005972067</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX00000000000000000000000000000046">
           <Properties>
@@ -815,8 +815,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4286816599</Color3uint8>
-          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.34985</X><Y>0.1829</Y><Z>-0.01313765</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.3599</X><Y>0.374296</Y><Z>0.352702</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.238817</X><Y>0.223138</Y><Z>0.005972067</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX00000000000000000000000000000048">
           <Properties>
@@ -837,8 +837,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4287670627</Color3uint8>
-          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.2997</X><Y>0.1829</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.3599</X><Y>0.374296</Y><Z>0.352702</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.177634</X><Y>0.223138</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX0000000000000000000000000000004A">
           <Properties>
@@ -859,8 +859,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4286816599</Color3uint8>
-          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.34985</X><Y>0.1829</Y><Z>-0.1868623</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.3599</X><Y>0.374296</Y><Z>0.352702</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.238817</X><Y>0.223138</Y><Z>-0.205972</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX0000000000000000000000000000004C">
           <Properties>
@@ -881,8 +881,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4287670627</Color3uint8>
-          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.45015</X><Y>0.1829</Y><Z>-0.1868623</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.3599</X><Y>0.374296</Y><Z>0.352702</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.361183</X><Y>0.223138</Y><Z>-0.205972</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX0000000000000000000000000000004E">
           <Properties>
@@ -903,8 +903,8 @@
           <token name="shape">2</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4285368143</Color3uint8>
-          <Vector3 name="size"><X>0.1324094</X><Y>0.06195</Y><Z>0.06195</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.445</X><Y>0.37465</Y><Z>-0.12</Z><R00>0.67971</R00><R01>-0.6107748</R01><R02>0.4061385</R02><R10>0.6683815</R10><R11>0.7438186</R11><R12>0</R12><R20>-0.3020933</R20><R21>0.2714555</R21><R22>0.9138115</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.1615395</X><Y>0.075579</Y><Z>0.075579</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3549</X><Y>0.457073</Y><Z>-0.1244</Z><R00>0.67971</R00><R01>-0.6107748</R01><R02>0.4061385</R02><R10>0.6683815</R10><R11>0.7438186</R11><R12>0</R12><R20>-0.3020933</R20><R21>0.2714555</R21><R22>0.9138115</R22></CoordinateFrame>
         </Properties>
       </Item>
     </Item>
@@ -1189,8 +1189,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4292707389</Color3uint8>
-          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.57</X><Y>0.31</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.825</X><Y>0.858</Y><Z>0.8085</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.5805</X><Y>0.5115</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX00000000000000000000000000000068">
           <Properties>
@@ -1211,8 +1211,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4293499464</Color3uint8>
-          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.485</X><Y>0.31</Y><Z>0.04722432</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.825</X><Y>0.858</Y><Z>0.8085</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.44025</X><Y>0.5115</Y><Z>0.1429201</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006A">
           <Properties>
@@ -1233,8 +1233,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4293829455</Color3uint8>
-          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.315</X><Y>0.31</Y><Z>0.04722432</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.825</X><Y>0.858</Y><Z>0.8085</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.15975</X><Y>0.5115</Y><Z>0.1429201</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006C">
           <Properties>
@@ -1255,8 +1255,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4292707389</Color3uint8>
-          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.23</X><Y>0.31</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.825</X><Y>0.858</Y><Z>0.8085</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.0195</X><Y>0.5115</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006E">
           <Properties>
@@ -1277,8 +1277,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4293499464</Color3uint8>
-          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.315</X><Y>0.31</Y><Z>-0.2472243</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.825</X><Y>0.858</Y><Z>0.8085</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.15975</X><Y>0.5115</Y><Z>-0.3429201</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX00000000000000000000000000000070">
           <Properties>
@@ -1299,8 +1299,8 @@
           <token name="shape">1</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4293829455</Color3uint8>
-          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.485</X><Y>0.31</Y><Z>-0.2472243</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.825</X><Y>0.858</Y><Z>0.8085</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.44025</X><Y>0.5115</Y><Z>-0.3429201</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
         </Properties>
         <Item class="SpecialMesh" referent="RBX00000000000000000000000000000072">
           <Properties>
@@ -1321,8 +1321,8 @@
           <token name="shape">2</token>
           <token name="Material">272</token>
           <Color3uint8 name="Color3uint8">4285368143</Color3uint8>
-          <Vector3 name="size"><X>0.1794436</X><Y>0.105</Y><Z>0.105</Z></Vector3>
-          <CoordinateFrame name="CFrame"><X>0.445</X><Y>0.635</Y><Z>-0.12</Z><R00>0.5015504</R00><R01>-0.7638709</R01><R02>0.4061385</R02><R10>0.8359173</R10><R11>0.5488554</R11><R12>0</R12><R20>-0.2229113</R20><R21>0.3394982</R21><R22>0.9138115</R22></CoordinateFrame>
+          <Vector3 name="size"><X>0.2960819</X><Y>0.17325</Y><Z>0.17325</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.37425</X><Y>1.04775</Y><Z>-0.133</Z><R00>0.5015504</R00><R01>-0.7638709</R01><R02>0.4061385</R02><R10>0.8359173</R10><R11>0.5488554</R11><R12>0</R12><R20>-0.2229113</R20><R21>0.3394982</R21><R22>0.9138115</R22></CoordinateFrame>
         </Properties>
       </Item>
     </Item>

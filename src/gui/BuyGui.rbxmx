@@ -6624,9 +6624,12 @@ local function resize()
     main.FooterFrame.HintLabel.Visible = main.AbsoluteSize.X >= 500
     main.FooterFrame.MoneyLabel.Size = UDim2.new(main.AbsoluteSize.X >= 500 and 0.5 or 1, 0, 1, 0)
     for _, frame in ipairs(grids) do
-        local twoColumns = frame.AbsoluteSize.X >= (compact and 480 or 580)
-        frame.UIGridLayout.FillDirectionMaxCells = twoColumns and 2 or 1
-        frame.UIGridLayout.CellSize = UDim2.new(twoColumns and 0.5 or 1, twoColumns and -14 or -16, 0, frame.Name == "CategoriesFrame" and 104 or 118)
+        local isCategory = frame.Name == "CategoriesFrame"
+        local columnWidth = narrow and 130 or 170
+        local columns = math.clamp(math.floor((frame.AbsoluteSize.X - 8) / columnWidth), 1, isCategory and 2 or 3)
+        local height = isCategory and (compact and 111 or 132) or (compact and 140 or 172)
+        frame.UIGridLayout.FillDirectionMaxCells = columns
+        frame.UIGridLayout.CellSize = UDim2.new(1 / columns, -16, 0, height)
     end
     local scale = compact and math.clamp((details.Parent.AbsoluteSize.Y - 4) / 188, 0.5, 1) or math.clamp((details.Parent.AbsoluteSize.Y - 8) / 412, 0.75, desktopScale)
     details.UIScale.Scale = scale
@@ -6806,6 +6809,71 @@ local function itemName(id, item)
     return (id:gsub("(%l)(%u)", "%1 %2"):gsub("_", " "))
 end
 
+local function layoutCard(card)
+    local button = card.SelectButton
+    button.Position = UDim2.fromOffset(8, 8)
+    button.Size = UDim2.new(1, -16, 1, -43)
+    button.BackgroundColor3 = Color3.fromRGB(247, 219, 164)
+    button.TextColor3 = Color3.fromRGB(100, 63, 35)
+    local border = button:FindFirstChildOfClass("UIStroke")
+    if border then
+        border.Color = Color3.fromRGB(166, 112, 61)
+    end
+end
+
+local function showArtwork(button, image, icon, isSeed)
+    if not icon or icon == "" then return end
+
+    button.TextTransparency = 1
+    image.Image = icon
+    if isSeed then
+        image.ImageRectOffset = Vector2.new(32, 16)
+        image.ImageRectSize = Vector2.new(128, 160)
+    end
+    image.ZIndex = button.ZIndex + 1
+    image.AnchorPoint = Vector2.new(0.5, 0)
+    image.Position = UDim2.new(0.5, 0, 0, 4)
+    image.Size = UDim2.new(1, -20, 1, -29)
+    image.Parent = button
+
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new(Color3.fromRGB(255, 248, 223), Color3.fromRGB(232, 194, 127))
+    gradient.Rotation = 90
+    gradient.Parent = button
+
+    local caption = Instance.new("TextLabel")
+    caption.Name = "Caption"
+    caption.Text = button.Text
+    caption.Font = Enum.Font.GothamBold
+    caption.TextColor3 = button.TextColor3
+    caption.TextScaled = true
+    caption.BackgroundTransparency = 1
+    caption.Position = UDim2.new(0, 5, 1, -24)
+    caption.Size = UDim2.new(1, -10, 0, 21)
+    caption.ZIndex = button.ZIndex + 1
+    caption.Parent = button
+
+    local limit = Instance.new("UITextSizeConstraint")
+    limit.MinTextSize = 10
+    limit.MaxTextSize = 17
+    limit.Parent = caption
+end
+
+local function layoutPrice(card)
+    card.PriceLabel.Position = UDim2.new(0, 11, 1, -30)
+    card.PriceLabel.Size = UDim2.new(0.5, -12, 0, 22)
+    card.OwnedLabel.Position = UDim2.new(0.5, 0, 1, -30)
+    card.OwnedLabel.Size = UDim2.new(0.5, -11, 0, 22)
+    card.OwnedLabel.TextXAlignment = Enum.TextXAlignment.Right
+end
+
+local detailsIcon = template.ItemIcon:Clone()
+detailsIcon.AnchorPoint = Vector2.new(0, 0.5)
+detailsIcon.Position = UDim2.new(0, 7, 0.5, 0)
+detailsIcon.Size = UDim2.fromOffset(36, 36)
+detailsIcon.ZIndex = details.ItemHeaderFrame.ItemNameLabel.ZIndex + 1
+detailsIcon.Parent = details.ItemHeaderFrame
+
 local function validPrice(price)
     return typeof(price) == "number" and price >= 0
         and price <= MAX_INTEGER and price % 1 == 0
@@ -6840,7 +6908,7 @@ local function refresh()
     main.FooterFrame.MoneyLabel.Text = "Balance: " .. formatMoney(money.Value)
     for id, card in pairs(cards) do
         local owned = inventoryInfo(id)
-        card.OwnedLabel.Text = "You have: " .. tostring(owned)
+        card.OwnedLabel.Text = "Owned: " .. tostring(owned)
     end
     if not selectedId then return end
 
@@ -6849,7 +6917,12 @@ local function refresh()
     local maximum = maximumAmount(price)
     local owned, room = inventoryInfo(selectedId)
     selectedAmount = math.clamp(selectedAmount, 0, maximum)
-    details.ItemHeaderFrame.ItemNameLabel.Text = itemName(selectedId, item)
+    local nameLabel = details.ItemHeaderFrame.ItemNameLabel
+    nameLabel.Text = itemName(selectedId, item)
+    detailsIcon.Image = item.Icon or ""
+    local inset = detailsIcon.Image ~= "" and 47 or 8
+    nameLabel.Position = UDim2.fromOffset(inset, 3)
+    nameLabel.Size = UDim2.new(1, -inset - 8, 1, -6)
     details.PriceFrame.OwnedAmountLabel.Text = tostring(owned)
     details.PriceFrame.PriceLabel.Text = formatMoney(price)
     quantity.SelectedAmountFrame.ItemAmountToBuyLabel.Text = tostring(selectedAmount)
@@ -6920,6 +6993,7 @@ table.sort(ids, function(a, b)
 end)
 
 local stocked = {}
+local seedImages = {}
 for order, id in ipairs(ids) do
     local item = definitions[id]
     local category = categoryOf(item)
@@ -6929,14 +7003,23 @@ for order, id in ipairs(ids) do
     card:SetAttribute("ItemName", id)
     card:SetAttribute("ShopCategory", category)
     card.SelectButton.Text = itemName(id, item)
-    card.ItemIcon.Image = item.ShowShopIcon and item.Icon or ""
-	card.PriceLabel.Text = formatMoney(item.BuyPriceCents) .. " / each"
+    layoutCard(card)
+    layoutPrice(card)
+    local image = card.ItemIcon
+    showArtwork(card.SelectButton, image, item.Icon, item.Type == "Seed")
+    if item.Type == "Seed" and image.Image ~= "" then
+        table.insert(seedImages, image)
+    end
+    card.PriceLabel.Text = formatMoney(item.BuyPriceCents)
     card.SelectButton.Activated:Connect(function() selectItem(id) end)
     card.Visible = false
     card.Parent = items
     cards[id] = card
     stocked[category] = true
 end
+task.spawn(function()
+    game:GetService("ContentProvider"):PreloadAsync(seedImages)
+end)
 
 -- Placeholders are display only; they never send purchase requests.
 local futureStock = {
@@ -6952,6 +7035,8 @@ for category, names in pairs(futureStock) do
             card.LayoutOrder = order
             card:SetAttribute("ShopCategory", category)
             card.SelectButton.Text = name
+            layoutCard(card)
+            layoutPrice(card)
             enableButton(card.SelectButton, false, GREEN)
             card.PriceLabel.Text = "Coming soon"
             card.OwnedLabel.Text = ""
@@ -6960,8 +7045,19 @@ for category, names in pairs(futureStock) do
         end
     end
 end
+local categoryArt = {
+    Seeds = definitions.CarrotSeed.Icon,
+    Equipment = definitions.GardenBed.Icon,
+}
 for _, category in ipairs(categoryNames) do
-    categories[category .. "Frame"].SelectButton.Activated:Connect(function()
+    local card = categories[category .. "Frame"]
+    layoutCard(card)
+    card.DescriptionLabel.Position = UDim2.new(0, 12, 1, -30)
+    card.DescriptionLabel.Size = UDim2.new(1, -24, 0, 22)
+    if categoryArt[category] then
+        showArtwork(card.SelectButton, template.ItemIcon:Clone(), categoryArt[category], category == "Seeds")
+    end
+    card.SelectButton.Activated:Connect(function()
         showCatalogue(category)
     end)
 end
