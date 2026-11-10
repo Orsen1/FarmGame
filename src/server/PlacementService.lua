@@ -11,7 +11,7 @@ local plots = workspace:WaitForChild("Plots")
 
 local PlacementService = {}
 
-function PlacementService.placeItem(player, itemName, position)
+function PlacementService.placeItem(player, itemName, position, rotation)
     if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true then
         return false, "Player data is not ready"
     end
@@ -36,7 +36,7 @@ function PlacementService.placeItem(player, itemName, position)
         return false, "PlacedObjects folder is missing"
     end
 
-    local pivot, valid, reason = PlacementRules.getPlacement(plot, position, template)
+    local pivot, valid, reason = PlacementRules.getPlacement(plot, position, template, rotation)
 
     if not valid then
         return false, reason

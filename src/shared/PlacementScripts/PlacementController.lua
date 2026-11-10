@@ -15,6 +15,10 @@ local placingItemName
 local preview
 local connection
 local position
+local sourceSlot
+local controls
+local rotation = 0
+local snapEnabled = true
 
 local canPlace = false
 local pending = false
@@ -33,19 +37,88 @@ function PlacementController.cancelPlacement()
     canPlace = false
     position = nil
     placingItemName = nil
+    sourceSlot = nil
+
+    if controls then
+        controls:Destroy()
+        controls = nil
+    end
 
     ContextActionService:UnbindAction("ConfirmPlacement")
     ContextActionService:UnbindAction("CancelPlacement")
+    ContextActionService:UnbindAction("RotatePlacement")
+    ContextActionService:UnbindAction("TogglePlacementSnap")
 end
 
 local function confirmPlacement()
     if preview and canPlace and not pending then
         pending = true
-        PlaceEvent:FireServer(placingItemName, position)
+        PlaceEvent:FireServer(placingItemName, position, rotation)
     end
 end
 
-function PlacementController.startPlacement(itemName)
+local function hasSelectedItem()
+    return sourceSlot and sourceSlot.ItemName.Value == placingItemName and sourceSlot.Amount.Value > 0
+end
+
+local function makeControls(rotate, toggleSnap, canSnap)
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "PlacementControls"
+    gui.DisplayOrder = 10
+    gui.ResetOnSpawn = false
+
+    local function label(class, parent, name, size, position)
+        local object = Instance.new(class)
+        object.Name = name
+        object.Size = size
+        object.Position = position
+        object.BackgroundColor3 = Color3.fromRGB(255, 232, 169)
+        object.BorderSizePixel = 0
+        object.Parent = parent
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 8)
+        corner.Parent = object
+        return object
+    end
+
+    local hint = label("TextLabel", gui, "KeyboardHint", UDim2.new(0.85, 0, 0, 32), UDim2.new(0.5, 0, 0, 8))
+    hint.AnchorPoint = Vector2.new(0.5, 0)
+    hint.TextColor3 = Color3.fromRGB(91, 54, 28)
+    hint.Font = Enum.Font.GothamMedium
+    hint.TextSize = 14
+    local sizeLimit = Instance.new("UISizeConstraint")
+    sizeLimit.MaxSize = Vector2.new(388, 32)
+    sizeLimit.Parent = hint
+
+    local touchPanel = Instance.new("Frame")
+    touchPanel.Name = "TouchActions"
+    touchPanel.AnchorPoint = Vector2.new(1, 0.5)
+    touchPanel.Position = UDim2.new(1, -8, 0.46, 0)
+    touchPanel.Size = UDim2.fromOffset(148, 100)
+    touchPanel.BackgroundTransparency = 1
+    touchPanel.Parent = gui
+    local function button(name, text, x, y, callback)
+        local object = label("TextButton", touchPanel, name, UDim2.fromOffset(71, 46), UDim2.fromOffset(x, y))
+        object.Text = text
+        object.Font = Enum.Font.GothamBold
+        object.TextSize = 14
+        object.TextColor3 = hint.TextColor3
+        object.Activated:Connect(callback)
+        return object
+    end
+    local turn = button("Rotate", "", 0, 0, rotate)
+    local snap = button("Snap", "", 77, 0, toggleSnap)
+    snap.Visible = canSnap
+    button("Place", "Place", 0, 52, confirmPlacement)
+    button("Cancel", "Cancel", 77, 52, PlacementController.cancelPlacement)
+
+    local reticle = label("Frame", gui, "AimPoint", UDim2.fromOffset(8, 8), UDim2.fromScale(0.5, 0.5))
+    reticle.AnchorPoint = Vector2.new(0.5, 0.5)
+    gui.Parent = player:WaitForChild("PlayerGui")
+    return gui, hint, touchPanel, turn, snap, reticle
+end
+
+function PlacementController.startPlacement(itemName, slotNumber)
     if pending then
         return
     end
@@ -80,6 +153,9 @@ function PlacementController.startPlacement(itemName)
     end
 
     placingItemName = itemName
+    local inventory = player:FindFirstChild("Inventory")
+    sourceSlot = inventory and slotNumber and inventory:FindFirstChild("Slot" .. slotNumber)
+    rotation = 0
     preview = template:Clone()
 
     local parts = {}
@@ -99,27 +175,48 @@ function PlacementController.startPlacement(itemName)
         end
     end
 
-    local touch = UserInputService.TouchEnabled and not UserInputService.MouseEnabled
-
-    local function bindButton(name, title, key, y, callback)
+    local function bindButton(name, key, callback)
         ContextActionService:BindAction(name, function(_, state)
             if state == Enum.UserInputState.Begin then
                 callback()
             end
-
             return Enum.ContextActionResult.Sink
-        end, true, key)
-
-        ContextActionService:SetTitle(name, title)
-        ContextActionService:SetPosition(name, UDim2.fromScale(0.75, y))
+        end, false, key)
     end
 
-    bindButton("ConfirmPlacement", "Place", Enum.KeyCode.E, 0.45, confirmPlacement)
+    local canSnap = definition.PlacementSnapGroup ~= nil
+    local function rotate()
+        if not pending then
+            rotation = (rotation + 1) % 4
+            canPlace = false
+        end
+    end
+    local function toggleSnap()
+        if not pending then
+            snapEnabled = not snapEnabled
+            canPlace = false
+        end
+    end
+    local gui, hint, touchPanel, turn, snap, reticle = makeControls(rotate, toggleSnap, canSnap)
+    controls = gui
+    bindButton("ConfirmPlacement", Enum.KeyCode.E, confirmPlacement)
+    bindButton("CancelPlacement", Enum.KeyCode.Q, PlacementController.cancelPlacement)
+    bindButton("RotatePlacement", Enum.KeyCode.R, rotate)
+    if canSnap then
+        bindButton("TogglePlacementSnap", Enum.KeyCode.G, toggleSnap)
+    end
 
-    bindButton("CancelPlacement", "Cancel", Enum.KeyCode.Q, 0.62, PlacementController.cancelPlacement)
+    local function showStatus(snapped)
+        local snapText = snapped and "Snapped" or (snapEnabled and "Snap: On" or "Snap: Off")
+        turn.Text = "Turn " .. rotation * 90 .. "°"
+        snap.Text = snapText
+        hint.Text = "R  Rotate " .. rotation * 90 .. "°   ·   "
+            .. (canSnap and ("G  " .. snapText .. "   ·   ") or "") .. "E  Place   ·   Q  Cancel"
+    end
 
     connection = RunService.RenderStepped:Connect(function()
-        if player:GetAttribute("DataLoaded") ~= true or plot:GetAttribute("OwnerUserId") ~= player.UserId then
+        if player:GetAttribute("DataLoaded") ~= true or plot:GetAttribute("OwnerUserId") ~= player.UserId
+            or (sourceSlot and not hasSelectedItem()) then
             PlacementController.cancelPlacement()
             return
         end
@@ -129,10 +226,15 @@ function PlacementController.startPlacement(itemName)
             return
         end
 
-        local ray
+        local touch = UserInputService.PreferredInput == Enum.PreferredInput.Touch
+        hint.Visible = not touch
+        touchPanel.Visible = touch
+        reticle.Visible = touch
 
+        local ray
         if touch then
-            ray = camera:ViewportPointToRay(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+            local aim = reticle.AbsolutePosition + reticle.AbsoluteSize / 2
+            ray = camera:ScreenPointToRay(aim.X, aim.Y)
         else
             local mouse = UserInputService:GetMouseLocation()
             ray = camera:ViewportPointToRay(mouse.X, mouse.Y)
@@ -152,12 +254,16 @@ function PlacementController.startPlacement(itemName)
         if distance <= 0 or distance > 500 then
             preview.Parent = nil
             canPlace = false
+            showStatus(false)
             return
         end
 
-        position = ray.Origin + ray.Direction * distance
-
-        local pivot, valid = rules.getPlacement(plot, position, template, preview)
+        local aimPosition = ray.Origin + ray.Direction * distance
+        local snapped = canSnap and snapEnabled
+            and rules.getSnapPosition(plot, aimPosition, template, rotation, itemName, preview)
+        position = snapped or aimPosition
+        showStatus(snapped)
+        local pivot, valid = rules.getPlacement(plot, position, template, rotation, preview)
         canPlace = valid
 
         if not pivot then
@@ -168,7 +274,8 @@ function PlacementController.startPlacement(itemName)
         preview:PivotTo(pivot)
         preview.Parent = workspace
 
-        local color = valid and Color3.fromRGB(75, 210, 100) or Color3.fromRGB(230, 75, 75)
+        local color = valid and (snapped and Color3.fromRGB(62, 202, 171) or Color3.fromRGB(75, 210, 100))
+            or Color3.fromRGB(230, 75, 75)
 
         for _, part in ipairs(parts) do
             part.Color = color
@@ -179,9 +286,9 @@ end
 PlaceEvent.OnClientEvent:Connect(function(success, message)
     pending = false
 
-    if success then
+    if success and not hasSelectedItem() then
         PlacementController.cancelPlacement()
-    else
+    elseif not success then
         warn("[PLACEMENT] Failed to place item:", message)
     end
 end)

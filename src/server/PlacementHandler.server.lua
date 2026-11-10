@@ -7,7 +7,7 @@ local PlaceEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("
 
 local lastRequest = {}
 
-PlaceEvent.OnServerEvent:Connect(function(player, itemName, position)
+PlaceEvent.OnServerEvent:Connect(function(player, itemName, position, rotation)
     local now = os.clock()
 
     if now - (lastRequest[player] or -math.huge) < 0.25 then
@@ -17,7 +17,7 @@ PlaceEvent.OnServerEvent:Connect(function(player, itemName, position)
 
     lastRequest[player] = now
 
-    local success, reason = PlacementService.placeItem(player, itemName, position)
+    local success, reason = PlacementService.placeItem(player, itemName, position, rotation)
     PlaceEvent:FireClient(player, success, reason)
 end)
 

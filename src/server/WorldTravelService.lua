@@ -2,6 +2,7 @@ local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
+local MemoryStoreService = game:GetService("MemoryStoreService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("WorldTravelConfig"))
@@ -12,6 +13,62 @@ local lastAttempt = {}
 local prepareData
 local restoreData
 local send
+local activeFarms
+
+if not RunService:IsStudio() then
+    activeFarms = MemoryStoreService:GetHashMap("ActiveFarmServers_v1")
+end
+
+local function trackFarmServer()
+    local closing = false
+    local updating = false
+    local refreshAgain = false
+
+    local function refresh()
+        if updating then
+            refreshAgain = true
+            return
+        end
+        updating = true
+        repeat
+            refreshAgain = false
+            if closing or #Players:GetPlayers() == 0 then
+                pcall(activeFarms.RemoveAsync, activeFarms, game.JobId)
+            else
+                pcall(activeFarms.SetAsync, activeFarms, game.JobId, true, 35)
+            end
+        until not refreshAgain
+        updating = false
+    end
+
+    Players.PlayerAdded:Connect(function()
+        if #Players:GetPlayers() == 1 then
+            refresh()
+        end
+    end)
+    Players.PlayerRemoving:Connect(function()
+        if #Players:GetPlayers() <= 1 then
+            task.defer(refresh)
+        end
+    end)
+    game:BindToClose(function()
+        closing = true
+        refresh()
+        while updating do
+            task.wait()
+        end
+    end)
+    task.spawn(function()
+        while not closing do
+            refresh()
+            task.wait(12)
+        end
+    end)
+end
+
+if activeFarms and game.PlaceId == Config.FarmPlaceId then
+    trackFarmServer()
+end
 
 local function validPlaceId(value)
     return typeof(value) == "number" and value > 0 and value % 1 == 0
@@ -120,7 +177,9 @@ function WorldTravelService.Travel(player, destination)
     if destination == "Resources" and game.PlaceId == Config.FarmPlaceId then
         context.PlaceId = Config.ResourcesPlaceId
         context.ReturnFarmPlaceId = game.PlaceId
-        context.ReturnFarmJobId = game.JobId
+        if #Players:GetPlayers() > 1 then
+            context.ReturnFarmJobId = game.JobId
+        end
 
     elseif destination == "Farm" and game.PlaceId == Config.ResourcesPlaceId then
         context.PlaceId = Config.FarmPlaceId
@@ -151,6 +210,12 @@ function WorldTravelService.Travel(player, destination)
     end
 
     context.Prepared = true
+    if context.ServerId ~= "" then
+        local checked, online = pcall(activeFarms.GetAsync, activeFarms, context.ServerId)
+        if not checked or online ~= true then
+            context.ServerId = ""
+        end
+    end
     send(player, context)
     return true
 end
@@ -158,14 +223,16 @@ end
 TeleportService.TeleportInitFailed:Connect(function(player, _, message, placeId, options)
     local context = pending[player]
 
-    if not context or context.PlaceId ~= placeId or not options then
+    if not context or context.PlaceId ~= placeId or not context.AttemptId or not options then
         return
     end
 
     local data = options:GetTeleportData()
 
-    if typeof(data) == "table" then
+    if typeof(data) == "table" and typeof(data.TravelAttemptId) == "string" then
         failed(player, context, data.TravelAttemptId, message)
+    elseif options.ServerInstanceId == context.ServerId then
+        failed(player, context, context.AttemptId, message)
     end
 end)
 

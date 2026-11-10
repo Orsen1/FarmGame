@@ -53,6 +53,7 @@ local ItemDefinitions = {
         BuyPriceCents = 30,
         Icon = "rbxassetid://114628718599456",
         Placeable = true,
+        PlacementSnapGroup = "GardenBed",
         Plantable = true,
         ShopCategory = "Equipment"
     },
@@ -62,6 +63,7 @@ local ItemDefinitions = {
         BuyPriceCents = 100,
         Icon = "rbxassetid://132158221134383",
         Placeable = true,
+        PlacementSnapGroup = "GardenBed",
         Plantable = true,
         ShopCategory = "Equipment"
     },

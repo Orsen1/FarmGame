@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local plotsFolder = workspace:WaitForChild("Plots")
+local PlotSectionService = require(script.Parent.PlotSectionService)
 
 local PlayerPlotService = {}
 
@@ -93,6 +94,7 @@ function PlayerPlotService.releasePlot(player)
     end
 
     plot:SetAttribute("OwnerUserId", 0)
+    PlotSectionService.loadData(plot)
     player:SetAttribute("PlotName", nil)
 
     print("[PLOT]", player.Name, "released", plot.Name)

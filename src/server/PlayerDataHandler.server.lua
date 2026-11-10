@@ -9,6 +9,7 @@ local TravelService = require(ServerScriptService:WaitForChild("WorldTravelServi
 local plotModule = ServerScriptService:FindFirstChild("PlayerPlotService")
 local PlayerPlotService = plotModule and require(plotModule)
 local PlotDataService = plotModule and require(ServerScriptService:WaitForChild("PlotDataService"))
+local PlotSectionService = plotModule and require(ServerScriptService:WaitForChild("PlotSectionService"))
 local ProductionService = plotModule and require(ServerScriptService:WaitForChild("ProductionService"))
 
 local loadedData = {}
@@ -57,7 +58,11 @@ local function loadPlayerData(player)
     end
 
     if PlotDataService then
-        local success, reason = PlotDataService.loadData(player, data.PlacedObjects or {})
+        local plot = workspace.Plots[player:GetAttribute("PlotName")]
+        local success, reason = PlotSectionService.loadData(plot, data.UnlockedPlotSections)
+        if success then
+            success, reason = PlotDataService.loadData(player, data.PlacedObjects or {})
+        end
 
         if not success then
             warn("[PLOT LOAD ERROR]", player.UserId, reason)
@@ -101,6 +106,7 @@ local function savePlayerData(player, preparingTeleport)
                 return false
             end
             data.PlacedObjects = placedObjects
+            data.UnlockedPlotSections = PlotSectionService.getData(workspace.Plots[player:GetAttribute("PlotName")])
         end
 
         if PlayerPlotService and not preparingTeleport then
