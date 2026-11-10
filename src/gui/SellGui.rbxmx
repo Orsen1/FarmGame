@@ -85,6 +85,7 @@ for order, itemName in ipairs(itemNames) do
     card:SetAttribute("ItemName", itemName)
     card.SelectButton:SetAttribute("ItemName", itemName)
     card.SelectButton.Text = itemDisplayName(itemName, item)
+    card.ItemIcon.Image = item.ShowShopIcon and item.Icon or ""
     card.PriceLabel.Text = string.format("$%.2f / each", item.SellPriceCents / 100)
     card.OwnedLabel.Text = "You have: 0"
     card.SelectButton.Activated:Connect(function()
@@ -5173,6 +5174,18 @@ updateItemSellFrame()
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
 					</Item>
+				</Item>
+				<Item class="ImageLabel" referent="RBXCA5CC19C54824E11BE1A7B5D99A50002">
+					<Properties>
+						<string name="Name">ItemIcon</string>
+						<float name="BackgroundTransparency">1</float>
+						<bool name="Active">false</bool>
+						<bool name="Selectable">false</bool>
+						<token name="ScaleType">3</token>
+						<Vector2 name="AnchorPoint"><X>1</X><Y>1</Y></Vector2>
+						<UDim2 name="Position"><XS>1</XS><XO>-12</XO><YS>1</YS><YO>-6</YO></UDim2>
+						<UDim2 name="Size"><XS>0</XS><XO>36</XO><YS>0</YS><YO>36</YO></UDim2>
+					</Properties>
 				</Item>
 			</Item>
 		</Item>

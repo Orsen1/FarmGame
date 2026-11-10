@@ -47,6 +47,86 @@ local ItemDefinitions = {
         Icon = "rbxassetid://86719338895075",
         ShopCategory = "Seeds"
     },
+    Strawberry = {
+        DisplayName = "Strawberry",
+        Type = "Product",
+        SellPriceCents = 15,
+        ShowShopIcon = true,
+        Icon = "rbxassetid://127742627411355"
+    },
+    StrawberrySeed = {
+        DisplayName = "Strawberry Seeds",
+        Type = "Seed",
+        BuyPriceCents = 6,
+        PlantId = "Strawberry",
+        ShowShopIcon = true,
+        Icon = "rbxassetid://105364460528767",
+        ShopCategory = "Seeds"
+    },
+    Blueberry = {
+        DisplayName = "Blueberry",
+        Type = "Product",
+        SellPriceCents = 18,
+        ShowShopIcon = true,
+        Icon = "rbxassetid://119358528005529"
+    },
+    BlueberrySeed = {
+        DisplayName = "Blueberry Seeds",
+        Type = "Seed",
+        BuyPriceCents = 7,
+        PlantId = "Blueberry",
+        ShowShopIcon = true,
+        Icon = "rbxassetid://70470989949497",
+        ShopCategory = "Seeds"
+    },
+    Corn = {
+        DisplayName = "Corn",
+        Type = "Product",
+        SellPriceCents = 12,
+        ShowShopIcon = true,
+        Icon = "rbxassetid://99812472423694"
+    },
+    CornSeed = {
+        DisplayName = "Corn Seeds",
+        Type = "Seed",
+        BuyPriceCents = 5,
+        PlantId = "Corn",
+        ShowShopIcon = true,
+        Icon = "rbxassetid://73295381241741",
+        ShopCategory = "Seeds"
+    },
+    Pumpkin = {
+        DisplayName = "Pumpkin",
+        Type = "Product",
+        SellPriceCents = 24,
+        ShowShopIcon = true,
+        Icon = "rbxassetid://136316914578267"
+    },
+    PumpkinSeed = {
+        DisplayName = "Pumpkin Seeds",
+        Type = "Seed",
+        BuyPriceCents = 9,
+        PlantId = "Pumpkin",
+        ShowShopIcon = true,
+        Icon = "rbxassetid://94872052486573",
+        ShopCategory = "Seeds"
+    },
+    BellPepper = {
+        DisplayName = "Bell Pepper",
+        Type = "Product",
+        SellPriceCents = 20,
+        ShowShopIcon = true,
+        Icon = "rbxassetid://76085404412347"
+    },
+    BellPepperSeed = {
+        DisplayName = "Bell Pepper Seeds",
+        Type = "Seed",
+        BuyPriceCents = 8,
+        PlantId = "BellPepper",
+        ShowShopIcon = true,
+        Icon = "rbxassetid://94224988595274",
+        ShopCategory = "Seeds"
+    },
     GardenBed = {
         DisplayName = "Грядка",
         Type = "GardenBed",

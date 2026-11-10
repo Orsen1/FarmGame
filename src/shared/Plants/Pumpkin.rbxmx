@@ -1,0 +1,1330 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Folder" referent="RBX00000000000000000000000000000001">
+    <Properties>
+      <string name="Name">Pumpkin</string>
+    </Properties>
+    <Item class="Model" referent="RBX00000000000000000000000000000002">
+      <Properties>
+        <string name="Name">Stage1</string>
+        <Ref name="PrimaryPart">RBX00000000000000000000000000000003</Ref>
+        <bool name="NeedsPivotMigration">false</bool>
+      </Properties>
+      <Item class="Part" referent="RBX00000000000000000000000000000003">
+        <Properties>
+          <string name="Name">Root</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">false</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+          <float name="Transparency">1</float>
+          <Vector3 name="size"><X>0.05</X><Y>0.05</Y><Z>0.05</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000004">
+        <Properties>
+          <string name="Name">Sprout</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285174863</Color3uint8>
+          <Vector3 name="size"><X>0.2704737</X><Y>0.07</Y><Z>0.07</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.008</X><Y>0.135</Y><Z>0</Z><R00>0.05915548</R00><R01>0</R01><R02>0.9982488</R02><R10>0.9982488</R10><R11>0</R11><R12>-0.05915548</R12><R20>0</R20><R21>1</R21><R22>0</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000005">
+        <Properties>
+          <string name="Name">SeedLeaf</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.3212317</X><Y>0.075</Y><Z>0.16</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1097154</X><Y>0.305</Y><Z>0.06609149</Z><R00>-0.7827086</R00><R01>0.4133159</R01><R02>-0.4653356</R02><R10>0.4669527</R10><R11>0.8842823</R11><R12>0</R12><R20>0.411488</R20><R21>-0.2172897</R21><R22>-0.8851343</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000006">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000007">
+        <Properties>
+          <string name="Name">SeedLeaf</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2374577</X><Y>0.075</Y><Z>0.15</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.1137788</X><Y>0.3</Y><Z>-0.04512028</Z><R00>0.8235474</R00><R01>-0.3823793</R01><R02>0.4189938</R02><R10>0.4211277</R10><R11>0.9070014</R11><R12>0</R12><R20>-0.3800279</R20><R21>0.1764499</R21><R22>0.9079891</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000008">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+    <Item class="Model" referent="RBX00000000000000000000000000000009">
+      <Properties>
+        <string name="Name">Stage2</string>
+        <Ref name="PrimaryPart">RBX0000000000000000000000000000000A</Ref>
+        <bool name="NeedsPivotMigration">false</bool>
+      </Properties>
+      <Item class="Part" referent="RBX0000000000000000000000000000000A">
+        <Properties>
+          <string name="Name">Root</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">false</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+          <float name="Transparency">1</float>
+          <Vector3 name="size"><X>0.05</X><Y>0.05</Y><Z>0.05</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000000B">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.3449632</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.07101718</X><Y>0.155</Y><Z>0.1311201</Z><R00>0.817578</R00><R01>-0.1197669</R01><R02>-0.5632248</R02><R10>0.144943</R10><R11>0.98944</R11><R12>0</R12><R20>0.5572771</R20><R21>-0.08163548</R21><R22>0.8263037</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000000C">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3097037</X><Y>0.2325</Y><Z>0.2617894</Z><R00>0.8409403</R00><R01>-0.4261522</R01><R02>-0.3334871</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>0.2974716</R20><R21>-0.1507457</R21><R22>0.9427547</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000000D">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000000E">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2827125</X><Y>0.2325</Y><Z>0.3029868</Z><R00>0.6085436</R00><R01>-0.3083836</R01><R02>-0.7311458</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>0.6521845</R20><R21>-0.3304989</R21><R22>0.6822212</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000000F">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000010">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2397472</X><Y>0.2325</Y><Z>0.3270648</Z><R00>0.2386099</R00><R01>-0.1209172</R01><R02>-0.9635582</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>0.8594972</R20><R21>-0.435556</R21><R22>0.2674988</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000011">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000012">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.2386119</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.1814214</X><Y>0.155</Y><Z>0.06955716</Z><R00>-0.9339126</R00><R01>0.2001403</R01><R02>-0.2962281</R02><R10>0.2095453</R10><R11>0.977799</R11><R12>0</R12><R20>0.2896515</R20><R21>-0.0620732</R21><R22>-0.9551172</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000013">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.3634001</X><Y>0.2325</Y><Z>0.1799735</Z><R00>-0.6075041</R00><R01>0.3078568</R01><R02>-0.7322314</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>0.6531529</R20><R21>-0.3309897</R21><R22>-0.6810559</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000014">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000015">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.3904569</X><Y>0.2325</Y><Z>0.1388191</Z><R00>-0.8404655</R00><R01>0.4259116</R01><R02>-0.3349882</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>0.2988106</R20><R21>-0.1514243</R21><R22>-0.9422223</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000016">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000017">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.395452</X><Y>0.2325</Y><Z>0.08982105</Z><R00>-0.8834731</R00><R01>0.447706</R01><R02>0.1379659</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>-0.123066</R20><R21>0.06236454</R21><R22>-0.990437</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000018">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000019">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.3537149</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.04158528</X><Y>0.155</Y><Z>-0.1377604</Z><R00>0.1606646</R00><R01>-0.02294139</R01><R02>0.9867424</R02><R10>0.1413568</R10><R11>0.9899587</R11><R12>0</R12><R20>-0.9768343</R20><R21>0.1394827</R21><R22>0.1622942</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000001A">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.06486197</X><Y>0.2325</Y><Z>-0.4003036</Z><R00>-0.4450668</R00><R01>0.2255406</R01><R02>0.8666297</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>-0.7730366</R20><R21>0.3917415</R21><R22>-0.4989519</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000001B">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000001C">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.01756073</X><Y>0.2325</Y><Z>-0.4140278</Z><R00>-0.03779979</R00><R01>0.0191553</R01><R02>0.9991017</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>-0.8912021</R20><R21>0.4516227</R21><R22>-0.04237629</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000001D">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000001E">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2322861</X><Y>0.11</Y><Z>0.1554</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.03073273</X><Y>0.2325</Y><Z>-0.4043582</Z><R00>0.3780104</R00><R01>-0.1915593</R01><R02>0.9057666</R02><R10>0.4520287</R10><R11>0.8920034</R11><R12>0</R12><R20>-0.8079469</R20><R21>0.4094326</R21><R22>0.4237768</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000001F">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+    <Item class="Model" referent="RBX00000000000000000000000000000020">
+      <Properties>
+        <string name="Name">Stage3</string>
+        <Ref name="PrimaryPart">RBX00000000000000000000000000000021</Ref>
+        <bool name="NeedsPivotMigration">false</bool>
+      </Properties>
+      <Item class="Part" referent="RBX00000000000000000000000000000021">
+        <Properties>
+          <string name="Name">Root</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">false</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+          <float name="Transparency">1</float>
+          <Vector3 name="size"><X>0.05</X><Y>0.05</Y><Z>0.05</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000022">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.4512692</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.1082665</X><Y>0.155</Y><Z>0.1710406</Z><R00>0.790067</R00><R01>-0.08808064</R01><R02>-0.6066597</R02><R10>0.1107986</R10><R11>0.9938429</R11><R12>0</R12><R20>0.6029244</R20><R21>-0.06721705</R21><R22>0.7949616</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000023">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.4185186</X><Y>0.2325</Y><Z>0.3537694</Z><R00>0.8827287</R00><R01>-0.3310233</R01><R02>-0.3334871</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.3122537</R20><R21>-0.1170951</R21><R22>0.9427547</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000024">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000025">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3820439</X><Y>0.2325</Y><Z>0.4094417</Z><R00>0.6387836</R00><R01>-0.2395439</R01><R02>-0.7311458</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.6845932</R20><R21>-0.2567224</R21><R22>0.6822212</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000026">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000027">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3239827</X><Y>0.2325</Y><Z>0.4419794</Z><R00>0.250467</R00><R01>-0.09392511</R01><R02>-0.9635582</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.9022076</R20><R21>-0.3383279</R21><R22>0.2674988</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000028">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000029">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.3460833</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2328667</X><Y>0.155</Y><Z>0.08784751</Z><R00>-0.9411993</R00><R01>0.1374204</R01><R02>-0.3086415</R02><R10>0.1444739</R10><R11>0.9895086</R11><R12>0</R12><R20>0.3054034</R20><R21>-0.04459063</R21><R22>-0.9511785</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000002A">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.4910812</X><Y>0.2325</Y><Z>0.2432074</Z><R00>-0.6376925</R00><R01>0.2391347</R01><R02>-0.7322314</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.6856097</R20><R21>-0.2571036</R21><R22>-0.6810559</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000002B">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000002C">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.5276445</X><Y>0.2325</Y><Z>0.1875934</Z><R00>-0.8822303</R00><R01>0.3308364</R01><R02>-0.3349882</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.3136592</R20><R21>-0.1176222</R21><R22>-0.9422223</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000002D">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000002E">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.5343946</X><Y>0.2325</Y><Z>0.1213798</Z><R00>-0.927375</R00><R01>0.3477656</R01><R02>0.1379659</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>-0.1291815</R20><R21>0.04844305</R21><R22>-0.990437</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000002F">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000030">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.4603334</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.04389902</X><Y>0.155</Y><Z>-0.1923114</Z><R00>0.1134003</R00><R01>-0.0123905</R01><R02>0.9934721</R02><R10>0.1086169</R10><R11>0.9940837</R11><R12>0</R12><R20>-0.9875944</R20><R21>0.1079079</R21><R22>0.1140752</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000031">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.08765131</X><Y>0.2325</Y><Z>-0.5409509</Z><R00>-0.4671832</R00><R01>0.1751937</R01><R02>0.8666297</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>-0.8114506</R20><R21>0.304294</R21><R22>-0.4989519</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000032">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000033">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.02373072</X><Y>0.2325</Y><Z>-0.559497</Z><R00>-0.03967815</R00><R01>0.01487931</R01><R02>0.9991017</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>-0.9354881</R20><R21>0.350808</R21><R22>-0.04237629</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000034">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000035">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.04153071</X><Y>0.2325</Y><Z>-0.5464301</Z><R00>0.3967946</R00><R01>-0.148798</R01><R02>0.9057666</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>-0.8480957</R20><R21>0.3180359</R21><R22>0.4237768</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000036">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000037">
+        <Properties>
+          <string name="Name">Petal</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294362732</Color3uint8>
+          <Vector3 name="size"><X>0.1630859</X><Y>0.064</Y><Z>0.1587</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.4695</X><Y>0.323</Y><Z>-0.27</Z><R00>0.98721</R00><R01>-0.1594252</R01><R02>0</R02><R10>0.1594252</R10><R11>0.98721</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000038">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000039">
+        <Properties>
+          <string name="Name">Petal</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294362732</Color3uint8>
+          <Vector3 name="size"><X>0.1630859</X><Y>0.064</Y><Z>0.1587</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.366198</X><Y>0.323</Y><Z>-0.1278171</Z><R00>0.3050647</R00><R01>-0.0492651</R01><R02>-0.9510565</R02><R10>0.1594252</R10><R11>0.98721</R11><R12>0</R12><R20>0.9388925</R20><R21>-0.1516224</R21><R22>0.309017</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000003A">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000003B">
+        <Properties>
+          <string name="Name">Petal</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294362732</Color3uint8>
+          <Vector3 name="size"><X>0.1630859</X><Y>0.064</Y><Z>0.1587</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.199052</X><Y>0.323</Y><Z>-0.1821261</Z><R00>-0.7986697</R00><R01>0.1289777</R01><R02>-0.5877853</R02><R10>0.1594252</R10><R11>0.98721</R11><R12>0</R12><R20>0.5802675</R20><R21>-0.09370779</R21><R22>-0.809017</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000003C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000003D">
+        <Properties>
+          <string name="Name">Petal</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294362732</Color3uint8>
+          <Vector3 name="size"><X>0.1630859</X><Y>0.064</Y><Z>0.1587</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.199052</X><Y>0.323</Y><Z>-0.3578739</Z><R00>-0.7986697</R00><R01>0.1289777</R01><R02>0.5877853</R02><R10>0.1594252</R10><R11>0.98721</R11><R12>0</R12><R20>-0.5802675</R20><R21>0.09370779</R21><R22>-0.809017</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000003E">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000003F">
+        <Properties>
+          <string name="Name">Petal</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294362732</Color3uint8>
+          <Vector3 name="size"><X>0.1630859</X><Y>0.064</Y><Z>0.1587</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.366198</X><Y>0.323</Y><Z>-0.4121829</Z><R00>0.3050647</R00><R01>-0.0492651</R01><R02>0.9510565</R02><R10>0.1594252</R10><R11>0.98721</R11><R12>0</R12><R20>-0.9388925</R20><R21>0.1516224</R21><R22>0.309017</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000040">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000041">
+        <Properties>
+          <string name="Name">Pollen</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4292776771</Color3uint8>
+          <Vector3 name="size"><X>0.1472</X><Y>0.095</Y><Z>0.1472</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.32</X><Y>0.338</Y><Z>-0.27</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000042">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000043">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286816599</Color3uint8>
+          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.5003</X><Y>0.1829</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000044">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000045">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287670627</Color3uint8>
+          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.45015</X><Y>0.1829</Y><Z>-0.01313765</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000046">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000047">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286816599</Color3uint8>
+          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.34985</X><Y>0.1829</Y><Z>-0.01313765</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000048">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000049">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287670627</Color3uint8>
+          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.2997</X><Y>0.1829</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000004A">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000004B">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4286816599</Color3uint8>
+          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.34985</X><Y>0.1829</Y><Z>-0.1868623</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000004C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000004D">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287670627</Color3uint8>
+          <Vector3 name="size"><X>0.295</X><Y>0.3068</Y><Z>0.2891</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.45015</X><Y>0.1829</Y><Z>-0.1868623</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000004E">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000004F">
+        <Properties>
+          <string name="Name">PumpkinStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285368143</Color3uint8>
+          <Vector3 name="size"><X>0.1324094</X><Y>0.06195</Y><Z>0.06195</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.445</X><Y>0.37465</Y><Z>-0.12</Z><R00>0.67971</R00><R01>-0.6107748</R01><R02>0.4061385</R02><R10>0.6683815</R10><R11>0.7438186</R11><R12>0</R12><R20>-0.3020933</R20><R21>0.2714555</R21><R22>0.9138115</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Model" referent="RBX00000000000000000000000000000050">
+      <Properties>
+        <string name="Name">Stage4</string>
+        <Ref name="PrimaryPart">RBX00000000000000000000000000000051</Ref>
+        <bool name="NeedsPivotMigration">false</bool>
+      </Properties>
+      <Item class="Part" referent="RBX00000000000000000000000000000051">
+        <Properties>
+          <string name="Name">Root</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">false</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+          <float name="Transparency">1</float>
+          <Vector3 name="size"><X>0.05</X><Y>0.05</Y><Z>0.05</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000052">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.4512692</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.1082665</X><Y>0.155</Y><Z>0.1710406</Z><R00>0.790067</R00><R01>-0.08808064</R01><R02>-0.6066597</R02><R10>0.1107986</R10><R11>0.9938429</R11><R12>0</R12><R20>0.6029244</R20><R21>-0.06721705</R21><R22>0.7949616</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000053">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.4185186</X><Y>0.2325</Y><Z>0.3537694</Z><R00>0.8827287</R00><R01>-0.3310233</R01><R02>-0.3334871</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.3122537</R20><R21>-0.1170951</R21><R22>0.9427547</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000054">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000055">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3820439</X><Y>0.2325</Y><Z>0.4094417</Z><R00>0.6387836</R00><R01>-0.2395439</R01><R02>-0.7311458</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.6845932</R20><R21>-0.2567224</R21><R22>0.6822212</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000056">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000057">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284057674</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.3239827</X><Y>0.2325</Y><Z>0.4419794</Z><R00>0.250467</R00><R01>-0.09392511</R01><R02>-0.9635582</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.9022076</R20><R21>-0.3383279</R21><R22>0.2674988</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000058">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000059">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.3460833</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.2328667</X><Y>0.155</Y><Z>0.08784751</Z><R00>-0.9411993</R00><R01>0.1374204</R01><R02>-0.3086415</R02><R10>0.1444739</R10><R11>0.9895086</R11><R12>0</R12><R20>0.3054034</R20><R21>-0.04459063</R21><R22>-0.9511785</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000005A">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.4910812</X><Y>0.2325</Y><Z>0.2432074</Z><R00>-0.6376925</R00><R01>0.2391347</R01><R02>-0.7322314</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.6856097</R20><R21>-0.2571036</R21><R22>-0.6810559</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000005B">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000005C">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.5276445</X><Y>0.2325</Y><Z>0.1875934</Z><R00>-0.8822303</R00><R01>0.3308364</R01><R02>-0.3349882</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>0.3136592</R20><R21>-0.1176222</R21><R22>-0.9422223</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000005D">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000005E">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285570390</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.5343946</X><Y>0.2325</Y><Z>0.1213798</Z><R00>-0.927375</R00><R01>0.3477656</R01><R02>0.1379659</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>-0.1291815</R20><R21>0.04844305</R21><R22>-0.990437</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000005F">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000060">
+        <Properties>
+          <string name="Name">Vine</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4284910160</Color3uint8>
+          <Vector3 name="size"><X>0.4603334</X><Y>0.081</Y><Z>0.081</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.04389902</X><Y>0.155</Y><Z>-0.1923114</Z><R00>0.1134003</R00><R01>-0.0123905</R01><R02>0.9934721</R02><R10>0.1086169</R10><R11>0.9940837</R11><R12>0</R12><R20>-0.9875944</R20><R21>0.1079079</R21><R22>0.1140752</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000061">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.08765131</X><Y>0.2325</Y><Z>-0.5409509</Z><R00>-0.4671832</R00><R01>0.1751937</R01><R02>0.8666297</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>-0.8114506</R20><R21>0.304294</R21><R22>-0.4989519</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000062">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000063">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>-0.02373072</X><Y>0.2325</Y><Z>-0.559497</Z><R00>-0.03967815</R00><R01>0.01487931</R01><R02>0.9991017</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>-0.9354881</R20><R21>0.350808</R21><R22>-0.04237629</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000064">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000065">
+        <Properties>
+          <string name="Name">LeafLobe</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4287147356</Color3uint8>
+          <Vector3 name="size"><X>0.2990401</X><Y>0.11</Y><Z>0.21</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.04153071</X><Y>0.2325</Y><Z>-0.5464301</Z><R00>0.3967946</R00><R01>-0.148798</R01><R02>0.9057666</R02><R10>0.3511234</R10><R11>0.9363292</R11><R12>0</R12><R20>-0.8480957</R20><R21>0.3180359</R21><R22>0.4237768</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000066">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000067">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4292707389</Color3uint8>
+          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.57</X><Y>0.31</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000068">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000069">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4293499464</Color3uint8>
+          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.485</X><Y>0.31</Y><Z>0.04722432</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006A">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000006B">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4293829455</Color3uint8>
+          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.315</X><Y>0.31</Y><Z>0.04722432</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006C">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000006D">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4292707389</Color3uint8>
+          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.23</X><Y>0.31</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX0000000000000000000000000000006E">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX0000000000000000000000000000006F">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4293499464</Color3uint8>
+          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.315</X><Y>0.31</Y><Z>-0.2472243</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000070">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000071">
+        <Properties>
+          <string name="Name">PumpkinRib</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">1</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4293829455</Color3uint8>
+          <Vector3 name="size"><X>0.5</X><Y>0.52</Y><Z>0.49</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.485</X><Y>0.31</Y><Z>-0.2472243</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+        <Item class="SpecialMesh" referent="RBX00000000000000000000000000000072">
+          <Properties>
+            <string name="Name">Shape</string>
+            <token name="MeshType">3</token>
+          </Properties>
+        </Item>
+      </Item>
+      <Item class="Part" referent="RBX00000000000000000000000000000073">
+        <Properties>
+          <string name="Name">PumpkinStem</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">false</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">false</bool>
+          <bool name="Massless">true</bool>
+          <bool name="CastShadow">true</bool>
+          <token name="shape">2</token>
+          <token name="Material">272</token>
+          <Color3uint8 name="Color3uint8">4285368143</Color3uint8>
+          <Vector3 name="size"><X>0.1794436</X><Y>0.105</Y><Z>0.105</Z></Vector3>
+          <CoordinateFrame name="CFrame"><X>0.445</X><Y>0.635</Y><Z>-0.12</Z><R00>0.5015504</R00><R01>-0.7638709</R01><R02>0.4061385</R02><R10>0.8359173</R10><R11>0.5488554</R11><R12>0</R12><R20>-0.2229113</R20><R21>0.3394982</R21><R22>0.9138115</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+  </Item>
+</roblox>

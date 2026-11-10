@@ -6578,6 +6578,18 @@
 						</Properties>
 					</Item>
 				</Item>
+				<Item class="ImageLabel" referent="RBXCA5CC19C54824E11BE1A7B5D99A50001">
+					<Properties>
+						<string name="Name">ItemIcon</string>
+						<float name="BackgroundTransparency">1</float>
+						<bool name="Active">false</bool>
+						<bool name="Selectable">false</bool>
+						<token name="ScaleType">3</token>
+						<Vector2 name="AnchorPoint"><X>1</X><Y>1</Y></Vector2>
+						<UDim2 name="Position"><XS>1</XS><XO>-12</XO><YS>1</YS><YO>-6</YO></UDim2>
+						<UDim2 name="Size"><XS>0</XS><XO>36</XO><YS>0</YS><YO>36</YO></UDim2>
+					</Properties>
+				</Item>
 			</Item>
 		</Item>
 		<Item class="LocalScript" referent="RBX25E2343A242B4AFEAEA6CB6EFF57A26E">
@@ -6917,6 +6929,7 @@ for order, id in ipairs(ids) do
     card:SetAttribute("ItemName", id)
     card:SetAttribute("ShopCategory", category)
     card.SelectButton.Text = itemName(id, item)
+    card.ItemIcon.Image = item.ShowShopIcon and item.Icon or ""
 	card.PriceLabel.Text = formatMoney(item.BuyPriceCents) .. " / each"
     card.SelectButton.Activated:Connect(function() selectItem(id) end)
     card.Visible = false
