@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Model" referent="RBX0000000000000000000000000000000C">
+    <Properties>
+      <string name="Name">Pebble</string>
+      <Ref name="PrimaryPart">RBX0000000000000000000000000000000D</Ref>
+    </Properties>
+    <Item class="Part" referent="RBX0000000000000000000000000000000D">
+      <Properties>
+        <string name="Name">PebbleRoot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="Material">272</token>
+        <Color3uint8 name="Color3uint8">4287206813</Color3uint8>
+        <token name="shape">0</token>
+        <Vector3 name="size"><X>1.25</X><Y>0.72</Y><Z>0.94</Z></Vector3>
+        <CoordinateFrame name="CFrame"><X>29</X><Y>0.35</Y><Z>9</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <CoordinateFrame name="PivotOffset"><X>0</X><Y>-0.35</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+      </Properties>
+      <Item class="Attachment" referent="RBX0000000000000000000000000000000E">
+        <Properties>
+          <string name="Name">GatherPoint</string>
+          <CoordinateFrame name="CFrame"><X>0</X><Y>0.65</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RBX0000000000000000000000000000000F">
+      <Properties>
+        <string name="Name">Chip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <token name="Material">272</token>
+        <Color3uint8 name="Color3uint8">4288916144</Color3uint8>
+        <token name="shape">0</token>
+        <Vector3 name="size"><X>0.48</X><Y>0.36</Y><Z>0.44</Z></Vector3>
+        <CoordinateFrame name="CFrame"><X>29.57</X><Y>0.14</Y><Z>9.4</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+      </Properties>
+    </Item>
+  </Item>
+</roblox>

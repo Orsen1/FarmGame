@@ -61,6 +61,12 @@
         <token name="FrontSurface">0</token>
         <token name="BackSurface">0</token>
       </Properties>
+      <Item class="Attachment" referent="RBXSTRIKETIP">
+        <Properties>
+          <string name="Name">StrikeTip</string>
+          <CoordinateFrame name="CFrame"><X>1.0225</X><Y>1.429</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        </Properties>
+      </Item>
     </Item>
     <Item class="Part" referent="RBX00000000000000000000000000000003">
       <Properties>

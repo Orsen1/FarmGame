@@ -7029,6 +7029,95 @@ inventory.DescendantRemoving:Connect(function(value)
 end)
 money.Changed:Connect(refresh)
 
+local shopButton = Instance.new("TextButton")
+shopButton.Name = "ShopButton"
+shopButton.AnchorPoint = Vector2.new(0, 0.5)
+shopButton.Position = UDim2.new(0, 14, 0.42, 0)
+shopButton.Size = UDim2.fromOffset(150, 58)
+shopButton.BackgroundColor3 = Color3.fromRGB(232, 190, 112)
+shopButton.BorderSizePixel = 0
+shopButton.Text = ""
+shopButton.AutoButtonColor = true
+shopButton.Active = true
+shopButton.Selectable = true
+shopButton.ZIndex = 50
+shopButton.Parent = gui
+
+local shopCorner = Instance.new("UICorner")
+shopCorner.CornerRadius = UDim.new(0, 12)
+shopCorner.Parent = shopButton
+
+local shopStroke = Instance.new("UIStroke")
+shopStroke.Color = Color3.fromRGB(104, 65, 34)
+shopStroke.Thickness = 2
+shopStroke.Parent = shopButton
+
+local shopIcon = Instance.new("Frame")
+shopIcon.Name = "ShopIcon"
+shopIcon.Position = UDim2.fromOffset(9, 10)
+shopIcon.Size = UDim2.fromOffset(36, 38)
+shopIcon.BackgroundTransparency = 1
+shopIcon.BorderSizePixel = 0
+shopIcon.ZIndex = 51
+shopIcon.Parent = shopButton
+
+local function createShopShape(name, size, position, color)
+    local shape = Instance.new("Frame")
+    shape.Name = name
+    shape.Size = size
+    shape.Position = position
+    shape.BackgroundColor3 = color
+    shape.BorderSizePixel = 0
+    shape.ZIndex = 52
+    shape.Parent = shopIcon
+    return shape
+end
+
+local woodColor = Color3.fromRGB(112, 68, 36)
+local awningColor = Color3.fromRGB(185, 96, 49)
+createShopShape("Roof", UDim2.fromOffset(32, 5), UDim2.fromOffset(2, 5), woodColor)
+createShopShape("StoreFront", UDim2.fromOffset(28, 19), UDim2.fromOffset(4, 15), Color3.fromRGB(232, 190, 112))
+createShopShape("Awning", UDim2.fromOffset(32, 7), UDim2.fromOffset(2, 10), awningColor)
+createShopShape("AwningStripe1", UDim2.fromOffset(5, 7), UDim2.fromOffset(8, 10), Color3.fromRGB(247, 220, 168))
+createShopShape("AwningStripe2", UDim2.fromOffset(5, 7), UDim2.fromOffset(20, 10), Color3.fromRGB(247, 220, 168))
+createShopShape("Window", UDim2.fromOffset(8, 7), UDim2.fromOffset(7, 20), Color3.fromRGB(119, 174, 161))
+createShopShape("Door", UDim2.fromOffset(7, 12), UDim2.fromOffset(22, 22), woodColor)
+
+local shopLabel = Instance.new("TextLabel")
+shopLabel.Name = "ShopLabel"
+shopLabel.Position = UDim2.fromOffset(53, 0)
+shopLabel.Size = UDim2.new(1, -60, 1, 0)
+shopLabel.BackgroundTransparency = 1
+shopLabel.Font = Enum.Font.GothamBold
+shopLabel.Text = "Shop"
+shopLabel.TextColor3 = Color3.fromRGB(83, 51, 28)
+shopLabel.TextSize = 20
+shopLabel.TextXAlignment = Enum.TextXAlignment.Left
+shopLabel.ZIndex = 51
+shopLabel.Parent = shopButton
+
+local function resizeShopButton()
+    local viewportSize = gui.ViewportBounds.AbsoluteSize
+    if viewportSize.X <= 0 or viewportSize.Y <= 0 then return end
+    local compact = UserInputService.TouchEnabled or viewportSize.X < 600
+    shopButton.Size = UDim2.fromOffset(compact and 132 or 150, compact and 52 or 58)
+    shopButton.Position = UDim2.new(0, 12, 0.42, 0)
+    shopLabel.TextSize = compact and 18 or 20
+end
+
+gui.ViewportBounds:GetPropertyChangedSignal("AbsoluteSize"):Connect(resizeShopButton)
+resizeShopButton()
+local function updateShopButtonVisibility()
+    shopButton.Visible = not main.Visible
+end
+
+main:GetPropertyChangedSignal("Visible"):Connect(updateShopButtonVisibility)
+updateShopButtonVisibility()
+shopButton.Activated:Connect(function()
+    showCatalogue(nil)
+    main.Visible = true
+end)
+
 local function closeShop()
     main.Visible = false
 end

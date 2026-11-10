@@ -41,7 +41,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -63,7 +63,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -85,7 +85,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -107,7 +107,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -129,7 +129,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -151,7 +151,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -173,7 +173,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -195,7 +195,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -217,7 +217,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -239,7 +239,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -261,7 +261,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -283,7 +283,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -305,7 +305,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -327,7 +327,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -349,7 +349,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -371,7 +371,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -393,7 +393,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -415,7 +415,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -437,7 +437,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -459,7 +459,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -481,7 +481,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -503,7 +503,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -525,7 +525,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -547,7 +547,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -569,7 +569,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -591,7 +591,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -613,7 +613,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -635,7 +635,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -657,7 +657,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -679,7 +679,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -701,7 +701,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -723,7 +723,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -745,7 +745,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -767,7 +767,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -789,7 +789,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -811,7 +811,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -833,7 +833,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -855,7 +855,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -877,7 +877,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -899,7 +899,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -921,7 +921,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -943,7 +943,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -965,7 +965,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -987,7 +987,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1009,7 +1009,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1031,7 +1031,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1053,7 +1053,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1075,7 +1075,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1097,7 +1097,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -1119,7 +1119,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -1141,7 +1141,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1163,7 +1163,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1185,7 +1185,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1207,7 +1207,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1229,7 +1229,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1251,7 +1251,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1273,7 +1273,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1295,7 +1295,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1317,7 +1317,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -1339,7 +1339,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -1361,7 +1361,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1383,7 +1383,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1405,7 +1405,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1427,7 +1427,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1449,7 +1449,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1471,7 +1471,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1493,7 +1493,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1515,7 +1515,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1537,7 +1537,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -1559,7 +1559,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -1581,7 +1581,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1603,7 +1603,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1625,7 +1625,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1647,7 +1647,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1669,7 +1669,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1691,7 +1691,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1713,7 +1713,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1735,7 +1735,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -1757,7 +1757,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -1779,7 +1779,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">800</token>
@@ -1801,7 +1801,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1823,7 +1823,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1845,7 +1845,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1867,7 +1867,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1889,7 +1889,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1911,7 +1911,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1933,7 +1933,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1955,7 +1955,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1977,7 +1977,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -1999,7 +1999,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2021,7 +2021,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2043,7 +2043,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2065,7 +2065,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2087,7 +2087,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2109,7 +2109,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2131,7 +2131,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2153,7 +2153,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2175,7 +2175,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2197,7 +2197,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2219,7 +2219,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2241,7 +2241,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2263,7 +2263,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2285,7 +2285,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2307,7 +2307,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">1284</token>
@@ -2329,7 +2329,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -2351,7 +2351,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>
@@ -2373,7 +2373,7 @@
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanTouch">false</bool>
-        <bool name="CanQuery">false</bool>
+        <bool name="CanQuery">true</bool>
         <bool name="Massless">false</bool>
         <bool name="CastShadow">true</bool>
         <token name="Material">896</token>

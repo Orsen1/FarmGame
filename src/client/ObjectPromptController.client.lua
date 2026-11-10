@@ -1,15 +1,38 @@
 local Players = game:GetService("Players")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local ConstructionDefinitions = require(ReplicatedStorage:WaitForChild("Configs")
     :WaitForChild("ConstructionDefinitions"))
 
+local ConstructionPromptView = require(script.Parent:WaitForChild("ConstructionPromptView"))
+
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 local inventory = player:WaitForChild("Inventory")
 local plots = workspace:WaitForChild("Plots")
 
 local boundPrompts = {}
+local activePrompt
+local constructionView
+
+local function hideConstructionPrompt(prompt)
+    if prompt ~= activePrompt or not constructionView then
+        return
+    end
+
+    local view = constructionView
+    activePrompt = nil
+    constructionView = nil
+    view.destroy()
+end
+
+local function getConstructionStep(object, itemName)
+    local definition = ConstructionDefinitions[itemName]
+    local stage = object:GetAttribute("ConstructionStage") or 0
+    return definition and typeof(stage) == "number" and definition.Stages[stage + 1]
+end
 
 local function isSupportedPrompt(object)
     return object:IsA("ProximityPrompt") and
@@ -44,10 +67,10 @@ end
 
 local function updatePrompt(prompt)
     local object = prompt:FindFirstAncestorOfClass("Model")
-    prompt.Enabled = false
-
     if not object or player:GetAttribute("DataLoaded") ~= true or player:GetAttribute("StorageOpen") == true or
         object:GetAttribute("OwnerUserId") ~= player.UserId then
+        prompt.Enabled = false
+        hideConstructionPrompt(prompt)
         return
     end
 
@@ -55,6 +78,8 @@ local function updatePrompt(prompt)
     local definition = ItemDefinitions[itemName]
 
     if not definition or definition.Placeable ~= true then
+        prompt.Enabled = false
+        hideConstructionPrompt(prompt)
         return
     end
 
@@ -78,26 +103,40 @@ local function updatePrompt(prompt)
             local amount = getOutputAmount(object)
             prompt.ActionText = "Collect (" .. amount .. ")"
             prompt.Enabled = amount > 0
+        else
+            prompt.Enabled = false
         end
         return
     end
 
     local selectedItemName, selectedAmount = getSelectedItem()
 
-    if selectedItemName == "Shovel" and selectedAmount > 0 then
-        prompt.ActionText = "Remove"
-        prompt.Enabled = true
+    local removing = selectedItemName == "Shovel" and selectedAmount > 0
+    if definition.BuildsInto then
+        local step = getConstructionStep(object, itemName)
+        local custom = step ~= nil and step ~= false and not removing
+        local style = custom and Enum.ProximityPromptStyle.Custom or Enum.ProximityPromptStyle.Default
+        if prompt.Style ~= style then
+            prompt.Enabled = false
+            hideConstructionPrompt(prompt)
+            prompt.Style = style
+        end
+
+        prompt.ActionText = removing and "Remove" or "Add Materials"
+        prompt.Enabled = removing or (custom and player:GetAttribute("ProductionMode") ~= true)
+        if prompt == activePrompt and constructionView then
+            if prompt.Enabled and custom then
+                constructionView.update()
+            else
+                hideConstructionPrompt(prompt)
+            end
+        end
         return
     end
 
-    if definition.BuildsInto then
-        local construction = ConstructionDefinitions[itemName]
-        local stage = object:GetAttribute("ConstructionStage") or 0
-        local step = construction and construction.Stages and construction.Stages[stage + 1]
-        if step then
-            prompt.ActionText = "Build: " .. step.DisplayName
-            prompt.Enabled = true
-        end
+    if removing then
+        prompt.ActionText = "Remove"
+        prompt.Enabled = true
         return
     end
 
@@ -112,6 +151,8 @@ local function updatePrompt(prompt)
     elseif definition.Recipes then
         prompt.ActionText = "Work"
         prompt.Enabled = true
+    else
+        prompt.Enabled = false
     end
 end
 
@@ -162,6 +203,7 @@ local function bindPrompt(prompt)
     end
 
     table.insert(connections, prompt.Destroying:Connect(function()
+        hideConstructionPrompt(prompt)
         boundPrompts[prompt] = nil
 
         for _, connection in ipairs(connections) do
@@ -172,6 +214,27 @@ local function bindPrompt(prompt)
     refresh()
 end
 
+ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
+    if not boundPrompts[prompt] or prompt.Name ~= "ActionPrompt" or
+        prompt.Style ~= Enum.ProximityPromptStyle.Custom or not prompt.Enabled then
+        return
+    end
+    local object = prompt:FindFirstAncestorOfClass("Model")
+    if not object or object:GetAttribute("OwnerUserId") ~= player.UserId then
+        return
+    end
+    local itemName = object:GetAttribute("ItemName") or object.Name
+    local step = getConstructionStep(object, itemName)
+    if not step then
+        return
+    end
+    hideConstructionPrompt(activePrompt)
+    constructionView = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)
+    activePrompt = prompt
+end)
+ProximityPromptService.PromptHidden:Connect(hideConstructionPrompt)
+
+player:GetAttributeChangedSignal("ProductionMode"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("SelectedSlot"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("DataLoaded"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("StorageOpen"):Connect(updateAllPrompts)

@@ -31,6 +31,16 @@
       },
       "ResourceGatherHandler": {
         "$path": "src/places/ResourceWorld/ResourceGatherHandler.server.lua"
+      },
+      "ResourceSpawnService": {
+        "$path": "src/places/ResourceWorld/ResourceSpawnService.lua"
+      }
+    },
+    "ServerStorage": {
+      "$className": "ServerStorage",
+      "$ignoreUnknownInstances": true,
+      "ResourceTemplates": {
+        "$path": "src/places/ResourceWorld/ResourceNodes"
       }
     },
     "ReplicatedStorage": {
@@ -69,8 +79,11 @@
       "TravelPortals": {
         "$path": "src/places/ResourceWorld/TravelPortals"
       },
+      "ResourceMap": {
+        "$path": "src/places/ResourceWorld/ResourceMap.rbxmx"
+      },
       "ResourceNodes": {
-        "$path": "src/places/ResourceWorld/ResourceNodes"
+        "$className": "Folder"
       }
     },
     "StarterGui": {

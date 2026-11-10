@@ -1,28 +1,28 @@
 local ConstructionDefinitions = {
     WarehouseBlueprint = {
         Stages = {{
-            DisplayName = "Фундамент",
+            DisplayName = "Foundation",
             Model = "Stage1_Foundation",
 
             Inputs = {
                 Stone = 20
             }
         }, {
-            DisplayName = "Каркас",
+            DisplayName = "Frame",
             Model = "Stage2_Frame",
 
             Inputs = {
                 Wood = 20
             }
         }, {
-            DisplayName = "Стены и крыша",
+            DisplayName = "Walls & Roof",
             Model = "Stage3_Walls",
 
             Inputs = {
                 Wood = 15
             }
         }, {
-            DisplayName = "Завершение строительства",
+            DisplayName = "Finishing",
 
             Inputs = {
                 Wood = 10,
