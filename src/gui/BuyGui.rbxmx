@@ -4940,20 +4940,22 @@
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
-							<Item class="TextButton" referent="RBXD7FB048D94DC4346B18DAB9A32BDB3D8">
+							<Item class="TextButton" referent="RBX39675CCB8DC95E368C255BDA77A93DBF">
 								<Properties>
 									<Font name="FontFace">
-										<Family><url>rbxasset://fonts/families/FredokaOne.json</url></Family>
+										<Family>
+											<url>rbxasset://fonts/families/FredokaOne.json</url>
+										</Family>
 										<Weight>400</Weight>
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
-									<string name="Text">-</string>
+									<string name="Text">−10</string>
 									<Color3 name="TextColor3">
 										<R>1</R>
 										<G>1</G>
@@ -5010,7 +5012,7 @@
 										<XS>0</XS>
 										<XO>0</XO>
 										<YS>0</YS>
-										<YO>3</YO>
+										<YO>0</YO>
 									</UDim2>
 									<float name="Rotation">0</float>
 									<bool name="Selectable">true</bool>
@@ -5018,10 +5020,10 @@
 									<int name="SelectionOrder">0</int>
 									<token name="Sink">1</token>
 									<UDim2 name="Size">
-										<XS>0</XS>
-										<XO>48</XO>
-										<YS>0</YS>
-										<YO>48</YO>
+										<XS>0.181</XS>
+										<XO>0</XO>
+										<YS>1</YS>
+										<YO>0</YO>
 									</UDim2>
 									<token name="SizeConstraint">0</token>
 									<bool name="Visible">true</bool>
@@ -5033,15 +5035,15 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
-									<string name="Name">MinusButton</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<string name="Name">MinusTenButton</string>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
-								<Item class="UICorner" referent="RBXAC220023FF5B4CA3BB21B932EA26468D">
+								<Item class="UICorner" referent="RBX757A131F67F85A4FB2390FF76C92B50C">
 									<Properties>
 										<UDim name="BottomLeftRadius">
 											<S>0</S>
@@ -5059,16 +5061,16 @@
 											<S>0</S>
 											<O>8</O>
 										</UDim>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UICorner</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
 								</Item>
-								<Item class="UIStroke" referent="RBX3F8D0173E4D14856879058D6BA79FF19">
+								<Item class="UIStroke" referent="RBX5930875F1F035DC49CFFA82170458C9F">
 									<Properties>
 										<token name="ApplyStrokeMode">1</token>
 										<UDim name="BorderOffset">
@@ -5087,43 +5089,46 @@
 										<float name="Thickness">3</float>
 										<float name="Transparency">0</float>
 										<int name="ZIndex">1</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UIStroke</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
 								</Item>
-								<Item class="UITextSizeConstraint" referent="RBX472D5A7536354D2F87BEFDB9C28B3CF6">
+								<Item class="UITextSizeConstraint" referent="RBX1FAEA9823F9F5DE1A078636DC823EC1D">
 									<Properties>
 										<int name="MaxTextSize">35</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
 								</Item>
 							</Item>
-							<Item class="TextButton" referent="RBXFFBB2A8970EA49B880E4F3BC15C82FEF">
+
+							<Item class="TextButton" referent="RBXD7FB048D94DC4346B18DAB9A32BDB3D8">
 								<Properties>
 									<Font name="FontFace">
-										<Family><url>rbxasset://fonts/families/FredokaOne.json</url></Family>
+										<Family>
+											<url>rbxasset://fonts/families/FredokaOne.json</url>
+										</Family>
 										<Weight>400</Weight>
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
-									<string name="Text">+</string>
+									<string name="Text">−</string>
 									<Color3 name="TextColor3">
 										<R>1</R>
 										<G>1</G>
@@ -5177,10 +5182,10 @@
 									<Ref name="NextSelectionRight">null</Ref>
 									<Ref name="NextSelectionUp">null</Ref>
 									<UDim2 name="Position">
-										<XS>1</XS>
-										<XO>-48</XO>
+										<XS>0.197</XS>
+										<XO>0</XO>
 										<YS>0</YS>
-										<YO>3</YO>
+										<YO>0</YO>
 									</UDim2>
 									<float name="Rotation">0</float>
 									<bool name="Selectable">true</bool>
@@ -5188,10 +5193,10 @@
 									<int name="SelectionOrder">0</int>
 									<token name="Sink">1</token>
 									<UDim2 name="Size">
-										<XS>0</XS>
-										<XO>48</XO>
-										<YS>0</YS>
-										<YO>48</YO>
+										<XS>0.181</XS>
+										<XO>0</XO>
+										<YS>1</YS>
+										<YO>0</YO>
 									</UDim2>
 									<token name="SizeConstraint">0</token>
 									<bool name="Visible">true</bool>
@@ -5203,15 +5208,15 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
-									<string name="Name">PlusButton</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<string name="Name">MinusButton</string>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
-								<Item class="UICorner" referent="RBXD8A0E0CE47794D08AB22E737AE0F9CD0">
+								<Item class="UICorner" referent="RBXAC220023FF5B4CA3BB21B932EA26468D">
 									<Properties>
 										<UDim name="BottomLeftRadius">
 											<S>0</S>
@@ -5229,16 +5234,16 @@
 											<S>0</S>
 											<O>8</O>
 										</UDim>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UICorner</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
 								</Item>
-								<Item class="UIStroke" referent="RBX083BACB6542745EF92C6E72A042A0675">
+								<Item class="UIStroke" referent="RBX3F8D0173E4D14856879058D6BA79FF19">
 									<Properties>
 										<token name="ApplyStrokeMode">1</token>
 										<UDim name="BorderOffset">
@@ -5257,29 +5262,30 @@
 										<float name="Thickness">3</float>
 										<float name="Transparency">0</float>
 										<int name="ZIndex">1</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UIStroke</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
 								</Item>
-								<Item class="UITextSizeConstraint" referent="RBX670CF582CFA74099A4594EFA89BE40B3">
+								<Item class="UITextSizeConstraint" referent="RBX472D5A7536354D2F87BEFDB9C28B3CF6">
 									<Properties>
 										<int name="MaxTextSize">35</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
 								</Item>
 							</Item>
+
 							<Item class="Frame" referent="RBX5F1715DB125D4121A0D59AB03019C198">
 								<Properties>
 									<token name="Style">0</token>
@@ -5311,8 +5317,8 @@
 									<Ref name="NextSelectionRight">null</Ref>
 									<Ref name="NextSelectionUp">null</Ref>
 									<UDim2 name="Position">
-										<XS>0</XS>
-										<XO>62</XO>
+										<XS>0.394</XS>
+										<XO>0</XO>
 										<YS>0</YS>
 										<YO>0</YO>
 									</UDim2>
@@ -5322,8 +5328,8 @@
 									<int name="SelectionOrder">0</int>
 									<token name="Sink">0</token>
 									<UDim2 name="Size">
-										<XS>1</XS>
-										<XO>-124</XO>
+										<XS>0.212</XS>
+										<XO>0</XO>
 										<YS>1</YS>
 										<YO>0</YO>
 									</UDim2>
@@ -5337,11 +5343,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">SelectedAmountFrame</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -5363,11 +5369,11 @@
 											<S>0</S>
 											<O>8</O>
 										</UDim>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UICorner</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -5391,11 +5397,11 @@
 										<float name="Thickness">3</float>
 										<float name="Transparency">0</float>
 										<int name="ZIndex">1</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UIStroke</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -5403,15 +5409,17 @@
 								<Item class="TextLabel" referent="RBX66F393A854E344E2AEA1416A824BCA99">
 									<Properties>
 										<Font name="FontFace">
-											<Family><url>rbxasset://fonts/families/FredokaOne.json</url></Family>
+											<Family>
+												<url>rbxasset://fonts/families/FredokaOne.json</url>
+											</Family>
 											<Weight>400</Weight>
 											<Style>Normal</Style>
 										</Font>
 										<float name="LineHeight">1</float>
-										<string name="LocalizationMatchIdentifier"></string>
-										<string name="LocalizationMatchedSourceText"></string>
+										<string name="LocalizationMatchIdentifier" />
+										<string name="LocalizationMatchedSourceText" />
 										<int name="MaxVisibleGraphemes">-1</int>
-										<string name="OpenTypeFeatures"></string>
+										<string name="OpenTypeFeatures" />
 										<bool name="RichText">false</bool>
 										<string name="Text">1</string>
 										<Color3 name="TextColor3">
@@ -5487,11 +5495,11 @@
 										<token name="SelectionBehaviorRight">0</token>
 										<token name="SelectionBehaviorUp">0</token>
 										<bool name="SelectionGroup">false</bool>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">ItemAmountToBuyLabel</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -5499,17 +5507,364 @@
 										<Properties>
 											<int name="MaxTextSize">25</int>
 											<int name="MinTextSize">12</int>
-											<BinaryString name="AttributesSerialize"></BinaryString>
+											<BinaryString name="AttributesSerialize" />
 											<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 											<bool name="DefinesCapabilities">false</bool>
 											<string name="Name">UITextSizeConstraint</string>
-											<BinaryString name="SerializedOverrides"></BinaryString>
+											<BinaryString name="SerializedOverrides" />
 											<int64 name="SourceAssetId">-1</int64>
 											<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 										</Properties>
 									</Item>
 								</Item>
 							</Item>
+
+							<Item class="TextButton" referent="RBXFFBB2A8970EA49B880E4F3BC15C82FEF">
+								<Properties>
+									<Font name="FontFace">
+										<Family>
+											<url>rbxasset://fonts/families/FredokaOne.json</url>
+										</Family>
+										<Weight>400</Weight>
+										<Style>Normal</Style>
+									</Font>
+									<float name="LineHeight">1</float>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
+									<int name="MaxVisibleGraphemes">-1</int>
+									<string name="OpenTypeFeatures" />
+									<bool name="RichText">false</bool>
+									<string name="Text">+</string>
+									<Color3 name="TextColor3">
+										<R>1</R>
+										<G>1</G>
+										<B>1</B>
+									</Color3>
+									<token name="TextDirection">0</token>
+									<bool name="TextScaled">true</bool>
+									<float name="TextSize">35</float>
+									<Color3 name="TextStrokeColor3">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
+									<float name="TextStrokeTransparency">1</float>
+									<float name="TextTransparency">0</float>
+									<token name="TextTruncate">0</token>
+									<bool name="TextWrapped">true</bool>
+									<token name="TextXAlignment">2</token>
+									<token name="TextYAlignment">1</token>
+									<bool name="AutoButtonColor">true</bool>
+									<Ref name="HoverHapticEffect">null</Ref>
+									<bool name="Modal">false</bool>
+									<Ref name="PressHapticEffect">null</Ref>
+									<bool name="Selected">false</bool>
+									<token name="Style">0</token>
+									<bool name="Active">true</bool>
+									<Vector2 name="AnchorPoint">
+										<X>0</X>
+										<Y>0</Y>
+									</Vector2>
+									<token name="AutomaticSize">0</token>
+									<Color3 name="BackgroundColor3">
+										<R>0.70588237</R>
+										<G>0.274509817</G>
+										<B>0.215686277</B>
+									</Color3>
+									<float name="BackgroundTransparency">0</float>
+									<Color3 name="BorderColor3">
+										<R>0.105882354</R>
+										<G>0.164705887</G>
+										<B>0.20784314</B>
+									</Color3>
+									<token name="BorderMode">0</token>
+									<int name="BorderSizePixel">0</int>
+									<bool name="ClipsDescendants">false</bool>
+									<bool name="Draggable">false</bool>
+									<bool name="Interactable">true</bool>
+									<int name="LayoutOrder">0</int>
+									<Ref name="NextSelectionDown">null</Ref>
+									<Ref name="NextSelectionLeft">null</Ref>
+									<Ref name="NextSelectionRight">null</Ref>
+									<Ref name="NextSelectionUp">null</Ref>
+									<UDim2 name="Position">
+										<XS>0.622</XS>
+										<XO>0</XO>
+										<YS>0</YS>
+										<YO>0</YO>
+									</UDim2>
+									<float name="Rotation">0</float>
+									<bool name="Selectable">true</bool>
+									<Ref name="SelectionImageObject">null</Ref>
+									<int name="SelectionOrder">0</int>
+									<token name="Sink">1</token>
+									<UDim2 name="Size">
+										<XS>0.181</XS>
+										<XO>0</XO>
+										<YS>1</YS>
+										<YO>0</YO>
+									</UDim2>
+									<token name="SizeConstraint">0</token>
+									<bool name="Visible">true</bool>
+									<int name="ZIndex">3</int>
+									<bool name="AutoLocalize">false</bool>
+									<Ref name="RootLocalizationTable">null</Ref>
+									<token name="SelectionBehaviorDown">0</token>
+									<token name="SelectionBehaviorLeft">0</token>
+									<token name="SelectionBehaviorRight">0</token>
+									<token name="SelectionBehaviorUp">0</token>
+									<bool name="SelectionGroup">false</bool>
+									<BinaryString name="AttributesSerialize" />
+									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+									<bool name="DefinesCapabilities">false</bool>
+									<string name="Name">PlusButton</string>
+									<BinaryString name="SerializedOverrides" />
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+								<Item class="UICorner" referent="RBXD8A0E0CE47794D08AB22E737AE0F9CD0">
+									<Properties>
+										<UDim name="BottomLeftRadius">
+											<S>0</S>
+											<O>8</O>
+										</UDim>
+										<UDim name="BottomRightRadius">
+											<S>0</S>
+											<O>8</O>
+										</UDim>
+										<UDim name="TopLeftRadius">
+											<S>0</S>
+											<O>8</O>
+										</UDim>
+										<UDim name="TopRightRadius">
+											<S>0</S>
+											<O>8</O>
+										</UDim>
+										<BinaryString name="AttributesSerialize" />
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">UICorner</string>
+										<BinaryString name="SerializedOverrides" />
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+								<Item class="UIStroke" referent="RBX083BACB6542745EF92C6E72A042A0675">
+									<Properties>
+										<token name="ApplyStrokeMode">1</token>
+										<UDim name="BorderOffset">
+											<S>0</S>
+											<O>0</O>
+										</UDim>
+										<token name="BorderStrokePosition">0</token>
+										<Color3 name="Color">
+											<R>0.450980395</R>
+											<G>0.137254909</G>
+											<B>0.117647059</B>
+										</Color3>
+										<bool name="Enabled">true</bool>
+										<token name="LineJoinMode">0</token>
+										<token name="StrokeSizingMode">0</token>
+										<float name="Thickness">3</float>
+										<float name="Transparency">0</float>
+										<int name="ZIndex">1</int>
+										<BinaryString name="AttributesSerialize" />
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">UIStroke</string>
+										<BinaryString name="SerializedOverrides" />
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+								<Item class="UITextSizeConstraint" referent="RBX670CF582CFA74099A4594EFA89BE40B3">
+									<Properties>
+										<int name="MaxTextSize">35</int>
+										<int name="MinTextSize">12</int>
+										<BinaryString name="AttributesSerialize" />
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">UITextSizeConstraint</string>
+										<BinaryString name="SerializedOverrides" />
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+							</Item>
+
+							<Item class="TextButton" referent="RBXB913BF3F82C655D7B1D62AA044588FED">
+								<Properties>
+									<Font name="FontFace">
+										<Family>
+											<url>rbxasset://fonts/families/FredokaOne.json</url>
+										</Family>
+										<Weight>400</Weight>
+										<Style>Normal</Style>
+									</Font>
+									<float name="LineHeight">1</float>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
+									<int name="MaxVisibleGraphemes">-1</int>
+									<string name="OpenTypeFeatures" />
+									<bool name="RichText">false</bool>
+									<string name="Text">+10</string>
+									<Color3 name="TextColor3">
+										<R>1</R>
+										<G>1</G>
+										<B>1</B>
+									</Color3>
+									<token name="TextDirection">0</token>
+									<bool name="TextScaled">true</bool>
+									<float name="TextSize">35</float>
+									<Color3 name="TextStrokeColor3">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
+									<float name="TextStrokeTransparency">1</float>
+									<float name="TextTransparency">0</float>
+									<token name="TextTruncate">0</token>
+									<bool name="TextWrapped">true</bool>
+									<token name="TextXAlignment">2</token>
+									<token name="TextYAlignment">1</token>
+									<bool name="AutoButtonColor">true</bool>
+									<Ref name="HoverHapticEffect">null</Ref>
+									<bool name="Modal">false</bool>
+									<Ref name="PressHapticEffect">null</Ref>
+									<bool name="Selected">false</bool>
+									<token name="Style">0</token>
+									<bool name="Active">true</bool>
+									<Vector2 name="AnchorPoint">
+										<X>0</X>
+										<Y>0</Y>
+									</Vector2>
+									<token name="AutomaticSize">0</token>
+									<Color3 name="BackgroundColor3">
+										<R>0.70588237</R>
+										<G>0.274509817</G>
+										<B>0.215686277</B>
+									</Color3>
+									<float name="BackgroundTransparency">0</float>
+									<Color3 name="BorderColor3">
+										<R>0.105882354</R>
+										<G>0.164705887</G>
+										<B>0.20784314</B>
+									</Color3>
+									<token name="BorderMode">0</token>
+									<int name="BorderSizePixel">0</int>
+									<bool name="ClipsDescendants">false</bool>
+									<bool name="Draggable">false</bool>
+									<bool name="Interactable">true</bool>
+									<int name="LayoutOrder">0</int>
+									<Ref name="NextSelectionDown">null</Ref>
+									<Ref name="NextSelectionLeft">null</Ref>
+									<Ref name="NextSelectionRight">null</Ref>
+									<Ref name="NextSelectionUp">null</Ref>
+									<UDim2 name="Position">
+										<XS>0.819</XS>
+										<XO>0</XO>
+										<YS>0</YS>
+										<YO>0</YO>
+									</UDim2>
+									<float name="Rotation">0</float>
+									<bool name="Selectable">true</bool>
+									<Ref name="SelectionImageObject">null</Ref>
+									<int name="SelectionOrder">0</int>
+									<token name="Sink">1</token>
+									<UDim2 name="Size">
+										<XS>0.181</XS>
+										<XO>0</XO>
+										<YS>1</YS>
+										<YO>0</YO>
+									</UDim2>
+									<token name="SizeConstraint">0</token>
+									<bool name="Visible">true</bool>
+									<int name="ZIndex">3</int>
+									<bool name="AutoLocalize">false</bool>
+									<Ref name="RootLocalizationTable">null</Ref>
+									<token name="SelectionBehaviorDown">0</token>
+									<token name="SelectionBehaviorLeft">0</token>
+									<token name="SelectionBehaviorRight">0</token>
+									<token name="SelectionBehaviorUp">0</token>
+									<bool name="SelectionGroup">false</bool>
+									<BinaryString name="AttributesSerialize" />
+									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+									<bool name="DefinesCapabilities">false</bool>
+									<string name="Name">PlusTenButton</string>
+									<BinaryString name="SerializedOverrides" />
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+								<Item class="UICorner" referent="RBXABE2DA3EADCD593B97DECB8E38245A12">
+									<Properties>
+										<UDim name="BottomLeftRadius">
+											<S>0</S>
+											<O>8</O>
+										</UDim>
+										<UDim name="BottomRightRadius">
+											<S>0</S>
+											<O>8</O>
+										</UDim>
+										<UDim name="TopLeftRadius">
+											<S>0</S>
+											<O>8</O>
+										</UDim>
+										<UDim name="TopRightRadius">
+											<S>0</S>
+											<O>8</O>
+										</UDim>
+										<BinaryString name="AttributesSerialize" />
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">UICorner</string>
+										<BinaryString name="SerializedOverrides" />
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+								<Item class="UIStroke" referent="RBX65BF7CD576625C0FB06D27BF440B138F">
+									<Properties>
+										<token name="ApplyStrokeMode">1</token>
+										<UDim name="BorderOffset">
+											<S>0</S>
+											<O>0</O>
+										</UDim>
+										<token name="BorderStrokePosition">0</token>
+										<Color3 name="Color">
+											<R>0.450980395</R>
+											<G>0.137254909</G>
+											<B>0.117647059</B>
+										</Color3>
+										<bool name="Enabled">true</bool>
+										<token name="LineJoinMode">0</token>
+										<token name="StrokeSizingMode">0</token>
+										<float name="Thickness">3</float>
+										<float name="Transparency">0</float>
+										<int name="ZIndex">1</int>
+										<BinaryString name="AttributesSerialize" />
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">UIStroke</string>
+										<BinaryString name="SerializedOverrides" />
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+								<Item class="UITextSizeConstraint" referent="RBXD729CC3024E3533A86FD5FC6D92486EA">
+									<Properties>
+										<int name="MaxTextSize">35</int>
+										<int name="MinTextSize">12</int>
+										<BinaryString name="AttributesSerialize" />
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">UITextSizeConstraint</string>
+										<BinaryString name="SerializedOverrides" />
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+							</Item>
+
 						</Item>
 						<Item class="UIScale" referent="RBX1E7DC94706A74675AD475EB3489D82A1">
 							<Properties>
@@ -6595,11 +6950,14 @@
 		<Item class="LocalScript" referent="RBX25E2343A242B4AFEAEA6CB6EFF57A26E">
 			<Properties>
 				<ProtectedString name="Source"><![CDATA[
+local ShopQuantityControls = require(game:GetService("ReplicatedStorage"):WaitForChild("ShopQuantityControls"))
+
 local gui = script.Parent
 local bounds = gui.ViewportBounds
 local main = gui.MainFrame
 local grids = {main.InnerFrame.CategoriesFrame, main.InnerFrame.ItemsFrame}
-local details = main.ItemBuyFrame.Content.ItemDetails
+local content = main.ItemBuyFrame.Content
+local details = content.ItemDetails
 local queued = false
 
 local function resize()
@@ -6607,6 +6965,7 @@ local function resize()
     if size.X <= 0 or size.Y <= 0 then return end
     local narrow = size.X < 600
     local short = size.Y < 500
+    local desktop = not narrow and not short
     local desktopScale = math.clamp(math.min(size.X / 1366, size.Y / 768), 1, 1.35)
     main.UISizeConstraint.MaxSize = Vector2.new(800 * desktopScale, narrow and 720 or 560 * desktopScale)
     main.Size = UDim2.new(narrow and 0.9 or short and 0.86 or 0.86, 0, narrow and 0.84 or short and 0.8 or 0.82, 0)
@@ -6615,7 +6974,7 @@ local function resize()
     main:SetAttribute("LayoutProfile", narrow and "PhonePortrait" or short and "ShortLandscape" or "Desktop")
     main.HeaderFrame.Size = UDim2.new(0.5, 0, 0, compact and 36 or 56)
     main.HeaderFrame.Position = UDim2.new(0.5, 0, 0, compact and 8 or 12)
-    main.CloseButton.Size = UDim2.new(0, compact and 36 or 48, 0, compact and 36 or 48)
+    main.CloseButton.Size = UDim2.fromOffset(compact and 44 or 48, compact and 44 or 48)
     main.CloseButton.Position = UDim2.new(1, compact and -60 or -64, 0, compact and 8 or 16)
     for _, frame in ipairs({main.InnerFrame, main.ItemBuyFrame}) do
         frame.Position = UDim2.new(0, 15, 0, compact and 52 or 80)
@@ -6631,24 +6990,60 @@ local function resize()
         frame.UIGridLayout.FillDirectionMaxCells = columns
         frame.UIGridLayout.CellSize = UDim2.new(1 / columns, -16, 0, height)
     end
-    local scale = compact and math.clamp((details.Parent.AbsoluteSize.Y - 4) / 188, 0.5, 1) or math.clamp((details.Parent.AbsoluteSize.Y - 8) / 412, 0.75, desktopScale)
+    local body = content.AbsoluteSize
+    if body.X <= 12 or body.Y <= 8 then return end
+    local desktopHeight = 410
+    local scale = math.clamp((body.Y - 8) / 412, 0.75, desktopScale)
+    if desktop then
+        scale = math.min(desktopScale, (body.Y - 8) / desktopHeight)
+        content.CanvasPosition = Vector2.zero
+    elseif compact then
+        scale = math.clamp((body.Y - 4) / 188, 0.5, 1)
+    end
+    content.ScrollingEnabled = not desktop
+    content.ScrollBarThickness = desktop and 0 or 5
     details.UIScale.Scale = scale
-    local width = math.max(1, details.AbsoluteSize.X / scale)
+    local inset = desktop and 8 or 12
+    local width = (body.X - inset) / scale
     local column = compact and width / 2 or width
-    details.Size = UDim2.new(1 / scale, -12 / scale, 0, compact and 188 or 412)
-    details.ItemHeaderFrame.Size = UDim2.new(0, math.min(320, column - 64), 0, compact and 44 or 50)
-    details.ItemHeaderFrame.Position = UDim2.new(compact and 0.25 or 0.5, 24, 0, 0)
-    details.PriceFrame.Size = UDim2.new(0, math.min(400, column - 24), 0, 86)
-    details.PriceFrame.Position = UDim2.new(compact and 0.25 or 0.5, 0, 0, compact and 56 or 68)
-    details.QuantityFrame.Size = UDim2.new(0, math.min(286, column - 12), 0, 54)
-    details.QuantityFrame.Position = UDim2.new(compact and 0.75 or 0.5, 0, 0, compact and 0 or 176)
-    details.QuantityHintLabel.Size = UDim2.new(compact and 0.5 or 1, -100, 0, 32)
-    details.QuantityHintLabel.Position = UDim2.new(compact and 0.5 or 0, 6, 0, compact and 60 or 240)
-    details.MaxButton.Position = UDim2.new(1, -82, 0, compact and 60 or 240)
-    details.ItemBuyButtonFrame.Size = UDim2.new(0, math.min(248, column - 12), 0, 84)
-    details.ItemBuyButtonFrame.Position = UDim2.new(compact and 0.75 or 0.5, 0, 0, compact and 100 or 286)
+    local rowWidth = math.min(desktop and 390 or 358, column - (desktop and 128 or 8))
+    local rowHeight = desktop and 52 or math.max(54, 46 / scale)
+    local maxHeight = desktop and 42 or 46 / scale
+    local buyHeight = math.max(48, maxHeight)
+    local actionHeight = buyHeight + 36
+    local quantityY = compact and 0 or desktop and 170 or 168
+    local quantityCentre = compact and 0.75 or 0.5
+    local controlY = quantityY + rowHeight + 8
+    local actionY = compact and controlY or controlY + maxHeight + 8
+    local actionRowWidth = math.min(330, column - 12)
+    local maxWidth = desktop and 80 or math.max(64, 54 / scale)
+    local hintY = desktop and 143 or compact and actionY + actionHeight + 4 or controlY
+    local height = desktop and desktopHeight or compact and math.max(188, hintY + 36) or actionY + 128
+    details.Size = UDim2.new(1 / scale, -inset / scale, 0, height)
+    details.BackButton.Size = UDim2.fromOffset(maxHeight, maxHeight)
+    details.BackButton.Position = UDim2.fromOffset(0, compact and 0 or 3)
+    details.ItemHeaderFrame.Size = UDim2.fromOffset(desktop and rowWidth or math.min(320, column - 86), compact and maxHeight or 50)
+    details.ItemHeaderFrame.Position = UDim2.new(compact and 0.25 or 0.5, desktop and 0 or 24, 0, 0)
+    details.PriceFrame.Size = UDim2.fromOffset(desktop and rowWidth or math.min(400, column - 24), 86)
+    details.PriceFrame.Position = UDim2.new(compact and 0.25 or 0.5, 0, 0, compact and maxHeight + 8 or desktop and 56 or 68)
+    details.QuantityFrame.Size = UDim2.fromOffset(rowWidth, rowHeight)
+    details.QuantityFrame.Position = UDim2.new(quantityCentre, 0, 0, quantityY)
+    ShopQuantityControls.setSpacing(details.QuantityFrame, desktop)
+    local hintWidth = desktop and rowWidth or compact and actionRowWidth or actionRowWidth - maxWidth - 8
+    details.QuantityHintLabel.Size = UDim2.fromOffset(hintWidth, desktop and 24 or 32)
+    details.QuantityHintLabel.Position = UDim2.new(quantityCentre, -(desktop and hintWidth or actionRowWidth) / 2, 0, hintY)
+    details.QuantityHintLabel.TextXAlignment = desktop and Enum.TextXAlignment.Center or Enum.TextXAlignment.Left
+    details.MaxButton.Size = UDim2.fromOffset(maxWidth, maxHeight)
+    local maxX = desktop and -maxWidth / 2 or compact and -actionRowWidth / 2 or actionRowWidth / 2 - maxWidth
+    details.MaxButton.Position = UDim2.new(quantityCentre, maxX, 0, compact and actionY + 4 or controlY)
+    local action = details.ItemBuyButtonFrame
+    action.Size = UDim2.fromOffset(compact and actionRowWidth - maxWidth - 10 or math.min(248, column - 12), actionHeight)
+    action.Position = UDim2.new(quantityCentre, compact and (maxWidth + 10) / 2 or 0, 0, actionY)
+    action.BuyButton.Size = UDim2.new(1, -8, 0, buyHeight)
+    action.TotalTextLabel.Position = UDim2.fromOffset(10, buyHeight + 8)
+    action.TotalPriceLabel.Position = UDim2.new(0.44, 0, 0, buyHeight + 8)
     details.StatusLabel.Size = UDim2.new(compact and 0.5 or 1, -12, 0, 34)
-    details.StatusLabel.Position = UDim2.new(0, 6, 0, compact and 150 or 378)
+    details.StatusLabel.Position = UDim2.new(0, 6, 0, compact and maxHeight + 99 or actionY + actionHeight + 4)
 end
 
 local function schedule()
@@ -6658,7 +7053,7 @@ local function schedule()
 end
 bounds:GetPropertyChangedSignal("AbsoluteSize"):Connect(schedule)
 main:GetPropertyChangedSignal("AbsoluteSize"):Connect(schedule)
-details:GetPropertyChangedSignal("AbsoluteSize"):Connect(schedule)
+content:GetPropertyChangedSignal("AbsoluteSize"):Connect(schedule)
 for _, frame in ipairs(grids) do
     frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(schedule)
 end
@@ -6773,6 +7168,7 @@ local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local openEvent = remotes:WaitForChild("OpenBuyGuiEvent")
 local buyEvent = remotes:WaitForChild("BuyItemEvent")
 local definitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local QuantityControls = require(ReplicatedStorage:WaitForChild("ShopQuantityControls"))
 
 local GREEN = Color3.fromRGB(85, 155, 55)
 local MUTED = Color3.fromRGB(125, 75, 35)
@@ -6928,8 +7324,7 @@ local function refresh()
     quantity.SelectedAmountFrame.ItemAmountToBuyLabel.Text = tostring(selectedAmount)
     action.TotalPriceLabel.Text = formatMoney(price * selectedAmount)
     details.QuantityHintLabel.Text = "Can buy: " .. tostring(maximum)
-    enableButton(quantity.MinusButton, not pending and selectedAmount > 0, RED)
-    enableButton(quantity.PlusButton, not pending and room and selectedAmount < maximum, RED)
+    QuantityControls.update(quantity, not pending and selectedAmount > 0, not pending and room and selectedAmount < maximum)
     enableButton(details.MaxButton, not pending and room and maximum > 0, GREEN)
     enableButton(action.BuyButton, not pending and room and selectedAmount > 0, GREEN)
     action.BuyButton.Text = pending and "Buying..." or "Buy"
@@ -7070,8 +7465,15 @@ local function changeAmount(amount)
     message = ""
     refresh()
 end
-quantity.PlusButton.Activated:Connect(function() changeAmount(selectedAmount + 1) end)
-quantity.MinusButton.Activated:Connect(function() changeAmount(selectedAmount - 1) end)
+local stopQuantity = QuantityControls.bind(quantity, function()
+    return gui.Enabled and main.Visible and purchase.Visible and selectedId ~= nil and not pending
+end, function(step)
+    changeAmount(selectedAmount + step)
+end)
+gui:GetPropertyChangedSignal("Enabled"):Connect(stopQuantity)
+main:GetPropertyChangedSignal("Visible"):Connect(stopQuantity)
+purchase:GetPropertyChangedSignal("Visible"):Connect(stopQuantity)
+purchase:GetAttributeChangedSignal("ItemName"):Connect(stopQuantity)
 details.MaxButton.Activated:Connect(function()
     if selectedId then changeAmount(maximumAmount(definitions[selectedId].BuyPriceCents)) end
 end)
@@ -7216,11 +7618,13 @@ end
 
 gui.ViewportBounds:GetPropertyChangedSignal("AbsoluteSize"):Connect(resizeShopButton)
 resizeShopButton()
+local sellMain = gui.Parent:WaitForChild("SellGui"):WaitForChild("MainFrame")
 local function updateShopButtonVisibility()
-    shopButton.Visible = not main.Visible
+    shopButton.Visible = not main.Visible and not sellMain.Visible
 end
 
 main:GetPropertyChangedSignal("Visible"):Connect(updateShopButtonVisibility)
+sellMain:GetPropertyChangedSignal("Visible"):Connect(updateShopButtonVisibility)
 updateShopButtonVisibility()
 shopButton.Activated:Connect(function()
     showCatalogue(nil)
