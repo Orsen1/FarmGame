@@ -214,7 +214,7 @@ local ItemDefinitions = {
         DisplayName = "Chicken",
         Type = "Animal",
         BuyPriceCents = 200,
-        Icon = "",
+        Icon = "rbxassetid://127784534967320",
         ShopCategory = "Animals"
     },
     WarehouseBlueprint = {

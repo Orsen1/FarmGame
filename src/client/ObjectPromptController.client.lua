@@ -8,6 +8,7 @@ local ConstructionDefinitions = require(ReplicatedStorage:WaitForChild("Configs"
 
 local ConstructionPromptView = require(script.Parent:WaitForChild("ConstructionPromptView"))
 local AnimalShopPromptView = require(script.Parent:WaitForChild("AnimalShopPromptView"))
+local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -142,10 +143,15 @@ local function updatePrompt(prompt)
             hidePrompt(prompt)
             prompt.Style = style
         end
-        prompt.ActionText = removing and "Remove" or definition.ShopPromptText
-        prompt.Enabled = removing or ((object:GetAttribute("AnimalCount") or 0) == 0 and
-            player:GetAttribute("ProductionMode") ~= true)
-        if not prompt.Enabled then hidePrompt(prompt) end
+        local home = AnimalConfig.Coops[itemName]
+        local count = object:GetAttribute("AnimalCount") or 0
+        local adding = home and selectedItemName == home.ItemName and selectedAmount > 0
+        prompt.ActionText = removing and "Remove" or adding and
+            (count < home.Capacity and "Add chicken" or "Coop full") or definition.ShopPromptText
+        prompt:SetAttribute("Context", home and string.format("Chickens: %d / %d", count, home.Capacity) or "Empty coop")
+        prompt.Enabled = removing or ((adding or count == 0) and player:GetAttribute("ProductionMode") ~= true)
+        if not prompt.Enabled then hidePrompt(prompt)
+        elseif prompt == activePrompt and promptView then promptView.update() end
         return
     end
 
@@ -251,6 +257,11 @@ ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
     activePrompt = prompt
 end)
 ProximityPromptService.PromptHidden:Connect(hidePrompt)
+ReplicatedStorage.RemoteEvents.AnimalFeedback.OnClientEvent:Connect(function(object, success, message)
+    if activePrompt and activePrompt:FindFirstAncestorOfClass("Model") == object and promptView and promptView.message then
+        promptView.message(message, success)
+    end
+end)
 
 player:GetAttributeChangedSignal("ProductionMode"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("SelectedSlot"):Connect(updateAllPrompts)

@@ -7441,6 +7441,7 @@ for category, names in pairs(futureStock) do
     end
 end
 local categoryArt = {
+    Animals = definitions.Chicken.Icon,
     Seeds = definitions.CarrotSeed.Icon,
     Equipment = definitions.GardenBed.Icon,
 }

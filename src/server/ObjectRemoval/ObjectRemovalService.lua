@@ -2,6 +2,8 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local plots = workspace:WaitForChild("Plots")
+local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
+local AnimalService = require(script.Parent.Parent.AnimalService)
 
 local MAX_DISTANCE = 12
 
@@ -61,6 +63,11 @@ function ObjectRemovalService.remove(player, object)
 
     if distance ~= distance or distance > MAX_DISTANCE then
         return false, "Move closer to the object."
+    end
+
+    if AnimalConfig.Coops[itemName] then
+        local released, message = AnimalService.Release(player, object)
+        if not released then return false, message end
     end
 
     object:Destroy()

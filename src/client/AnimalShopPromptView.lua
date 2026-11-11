@@ -40,14 +40,26 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
     else
         key.Text = prompt.KeyboardKeyCode.Name
     end
-    make("TextLabel", button, {Name = "Context", Position = UDim2.fromOffset(62, 10),
+    local context = make("TextLabel", button, {Name = "Context", Position = UDim2.fromOffset(62, 10),
         Size = UDim2.fromOffset(192, 20), BackgroundTransparency = 1, Text = "Empty coop",
         TextColor3 = Color3.fromRGB(130, 83, 44), Font = Enum.Font.FredokaOne, TextSize = 14,
         TextXAlignment = Enum.TextXAlignment.Left})
-    make("TextLabel", button, {Name = "Action", Position = UDim2.fromOffset(62, 32),
+    local action = make("TextLabel", button, {Name = "Action", Position = UDim2.fromOffset(62, 32),
         Size = UDim2.fromOffset(192, 30), BackgroundTransparency = 1, Text = prompt.ActionText,
         TextColor3 = ink, Font = Enum.Font.FredokaOne, TextSize = 21,
         TextXAlignment = Enum.TextXAlignment.Left})
+    action.TextScaled = true
+    make("UITextSizeConstraint", action, {MinTextSize = 12, MaxTextSize = 21})
+    local messageUntil = 0
+    local function update()
+        if os.clock() >= messageUntil then
+            context.TextScaled = false
+            context.Text = prompt:GetAttribute("Context") or "Empty coop"
+            context.TextColor3 = Color3.fromRGB(130, 83, 44)
+        end
+        action.Text = prompt.ActionText
+    end
+    update()
     TweenService:Create(group, TweenInfo.new(0.18), {GroupTransparency = 0}):Play()
     local pressed
     button.InputBegan:Connect(function(input)
@@ -82,6 +94,7 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
             group.Visible = false
             return
         end
+        update()
         scale.Scale = factor
         local halfWidth, halfHeight = 134 * factor, 38 * factor
         local minY, maxY = halfHeight + 8, bounds.Y - halfHeight - bottom
@@ -105,6 +118,14 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
     position()
     local render = RunService.RenderStepped:Connect(position)
     return {
+        update = update,
+        message = function(text, success)
+            context.Text = text
+            context.TextColor3 = success and Color3.fromRGB(75, 115, 47) or Color3.fromRGB(160, 56, 39)
+            context.TextScaled = true
+            context.TextWrapped = true
+            messageUntil = os.clock() + 2.5
+        end,
         destroy = function()
             render:Disconnect()
             released:Disconnect()

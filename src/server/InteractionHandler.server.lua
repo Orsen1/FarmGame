@@ -6,6 +6,8 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitFo
 local PlantService = require(script.Parent:WaitForChild("PlantService"))
 local ProductionService = require(script.Parent:WaitForChild("ProductionService"))
 local ConstructionService = require(script.Parent:WaitForChild("ConstructionService"))
+local AnimalService = require(script.Parent:WaitForChild("AnimalService"))
+local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
 
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
@@ -89,7 +91,11 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     end
 
     if definition.ShopCategoryWhenEmpty then
-        if (object:GetAttribute("AnimalCount") or 0) == 0 then
+        local home = AnimalConfig.Coops[itemName]
+        if home and selectedItemName == home.ItemName and selectedAmount > 0 then
+            local success, message = AnimalService.Add(player, object)
+            remotes.AnimalFeedback:FireClient(player, object, success, message)
+        elseif (object:GetAttribute("AnimalCount") or 0) == 0 then
             remotes.OpenBuyGuiEvent:FireClient(player, definition.ShopCategoryWhenEmpty)
         end
         return

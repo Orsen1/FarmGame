@@ -9,6 +9,8 @@ local PlantService = require(ServerScriptService:WaitForChild("PlantService"))
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 local StorageService = require(ServerScriptService:WaitForChild("StorageService"))
 local ConstructionService = require(ServerScriptService:WaitForChild("ConstructionService"))
+local AnimalService = require(ServerScriptService:WaitForChild("AnimalService"))
+local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
 
 local models = ReplicatedStorage:WaitForChild("PlaceableModels")
 local plants = ReplicatedStorage:WaitForChild("Plants")
@@ -89,6 +91,12 @@ function PlotDataService.getData(player)
             savedObject.StorageInventory = data
         end
 
+        if AnimalConfig.Coops[itemName] then
+            local animals, reason = AnimalService.getData(object)
+            if not animals then return nil, reason end
+            savedObject.Animals = animals
+        end
+
         table.insert(result, savedObject)
     end
 
@@ -165,6 +173,11 @@ function PlotDataService.loadData(player, savedObjects)
                 object:Destroy()
                 return false, reason
             end
+        end
+
+        if AnimalConfig.Coops[savedObject.ItemName] then
+            local success, reason = AnimalService.loadData(object, savedObject.Animals)
+            if not success then object:Destroy();return false, reason end
         end
 
         for _, part in ipairs(object:GetDescendants()) do
