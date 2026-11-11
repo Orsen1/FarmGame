@@ -35744,7 +35744,7 @@ AElAEAAAAFByb2R1Y3Rpb25WaXN1YWwCCAAAAEhhbmRNaWxs]]></BinaryString>
 				</Properties>
 				<Item class="ProximityPrompt" referent="RBX7152EB40CCBB44E59A18207817429B70">
 					<Properties>
-						<string name="ActionText">&#195;&#144;&#194;&#160;&#195;&#144;&#194;&#176;&#195;&#144;&#194;&#177;&#195;&#144;&#194;&#190;&#195;&#145;&#194;&#130;&#195;&#144;&#194;&#176;&#195;&#145;&#194;&#130;&#195;&#145;&#194;&#140;</string>
+						<string name="ActionText">Work</string>
 						<bool name="AutoLocalize">true</bool>
 						<bool name="ClickablePrompt">true</bool>
 						<bool name="Enabled">true</bool>
@@ -35773,7 +35773,7 @@ AElAEAAAAFByb2R1Y3Rpb25WaXN1YWwCCAAAAEhhbmRNaWxs]]></BinaryString>
 				</Item>
 				<Item class="ProximityPrompt" referent="RBX40BD24899D2A44A19037317B70A0C416">
 					<Properties>
-						<string name="ActionText">Interact</string>
+						<string name="ActionText">Collect</string>
 						<bool name="AutoLocalize">true</bool>
 						<bool name="ClickablePrompt">true</bool>
 						<bool name="Enabled">true</bool>

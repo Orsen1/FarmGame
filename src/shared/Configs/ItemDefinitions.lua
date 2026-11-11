@@ -148,13 +148,28 @@ local ItemDefinitions = {
         ShopCategory = "Equipment"
     },
     HandMill = {
-        DisplayName = "Жернов",
+        DisplayName = "Hand Mill",
         Type = "Tool",
         BuyPriceCents = 50,
         Icon = "rbxassetid://70965951401388",
         ShopCategory = "Equipment",
         Placeable = true,
         Recipes = {"WheatToFlour"}
+    },
+    Sawmill = {
+        DisplayName = "Sawmill",
+        Type = "Tool",
+        BuyPriceCents = 200,
+        Icon = "rbxassetid://126264449555960",
+        ShowShopIcon = true,
+        ShopCategory = "Equipment",
+        Placeable = true,
+        Recipes = {"WoodToPlank"}
+    },
+    Plank = {
+        DisplayName = "Plank",
+        Type = "Material",
+        Icon = "rbxassetid://135216081156968"
     },
     Shovel = {
         DisplayName = "Лопата",

@@ -105,7 +105,7 @@
 					<int name="MaxVisibleGraphemes">-1</int>
 					<string name="OpenTypeFeatures"></string>
 					<bool name="RichText">false</bool>
-					<string name="Text">&#195;&#151;</string>
+					<string name="Text">X</string>
 					<Color3 name="TextColor3">
 						<R>0.349019617</R>
 						<G>0.215686277</G>
@@ -388,7 +388,7 @@
 						<int name="MaxVisibleGraphemes">-1</int>
 						<string name="OpenTypeFeatures"></string>
 						<bool name="RichText">false</bool>
-						<string name="Text">&#208;&#159;&#209;&#128;&#208;&#190;&#208;&#184;&#208;&#183;&#208;&#178;&#208;&#190;&#208;&#180;&#209;&#129;&#209;&#130;&#208;&#178;&#208;&#190;</string>
+						<string name="Text">Production</string>
 						<Color3 name="TextColor3">
 							<R>0.349019617</R>
 							<G>0.215686277</G>
@@ -485,7 +485,7 @@
 						<int name="MaxVisibleGraphemes">-1</int>
 						<string name="OpenTypeFeatures"></string>
 						<bool name="RichText">false</bool>
-						<string name="Text">&#208;&#146;&#209;&#139;&#208;&#177;&#208;&#181;&#209;&#128;&#208;&#184;&#209;&#130;&#208;&#181; &#209;&#128;&#208;&#181;&#209;&#134;&#208;&#181;&#208;&#191;&#209;&#130;</string>
+						<string name="Text">Choose a recipe</string>
 						<Color3 name="TextColor3">
 							<R>0.349019617</R>
 							<G>0.215686277</G>
@@ -766,7 +766,7 @@
 								<int name="MaxVisibleGraphemes">-1</int>
 								<string name="OpenTypeFeatures"></string>
 								<bool name="RichText">false</bool>
-								<string name="Text">&#208;&#157;&#208;&#181;&#209;&#130; &#208;&#180;&#208;&#190;&#209;&#129;&#209;&#130;&#209;&#131;&#208;&#191;&#208;&#189;&#209;&#139;&#209;&#133; &#209;&#128;&#208;&#181;&#209;&#134;&#208;&#181;&#208;&#191;&#209;&#130;&#208;&#190;&#208;&#178;</string>
+								<string name="Text">No recipes</string>
 								<Color3 name="TextColor3">
 									<R>0.349019617</R>
 									<G>0.215686277</G>
@@ -1021,7 +1021,7 @@
 								<int name="MaxVisibleGraphemes">-1</int>
 								<string name="OpenTypeFeatures"></string>
 								<bool name="RichText">false</bool>
-								<string name="Text">&#208;&#163;&#208;&#180;&#208;&#181;&#209;&#128;&#208;&#182;&#208;&#184;&#208;&#178;&#208;&#176;&#208;&#185;&#209;&#130;&#208;&#181; &#208;&#186;&#208;&#189;&#208;&#190;&#208;&#191;&#208;&#186;&#209;&#131; &#208;&#180;&#208;&#187;&#209;&#143; &#209;&#128;&#208;&#176;&#208;&#177;&#208;&#190;&#209;&#130;&#209;&#139;</string>
+								<string name="Text">Hold to work</string>
 								<Color3 name="TextColor3">
 									<R>0.349019617</R>
 									<G>0.215686277</G>
@@ -1304,7 +1304,7 @@
 								<int name="MaxVisibleGraphemes">-1</int>
 								<string name="OpenTypeFeatures"></string>
 								<bool name="RichText">false</bool>
-								<string name="Text">0.0 &#209;&#129;</string>
+								<string name="Text">0s</string>
 								<Color3 name="TextColor3">
 									<R>0.349019617</R>
 									<G>0.215686277</G>
@@ -1401,7 +1401,7 @@
 								<int name="MaxVisibleGraphemes">-1</int>
 								<string name="OpenTypeFeatures"></string>
 								<bool name="RichText">false</bool>
-								<string name="Text">&#208;&#160;&#208;&#181;&#209;&#134;&#208;&#181;&#208;&#191;&#209;&#130;&#209;&#139;</string>
+								<string name="Text">Recipes</string>
 								<Color3 name="TextColor3">
 									<R>0.349019617</R>
 									<G>0.215686277</G>
@@ -1559,7 +1559,7 @@
 								<int name="MaxVisibleGraphemes">-1</int>
 								<string name="OpenTypeFeatures"></string>
 								<bool name="RichText">false</bool>
-								<string name="Text">&#208;&#163;&#208;&#180;&#208;&#181;&#209;&#128;&#208;&#182;&#208;&#184;&#208;&#178;&#208;&#176;&#208;&#185;&#209;&#130;&#208;&#181; E</string>
+								<string name="Text">Hold E</string>
 								<Color3 name="TextColor3">
 									<R>0.349019617</R>
 									<G>0.215686277</G>

@@ -305,6 +305,7 @@ view.Work.StartButton.InputBegan:Connect(function(input)
     end
     if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
         pointerInput = input
+        view:PressFeedback(view.Work.StartButton)
         updateHeld()
     end
 end)

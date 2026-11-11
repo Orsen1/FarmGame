@@ -6,8 +6,9 @@ local stations = {}
 local TWO_PI = math.pi * 2
 
 local function bindStation(station)
-    if stations[station] or not station:IsA("Model")
-        or station:GetAttribute("ProductionVisual") ~= "HandMill" then return end
+    if stations[station] or not station:IsA("Model") then return end
+    local visual = station:GetAttribute("ProductionVisual")
+    if visual ~= "HandMill" and visual ~= "Sawmill" then return end
     local root = station:FindFirstChild("PlacementRoot")
     local rotor = station:FindFirstChild("Rotor")
     local axis = rotor and rotor:FindFirstChild("RotorPivot")
@@ -20,7 +21,7 @@ local function bindStation(station)
         referenceRoot, referenceRotor, referenceAxis = root, rotor, axis
     end
     stations[station] = {
-        Root = root, Rotor = rotor,
+        Root = root, Rotor = rotor, Visual = visual,
         RootToAxis = referenceRoot.CFrame:ToObjectSpace(referenceAxis.CFrame),
         AxisToRotor = referenceAxis.CFrame:ToObjectSpace(referenceRotor:GetPivot()),
     }
@@ -53,8 +54,9 @@ RunService.PreAnimation:Connect(function()
             or not state.Root.Parent or not state.Rotor.Parent then
             stations[station] = nil
         else
-            local frame = state.Root.CFrame * state.RootToAxis
-                * CFrame.Angles(0, getAngle(station), 0) * state.AxisToRotor
+            local angle = getAngle(station)
+            local rotation = state.Visual == "Sawmill" and CFrame.Angles(0, 0, angle) or CFrame.Angles(0, angle, 0)
+            local frame = state.Root.CFrame * state.RootToAxis * rotation * state.AxisToRotor
             if frame ~= state.LastFrame then
                 state.Rotor:PivotTo(frame)
                 state.LastFrame = frame

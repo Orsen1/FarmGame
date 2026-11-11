@@ -7,6 +7,11 @@ local ProductionRecipes = {
             Flour = 1
         },
         Duration = 5
+    },
+    WoodToPlank = {
+        Inputs = {Wood = 1},
+        Outputs = {Plank = 1},
+        Duration = 5
     }
 }
 
