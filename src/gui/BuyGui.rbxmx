@@ -7628,19 +7628,19 @@ main:GetPropertyChangedSignal("Visible"):Connect(updateShopButtonVisibility)
 sellMain:GetPropertyChangedSignal("Visible"):Connect(updateShopButtonVisibility)
 orderGui:GetPropertyChangedSignal("Enabled"):Connect(updateShopButtonVisibility)
 updateShopButtonVisibility()
-shopButton.Activated:Connect(function()
-    showCatalogue(nil)
+local function openShop(category)
+    if not table.find(categoryNames, category) then category = nil end
+    gui.Enabled = true
+    showCatalogue(category)
     main.Visible = true
-end)
+end
+shopButton.Activated:Connect(function() openShop(nil) end)
 
 local function closeShop()
     main.Visible = false
 end
 main.CloseButton.Activated:Connect(closeShop)
-openEvent.OnClientEvent:Connect(function()
-    showCatalogue(nil)
-    main.Visible = true
-end)
+openEvent.OnClientEvent:Connect(openShop)
 UserInputService.InputBegan:Connect(function(input)
     if not main.Visible or UserInputService:GetFocusedTextBox() then return end
     if input.KeyCode == Enum.KeyCode.Escape or input.KeyCode == Enum.KeyCode.ButtonB then

@@ -1,0 +1,980 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+    <Item class="Folder" referent="RBX53F6F9F5268B49EFB644793792FB9022">
+        <Properties>
+            <string name="Name">ChickenCoopStages</string>
+        </Properties>
+        <Item class="Model" referent="RBX7C8C1B6DE4ED4071906FFC7C436DDD30">
+            <Properties>
+                <string name="Name">Blueprint</string>
+                <Ref name="PrimaryPart">RBXDC6560CA63874EA2A53C13650D8C3F1B</Ref>
+            </Properties>
+            <Item class="Part" referent="RBXDC6560CA63874EA2A53C13650D8C3F1B">
+                <Properties>
+                    <string name="Name">PlacementRoot</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>0</X>
+                        <Y>0.04</Y>
+                        <Z>0</Z>
+                        <R00>1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>10</X>
+                        <Y>0.08</Y>
+                        <Z>10</Z>
+                    </Vector3>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">false</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">false</bool>
+                    <float name="Transparency">1</float>
+                </Properties>
+                <Item class="Attachment" referent="RBXEADCF384D1144628A89D8454D682C3ED">
+                    <Properties>
+                        <string name="Name">InteractionAttachment</string>
+                        <CoordinateFrame name="CFrame">
+                            <X>0</X>
+                            <Y>2.2</Y>
+                            <Z>4.5</Z>
+                            <R00>1</R00>
+                            <R01>0</R01>
+                            <R02>0</R02>
+                            <R10>0</R10>
+                            <R11>1</R11>
+                            <R12>0</R12>
+                            <R20>0</R20>
+                            <R21>0</R21>
+                            <R22>1</R22>
+                        </CoordinateFrame>
+                    </Properties>
+                    <Item class="ProximityPrompt" referent="RBX38A71D9915264BF887F6A6E977342636">
+                        <Properties>
+                            <string name="Name">ActionPrompt</string>
+                            <string name="ActionText">Add Materials</string>
+                            <string name="ObjectText">Chicken Coop</string>
+                            <token name="KeyboardKeyCode">101</token>
+                            <token name="Style">1</token>
+                            <float name="HoldDuration">0</float>
+                            <float name="MaxActivationDistance">8</float>
+                            <bool name="RequiresLineOfSight">false</bool>
+                            <bool name="Enabled">true</bool>
+                        </Properties>
+                    </Item>
+                </Item>
+            </Item>
+            <Item class="MeshPart" referent="RBXC6A1BD756C43473E8F07A0D3678DF189">
+                <Properties>
+                    <string name="Name">Coop_0_Blueprint</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>0.4285812377929687</X>
+                        <Y>0.5714285054377146</Y>
+                        <Z>0.14286037268383162</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>9.125001089913503</X>
+                        <Y>1.142857117312295</Y>
+                        <Z>9.553572109767368</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>2.5550003051757812</X>
+                        <Y>0.3199999928474426</Y>
+                        <Z>2.6750001907348633</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://73952875064241</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.7490195976216635</R>
+                        <G>0.6431372664541128</G>
+                        <B>0.4588235381021685</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">false</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX89EE3CCD912B45DCB389548B94213D5A">
+                <Properties>
+                    <string name="Name">Coop_0_Cream</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>0.4285812377929687</X>
+                        <Y>1.178571901151112</Y>
+                        <Z>0.14286037268383162</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>9.28571479661124</X>
+                        <Y>0.12500009366444179</Y>
+                        <Z>9.714285816465104</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>2.6000001430511475</X>
+                        <Y>0.0350000262260437</Y>
+                        <Z>2.7200000286102295</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://104946448500599</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.9999999999999999</R>
+                        <G>0.8862745132394668</G>
+                        <B>0.6666666649079432</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">false</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBXB8222D1416E24B468F287EE0EE01E01C">
+                <Properties>
+                    <string name="Name">Coop_0_BaseLight</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-1.4464243182114191</X>
+                        <Y>0.4375000617333821</Y>
+                        <Z>-1.6071454754897525</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>2.890043599264962</X>
+                        <Y>0.7678571024111338</Y>
+                        <Z>0.7640470351491655</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>0.8092122077941895</X>
+                        <Y>0.2149999886751175</Y>
+                        <Z>0.21393316984176636</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://131090790772014</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.7294117703237838</R>
+                        <G>0.5294117662438377</G>
+                        <B>0.31764705875810884</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">false</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+        </Item>
+        <Item class="Model" referent="RBXC16104F87CAF4DF59C5833989A564D77">
+            <Properties>
+                <string name="Name">Stage1_Foundation</string>
+                <Ref name="PrimaryPart">RBX07522744C5D9489F904ACC20F91E166A</Ref>
+            </Properties>
+            <Item class="Part" referent="RBX07522744C5D9489F904ACC20F91E166A">
+                <Properties>
+                    <string name="Name">PlacementRoot</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>0</X>
+                        <Y>0.04</Y>
+                        <Z>0</Z>
+                        <R00>1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>10</X>
+                        <Y>0.08</Y>
+                        <Z>10</Z>
+                    </Vector3>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">false</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">false</bool>
+                    <float name="Transparency">1</float>
+                </Properties>
+                <Item class="Attachment" referent="RBX199791316A0B4EC0B2380F10A37F8FE5">
+                    <Properties>
+                        <string name="Name">InteractionAttachment</string>
+                        <CoordinateFrame name="CFrame">
+                            <X>0</X>
+                            <Y>2.2</Y>
+                            <Z>4.5</Z>
+                            <R00>1</R00>
+                            <R01>0</R01>
+                            <R02>0</R02>
+                            <R10>0</R10>
+                            <R11>1</R11>
+                            <R12>0</R12>
+                            <R20>0</R20>
+                            <R21>0</R21>
+                            <R22>1</R22>
+                        </CoordinateFrame>
+                    </Properties>
+                    <Item class="ProximityPrompt" referent="RBXF8FBAAC4762841D38D798D1B357E4002">
+                        <Properties>
+                            <string name="Name">ActionPrompt</string>
+                            <string name="ActionText">Add Materials</string>
+                            <string name="ObjectText">Chicken Coop</string>
+                            <token name="KeyboardKeyCode">101</token>
+                            <token name="Style">1</token>
+                            <float name="HoldDuration">0</float>
+                            <float name="MaxActivationDistance">8</float>
+                            <bool name="RequiresLineOfSight">false</bool>
+                            <bool name="Enabled">true</bool>
+                        </Properties>
+                    </Item>
+                </Item>
+            </Item>
+            <Item class="MeshPart" referent="RBXD6B7E5AC79D3447CB8AD40B7E6170B93">
+                <Properties>
+                    <string name="Name">Coop_1_BaseLight</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-9.054530458740827e-08</X>
+                        <Y>1.142857436622892</Y>
+                        <Z>-1.035717555454799</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>6.542857629912239</X>
+                        <Y>0.35714294229234966</Y>
+                        <Z>5.285715205328804</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.8320001363754272</X>
+                        <Y>0.10000002384185791</Y>
+                        <Z>1.4800002574920654</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://84098299661499</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.7294117703237838</R>
+                        <G>0.5294117662438377</G>
+                        <B>0.31764705875810884</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBXCF724A0CEB6F4AAFA2AB6C1654B76591">
+                <Properties>
+                    <string name="Name">Coop_1_BaseDark</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>1.353181216602804e-05</X>
+                        <Y>0.5535713796104703</Y>
+                        <Z>-1.0535785130092075</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>6.714286123003278</X>
+                        <Y>1.1071428656578064</Y>
+                        <Z>5.071429695401872</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.880000114440918</X>
+                        <Y>0.3100000023841858</Y>
+                        <Z>1.4200003147125244</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://84135711693908</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.47058824111974823</R>
+                        <G>0.3254901894487975</G>
+                        <B>0.21960784637517866</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+        </Item>
+        <Item class="Model" referent="RBX453B8FFAD7D740ACA1F0AA4C40200D93">
+            <Properties>
+                <string name="Name">Stage2_Frame</string>
+                <Ref name="PrimaryPart">RBX7F38C32CCD26411BA7318F36D54CCA68</Ref>
+            </Properties>
+            <Item class="Part" referent="RBX7F38C32CCD26411BA7318F36D54CCA68">
+                <Properties>
+                    <string name="Name">PlacementRoot</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>0</X>
+                        <Y>0.04</Y>
+                        <Z>0</Z>
+                        <R00>1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>10</X>
+                        <Y>0.08</Y>
+                        <Z>10</Z>
+                    </Vector3>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">false</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">false</bool>
+                    <float name="Transparency">1</float>
+                </Properties>
+                <Item class="Attachment" referent="RBX648DC076877F4BBD8B52110A9231555F">
+                    <Properties>
+                        <string name="Name">InteractionAttachment</string>
+                        <CoordinateFrame name="CFrame">
+                            <X>0</X>
+                            <Y>2.2</Y>
+                            <Z>4.5</Z>
+                            <R00>1</R00>
+                            <R01>0</R01>
+                            <R02>0</R02>
+                            <R10>0</R10>
+                            <R11>1</R11>
+                            <R12>0</R12>
+                            <R20>0</R20>
+                            <R21>0</R21>
+                            <R22>1</R22>
+                        </CoordinateFrame>
+                    </Properties>
+                    <Item class="ProximityPrompt" referent="RBX618F73D10EBB466A8EBB3EBBEE51427E">
+                        <Properties>
+                            <string name="Name">ActionPrompt</string>
+                            <string name="ActionText">Add Materials</string>
+                            <string name="ObjectText">Chicken Coop</string>
+                            <token name="KeyboardKeyCode">101</token>
+                            <token name="Style">1</token>
+                            <float name="HoldDuration">0</float>
+                            <float name="MaxActivationDistance">8</float>
+                            <bool name="RequiresLineOfSight">false</bool>
+                            <bool name="Enabled">true</bool>
+                        </Properties>
+                    </Item>
+                </Item>
+            </Item>
+            <Item class="MeshPart" referent="RBX78986A0900B1492EAC52CCC4CBFA2F3B">
+                <Properties>
+                    <string name="Name">Coop_2_FrameOak</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-9.054530458740827e-08</X>
+                        <Y>4.107143623488289</Y>
+                        <Z>-1.035717555454799</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>7.4315002986362995</X>
+                        <Y>6.1428572450365335</Y>
+                        <Z>5.785714728491646</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>2.080820083618164</X>
+                        <Y>1.7200000286102295</Y>
+                        <Z>1.6200001239776611</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://70760188272989</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.5960784331303468</R>
+                        <G>0.39215686351127116</G>
+                        <B>0.21960784637517866</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX8BC75FAF6B4643EAB96A39FFEE93F7AD">
+                <Properties>
+                    <string name="Name">Coop_1_BaseLight</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-9.054530458740827e-08</X>
+                        <Y>1.142857436622892</Y>
+                        <Z>-1.035717555454799</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>6.542857629912239</X>
+                        <Y>0.35714294229234966</Y>
+                        <Z>5.285715205328804</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.8320001363754272</X>
+                        <Y>0.10000002384185791</Y>
+                        <Z>1.4800002574920654</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://84098299661499</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.7294117703237838</R>
+                        <G>0.5294117662438377</G>
+                        <B>0.31764705875810884</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX55712E138D6348EF99ED2CAEE147FD48">
+                <Properties>
+                    <string name="Name">Coop_1_BaseDark</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>1.353181216602804e-05</X>
+                        <Y>0.5535713796104703</Y>
+                        <Z>-1.0535785130092075</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>6.714286123003278</X>
+                        <Y>1.1071428656578064</Y>
+                        <Z>5.071429695401872</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.880000114440918</X>
+                        <Y>0.3100000023841858</Y>
+                        <Z>1.4200003147125244</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://84135711693908</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.47058824111974823</R>
+                        <G>0.3254901894487975</G>
+                        <B>0.21960784637517866</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+        </Item>
+        <Item class="Model" referent="RBXAB16A27C57524A9CB296309BBAD48636">
+            <Properties>
+                <string name="Name">Stage3_Walls</string>
+                <Ref name="PrimaryPart">RBX7778869D915043038A202C7DD0BB66E9</Ref>
+            </Properties>
+            <Item class="Part" referent="RBX7778869D915043038A202C7DD0BB66E9">
+                <Properties>
+                    <string name="Name">PlacementRoot</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>0</X>
+                        <Y>0.04</Y>
+                        <Z>0</Z>
+                        <R00>1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>10</X>
+                        <Y>0.08</Y>
+                        <Z>10</Z>
+                    </Vector3>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">false</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">false</bool>
+                    <float name="Transparency">1</float>
+                </Properties>
+                <Item class="Attachment" referent="RBXD7B0BE422A1F4D26B70ED821F5D36570">
+                    <Properties>
+                        <string name="Name">InteractionAttachment</string>
+                        <CoordinateFrame name="CFrame">
+                            <X>0</X>
+                            <Y>2.2</Y>
+                            <Z>4.5</Z>
+                            <R00>1</R00>
+                            <R01>0</R01>
+                            <R02>0</R02>
+                            <R10>0</R10>
+                            <R11>1</R11>
+                            <R12>0</R12>
+                            <R20>0</R20>
+                            <R21>0</R21>
+                            <R22>1</R22>
+                        </CoordinateFrame>
+                    </Properties>
+                    <Item class="ProximityPrompt" referent="RBXD5A38FB21E754F3793942B189E5DB036">
+                        <Properties>
+                            <string name="Name">ActionPrompt</string>
+                            <string name="ActionText">Add Materials</string>
+                            <string name="ObjectText">Chicken Coop</string>
+                            <token name="KeyboardKeyCode">101</token>
+                            <token name="Style">1</token>
+                            <float name="HoldDuration">0</float>
+                            <float name="MaxActivationDistance">8</float>
+                            <bool name="RequiresLineOfSight">false</bool>
+                            <bool name="Enabled">true</bool>
+                        </Properties>
+                    </Item>
+                </Item>
+            </Item>
+            <Item class="MeshPart" referent="RBX35470BD7CCA94FC4821BDFA457E6DBF3">
+                <Properties>
+                    <string name="Name">Coop_3_WallHoney</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-9.054530458740827e-08</X>
+                        <Y>4.1160719735281805</Y>
+                        <Z>-1.035717555454799</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>6.785715052059718</X>
+                        <Y>5.624999744551522</Y>
+                        <Z>5.4821435894284924</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.9000002145767212</X>
+                        <Y>1.5749999284744263</Y>
+                        <Z>1.535000205039978</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://71887115306974</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.8549019646853679</R>
+                        <G>0.6509803985837963</G>
+                        <B>0.39215686351127116</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX23B2FBBAC61846B2879FA99A3D214F10">
+                <Properties>
+                    <string name="Name">Coop_3_Cream</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-0.1562528179160186</X>
+                        <Y>3.107143725667681</Y>
+                        <Z>-1.022325243268694</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>7.026785612106322</X>
+                        <Y>4.0000004427773606</Y>
+                        <Z>5.776785952704293</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.9674999713897705</X>
+                        <Y>1.1200001239776611</Y>
+                        <Z>1.6175000667572021</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://95958631864813</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.9999999999999999</R>
+                        <G>0.8862745132394668</G>
+                        <B>0.6666666649079432</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX096CB54B2D66412EB7F93FBFF97E74C4">
+                <Properties>
+                    <string name="Name">Coop_3_BaseDark</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-1.1866160801478793</X>
+                        <Y>2.848214762551444</Y>
+                        <Z>0.25446084993226187</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>4.587500435965401</X>
+                        <Y>2.982142567634582</Y>
+                        <Z>3.258928230830601</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.2845001220703125</X>
+                        <Y>0.8349999189376831</Y>
+                        <Z>0.9124999046325684</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://78560525535229</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.47058824111974823</R>
+                        <G>0.3254901894487975</G>
+                        <B>0.21960784637517866</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX12D0DF668040431BBB096176A96FCE71">
+                <Properties>
+                    <string name="Name">Coop_2_FrameOak</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-9.054530458740827e-08</X>
+                        <Y>4.107143623488289</Y>
+                        <Z>-1.035717555454799</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>7.4315002986362995</X>
+                        <Y>6.1428572450365335</Y>
+                        <Z>5.785714728491646</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>2.080820083618164</X>
+                        <Y>1.7200000286102295</Y>
+                        <Z>1.6200001239776611</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://70760188272989</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.5960784331303468</R>
+                        <G>0.39215686351127116</G>
+                        <B>0.21960784637517866</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX6D05220439D94D77825A62EDA50B0D01">
+                <Properties>
+                    <string name="Name">Coop_3_Sage</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-3.4928594316755017</X>
+                        <Y>3.642857926232474</Y>
+                        <Z>-0.5357126040118081</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>0.19642838409968782</X>
+                        <Y>1.5714287757873533</Y>
+                        <Z>3.3214288098471503</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>0.0549999475479126</X>
+                        <Y>0.440000057220459</Y>
+                        <Z>0.9300000667572021</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://78179222180811</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.5137254911601954</R>
+                        <G>0.6078431397075864</G>
+                        <B>0.38823529553517194</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX40C22C765D0F4CA3BEE7BE9D27A2F997">
+                <Properties>
+                    <string name="Name">Coop_3_FrameOak</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>1.5298918957081954e-07</X>
+                        <Y>1.3214289077690669</Y>
+                        <Z>1.7499923706054685</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>2.8571431125913347</X>
+                        <Y>0.32142869063786095</Y>
+                        <Z>0.4642860165664127</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>0.8000000715255737</X>
+                        <Y>0.09000003337860107</Y>
+                        <Z>0.13000008463859558</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://113072865686114</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.5960784331303468</R>
+                        <G>0.39215686351127116</G>
+                        <B>0.21960784637517866</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBXE620069B8D7541559BCA87FDFF6B81E6">
+                <Properties>
+                    <string name="Name">Coop_1_BaseLight</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>-9.054530458740827e-08</X>
+                        <Y>1.142857436622892</Y>
+                        <Z>-1.035717555454799</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>6.542857629912239</X>
+                        <Y>0.35714294229234966</Y>
+                        <Z>5.285715205328804</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.8320001363754272</X>
+                        <Y>0.10000002384185791</Y>
+                        <Z>1.4800002574920654</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://84098299661499</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.7294117703237838</R>
+                        <G>0.5294117662438377</G>
+                        <B>0.31764705875810884</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+            <Item class="MeshPart" referent="RBX7D5863020DBC490D8815C59235E0D4A0">
+                <Properties>
+                    <string name="Name">Coop_1_BaseDark</string>
+                    <CoordinateFrame name="CFrame">
+                        <X>1.353181216602804e-05</X>
+                        <Y>0.5535713796104703</Y>
+                        <Z>-1.0535785130092075</Z>
+                        <R00>-1</R00>
+                        <R01>0</R01>
+                        <R02>0</R02>
+                        <R10>0</R10>
+                        <R11>1</R11>
+                        <R12>0</R12>
+                        <R20>0</R20>
+                        <R21>0</R21>
+                        <R22>-1</R22>
+                    </CoordinateFrame>
+                    <Vector3 name="size">
+                        <X>6.714286123003278</X>
+                        <Y>1.1071428656578064</Y>
+                        <Z>5.071429695401872</Z>
+                    </Vector3>
+                    <Vector3 name="InitialSize">
+                        <X>1.880000114440918</X>
+                        <Y>0.3100000023841858</Y>
+                        <Z>1.4200003147125244</Z>
+                    </Vector3>
+                    <Content name="MeshId">
+                        <url>rbxassetid://84135711693908</url>
+                    </Content>
+                    <Color3 name="Color">
+                        <R>0.47058824111974823</R>
+                        <G>0.3254901894487975</G>
+                        <B>0.21960784637517866</B>
+                    </Color3>
+                    <token name="Material">272</token>
+                    <token name="CollisionFidelity">2</token>
+                    <token name="RenderFidelity">0</token>
+                    <bool name="Anchored">true</bool>
+                    <bool name="CanCollide">true</bool>
+                    <bool name="CanTouch">false</bool>
+                    <bool name="CanQuery">true</bool>
+                </Properties>
+            </Item>
+        </Item>
+    </Item>
+</roblox>

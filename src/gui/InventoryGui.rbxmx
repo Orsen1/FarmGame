@@ -87,6 +87,25 @@ local function updateSlot(slotData)
 
 	local itemIcon = guiSlot:WaitForChild("ItemIcon")
 	local amountText = guiSlot:WaitForChild("AmountText")
+    local fallback = guiSlot:FindFirstChild("ItemNameFallback")
+    if not fallback then
+        fallback = Instance.new("TextLabel")
+        fallback.Name = "ItemNameFallback"
+        fallback.BackgroundTransparency = 1
+        fallback.Position = UDim2.fromOffset(5, 5)
+        fallback.Size = UDim2.new(1, -10, 1, -23)
+        fallback.Font = Enum.Font.FredokaOne
+        fallback.TextColor3 = Color3.fromRGB(89, 55, 26)
+        fallback.TextScaled = true
+        fallback.TextWrapped = true
+        fallback.ZIndex = itemIcon.ZIndex
+        fallback.Parent = guiSlot
+        local limit = Instance.new("UITextSizeConstraint")
+        limit.MinTextSize = 10
+        limit.MaxTextSize = 15
+        limit.Parent = fallback
+    end
+    fallback.Visible = false
 
 	local itemName = slotData.ItemName.Value
 	local amount = slotData.Amount.Value
@@ -98,6 +117,9 @@ local function updateSlot(slotData)
 	end
 
 	itemIcon.Image = getIcon(itemName)
+    local definition = ItemDefinitions[itemName]
+    fallback.Text = definition and definition.DisplayName or itemName
+    fallback.Visible = itemIcon.Image == ""
 	amountText.Text = tostring(amount)
 end
 

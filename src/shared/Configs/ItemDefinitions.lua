@@ -192,6 +192,31 @@ local ItemDefinitions = {
         Icon = "rbxassetid://119718856891391",
         ShopCategory = "Equipment"
     },
+    ChickenCoopBlueprint = {
+        DisplayName = "Chicken Coop",
+        Type = "Blueprint",
+        BuyPriceCents = 500,
+        Icon = "rbxassetid://75908875153706",
+        Placeable = true,
+        BuildsInto = "ChickenCoop",
+        ModelFolder = "ChickenCoopStages",
+        ShopCategory = "Equipment"
+    },
+    ChickenCoop = {
+        DisplayName = "Chicken Coop",
+        Type = "Building",
+        Icon = "",
+        Placeable = true,
+        ShopCategoryWhenEmpty = "Animals",
+        ShopPromptText = "Buy chickens"
+    },
+    Chicken = {
+        DisplayName = "Chicken",
+        Type = "Animal",
+        BuyPriceCents = 200,
+        Icon = "",
+        ShopCategory = "Animals"
+    },
     WarehouseBlueprint = {
         DisplayName = "Warehouse",
         Type = "Blueprint",

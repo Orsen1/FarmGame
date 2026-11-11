@@ -88,6 +88,13 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
         return
     end
 
+    if definition.ShopCategoryWhenEmpty then
+        if (object:GetAttribute("AnimalCount") or 0) == 0 then
+            remotes.OpenBuyGuiEvent:FireClient(player, definition.ShopCategoryWhenEmpty)
+        end
+        return
+    end
+
     if definition.BuildsInto then
         local success, reason = ConstructionService.Build(player, object)
         if not success then
