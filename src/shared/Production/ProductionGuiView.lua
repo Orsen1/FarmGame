@@ -116,7 +116,17 @@ function View.new(gui)
             object.Font = Enum.Font.FredokaOne
         end
     end
-    self.MaterialRows, self.Cards = {}, {}
+    self.MaterialRows, self.Cards, self.CardLayouts = {}, {}, {}
+    if not self.List:FindFirstChild("CardPadding") then
+        make("UIPadding", "CardPadding", self.List, {
+            PaddingLeft = UDim.new(0, 0), PaddingTop = UDim.new(0, 4),
+            PaddingRight = UDim.new(0, 0), PaddingBottom = UDim.new(0, 4),
+        })
+    end
+    self.List.ListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    self.InputConnection = UserInputService:GetPropertyChangedSignal("PreferredInput"):Connect(function()
+        if self.LastState then self:UpdateState(self.LastState) end
+    end)
     self.LayoutConnection = self.Root:GetPropertyChangedSignal("AbsoluteSize"):Connect(function() self:Layout() end)
     self:Layout()
     return self
@@ -127,12 +137,20 @@ function View:Layout()
     if size.X < 1 or size.Y < 1 then return end
     self.Portrait = size.Y > size.X
     self.Compact = not self.Portrait and size.Y < 420
+    local width = self.Portrait and size.X - 24 or math.clamp(size.X * 0.33, 290, 380)
+    for card, layout in pairs(self.CardLayouts) do
+        if card.Parent then
+            self:LayoutCard(card, layout, width - 56)
+        else
+            self.CardLayouts[card] = nil
+        end
+    end
     local contentHeight = self.RecipeId and 222 or 80
     if self.RecipeId then
         local card = self.Work.RecipeSummary:FindFirstChild(self.RecipeId)
-        if card then contentHeight = card.Size.Y.Offset + 124 end
+        if card then contentHeight = card.Size.Y.Offset + 112 end
     elseif #self.Cards > 0 then
-        contentHeight = 0
+        contentHeight = 8
         for index, card in ipairs(self.Cards) do
             contentHeight += card.Size.Y.Offset + (index > 1 and 12 or 0)
         end
@@ -142,11 +160,11 @@ function View:Layout()
     if self.Portrait then
         self.OpenPosition = UDim2.new(0.5, 0, 1, -12)
         self.Panel.AnchorPoint = Vector2.new(0.5, 1)
-        self.Panel.Size = UDim2.fromOffset(size.X - 24, panelHeight)
+        self.Panel.Size = UDim2.fromOffset(width, panelHeight)
     else
         self.OpenPosition = UDim2.new(1, -16, 0.5, 0)
         self.Panel.AnchorPoint = Vector2.new(1, 0.5)
-        self.Panel.Size = UDim2.fromOffset(math.clamp(size.X * 0.33, 290, 380), panelHeight)
+        self.Panel.Size = UDim2.fromOffset(width, panelHeight)
     end
     if not self.Transitioning then self.Panel.Position = self.OpenPosition end
     self.Panel.Title.Position = UDim2.fromOffset(16, 10)
@@ -155,15 +173,17 @@ function View:Layout()
     self.Body.Position = UDim2.fromOffset(12, 50)
     self.Body.Size = UDim2.new(1, -24, 1, -62)
     local height = self.Panel.Size.Y.Offset - 62
-    local summaryHeight = math.max(54, height - 124)
+    local summaryHeight = math.max(54, height - 104)
     self.Work.RecipeSummary.Size = UDim2.new(1, 0, 0, summaryHeight)
     self.Work.StatusLabel.Position = UDim2.fromOffset(0, summaryHeight + 2)
-    self.Work.StatusLabel.Size = UDim2.new(1, 0, 0, 22)
+    self.Work.StatusLabel.Size = UDim2.new(0.66, 0, 0, 22)
     self.Work.StatusLabel.TextSize = 17
-    self.Work.ProgressBar.Position = UDim2.fromOffset(0, summaryHeight + 28)
+    self.Work.ProgressBar.Position = UDim2.fromOffset(0, summaryHeight + 30)
     self.Work.ProgressBar.Size = UDim2.new(1, 0, 0, 10)
-    self.Work.TimeLabel.Position = UDim2.fromOffset(0, summaryHeight + 42)
-    self.Work.TimeLabel.Size = UDim2.new(1, 0, 0, 22)
+    self.Work.TimeLabel.AnchorPoint = Vector2.new(1, 0)
+    self.Work.TimeLabel.Position = UDim2.new(1, 0, 0, summaryHeight + 2)
+    self.Work.TimeLabel.Size = UDim2.new(0.34, 0, 0, 22)
+    self.Work.TimeLabel.TextXAlignment = Enum.TextXAlignment.Right
     self.Work.TimeLabel.TextSize = 18
     self.Work.BackButton.Position = UDim2.new(0, 0, 1, -48)
     self.Work.BackButton.Size = UDim2.new(0.34, -6, 0, 48)
@@ -175,9 +195,64 @@ end
 function View:PressFeedback(button)
     local outline = button:FindFirstChild("Outline")
     if outline then
-        outline.Thickness = 4
-        TweenService:Create(outline, TweenInfo.new(0.2), {Thickness = 2}):Play()
+        outline.Color, outline.Thickness = colors.Green, 3
+        TweenService:Create(outline, TweenInfo.new(0.28), {Color = colors.Border, Thickness = 2}):Play()
     end
+    local original = button.BackgroundColor3
+    button.BackgroundColor3 = Color3.fromRGB(255, 250, 225)
+    TweenService:Create(button, TweenInfo.new(0.28), {BackgroundColor3 = original}):Play()
+end
+
+function View:LayoutCard(card, layout, availableWidth)
+    local tileWidth, tileHeight, plusWidth = 76, 94, 18
+    local inputColumns, outputColumns = 1, 1
+    local function groupWidth(columns)
+        return columns * tileWidth + (columns - 1) * plusWidth
+    end
+    while groupWidth(inputColumns) + groupWidth(outputColumns) + 56 + tileWidth + plusWidth <= availableWidth do
+        local moreInputs = inputColumns < #layout.Inputs
+        local moreOutputs = outputColumns < #layout.Outputs
+        if moreInputs and (not moreOutputs or #layout.Inputs / inputColumns >= #layout.Outputs / outputColumns) then
+            inputColumns += 1
+        elseif moreOutputs then
+            outputColumns += 1
+        else
+            break
+        end
+    end
+    local function arrange(items, columns)
+        local width = groupWidth(columns)
+        local rows = math.ceil(#items / columns)
+        local height = rows * tileHeight + math.max(0, rows - 1) * plusWidth
+        for index, item in ipairs(items) do
+            local row = math.floor((index - 1) / columns)
+            local column = (index - 1) % columns
+            local count = math.min(columns, #items - row * columns)
+            local left = (width - groupWidth(count)) / 2
+            item.Row.Position = UDim2.fromOffset(left + column * (tileWidth + plusWidth), row * (tileHeight + plusWidth))
+            if item.Plus then
+                if column + 1 < columns then
+                    item.Plus.Position = UDim2.fromOffset(left + column * (tileWidth + plusWidth) + tileWidth, row * (tileHeight + plusWidth) + 22)
+                else
+                    item.Plus.Position = UDim2.fromOffset((width - plusWidth) / 2, row * (tileHeight + plusWidth) + tileHeight)
+                end
+            end
+        end
+        return width, height
+    end
+    local inputWidth, inputHeight = arrange(layout.Inputs, inputColumns)
+    local outputWidth, outputHeight = arrange(layout.Outputs, outputColumns)
+    local height = math.max(inputHeight, outputHeight)
+    local left = (availableWidth - inputWidth - outputWidth - 56) / 2
+    layout.InputGroup.Position = UDim2.fromOffset(left, (height - inputHeight) / 2)
+    layout.InputGroup.Size = UDim2.fromOffset(inputWidth, inputHeight)
+    layout.OutputGroup.Position = UDim2.fromOffset(left + inputWidth + 56, (height - outputHeight) / 2)
+    layout.OutputGroup.Size = UDim2.fromOffset(outputWidth, outputHeight)
+    layout.Direction.Position = UDim2.fromOffset(left + inputWidth + 14, (height - tileHeight) / 2 + 18)
+    if layout.Duration then
+        layout.Duration.Position = UDim2.fromOffset(left + inputWidth + 8, (height - tileHeight) / 2 + 64)
+    end
+    card.Size = UDim2.new(1, -8, 0, height + 20)
 end
 
 function View:CreateCard(recipeId, parent, showOwned)
@@ -185,50 +260,69 @@ function View:CreateCard(recipeId, parent, showOwned)
     if not recipe then return end
     local card = self.Templates.RecipeCard:Clone()
     card.Name, card.Parent, card.Visible = recipeId, parent, true
+    card.AutoButtonColor = false
     card.Content.ListLayout:Destroy()
-    card.Content.Position = UDim2.fromOffset(8, 8)
-    card.Content.Size = UDim2.new(1, -16, 1, -16)
-    local rows = 1
-    local function column(items, x, input)
+    card.Content.Position = UDim2.fromOffset(12, 10)
+    card.Content.Size = UDim2.new(1, -24, 1, -20)
+    local layout = {Inputs = {}, Outputs = {}}
+    local function group(items, input)
+        local container = make("Frame", input and "Inputs" or "Outputs", card.Content, {BackgroundTransparency = 1})
         local keys = sortedKeys(items)
-        rows = math.max(rows, #keys)
+        local entries = input and layout.Inputs or layout.Outputs
         for index, name in ipairs(keys) do
             local row = self.Templates.ItemRow:Clone()
             local definition = definitions[name]
-            row.Name, row.Parent, row.Visible = name, card.Content, true
-            row.Position = UDim2.new(x, 0, 0, (index - 1) * 82)
-            row.Size = UDim2.new(0.44, 0, 0, 80)
-            row.Icon.Position = UDim2.fromOffset(2, 2)
-            row.Icon.Size = UDim2.fromOffset(44, 44)
+            row.Name, row.Parent, row.Visible = name, container, true
+            row.Size = UDim2.fromOffset(76, 94)
+            row.Icon.AnchorPoint = Vector2.new(0.5, 0)
+            row.Icon.Position = UDim2.fromScale(0.5, 0)
+            row.Icon.Size = UDim2.fromOffset(64, 64)
+            row.Icon.BackgroundTransparency = 0
+            row.Icon.BackgroundColor3 = input and Color3.fromRGB(255, 228, 174) or Color3.fromRGB(228, 231, 187)
             row.Icon.Image = definition.Icon or ""
-            row.ItemName.Position = UDim2.fromOffset(0, 54)
-            row.ItemName.Size = UDim2.new(1, 0, 0, 24)
+            make("UICorner", "Corner", row.Icon, {CornerRadius = UDim.new(0, 10)})
+            make("UIStroke", "Outline", row.Icon, {Color = colors.Border, Thickness = 1, Transparency = 0.55, ApplyStrokeMode = Enum.ApplyStrokeMode.Border})
+            row.ItemName.Position = UDim2.fromOffset(0, 68)
+            row.ItemName.Size = UDim2.fromOffset(76, 24)
             row.ItemName.Text = definition.DisplayName or name
-            row.ItemName.TextSize = 17
+            row.ItemName.TextXAlignment = Enum.TextXAlignment.Center
             row.ItemName.TextScaled = true
-            make("UITextSizeConstraint", "TextLimit", row.ItemName, {MinTextSize = 12, MaxTextSize = 18})
-            row.Amount.Position = UDim2.new(1, 0, 0, 12)
-            row.Amount.Size = UDim2.fromOffset(52, 24)
+            make("UITextSizeConstraint", "TextLimit", row.ItemName, {MinTextSize = 12, MaxTextSize = 16})
+            row.Amount.AnchorPoint = Vector2.new(1, 1)
+            row.Amount.Position = UDim2.new(0.5, 32, 0, 64)
+            row.Amount.Size = UDim2.fromOffset(showOwned and input and 52 or 30, 22)
+            row.Amount.BackgroundTransparency = 0
+            row.Amount.BackgroundColor3 = colors.Card
+            row.Amount.TextXAlignment = Enum.TextXAlignment.Center
             row.Amount.Text = tostring(items[name])
             row.Amount.TextScaled = true
-            make("UITextSizeConstraint", "TextLimit", row.Amount, {MinTextSize = 10, MaxTextSize = 20})
+            row.Amount.ZIndex = row.Icon.ZIndex + 1
+            make("UICorner", "Corner", row.Amount, {CornerRadius = UDim.new(0, 6)})
+            make("UIStroke", "Outline", row.Amount, {Color = colors.Border, Thickness = 1, Transparency = 0.35, ApplyStrokeMode = Enum.ApplyStrokeMode.Border})
+            make("UITextSizeConstraint", "TextLimit", row.Amount, {MinTextSize = 10, MaxTextSize = 17})
+            local entry = {Row = row}
+            if index < #keys then
+                entry.Plus = label("Plus" .. index, container, {Size = UDim2.fromOffset(18, 18), Text = "+", TextSize = 20, TextXAlignment = Enum.TextXAlignment.Center})
+            end
+            table.insert(entries, entry)
             if input and showOwned then
                 table.insert(self.MaterialRows, {Row = row, Name = name, Required = items[name]})
             end
         end
+        return container
     end
-    column(recipe.Inputs, 0, true)
-    column(recipe.Outputs, 0.56, false)
-    label("Direction", card.Content, {Position = UDim2.new(0.44, 0, 0, 12),
-        Size = UDim2.new(0.12, 0, 0, 32), Text = ">", TextSize = 28, TextXAlignment = Enum.TextXAlignment.Center})
-    local height = rows * 82 + 16
+    layout.InputGroup = group(recipe.Inputs, true)
+    layout.OutputGroup = group(recipe.Outputs, false)
+    local arrow = make("Frame", "Direction", card.Content, {Size = UDim2.fromOffset(28, 28), BackgroundTransparency = 1})
+    make("Frame", "Shaft", arrow, {Position = UDim2.fromOffset(0, 12), Size = UDim2.fromOffset(24, 4), BackgroundColor3 = colors.Ink, BorderSizePixel = 0})
+    make("Frame", "Upper", arrow, {Position = UDim2.fromOffset(16, 8), Size = UDim2.fromOffset(12, 4), Rotation = 45, BackgroundColor3 = colors.Ink, BorderSizePixel = 0})
+    make("Frame", "Lower", arrow, {Position = UDim2.fromOffset(16, 16), Size = UDim2.fromOffset(12, 4), Rotation = -45, BackgroundColor3 = colors.Ink, BorderSizePixel = 0})
+    layout.Direction = arrow
     if not showOwned then
-        label("Duration", card.Content, {Position = UDim2.fromOffset(0, rows * 82),
-            Size = UDim2.new(1, 0, 0, 22), Text = string.format("%gs", recipe.Duration),
-            TextSize = 17, TextXAlignment = Enum.TextXAlignment.Center})
-        height += 24
+        layout.Duration = label("Duration", card.Content, {Size = UDim2.fromOffset(40, 24), Text = string.format("%gs", recipe.Duration), TextSize = 18, TextXAlignment = Enum.TextXAlignment.Center})
     end
-    card.Size = UDim2.new(1, -10, 0, height)
+    self.CardLayouts[card] = layout
+    self:LayoutCard(card, layout, self.Panel.Size.X.Offset - 56)
     return card
 end
 
@@ -267,7 +361,9 @@ function View:SetRecipe(recipeId)
     for _, child in ipairs(self.Work.RecipeSummary:GetChildren()) do child:Destroy() end
     if recipeId then
         local card = self:CreateCard(recipeId, self.Work.RecipeSummary, true)
+        card.Position = UDim2.fromOffset(4, 4)
         card.Active, card.AutoButtonColor, card.Selectable = false, false, false
+        self:PressFeedback(card)
         self.Work.RecipeSummary.CanvasPosition = Vector2.zero
     end
     self:Layout()
@@ -296,7 +392,7 @@ end
 function View:UpdateState(state)
     self.LastState = state
     self.Busy = state.Busy == true
-    self.Work.StartButton.Text = UserInputService.TouchEnabled and "Hold" or "Hold E"
+    self.Work.StartButton.Text = UserInputService.PreferredInput == Enum.PreferredInput.Touch and "Hold" or "Hold E"
     self.Work.StartButton.BackgroundColor3 = (self.Enough or self.Busy) and colors.Button or colors.Muted
     self.Work.StartButton.Interactable = self.Enough or self.Busy
     self.Work.BackButton.Interactable = not self.Busy
