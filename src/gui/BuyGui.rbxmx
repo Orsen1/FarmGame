@@ -7619,12 +7619,14 @@ end
 gui.ViewportBounds:GetPropertyChangedSignal("AbsoluteSize"):Connect(resizeShopButton)
 resizeShopButton()
 local sellMain = gui.Parent:WaitForChild("SellGui"):WaitForChild("MainFrame")
+local orderGui = gui.Parent:WaitForChild("OrderGui")
 local function updateShopButtonVisibility()
-    shopButton.Visible = not main.Visible and not sellMain.Visible
+    shopButton.Visible = not main.Visible and not sellMain.Visible and not orderGui.Enabled
 end
 
 main:GetPropertyChangedSignal("Visible"):Connect(updateShopButtonVisibility)
 sellMain:GetPropertyChangedSignal("Visible"):Connect(updateShopButtonVisibility)
+orderGui:GetPropertyChangedSignal("Enabled"):Connect(updateShopButtonVisibility)
 updateShopButtonVisibility()
 shopButton.Activated:Connect(function()
     showCatalogue(nil)

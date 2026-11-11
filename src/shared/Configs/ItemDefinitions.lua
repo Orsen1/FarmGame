@@ -1,6 +1,6 @@
 local ItemDefinitions = {
     Carrot = {
-        DisplayName = "Морковь",
+        DisplayName = "Carrot",
         Type = "Product",
         SellPriceCents = 5,
         Icon = "rbxassetid://76765094849929"
@@ -14,7 +14,7 @@ local ItemDefinitions = {
         ShopCategory = "Seeds"
     },
     Potato = {
-        DisplayName = "Картофель",
+        DisplayName = "Potato",
         Type = "Product",
         SellPriceCents = 8,
         Icon = "rbxassetid://120795864424521"
@@ -28,13 +28,13 @@ local ItemDefinitions = {
         ShopCategory = "Seeds"
     },
     Wheat = {
-        DisplayName = "Пшеница",
+        DisplayName = "Wheat",
         Type = "Product",
         SellPriceCents = 8,
         Icon = "rbxassetid://84204355593032"
     },
     Flour = {
-        DisplayName = "Мука",
+        DisplayName = "Flour",
         Type = "Product",
         SellPriceCents = 12,
         Icon = "rbxassetid://106543136566763"

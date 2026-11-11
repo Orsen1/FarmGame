@@ -11,6 +11,7 @@ local PlayerPlotService = plotModule and require(plotModule)
 local PlotDataService = plotModule and require(ServerScriptService:WaitForChild("PlotDataService"))
 local PlotSectionService = plotModule and require(ServerScriptService:WaitForChild("PlotSectionService"))
 local ProductionService = plotModule and require(ServerScriptService:WaitForChild("ProductionService"))
+local OrderService = plotModule and require(ServerScriptService:WaitForChild("OrderService"))
 
 local loadedData = {}
 local savingPlayers = {}
@@ -71,6 +72,15 @@ local function loadPlayerData(player)
         end
     end
 
+    if OrderService then
+        local success, reason = OrderService.LoadData(player, data.Orders)
+        if not success then
+            warn("[ORDER LOAD ERROR]", player.UserId, reason)
+            player:Kick("Failed to load your orders. Please try again later.")
+            return
+        end
+    end
+
     loadedData[player] = data
     player:SetAttribute("DataLoaded", true)
 end
@@ -99,6 +109,13 @@ local function savePlayerData(player, preparingTeleport)
         data = table.clone(loadedData[player])
         data.Money = MoneyService.GetMoney(player)
         data.Inventory = inventoryData
+
+        if OrderService then
+            data.Orders = OrderService.GetData(player)
+            if data.Orders == nil then
+                return false
+            end
+        end
 
         if PlotDataService then
             local placedObjects = PlotDataService.getData(player)
@@ -153,6 +170,9 @@ end)
 Players.PlayerRemoving:Connect(function(player)
     savePlayerData(player)
     loadedData[player] = nil
+    if OrderService then
+        OrderService.Clear(player)
+    end
     if PlayerPlotService then
         PlayerPlotService.releasePlot(player)
     end

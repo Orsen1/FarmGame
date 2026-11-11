@@ -89,6 +89,9 @@
     "StarterGui": {
       "$className": "StarterGui",
       "$ignoreUnknownInstances": true,
+      "MoneyGui": {
+        "$path": "src/gui/MoneyGui.rbxmx"
+      },
       "InventoryGui": {
         "$path": "src/gui/InventoryGui.rbxmx"
       }

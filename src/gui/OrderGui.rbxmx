@@ -1,0 +1,597 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+    <Item class="ScreenGui" referent="RBXCFC3E3C1C5994480806D1F43C63350BF">
+        <Properties>
+            <string name="Name">OrderGui</string>
+            <bool name="Enabled">false</bool>
+            <bool name="ResetOnSpawn">false</bool>
+            <int name="DisplayOrder">35</int>
+            <token name="ZIndexBehavior">1</token>
+            <bool name="IgnoreGuiInset">false</bool>
+        </Properties>
+        <Item class="Frame" referent="RBX543C665265A1465B9432AEC17FBF9C38">
+            <Properties>
+                <string name="Name">Root</string>
+                <int name="BorderSizePixel">0</int>
+                <float name="BackgroundTransparency">1</float>
+                <UDim2 name="Size">
+                    <XS>1</XS>
+                    <XO>0</XO>
+                    <YS>1</YS>
+                    <YO>0</YO>
+                </UDim2>
+            </Properties>
+            <Item class="CanvasGroup" referent="RBX92A56FF828064E4B88CE528095D04B7D">
+                <Properties>
+                    <string name="Name">Panel</string>
+                    <int name="BorderSizePixel">0</int>
+                    <Color3 name="BackgroundColor3">
+                        <R>1.0</R>
+                        <G>0.8627450980392157</G>
+                        <B>0.5882352941176471</B>
+                    </Color3>
+                    <UDim2 name="Size">
+                        <XS>0</XS>
+                        <XO>760</XO>
+                        <YS>0</YS>
+                        <YO>438</YO>
+                    </UDim2>
+                    <UDim2 name="Position">
+                        <XS>0.5</XS>
+                        <XO>0</XO>
+                        <YS>0.5</YS>
+                        <YO>0</YO>
+                    </UDim2>
+                    <Vector2 name="AnchorPoint">
+                        <X>0.5</X>
+                        <Y>0.5</Y>
+                    </Vector2>
+                </Properties>
+                <Item class="UICorner" referent="RBXD707E3FC94ED44ECA55781C30819F589">
+                    <Properties>
+                        <string name="Name">Corner</string>
+                        <UDim name="CornerRadius">
+                            <S>0</S>
+                            <O>18</O>
+                        </UDim>
+                    </Properties>
+                </Item>
+                <Item class="UIStroke" referent="RBX5BCC4FA26A234CB1A94B3F7D985E836C">
+                    <Properties>
+                        <string name="Name">Outline</string>
+                        <Color3 name="Color">
+                            <R>0.6627450980392157</R>
+                            <G>0.43529411764705883</G>
+                            <B>0.19607843137254902</B>
+                        </Color3>
+                        <float name="Thickness">2</float>
+                        <token name="ApplyStrokeMode">1</token>
+                    </Properties>
+                </Item>
+                <Item class="Frame" referent="RBX1D9EF4E6E88942F4B0191660255A5EBB">
+                    <Properties>
+                        <string name="Name">Header</string>
+                        <int name="BorderSizePixel">0</int>
+                        <float name="BackgroundTransparency">1</float>
+                        <UDim2 name="Position">
+                            <XS>0</XS>
+                            <XO>18</XO>
+                            <YS>0</YS>
+                            <YO>14</YO>
+                        </UDim2>
+                        <UDim2 name="Size">
+                            <XS>1</XS>
+                            <XO>-36</XO>
+                            <YS>0</YS>
+                            <YO>64</YO>
+                        </UDim2>
+                    </Properties>
+                    <Item class="TextLabel" referent="RBX1FE95D4B69A94DD19D9DFFAFA32BFF11">
+                        <Properties>
+                            <string name="Name">TitleLabel</string>
+                            <int name="BorderSizePixel">0</int>
+                            <float name="BackgroundTransparency">1</float>
+                            <string name="Text">Market Orders</string>
+                            <Color3 name="TextColor3">
+                                <R>0.34901960784313724</R>
+                                <G>0.21568627450980393</G>
+                                <B>0.10196078431372549</B>
+                            </Color3>
+                            <Font name="FontFace">
+                                <Family>
+                                    <url>rbxasset://fonts/families/FredokaOne.json</url>
+                                </Family>
+                                <Weight>400</Weight>
+                                <Style>Normal</Style>
+                            </Font>
+                            <bool name="TextWrapped">true</bool>
+                            <token name="TextXAlignment">0</token>
+                            <token name="TextYAlignment">1</token>
+                            <float name="TextSize">34</float>
+                            <UDim2 name="Size">
+                                <XS>1</XS>
+                                <XO>-60</XO>
+                                <YS>0</YS>
+                                <YO>48</YO>
+                            </UDim2>
+                        </Properties>
+                    </Item>
+                    <Item class="TextButton" referent="RBX2D3795AE6B8944D4BD2CFB7D9A3C45DB">
+                        <Properties>
+                            <string name="Name">CloseButton</string>
+                            <int name="BorderSizePixel">0</int>
+                            <Color3 name="BackgroundColor3">
+                                <R>0.6862745098039216</R>
+                                <G>0.30196078431372547</G>
+                                <B>0.20784313725490197</B>
+                            </Color3>
+                            <UDim2 name="Position">
+                                <XS>1</XS>
+                                <XO>-44</XO>
+                                <YS>0</YS>
+                                <YO>0</YO>
+                            </UDim2>
+                            <UDim2 name="Size">
+                                <XS>0</XS>
+                                <XO>44</XO>
+                                <YS>0</YS>
+                                <YO>44</YO>
+                            </UDim2>
+                            <string name="Text">×</string>
+                            <Font name="FontFace">
+                                <Family>
+                                    <url>rbxasset://fonts/families/FredokaOne.json</url>
+                                </Family>
+                                <Weight>400</Weight>
+                                <Style>Normal</Style>
+                            </Font>
+                            <float name="TextSize">28</float>
+                            <Color3 name="TextColor3">
+                                <R>1</R>
+                                <G>1</G>
+                                <B>1</B>
+                            </Color3>
+                        </Properties>
+                        <Item class="UICorner" referent="RBX2858C86BAF5B4FEF98C13E108E28AA2C">
+                            <Properties>
+                                <string name="Name">Corner</string>
+                                <UDim name="CornerRadius">
+                                    <S>0</S>
+                                    <O>10</O>
+                                </UDim>
+                            </Properties>
+                        </Item>
+                        <Item class="UIStroke" referent="RBX06B0FF13B6204AD688D4018CF61BAAAE">
+                            <Properties>
+                                <string name="Name">Outline</string>
+                                <Color3 name="Color">
+                                    <R>0.6627450980392157</R>
+                                    <G>0.43529411764705883</G>
+                                    <B>0.19607843137254902</B>
+                                </Color3>
+                                <float name="Thickness">2</float>
+                                <token name="ApplyStrokeMode">1</token>
+                            </Properties>
+                        </Item>
+                    </Item>
+                </Item>
+                <Item class="Frame" referent="RBXE70B02CF036F462C956A5BAB93D2A7CB">
+                    <Properties>
+                        <string name="Name">Body</string>
+                        <int name="BorderSizePixel">0</int>
+                        <float name="BackgroundTransparency">1</float>
+                        <UDim2 name="Position">
+                            <XS>0</XS>
+                            <XO>18</XO>
+                            <YS>0</YS>
+                            <YO>88</YO>
+                        </UDim2>
+                        <UDim2 name="Size">
+                            <XS>1</XS>
+                            <XO>-36</XO>
+                            <YS>1</YS>
+                            <YO>-144</YO>
+                        </UDim2>
+                    </Properties>
+                    <Item class="Frame" referent="RBX950C294F7B0B4C5991A9EF7A8A97BF08">
+                        <Properties>
+                            <string name="Name">Details</string>
+                            <int name="BorderSizePixel">0</int>
+                            <float name="BackgroundTransparency">1</float>
+                        </Properties>
+                        <Item class="Frame" referent="RBX754E28B6F0864CC1AFA7DAADEFD35783">
+                            <Properties>
+                                <string name="Name">RewardFrame</string>
+                                <int name="BorderSizePixel">0</int>
+                                <Color3 name="BackgroundColor3">
+                                    <R>1.0</R>
+                                    <G>0.9411764705882353</G>
+                                    <B>0.792156862745098</B>
+                                </Color3>
+                            </Properties>
+                            <Item class="UICorner" referent="RBXEC49FFEAA9B243638ACEBDDC3C015DA7">
+                                <Properties>
+                                    <string name="Name">Corner</string>
+                                    <UDim name="CornerRadius">
+                                        <S>0</S>
+                                        <O>10</O>
+                                    </UDim>
+                                </Properties>
+                            </Item>
+                            <Item class="UIStroke" referent="RBXF3CAC25A65C843ACAC412018C311BB9C">
+                                <Properties>
+                                    <string name="Name">Outline</string>
+                                    <Color3 name="Color">
+                                        <R>0.6627450980392157</R>
+                                        <G>0.43529411764705883</G>
+                                        <B>0.19607843137254902</B>
+                                    </Color3>
+                                    <float name="Thickness">2</float>
+                                    <token name="ApplyStrokeMode">1</token>
+                                </Properties>
+                            </Item>
+                            <Item class="TextLabel" referent="RBX4487D17A64B94A7087D3FCDE9B09744D">
+                                <Properties>
+                                    <string name="Name">AmountLabel</string>
+                                    <int name="BorderSizePixel">0</int>
+                                    <float name="BackgroundTransparency">1</float>
+                                    <string name="Text">$0.00</string>
+                                    <Color3 name="TextColor3">
+                                        <R>0.34901960784313724</R>
+                                        <G>0.21568627450980393</G>
+                                        <B>0.10196078431372549</B>
+                                    </Color3>
+                                    <Font name="FontFace">
+                                        <Family>
+                                            <url>rbxasset://fonts/families/FredokaOne.json</url>
+                                        </Family>
+                                        <Weight>400</Weight>
+                                        <Style>Normal</Style>
+                                    </Font>
+                                    <bool name="TextWrapped">true</bool>
+                                    <token name="TextYAlignment">1</token>
+                                    <Color3 name="TextColor3">
+                                        <R>0.27058823529411763</R>
+                                        <G>0.48627450980392156</G>
+                                        <B>0.19215686274509805</B>
+                                    </Color3>
+                                    <UDim2 name="Position">
+                                        <XS>0</XS>
+                                        <XO>0</XO>
+                                        <YS>0</YS>
+                                        <YO>0</YO>
+                                    </UDim2>
+                                    <UDim2 name="Size">
+                                        <XS>1</XS>
+                                        <XO>0</XO>
+                                        <YS>1</YS>
+                                        <YO>0</YO>
+                                    </UDim2>
+                                    <token name="TextXAlignment">2</token>
+                                    <float name="TextSize">32</float>
+                                </Properties>
+                            </Item>
+                        </Item>
+                        <Item class="TextButton" referent="RBXF9A0A9E394E448A28DD093E20EA8CE45">
+                            <Properties>
+                                <string name="Name">DeliverButton</string>
+                                <int name="BorderSizePixel">0</int>
+                                <Color3 name="BackgroundColor3">
+                                    <R>0.3411764705882353</R>
+                                    <G>0.5764705882352941</G>
+                                    <B>0.24313725490196078</B>
+                                </Color3>
+                                <string name="Text">Deliver</string>
+                                <Font name="FontFace">
+                                    <Family>
+                                        <url>rbxasset://fonts/families/FredokaOne.json</url>
+                                    </Family>
+                                    <Weight>400</Weight>
+                                    <Style>Normal</Style>
+                                </Font>
+                                <Color3 name="TextColor3">
+                                    <R>1</R>
+                                    <G>1</G>
+                                    <B>1</B>
+                                </Color3>
+                                <bool name="AutoButtonColor">true</bool>
+                                <float name="TextSize">26</float>
+                            </Properties>
+                            <Item class="UICorner" referent="RBX92CD29C4EC23484396AFEA7481A05AEE">
+                                <Properties>
+                                    <string name="Name">Corner</string>
+                                    <UDim name="CornerRadius">
+                                        <S>0</S>
+                                        <O>10</O>
+                                    </UDim>
+                                </Properties>
+                            </Item>
+                            <Item class="UIStroke" referent="RBXEA6D428DE72347888FF963C8A11BF7AC">
+                                <Properties>
+                                    <string name="Name">Outline</string>
+                                    <Color3 name="Color">
+                                        <R>0.6627450980392157</R>
+                                        <G>0.43529411764705883</G>
+                                        <B>0.19607843137254902</B>
+                                    </Color3>
+                                    <float name="Thickness">2</float>
+                                    <token name="ApplyStrokeMode">1</token>
+                                </Properties>
+                            </Item>
+                        </Item>
+                    </Item>
+                    <Item class="ScrollingFrame" referent="RBX303CDD5701B04E82A2D410E6C0FC433E">
+                        <Properties>
+                            <string name="Name">ItemList</string>
+                            <float name="BackgroundTransparency">1</float>
+                            <int name="BorderSizePixel">0</int>
+                            <bool name="Active">true</bool>
+                            <bool name="ClipsDescendants">true</bool>
+                            <token name="AutomaticCanvasSize">2</token>
+                            <token name="ScrollingDirection">2</token>
+                            <UDim2 name="CanvasSize">
+                                <XS>0</XS>
+                                <XO>0</XO>
+                                <YS>0</YS>
+                                <YO>0</YO>
+                            </UDim2>
+                            <int name="ScrollBarThickness">4</int>
+                            <Color3 name="ScrollBarImageColor3">
+                                <R>0.6627450980392157</R>
+                                <G>0.43529411764705883</G>
+                                <B>0.19607843137254902</B>
+                            </Color3>
+                            <token name="ElasticBehavior">0</token>
+                        </Properties>
+                        <Item class="UIGridLayout" referent="RBX53F34E4E08E148889B2ED4E260AD0407">
+                            <Properties>
+                                <string name="Name">Grid</string>
+                                <UDim2 name="CellPadding">
+                                    <XS>0</XS>
+                                    <XO>12</XO>
+                                    <YS>0</YS>
+                                    <YO>12</YO>
+                                </UDim2>
+                                <UDim2 name="CellSize">
+                                    <XS>0</XS>
+                                    <XO>160</XO>
+                                    <YS>0</YS>
+                                    <YO>220</YO>
+                                </UDim2>
+                                <token name="HorizontalAlignment">0</token>
+                                <token name="SortOrder">2</token>
+                                <int name="FillDirectionMaxCells">5</int>
+                            </Properties>
+                        </Item>
+                        <Item class="UIPadding" referent="RBX25DA8ED7D6444F5FBDF2BF3F1DB921E7">
+                            <Properties>
+                                <string name="Name">CardPadding</string>
+                                <UDim name="PaddingLeft">
+                                    <S>0</S>
+                                    <O>4</O>
+                                </UDim>
+                                <UDim name="PaddingRight">
+                                    <S>0</S>
+                                    <O>4</O>
+                                </UDim>
+                                <UDim name="PaddingTop">
+                                    <S>0</S>
+                                    <O>4</O>
+                                </UDim>
+                                <UDim name="PaddingBottom">
+                                    <S>0</S>
+                                    <O>4</O>
+                                </UDim>
+                            </Properties>
+                        </Item>
+                    </Item>
+                </Item>
+                <Item class="TextLabel" referent="RBXBEF4921E221E4564921AE582E1DDD846">
+                    <Properties>
+                        <string name="Name">StatusLabel</string>
+                        <int name="BorderSizePixel">0</int>
+                        <float name="BackgroundTransparency">1</float>
+                        <Color3 name="TextColor3">
+                            <R>0.34901960784313724</R>
+                            <G>0.21568627450980393</G>
+                            <B>0.10196078431372549</B>
+                        </Color3>
+                        <bool name="TextWrapped">true</bool>
+                        <token name="TextXAlignment">2</token>
+                        <token name="TextYAlignment">1</token>
+                        <string name="Text" />
+                        <Font name="FontFace">
+                            <Family>
+                                <url>rbxasset://fonts/families/FredokaOne.json</url>
+                            </Family>
+                            <Weight>400</Weight>
+                            <Style>Normal</Style>
+                        </Font>
+                        <float name="TextSize">20</float>
+                    </Properties>
+                </Item>
+                <Item class="UIScale" referent="RBX036F09219EB742F2B8221393ED72888E">
+                    <Properties>
+                        <string name="Name">OpenScale</string>
+                        <float name="Scale">1</float>
+                    </Properties>
+                </Item>
+            </Item>
+            <Item class="Frame" referent="RBX591AC8AF360940C6B08392451114546D">
+                <Properties>
+                    <string name="Name">Effects</string>
+                    <float name="BackgroundTransparency">1</float>
+                    <int name="BorderSizePixel">0</int>
+                    <UDim2 name="Size">
+                        <XS>1</XS>
+                        <XO>0</XO>
+                        <YS>1</YS>
+                        <YO>0</YO>
+                    </UDim2>
+                    <int name="ZIndex">50</int>
+                </Properties>
+            </Item>
+        </Item>
+        <Item class="Folder" referent="RBX7637E86E1C1E4CC48BD88E6E3853D910">
+            <Properties>
+                <string name="Name">Templates</string>
+            </Properties>
+            <Item class="Frame" referent="RBXD74DABFA43CE4D429A4DEC82F2324E01">
+                <Properties>
+                    <string name="Name">ItemCard</string>
+                    <int name="BorderSizePixel">0</int>
+                    <Color3 name="BackgroundColor3">
+                        <R>1.0</R>
+                        <G>0.9411764705882353</G>
+                        <B>0.792156862745098</B>
+                    </Color3>
+                    <bool name="Visible">false</bool>
+                    <UDim2 name="Size">
+                        <XS>0</XS>
+                        <XO>220</XO>
+                        <YS>0</YS>
+                        <YO>220</YO>
+                    </UDim2>
+                </Properties>
+                <Item class="UICorner" referent="RBXE26B7E60FEAC4E0AB859690382375F90">
+                    <Properties>
+                        <string name="Name">Corner</string>
+                        <UDim name="CornerRadius">
+                            <S>0</S>
+                            <O>14</O>
+                        </UDim>
+                    </Properties>
+                </Item>
+                <Item class="UIStroke" referent="RBX393353A453EA4BD4A44E49CEB08CCEF9">
+                    <Properties>
+                        <string name="Name">Outline</string>
+                        <Color3 name="Color">
+                            <R>0.6627450980392157</R>
+                            <G>0.43529411764705883</G>
+                            <B>0.19607843137254902</B>
+                        </Color3>
+                        <float name="Thickness">2</float>
+                        <token name="ApplyStrokeMode">1</token>
+                    </Properties>
+                </Item>
+                <Item class="ImageLabel" referent="RBX420D8AFCE3DA4E5AA5EF1C6EDE6818DA">
+                    <Properties>
+                        <string name="Name">ItemIcon</string>
+                        <int name="BorderSizePixel">0</int>
+                        <float name="BackgroundTransparency">1</float>
+                        <UDim2 name="Size">
+                            <XS>0</XS>
+                            <XO>158</XO>
+                            <YS>0</YS>
+                            <YO>158</YO>
+                        </UDim2>
+                        <Vector2 name="AnchorPoint">
+                            <X>0.5</X>
+                            <Y>0</Y>
+                        </Vector2>
+                        <token name="ScaleType">3</token>
+                    </Properties>
+                    <Item class="UIScale" referent="RBXC7AB8EE563E44FD7B34437761D17BA5F">
+                        <Properties>
+                            <string name="Name">PulseScale</string>
+                        </Properties>
+                    </Item>
+                </Item>
+                <Item class="TextLabel" referent="RBX0C27D4A56B7D4F61A8D2778814590049">
+                    <Properties>
+                        <string name="Name">ItemName</string>
+                        <int name="BorderSizePixel">0</int>
+                        <float name="BackgroundTransparency">1</float>
+                        <string name="Text">Carrot</string>
+                        <Color3 name="TextColor3">
+                            <R>0.34901960784313724</R>
+                            <G>0.21568627450980393</G>
+                            <B>0.10196078431372549</B>
+                        </Color3>
+                        <Font name="FontFace">
+                            <Family>
+                                <url>rbxasset://fonts/families/FredokaOne.json</url>
+                            </Family>
+                            <Weight>400</Weight>
+                            <Style>Normal</Style>
+                        </Font>
+                        <token name="TextXAlignment">2</token>
+                        <token name="TextYAlignment">1</token>
+                        <float name="TextSize">24</float>
+                        <bool name="TextWrapped">false</bool>
+                    </Properties>
+                </Item>
+                <Item class="TextLabel" referent="RBXABBF51183AB94B0CBF0C86BA8F38E0BA">
+                    <Properties>
+                        <string name="Name">CountLabel</string>
+                        <float name="BackgroundTransparency">1</float>
+                        <int name="BorderSizePixel">0</int>
+                        <string name="Text">0 / 20</string>
+                        <Font name="FontFace">
+                            <Family>
+                                <url>rbxasset://fonts/families/FredokaOne.json</url>
+                            </Family>
+                            <Weight>400</Weight>
+                            <Style>Normal</Style>
+                        </Font>
+                        <float name="TextSize">26</float>
+                        <Color3 name="TextColor3">
+                            <R>0.34901960784313724</R>
+                            <G>0.21568627450980393</G>
+                            <B>0.10196078431372549</B>
+                        </Color3>
+                        <token name="TextXAlignment">2</token>
+                    </Properties>
+                </Item>
+                <Item class="Frame" referent="RBX811CD0BC99DA40A1BAB5195895D1D433">
+                    <Properties>
+                        <string name="Name">ProgressBar</string>
+                        <int name="BorderSizePixel">0</int>
+                        <float name="BackgroundTransparency">0</float>
+                        <Color3 name="BackgroundColor3">
+                            <R>0.8313725490196079</R>
+                            <G>0.7098039215686275</G>
+                            <B>0.4980392156862745</B>
+                        </Color3>
+                    </Properties>
+                    <Item class="Frame" referent="RBX785B45A944814F6A8DE7F71486BC33D7">
+                        <Properties>
+                            <string name="Name">Fill</string>
+                            <int name="BorderSizePixel">0</int>
+                            <float name="BackgroundTransparency">0</float>
+                            <Color3 name="BackgroundColor3">
+                                <R>0.3411764705882353</R>
+                                <G>0.5764705882352941</G>
+                                <B>0.24313725490196078</B>
+                            </Color3>
+                            <UDim2 name="Size">
+                                <XS>0</XS>
+                                <XO>0</XO>
+                                <YS>1</YS>
+                                <YO>0</YO>
+                            </UDim2>
+                        </Properties>
+                        <Item class="UICorner" referent="RBXA4BD67B2DC464B0AAA2C5085FC149F6E">
+                            <Properties>
+                                <string name="Name">Corner</string>
+                                <UDim name="CornerRadius">
+                                    <S>0</S>
+                                    <O>3</O>
+                                </UDim>
+                            </Properties>
+                        </Item>
+                    </Item>
+                    <Item class="UICorner" referent="RBX421F24FBAECB48FFBA0AB6D5BA2E2DD9">
+                        <Properties>
+                            <string name="Name">Corner</string>
+                            <UDim name="CornerRadius">
+                                <S>0</S>
+                                <O>3</O>
+                            </UDim>
+                        </Properties>
+                    </Item>
+                </Item>
+            </Item>
+        </Item>
+    </Item>
+</roblox>

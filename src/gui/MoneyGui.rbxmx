@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+    <Item class="ScreenGui" referent="RBXD2E896D56AC242E3ADCAB77760048D76">
+        <Properties>
+            <string name="Name">MoneyGui</string>
+            <bool name="ResetOnSpawn">false</bool>
+            <bool name="IgnoreGuiInset">false</bool>
+            <int name="DisplayOrder">5</int>
+            <token name="ZIndexBehavior">1</token>
+        </Properties>
+        <Item class="Frame" referent="RBX098F91E13A7D49E3B79684F98DF94C6F">
+            <Properties>
+                <string name="Name">Root</string>
+                <float name="BackgroundTransparency">1</float>
+                <UDim2 name="Size">
+                    <XS>1</XS>
+                    <XO>0</XO>
+                    <YS>1</YS>
+                    <YO>0</YO>
+                </UDim2>
+            </Properties>
+            <Item class="Frame" referent="RBX4F11C5B8711147DD971DDCED44E3CA73">
+                <Properties>
+                    <string name="Name">Window</string>
+                    <UDim2 name="Size">
+                        <XS>0</XS>
+                        <XO>184</XO>
+                        <YS>0</YS>
+                        <YO>52</YO>
+                    </UDim2>
+                    <UDim2 name="Position">
+                        <XS>1</XS>
+                        <XO>-12</XO>
+                        <YS>0</YS>
+                        <YO>12</YO>
+                    </UDim2>
+                    <Vector2 name="AnchorPoint">
+                        <X>1</X>
+                        <Y>0</Y>
+                    </Vector2>
+                    <Color3 name="BackgroundColor3">
+                        <R>1</R>
+                        <G>0.8627450980392157</G>
+                        <B>0.5882352941176471</B>
+                    </Color3>
+                    <int name="BorderSizePixel">0</int>
+                </Properties>
+                <Item class="UICorner" referent="RBXD82DEC15B58A4C469277376CB48AA9A4">
+                    <Properties>
+                        <string name="Name">Corner</string>
+                        <UDim name="CornerRadius">
+                            <S>0</S>
+                            <O>12</O>
+                        </UDim>
+                    </Properties>
+                </Item>
+                <Item class="UIStroke" referent="RBX5EFF044D9EE945338F3CD11041FE908F">
+                    <Properties>
+                        <string name="Name">Outline</string>
+                        <Color3 name="Color">
+                            <R>0.6627450980392157</R>
+                            <G>0.43529411764705883</G>
+                            <B>0.19607843137254902</B>
+                        </Color3>
+                        <float name="Thickness">2</float>
+                        <token name="ApplyStrokeMode">1</token>
+                    </Properties>
+                </Item>
+                <Item class="ImageLabel" referent="RBX26F383C328424EF288D1DC1A8D9730CF">
+                    <Properties>
+                        <string name="Name">Icon</string>
+                        <float name="BackgroundTransparency">1</float>
+                        <UDim2 name="Position">
+                            <XS>0</XS>
+                            <XO>8</XO>
+                            <YS>0</YS>
+                            <YO>6</YO>
+                        </UDim2>
+                        <UDim2 name="Size">
+                            <XS>0</XS>
+                            <XO>40</XO>
+                            <YS>0</YS>
+                            <YO>40</YO>
+                        </UDim2>
+                        <token name="ScaleType">3</token>
+                        <Content name="Image">
+                            <url>rbxassetid://18560905584</url>
+                        </Content>
+                    </Properties>
+                </Item>
+                <Item class="TextLabel" referent="RBX3699DE1CE6394584843A74DAD819858F">
+                    <Properties>
+                        <string name="Name">AmountLabel</string>
+                        <float name="BackgroundTransparency">1</float>
+                        <UDim2 name="Position">
+                            <XS>0</XS>
+                            <XO>54</XO>
+                            <YS>0</YS>
+                            <YO>0</YO>
+                        </UDim2>
+                        <UDim2 name="Size">
+                            <XS>1</XS>
+                            <XO>-66</XO>
+                            <YS>1</YS>
+                            <YO>0</YO>
+                        </UDim2>
+                        <string name="Text">...</string>
+                        <bool name="TextScaled">true</bool>
+                        <bool name="TextWrapped">false</bool>
+                        <Font name="FontFace">
+                            <Family>
+                                <url>rbxasset://fonts/families/FredokaOne.json</url>
+                            </Family>
+                            <Weight>400</Weight>
+                            <Style>Normal</Style>
+                        </Font>
+                        <Color3 name="TextColor3">
+                            <R>0.34901960784313724</R>
+                            <G>0.21568627450980393</G>
+                            <B>0.10196078431372549</B>
+                        </Color3>
+                        <token name="TextXAlignment">1</token>
+                    </Properties>
+                    <Item class="UITextSizeConstraint" referent="RBXDFB4A23E7448469881505334C77C0613">
+                        <Properties>
+                            <string name="Name">TextSizeLimit</string>
+                            <int name="MinTextSize">14</int>
+                            <int name="MaxTextSize">24</int>
+                        </Properties>
+                    </Item>
+                </Item>
+            </Item>
+        </Item>
+        <Item class="LocalScript" referent="RBX75F41A422B5B4780922BED32FF3BA4CE">
+            <Properties>
+                <string name="Name">MoneyController</string>
+                <ProtectedString name="Source">local Players = game:GetService("Players")
+local TextService = game:GetService("TextService")
+
+local player = Players.LocalPlayer
+local gui = script.Parent
+local root = gui.Root
+local window = root.Window
+local amountLabel = window.AmountLabel
+local money = player:WaitForChild("PlayerData"):WaitForChild("MoneyCents")
+
+local function formatMoney(cents)
+    local dollars = string.format("%.0f", math.floor(cents / 100))
+    local grouped = dollars:reverse():gsub("(%d%d%d)", "%1,"):reverse():gsub("^,", "")
+    return "$" .. grouped .. string.format(".%02d", cents % 100)
+end
+
+local function refresh()
+    local size = root.AbsoluteSize
+    if size.X &lt; 1 then
+        return
+    end
+    local phone = size.X &lt; 600 or size.Y &lt; 500
+    local textSize = phone and 22 or 24
+    local height = phone and 46 or 52
+    local loaded = player:GetAttribute("DataLoaded") == true
+    local text = loaded and formatMoney(money.Value) or "..."
+    local textWidth = TextService:GetTextSize(text, textSize, Enum.Font.FredokaOne, Vector2.new(1000, height)).X
+    local width = math.clamp(math.ceil(textWidth) + 70, phone and 164 or 184, math.min(360, size.X - 24))
+    window.Size = UDim2.fromOffset(width, height)
+    window.Icon.Size = UDim2.fromOffset(height - 12, height - 12)
+    window.Icon.Position = UDim2.fromOffset(8, 6)
+    amountLabel.Position = UDim2.fromOffset(height + 2, 0)
+    amountLabel.Size = UDim2.new(1, -height - 14, 1, 0)
+    amountLabel.TextSizeLimit.MaxTextSize = textSize
+    amountLabel.Text = text
+end
+
+root:GetPropertyChangedSignal("AbsoluteSize"):Connect(refresh)
+money.Changed:Connect(refresh)
+player:GetAttributeChangedSignal("DataLoaded"):Connect(refresh)
+refresh()
+</ProtectedString>
+            </Properties>
+        </Item>
+    </Item>
+</roblox>
