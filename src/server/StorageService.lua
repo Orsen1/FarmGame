@@ -37,10 +37,10 @@ local function validRow(row)
     end
 
     if row.ItemName == "" then
-        return row.Amount == 0
+        return row.Amount == 0 and row.ObjectData == nil
     end
 
-    return ItemDefinitions[row.ItemName] ~= nil and row.Amount > 0
+    return ItemDefinitions[row.ItemName] ~= nil and row.Amount > 0 and InventoryService.IsValidObjectRow(row)
 end
 
 local function getInventory(object)
@@ -110,7 +110,8 @@ function StorageService.getData(object)
 
         local row = {
             ItemName = name.Value,
-            Amount = amount.Value
+            Amount = amount.Value,
+            ObjectData = slot:GetAttribute("ObjectData")
         }
 
         if not validRow(row) then
@@ -163,6 +164,7 @@ function StorageService.loadData(object, savedObject)
         local slot = folder:FindFirstChild("Slot" .. index)
         slot.ItemName.Value = row.ItemName
         slot.Amount.Value = row.Amount
+        slot:SetAttribute("ObjectData", row.ObjectData)
     end
 
     return true

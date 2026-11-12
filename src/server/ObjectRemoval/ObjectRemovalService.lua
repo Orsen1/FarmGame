@@ -66,6 +66,7 @@ function ObjectRemovalService.remove(player, object)
     end
 
     if AnimalConfig.Coops[itemName] then
+        if definition.InstanceItem then return false, "Finish this renovation before removing the coop." end
         local released, message = AnimalService.Release(player, object)
         if not released then return false, message end
     end

@@ -20,7 +20,7 @@ local function decorate(object, radius)
 end
 
 function AnimalShopPromptView.show(playerGui, prompt, inputType)
-    local gui = make("ScreenGui", playerGui, {Name = "AnimalShopPromptGui", ResetOnSpawn = false,
+    local gui = make("ScreenGui", playerGui, {Name = prompt.Name == "ActionPrompt" and "AnimalShopPromptGui" or prompt.Name .. "Gui", ResetOnSpawn = false,
         DisplayOrder = 10, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets})
     local group = make("CanvasGroup", gui, {Name = "Prompt", Size = UDim2.fromOffset(268, 76),
         AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = panelColor, BorderSizePixel = 0,
@@ -86,7 +86,10 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
             group.Visible = false
             return
         end
-        local point, visible = camera:WorldToScreenPoint(attachment.WorldPosition)
+        local coopPrompt = prompt.Name == "FeedPrompt" or prompt.Name == "EggPrompt"
+        local root = attachment.Parent
+        local common = coopPrompt and root:FindFirstChild("InteractionAttachment")
+        local point, visible = camera:WorldToScreenPoint(common and common.WorldPosition or attachment.WorldPosition)
         local bounds = gui.AbsoluteSize
         local factor = math.min(1, (bounds.X - 16) / 268)
         local bottom = UserInputService.TouchEnabled and 116 or 90
@@ -97,22 +100,33 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
         update()
         scale.Scale = factor
         local halfWidth, halfHeight = 134 * factor, 38 * factor
-        local minY, maxY = halfHeight + 8, bounds.Y - halfHeight - bottom
+        local offset = 0
+        local extraHeight = 0
+        if coopPrompt then
+            local other = root:FindFirstChild(prompt.Name == "FeedPrompt" and "EggAttachment" or "FeedAttachment")
+            local otherPrompt = other and other:FindFirstChildOfClass("ProximityPrompt")
+            if otherPrompt and otherPrompt.Enabled then
+                offset = (prompt.Name == "FeedPrompt" and -42 or 42) * factor
+                extraHeight = 42 * factor
+            end
+        end
+        local groupHalfHeight = halfHeight + extraHeight
+        local minY, maxY = groupHalfHeight + 8, bounds.Y - groupHalfHeight - bottom
         local x = math.clamp(point.X, halfWidth + 8, bounds.X - halfWidth - 8)
-        local y = math.clamp(point.Y - 20, minY, maxY)
+        local y = math.clamp(point.Y - 20, minY, math.max(minY, maxY))
         local shopButton = shop and shop:FindFirstChild("ShopButton")
         if shopButton and shopButton.Visible then
             local start = shopButton.AbsolutePosition - gui.AbsolutePosition
             local finish = start + shopButton.AbsoluteSize
             if x + halfWidth > start.X - 8 and x - halfWidth < finish.X + 8 and
-                y + halfHeight > start.Y - 8 and y - halfHeight < finish.Y + 8 then
-                local below = finish.Y + halfHeight + 12
-                local above = start.Y - halfHeight - 12
+                y + groupHalfHeight > start.Y - 8 and y - groupHalfHeight < finish.Y + 8 then
+                local below = finish.Y + groupHalfHeight + 12
+                local above = start.Y - groupHalfHeight - 12
                 if below <= maxY then y = below
                 elseif above >= minY then y = above end
             end
         end
-        group.Position = UDim2.fromOffset(x, y)
+        group.Position = UDim2.fromOffset(x, y + offset)
         group.Visible = true
     end
     position()

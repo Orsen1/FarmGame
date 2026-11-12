@@ -92,9 +92,11 @@ function PlotDataService.getData(player)
         end
 
         if AnimalConfig.Coops[itemName] then
-            local animals, reason = AnimalService.getData(object)
-            if not animals then return nil, reason end
-            savedObject.Animals = animals
+            local contents, reason = AnimalService.Snapshot(object)
+            if not contents then return nil, reason end
+            savedObject.Animals = contents.Animals
+            savedObject.AnimalFeedStock = contents.FeedStock
+            savedObject.OutputInventory = {[AnimalConfig.Coops[itemName].EggItem] = contents.Eggs}
         end
 
         table.insert(result, savedObject)
@@ -159,7 +161,7 @@ function PlotDataService.loadData(player, savedObjects)
             end
         end
 
-        if definition.Recipes then
+        if definition.Recipes or AnimalConfig.Coops[savedObject.ItemName] then
             local success, errorMessage = ProductionDataService.loadData(object, savedObject)
             if not success then
                 object:Destroy()
@@ -176,7 +178,7 @@ function PlotDataService.loadData(player, savedObjects)
         end
 
         if AnimalConfig.Coops[savedObject.ItemName] then
-            local success, reason = AnimalService.loadData(object, savedObject.Animals)
+            local success, reason = AnimalService.loadData(object, savedObject.Animals, savedObject.AnimalFeedStock)
             if not success then object:Destroy();return false, reason end
         end
 

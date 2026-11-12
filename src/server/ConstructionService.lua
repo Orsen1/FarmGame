@@ -5,6 +5,8 @@ local configs = ReplicatedStorage:WaitForChild("Configs")
 local ItemDefinitions = require(configs:WaitForChild("ItemDefinitions"))
 local ConstructionDefinitions = require(configs:WaitForChild("ConstructionDefinitions"))
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
+local AnimalService = require(ServerScriptService.AnimalService)
+local AnimalConfig = require(configs.AnimalConfig)
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 
 local ConstructionService = {}
@@ -170,6 +172,10 @@ function ConstructionService.Build(player, object)
     local nextObject
     if complete then
         nextObject = prepareNextObject(template, nextItemName, not final and nextStage or nil, player, object)
+        if AnimalConfig.Coops[itemName] then
+            local copied, message = AnimalService.Copy(object, nextObject)
+            if not copied then nextObject:Destroy();return false, message end
+        end
     end
 
     if next(payment) then

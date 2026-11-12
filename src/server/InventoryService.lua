@@ -1,6 +1,26 @@
+local ItemDefinitions = require(game:GetService("ReplicatedStorage").Configs.ItemDefinitions)
 local InventoryService = {}
 local SLOT_COUNT = 6
 local MAX_INTEGER = 9007199254740991
+
+function InventoryService.IsValidObjectRow(row)
+    if typeof(row) ~= "table" or typeof(row.ItemName) ~= "string" or typeof(row.Amount) ~= "number" then return false end
+    local definition = ItemDefinitions[row.ItemName]
+    if row.ObjectData ~= nil then
+        return definition ~= nil and definition.InstanceItem == true and row.Amount == 1 and
+            typeof(row.ObjectData) == "string" and #row.ObjectData > 0 and #row.ObjectData <= 32768
+    end
+    return not (definition and definition.InstanceItem and row.Amount > 0)
+end
+
+local function writeInventory(player, data)
+    for index, row in ipairs(data) do
+        local slot = player.Inventory["Slot" .. index]
+        slot.ItemName.Value = row.ItemName
+        slot.Amount.Value = row.Amount
+        slot:SetAttribute("ObjectData", row.ObjectData)
+    end
+end
 
 local function isValidAmount(amount)
     return typeof(amount) == "number" and amount >= 1 and amount % 1 == 0
@@ -68,6 +88,7 @@ local function planExchange(player, inputs, outputs)
 
         for _, slot in ipairs(data) do
             if slot.ItemName == itemName then
+                if slot.ObjectData then return nil, "UseSelectedBuilding" end
                 local taken = math.min(slot.Amount, remaining)
 
                 slot.Amount = slot.Amount - taken
@@ -92,6 +113,7 @@ local function planExchange(player, inputs, outputs)
         if not isValidItemName(itemName) or not isValidAmount(amount) then
             return nil, "InvalidItemOrAmount"
         end
+        if ItemDefinitions[itemName] and ItemDefinitions[itemName].InstanceItem then return nil, "MissingObjectData" end
 
         local target
         local empty
@@ -133,13 +155,7 @@ function InventoryService.ExchangeItems(player, inputs, outputs)
         return false, reason
     end
 
-    local inventory = player.Inventory
-
-    for slotNumber, savedSlot in ipairs(data) do
-        local slot = inventory:FindFirstChild("Slot" .. slotNumber)
-        slot.ItemName.Value = savedSlot.ItemName
-        slot.Amount.Value = savedSlot.Amount
-    end
+    writeInventory(player, data)
 
     return true
 end
@@ -162,6 +178,7 @@ function InventoryService.CanAddItem(player, itemName, amount)
     if not isValidItemName(itemName) or not isValidAmount(amount) then
         return false, "InvalidItemOrAmount"
     end
+    if ItemDefinitions[itemName] and ItemDefinitions[itemName].InstanceItem then return false, "MissingObjectData" end
 
     local inventory = player:FindFirstChild("Inventory")
     if not inventory then
@@ -227,8 +244,10 @@ function InventoryService.GetInventory(player)
 
         inventoryData[i] = {
             ItemName = nameValue.Value,
-            Amount = amountValue.Value
+            Amount = amountValue.Value,
+            ObjectData = slot:GetAttribute("ObjectData")
         }
+        if not InventoryService.IsValidObjectRow(inventoryData[i]) then return nil end
     end
 
     return inventoryData
@@ -266,7 +285,8 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
     end
 
     if fromName.Value ~= expectedFrom.ItemName or fromAmount.Value ~= expectedFrom.Amount or toName.Value ~=
-        expectedTo.ItemName or toAmount.Value ~= expectedTo.Amount then
+        expectedTo.ItemName or toAmount.Value ~= expectedTo.Amount or
+        from:GetAttribute("ObjectData") ~= expectedFrom.ObjectData or to:GetAttribute("ObjectData") ~= expectedTo.ObjectData then
         return false, "InventoryChanged"
     end
 
@@ -284,17 +304,21 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
 
     local aName, aAmount = fromName.Value, fromAmount.Value
     local bName, bAmount = toName.Value, toAmount.Value
+    local aData, bData = from:GetAttribute("ObjectData"), to:GetAttribute("ObjectData")
 
-    if aName == bName then
+    if aName == bName and not aData and not bData then
         aName, aAmount, bAmount = "", 0, bAmount + aAmount
     else
         aName, aAmount, bName, bAmount = bName, bAmount, aName, aAmount
+        aData, bData = bData, aData
     end
 
     fromName.Value = aName
     fromAmount.Value = aAmount
     toName.Value = bName
     toAmount.Value = bAmount
+    from:SetAttribute("ObjectData", aData)
+    to:SetAttribute("ObjectData", bData)
 
     return true
 end
@@ -304,6 +328,32 @@ function InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, exp
 
     return InventoryService.MoveBetweenSlots(inventory, SLOT_COUNT, inventory, SLOT_COUNT, fromIndex, toIndex,
         expectedFrom, expectedTo)
+end
+
+function InventoryService.ExchangeForObject(player, inputs, itemName, objectData)
+    local row = {ItemName = itemName, Amount = 1, ObjectData = objectData}
+    if not InventoryService.IsValidObjectRow(row) then return false, "Invalid object data." end
+    local data, reason = planExchange(player, inputs, {})
+    if not data then return false, reason end
+    for index, slot in ipairs(data) do
+        if slot.ItemName == "" then
+            data[index] = row
+            writeInventory(player, data)
+            return true
+        end
+    end
+    return false, "Free an inventory slot for the packed coop."
+end
+
+function InventoryService.RemoveObject(player, slotIndex, objectData)
+    local slot = player.Inventory:FindFirstChild("Slot" .. slotIndex)
+    if not slot or slot.Amount.Value ~= 1 or not objectData or slot:GetAttribute("ObjectData") ~= objectData then
+        return false
+    end
+    slot:SetAttribute("ObjectData", nil)
+    slot.ItemName.Value = ""
+    slot.Amount.Value = 0
+    return true
 end
 
 return InventoryService

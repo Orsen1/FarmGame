@@ -52,9 +52,14 @@ local function loadPlayerData(player)
         local savedSlot = data.Inventory[i]
 
         if savedSlot then
+            if not InventoryService.IsValidObjectRow(savedSlot) then
+                player:Kick("Failed to load a packed building. Please try again later.")
+                return
+            end
             local slot = player.Inventory["Slot" .. i]
             slot.ItemName.Value = savedSlot.ItemName
             slot.Amount.Value = savedSlot.Amount
+            slot:SetAttribute("ObjectData", savedSlot.ObjectData)
         end
     end
 

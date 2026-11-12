@@ -16,17 +16,12 @@ local inventory = player:WaitForChild("Inventory")
 local plots = workspace:WaitForChild("Plots")
 
 local boundPrompts = {}
-local activePrompt
-local promptView
+local promptViews = {}
 
 local function hidePrompt(prompt)
-    if prompt ~= activePrompt or not promptView then
-        return
-    end
-
-    local view = promptView
-    activePrompt = nil
-    promptView = nil
+    local view = promptViews[prompt]
+    if not view then return end
+    promptViews[prompt] = nil
     view.destroy()
 end
 
@@ -38,7 +33,8 @@ end
 
 local function isSupportedPrompt(object)
     return object:IsA("ProximityPrompt") and
-               (object.Name == "ActionPrompt" or object.Name == "CollectPrompt" or object.Name == "StoragePrompt")
+               (object.Name == "ActionPrompt" or object.Name == "CollectPrompt" or object.Name == "StoragePrompt" or
+                   object.Name == "FeedPrompt" or object.Name == "EggPrompt")
 end
 
 local function getSelectedItem()
@@ -70,6 +66,7 @@ end
 local function updatePrompt(prompt)
     local object = prompt:FindFirstAncestorOfClass("Model")
     if not object or player:GetAttribute("DataLoaded") ~= true or player:GetAttribute("StorageOpen") == true or
+        player:GetAttribute("FeederOpen") == true or
         object:GetAttribute("OwnerUserId") ~= player.UserId then
         prompt.Enabled = false
         hidePrompt(prompt)
@@ -86,6 +83,37 @@ local function updatePrompt(prompt)
     end
 
     prompt.ObjectText = definition.DisplayName or itemName
+
+    if prompt.Name == "FeedPrompt" or prompt.Name == "EggPrompt" then
+        local home = AnimalConfig.Coops[itemName]
+        if not home then prompt.Enabled = false;hidePrompt(prompt);return end
+        local selectedItemName = getSelectedItem()
+        local selected = ItemDefinitions[selectedItemName]
+        local caring = (not selected or selected.UpgradeFrom ~= itemName) and
+            (not definition.BuildsInto or selectedItemName == home.FeedItem or selectedItemName == home.EggItem)
+        local amount = getOutputAmount(object)
+        local hungry = (object:GetAttribute("HungryCount") or 0) > 0
+        local refilling = home.FeedCapacity > 0 and selectedItemName == home.FeedItem and
+            (object:GetAttribute("FeedStock") or 0) < home.FeedCapacity
+        prompt.Enabled = home ~= nil and selectedItemName ~= "Chicken" and selectedItemName ~= "Shovel" and
+            player:GetAttribute("ProductionMode") ~= true and caring and
+            (prompt.Name == "FeedPrompt" and (hungry or refilling) or
+                prompt.Name == "EggPrompt" and amount > 0)
+        if prompt.Name == "FeedPrompt" then
+            local wheat = 0
+            for _, slot in ipairs(inventory:GetChildren()) do
+                if slot.ItemName.Value == home.FeedItem then wheat += slot.Amount.Value end
+            end
+            prompt.ActionText = home.FeedCapacity > 0 and "Fill feeder" or "Feed 1 wheat"
+            prompt:SetAttribute("Context", string.format("Hungry: %d | Wheat: %d", object:GetAttribute("HungryCount") or 0, wheat))
+        else
+            prompt.ActionText = "Collect eggs"
+            prompt:SetAttribute("Context", string.format("Eggs ready: %d / %d", amount, home.EggCapacity))
+        end
+        if not prompt.Enabled then hidePrompt(prompt)
+        elseif promptViews[prompt] then promptViews[prompt].update() end
+        return
+    end
 
     if prompt.Name == "StoragePrompt" then
         local selectedItemName, selectedAmount = getSelectedItem()
@@ -114,6 +142,20 @@ local function updatePrompt(prompt)
     local selectedItemName, selectedAmount = getSelectedItem()
 
     local removing = selectedItemName == "Shovel" and selectedAmount > 0
+    local home = AnimalConfig.Coops[itemName]
+    local selectedDefinition = ItemDefinitions[selectedItemName]
+    local upgrading = selectedDefinition and selectedDefinition.UpgradeFrom == itemName and selectedAmount > 0
+    local adding = home and selectedItemName == home.ItemName and selectedAmount > 0
+    prompt:SetAttribute("CareAction", adding or upgrading or false)
+    if home and (adding or upgrading) and not removing then
+        if prompt.Style ~= Enum.ProximityPromptStyle.Custom then hidePrompt(prompt);prompt.Style = Enum.ProximityPromptStyle.Custom end
+        local count = object:GetAttribute("AnimalCount") or 0
+        prompt.ActionText = upgrading and "Pack for upgrade" or count < home.Capacity and "Add chicken" or "Coop full"
+        prompt:SetAttribute("Context", upgrading and "Coop I to II" or string.format("Chickens: %d / %d", count, home.Capacity))
+        prompt.Enabled = player:GetAttribute("ProductionMode") ~= true
+        if promptViews[prompt] then promptViews[prompt].update() end
+        return
+    end
     if definition.BuildsInto then
         local step = getConstructionStep(object, itemName)
         local custom = step ~= nil and step ~= false and not removing
@@ -125,10 +167,11 @@ local function updatePrompt(prompt)
         end
 
         prompt.ActionText = removing and "Remove" or "Add Materials"
-        prompt.Enabled = removing or (custom and player:GetAttribute("ProductionMode") ~= true)
-        if prompt == activePrompt and promptView then
+        local caring = home and (selectedItemName == home.FeedItem or selectedItemName == home.EggItem)
+        prompt.Enabled = removing or (custom and not caring and player:GetAttribute("ProductionMode") ~= true)
+        if promptViews[prompt] then
             if prompt.Enabled and custom then
-                promptView.update()
+                promptViews[prompt].update()
             else
                 hidePrompt(prompt)
             end
@@ -148,10 +191,10 @@ local function updatePrompt(prompt)
         local adding = home and selectedItemName == home.ItemName and selectedAmount > 0
         prompt.ActionText = removing and "Remove" or adding and
             (count < home.Capacity and "Add chicken" or "Coop full") or definition.ShopPromptText
-        prompt:SetAttribute("Context", home and string.format("Chickens: %d / %d", count, home.Capacity) or "Empty coop")
+        prompt:SetAttribute("Context", home and string.format("Chickens: %d / %d", count, home.Capacity) or prompt.ObjectText)
         prompt.Enabled = removing or ((adding or count == 0) and player:GetAttribute("ProductionMode") ~= true)
         if not prompt.Enabled then hidePrompt(prompt)
-        elseif prompt == activePrompt and promptView then promptView.update() end
+        elseif promptViews[prompt] then promptViews[prompt].update() end
         return
     end
 
@@ -205,7 +248,7 @@ local function bindPrompt(prompt)
 
     local outputInventory = object:FindFirstChild("OutputInventory")
 
-    if prompt.Name == "CollectPrompt" and outputInventory then
+    if prompt.Name == "CollectPrompt" or prompt.Name == "EggPrompt" then
         local function watchItem(item)
             if item:IsA("IntValue") then
                 table.insert(connections, item.Changed:Connect(refresh))
@@ -214,13 +257,17 @@ local function bindPrompt(prompt)
             refresh()
         end
 
-        for _, item in ipairs(outputInventory:GetChildren()) do
-            watchItem(item)
+        local watched = {}
+        local function watchOutput(folder)
+            if folder.Name ~= "OutputInventory" or watched[folder] then return end
+            watched[folder] = true
+            table.insert(connections, folder.ChildAdded:Connect(watchItem))
+            table.insert(connections, folder.ChildRemoved:Connect(refresh))
+            for _, item in ipairs(folder:GetChildren()) do watchItem(item) end
+            refresh()
         end
-
-        table.insert(connections, outputInventory.ChildAdded:Connect(watchItem))
-
-        table.insert(connections, outputInventory.ChildRemoved:Connect(refresh))
+        table.insert(connections, object.ChildAdded:Connect(watchOutput))
+        if outputInventory then watchOutput(outputInventory) end
     end
 
     table.insert(connections, prompt.Destroying:Connect(function()
@@ -236,7 +283,7 @@ local function bindPrompt(prompt)
 end
 
 ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
-    if not boundPrompts[prompt] or prompt.Name ~= "ActionPrompt" or
+    if not boundPrompts[prompt] or (prompt.Name ~= "ActionPrompt" and prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt") or
         prompt.Style ~= Enum.ProximityPromptStyle.Custom or not prompt.Enabled then
         return
     end
@@ -246,20 +293,22 @@ ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
     end
     local itemName = object:GetAttribute("ItemName") or object.Name
     local step = getConstructionStep(object, itemName)
+    if prompt.Name ~= "ActionPrompt" or prompt:GetAttribute("CareAction") then step = nil end
     local definition = ItemDefinitions[itemName]
-    if not step and not (definition and definition.ShopCategoryWhenEmpty) then return end
-    hidePrompt(activePrompt)
+    if not step and not (definition and (definition.ShopCategoryWhenEmpty or AnimalConfig.Coops[itemName])) then return end
+    hidePrompt(prompt)
     if step then
-        promptView = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)
+        promptViews[prompt] = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)
     else
-        promptView = AnimalShopPromptView.show(playerGui, prompt, inputType)
+        promptViews[prompt] = AnimalShopPromptView.show(playerGui, prompt, inputType)
     end
-    activePrompt = prompt
 end)
 ProximityPromptService.PromptHidden:Connect(hidePrompt)
-ReplicatedStorage.RemoteEvents.AnimalFeedback.OnClientEvent:Connect(function(object, success, message)
-    if activePrompt and activePrompt:FindFirstAncestorOfClass("Model") == object and promptView and promptView.message then
-        promptView.message(message, success)
+ReplicatedStorage.RemoteEvents.AnimalFeedback.OnClientEvent:Connect(function(object, success, message, promptName)
+    if message == "OpenFeeder" then return end
+    for prompt, view in pairs(promptViews) do
+        if prompt:FindFirstAncestorOfClass("Model") == object and view.message and
+            prompt.Name == (promptName or "ActionPrompt") then view.message(message, success) end
     end
 end)
 
@@ -267,6 +316,7 @@ player:GetAttributeChangedSignal("ProductionMode"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("SelectedSlot"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("DataLoaded"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("StorageOpen"):Connect(updateAllPrompts)
+player:GetAttributeChangedSignal("FeederOpen"):Connect(updateAllPrompts)
 
 for i = 1, 6 do
     local slot = inventory:WaitForChild("Slot" .. i)

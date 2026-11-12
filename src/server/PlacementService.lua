@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
+local CoopUpgradeService = require(ServerScriptService.CoopUpgradeService)
 local PlacementRules = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementRules"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
@@ -67,7 +68,15 @@ function PlacementService.placeItem(player, itemName, position, rotation)
 
     placedModel:PivotTo(pivot)
 
-    if not InventoryService.RemoveItem(player, itemName, 1) then
+    local removed
+    if definition.InstanceItem then
+        local prepared, encoded, index = CoopUpgradeService.Prepare(player, placedModel, itemName)
+        if not prepared then placedModel:Destroy();return false, encoded end
+        removed = InventoryService.RemoveObject(player, index, encoded)
+    else
+        removed = InventoryService.RemoveItem(player, itemName, 1)
+    end
+    if not removed then
         placedModel:Destroy()
         return false, "You do not have this item"
     end

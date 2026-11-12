@@ -8,6 +8,7 @@ local ProductionService = require(script.Parent:WaitForChild("ProductionService"
 local ConstructionService = require(script.Parent:WaitForChild("ConstructionService"))
 local AnimalService = require(script.Parent:WaitForChild("AnimalService"))
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
+local CoopUpgradeService = require(script.Parent.CoopUpgradeService)
 
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
@@ -28,7 +29,8 @@ end
 
 ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
 
-    if prompt.Name ~= "ActionPrompt" and prompt.Name ~= "CollectPrompt" then
+    if prompt.Name ~= "ActionPrompt" and prompt.Name ~= "CollectPrompt" and
+        prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt" then
         return
     end
 
@@ -68,6 +70,14 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
         return
     end
 
+    if AnimalConfig.Coops[itemName] and (prompt.Name == "FeedPrompt" or prompt.Name == "EggPrompt") then
+        local success, message
+        if prompt.Name == "FeedPrompt" then success, message = AnimalService.Feed(player, object)
+        else success, message = AnimalService.Collect(player, object) end
+        remotes.AnimalFeedback:FireClient(player, object, success, message, prompt.Name)
+        return
+    end
+
     if prompt.Name == "CollectPrompt" then
         if definition.Plantable == true then
             PlantService.Harvest(player, object)
@@ -87,6 +97,20 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local tool = character:FindFirstChild("EquippedItem")
 
     if selectedItemName == "Shovel" or (tool and tool:IsA("Tool") and tool:GetAttribute("ItemName") == "Shovel") then
+        return
+    end
+
+    local selectedDefinition = ItemDefinitions[selectedItemName]
+    if selectedDefinition and selectedDefinition.UpgradeFrom == itemName then
+        local success, message = CoopUpgradeService.Pack(player, object)
+        remotes.AnimalFeedback:FireClient(player, object, success, message, "ActionPrompt")
+        return
+    end
+
+    local home = AnimalConfig.Coops[itemName]
+    if home and selectedItemName == home.ItemName and selectedAmount > 0 then
+        local success, message = AnimalService.Add(player, object)
+        remotes.AnimalFeedback:FireClient(player, object, success, message, "ActionPrompt")
         return
     end
 

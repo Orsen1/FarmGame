@@ -106,6 +106,33 @@ local function updateSlot(slotData)
         limit.Parent = fallback
     end
     fallback.Visible = false
+    local badge = guiSlot:FindFirstChild("CoopContents")
+    if not badge then
+        badge = Instance.new("TextLabel")
+        badge.Name = "CoopContents"
+        badge.Position = UDim2.fromOffset(3, 3)
+        badge.Size = UDim2.new(1, -6, 0, 16)
+        badge.BackgroundColor3 = Color3.fromRGB(255, 226, 169)
+        badge.BackgroundTransparency = 0.1
+        badge.BorderSizePixel = 0
+        badge.Font = Enum.Font.FredokaOne
+        badge.TextSize = 10
+        badge.TextColor3 = Color3.fromRGB(89, 55, 26)
+        badge.ZIndex = itemIcon.ZIndex + 1
+        badge.Parent = guiSlot
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 5)
+        corner.Parent = badge
+    end
+    badge.Visible = false
+    local encoded = slotData:GetAttribute("ObjectData")
+    if encoded then
+        local ok, data = pcall(game:GetService("HttpService").JSONDecode, game:GetService("HttpService"), encoded)
+        if ok and data.Contents and data.Contents.Animals then
+            badge.Text = #data.Contents.Animals .. " birds"
+            badge.Visible = true
+        end
+    end
 
 	local itemName = slotData.ItemName.Value
 	local amount = slotData.Amount.Value
@@ -124,6 +151,7 @@ local function updateSlot(slotData)
 end
 
 local function bindSlot(slotData)
+    slotData:GetAttributeChangedSignal("ObjectData"):Connect(function() updateSlot(slotData) end)
 	slotData.ItemName.Changed:Connect(function()
 		updateSlot(slotData)
 	end)
@@ -144,7 +172,7 @@ local function isValidSlotNumber(slotNumber)
 end
 
 local function selectSlot(slotNumber, activatePlacement)
-	if dragging or player:GetAttribute("StorageOpen") == true then
+	if dragging or player:GetAttribute("StorageOpen") == true or player:GetAttribute("FeederOpen") == true then
         return
     end
 
@@ -272,7 +300,7 @@ local function readSlot(index, area)
     local name = slot and slot:FindFirstChild("ItemName")
     local amount = slot and slot:FindFirstChild("Amount")
     if name and amount then
-        return {ItemName = name.Value, Amount = amount.Value}
+        return {ItemName = name.Value, Amount = amount.Value, ObjectData = slot:GetAttribute("ObjectData")}
     end
 end
 

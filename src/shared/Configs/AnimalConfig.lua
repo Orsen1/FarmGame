@@ -1,4 +1,4 @@
-return {
+local Config = {
     UpdateInterval = 0.2,
     VisualDistance = 150,
     SeparationGap = 0.08,
@@ -9,6 +9,26 @@ return {
             SpawnAttempts = 40,
             AreaMin = Vector2.new(-4.5, 5.8),
             AreaMax = Vector2.new(4.5, 13),
+            DoorLaneWidth = 1.8,
+            DoorLaneLength = 2,
+            IndoorRadius = 0.65,
+            VisitChance = 0.28,
+            RestTime = Vector2.new(50, 70),
+            OutsideTime = Vector2.new(25, 45),
+            Entrance = {Vector3.new(0, 0, 6), Vector3.new(0, 0.04, 4.7),
+                Vector3.new(0, 1.28, 1.9), Vector3.new(0, 1.28, 1), Vector3.new(0, 1.28, -0.4)},
+            IndoorSpots = {Vector3.new(-1.9, 1.28, -2.2), Vector3.new(1.9, 1.28, -2.2),
+                Vector3.new(0, 1.28, -2.45), Vector3.new(-1.9, 1.28, 0.2), Vector3.new(1.9, 1.28, 0.2)},
+            FeedItem = "Wheat",
+            EatingTime = 1.5,
+            EggItem = "Egg",
+            EggCapacity = 5,
+            EggDuration = 300,
+            FedDuration = 180,
+            FeedCapacity = 0,
+            IndoorMin = Vector2.new(-2.7, -2.8),
+            IndoorMax = Vector2.new(2.7, 0.7),
+            IndoorWaypoints = {},
         }
     },
     Animals = {
@@ -27,3 +47,41 @@ return {
         }
     }
 }
+
+local upgraded = table.clone(Config.Coops.ChickenCoop)
+upgraded.Capacity = 10
+upgraded.EggCapacity = 10
+upgraded.FeedCapacity = 25
+upgraded.AreaMin = Vector2.new(-7.2, 8.7)
+upgraded.AreaMax = Vector2.new(7.2, 15.2)
+upgraded.DoorLaneWidth = 2.4
+upgraded.DoorLaneLength = 3.5
+upgraded.IndoorMin = Vector2.new(-4, -4.6)
+upgraded.IndoorMax = Vector2.new(4, 1)
+upgraded.IndoorWaypoints = {Vector3.new(0, 1.92, 0.5), Vector3.new(0, 1.92, -2.85),
+    Vector3.new(-3.8, 1.92, -2.85), Vector3.new(3.8, 1.92, -2.85)}
+upgraded.Entrance = {Vector3.new(0, 0, 8.7), Vector3.new(0, 0.06, 7.05),
+    Vector3.new(0, 1.92, 2.85), Vector3.new(0, 1.92, 1.5), Vector3.new(0, 1.92, 0.5)}
+upgraded.IndoorSpots = {}
+for _, z in ipairs({-4.3, -1.4}) do
+    for _, x in ipairs({-3.8, 3.8, -1.6, 1.6}) do table.insert(upgraded.IndoorSpots, Vector3.new(x, 1.92, z)) end
+end
+table.insert(upgraded.IndoorSpots, Vector3.new(-3.8, 1.92, 0.9))
+table.insert(upgraded.IndoorSpots, Vector3.new(3.8, 1.92, 0.9))
+Config.Coops.ChickenCoop2 = upgraded
+Config.Coops.ChickenCoop2Blueprint = Config.Coops.ChickenCoop
+
+for _, settings in ipairs({Config.Coops.ChickenCoop, upgraded}) do
+    settings.OutdoorWaypoints = {}
+    for _, x in ipairs({-1, -0.5, 0, 0.5, 1}) do
+        for _, z in ipairs({0, 0.5, 1}) do
+            table.insert(settings.OutdoorWaypoints, Vector3.new(settings.AreaMax.X * x, 0,
+                settings.AreaMin.Y + (settings.AreaMax.Y - settings.AreaMin.Y) * z))
+        end
+    end
+    table.insert(settings.OutdoorWaypoints, Vector3.new(0, 0, settings.AreaMin.Y - 1.2))
+end
+table.insert(upgraded.OutdoorWaypoints, Vector3.new(-3, 0, upgraded.AreaMin.Y - 1.2))
+table.insert(upgraded.OutdoorWaypoints, Vector3.new(3, 0, upgraded.AreaMin.Y - 1.2))
+
+return Config

@@ -10,6 +10,12 @@ for _, plot in ipairs(plots:GetChildren()) do
 end
 
 local elapsed = 0
+game.ReplicatedStorage.RemoteEvents.AnimalCommand.OnServerEvent:Connect(function(player, object, amount)
+    if typeof(object) ~= "Instance" or not object:IsA("Model") then return end
+    local success, message = AnimalService.DepositFeed(player, object, amount)
+    game.ReplicatedStorage.RemoteEvents.AnimalFeedback:FireClient(player, object, success, message, "FeedPrompt")
+end)
+
 RunService.Heartbeat:Connect(function(dt)
     elapsed += dt
     if elapsed >= Config.UpdateInterval then

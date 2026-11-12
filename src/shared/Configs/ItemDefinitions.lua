@@ -192,6 +192,24 @@ local ItemDefinitions = {
         Icon = "rbxassetid://119718856891391",
         ShopCategory = "Equipment"
     },
+    CowPenBlueprint = {
+        DisplayName = "Cow Pen",
+        Type = "Blueprint",
+        BuyPriceCents = 1000,
+        Icon = "",
+        Placeable = true,
+        BuildsInto = "CowPen",
+        ModelFolder = "CowPenStages",
+        ShopCategory = "Equipment"
+    },
+    CowPen = {
+        DisplayName = "Cow Pen",
+        Type = "Building",
+        Icon = "",
+        Placeable = true,
+        ShopCategoryWhenEmpty = "Animals",
+        ShopPromptText = "Buy cows"
+    },
     ChickenCoopBlueprint = {
         DisplayName = "Chicken Coop",
         Type = "Blueprint",
@@ -209,6 +227,39 @@ local ItemDefinitions = {
         Placeable = true,
         ShopCategoryWhenEmpty = "Animals",
         ShopPromptText = "Buy chickens"
+    },
+    ChickenCoopUpgrade = {
+        DisplayName = "Coop Upgrade I to II",
+        Type = "Upgrade",
+        BuyPriceCents = 2000,
+        Icon = "rbxassetid://75908875153706",
+        ShopCategory = "Upgrades",
+        UpgradeFrom = "ChickenCoop",
+        PacksInto = "ChickenCoop2Blueprint"
+    },
+    ChickenCoop2Blueprint = {
+        DisplayName = "Coop II Renovation",
+        Type = "Blueprint",
+        Icon = "rbxassetid://75908875153706",
+        Placeable = true,
+        InstanceItem = true,
+        BuildsInto = "ChickenCoop2",
+        ModelFolder = "ChickenCoop2Stages"
+    },
+    ChickenCoop2 = {
+        DisplayName = "Chicken Coop II",
+        Type = "Building",
+        Icon = "rbxassetid://75908875153706",
+        Placeable = true,
+        ShopCategoryWhenEmpty = "Animals",
+        ShopPromptText = "Buy chickens"
+    },
+    Egg = {
+        DisplayName = "Egg",
+        Type = "Product",
+        SellPriceCents = 20,
+        Icon = "rbxassetid://127828926565437",
+        ShowShopIcon = true
     },
     Chicken = {
         DisplayName = "Chicken",
