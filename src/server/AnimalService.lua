@@ -5,6 +5,7 @@ local Config = require(ReplicatedStorage.Configs.AnimalConfig)
 local Motion = require(ReplicatedStorage.Animals.AnimalMotion)
 local plots = workspace:WaitForChild("Plots")
 local homes = {}
+local obstacleCache
 local AnimalService = {}
 
 local function getConfig(object)
@@ -60,13 +61,16 @@ local function groundAt(home, point)
 end
 
 local function obstacles(home)
+    local objects = home.Object.Parent
+    if obstacleCache and obstacleCache[objects] then return obstacleCache[objects] end
     local result = {}
-    for _, object in ipairs(home.Object.Parent:GetChildren()) do
-        if object ~= home.Object and object:IsA("Model") then
+    for _, object in ipairs(objects:GetChildren()) do
+        if object:IsA("Model") then
             local frame, size = object:GetBoundingBox()
-            table.insert(result, {Frame = frame, Size = size})
+            table.insert(result, {Object = object, Frame = frame, Size = size})
         end
     end
+    if obstacleCache then obstacleCache[objects] = result end
     return result
 end
 
@@ -76,7 +80,7 @@ local function clearPoint(home, point, boxes)
     local world = home.Object:GetPivot():PointToWorldSpace(position)
     for _, box in ipairs(boxes) do
         local localPoint = box.Frame:PointToObjectSpace(world)
-        if math.abs(localPoint.X) < box.Size.X / 2 + home.Settings.Radius and
+        if box.Object ~= home.Object and math.abs(localPoint.X) < box.Size.X / 2 + home.Settings.Radius and
             math.abs(localPoint.Z) < box.Size.Z / 2 + home.Settings.Radius then return end
     end
     return position
@@ -396,13 +400,13 @@ local function nextActivity(home, record, now)
     end
 end
 
-local function newRecord(home, folder, now)
+local function newRecord(home, folder, now, point, duration)
     local record = {Folder = folder, From = Vector3.zero, To = Vector3.zero, StartedAt = now,
         Duration = 0, YawFrom = 0, YawTo = 0, Activity = "Waiting", Phase = home.Random:NextNumber(0, math.pi * 2),
         Care = {ItemName = home.Config.ItemName, WorkRemaining = folder:GetAttribute("WorkRemaining") or home.Config.EggDuration,
             FoodRemaining = folder:GetAttribute("FoodRemaining") or 0}}
-    local point = findPoint(home, record, nil, now)
-    setState(record, point and "Idle" or "Waiting", point or Vector3.zero, point or Vector3.zero, 2, 0, now)
+    point = point or findPoint(home, record, nil, now)
+    setState(record, point and "Idle" or "Waiting", point or Vector3.zero, point or Vector3.zero, duration or 2, 0, now)
     table.insert(home.Animals, record)
     table.insert(home.Production.Animals, record.Care)
     return record
@@ -437,6 +441,7 @@ function AnimalService.Bind(object)
 end
 
 function AnimalService.Step(now)
+    obstacleCache = {}
     for object, home in pairs(homes) do
         if not object:IsDescendantOf(plots) then
             home.Connection:Disconnect()
@@ -450,6 +455,7 @@ function AnimalService.Step(now)
             end
         end
     end
+    obstacleCache = nil
 end
 
 local function canUse(player, object, promptName)
@@ -488,12 +494,7 @@ function AnimalService.Add(player, object)
     local folder = Instance.new("Folder")
     folder.Name = "Animal" .. (#home.Animals + 1)
     folder:SetAttribute("ItemName", config.ItemName)
-    local record = {Folder = folder, From = point, To = point, StartedAt = now, Duration = 0,
-        YawFrom = 0, YawTo = 0, Activity = "Idle", Phase = home.Random:NextNumber(0, math.pi * 2),
-        Care = {ItemName = config.ItemName, WorkRemaining = config.EggDuration, FoodRemaining = 0}}
-    setState(record, "Idle", point, point, home.Random:NextNumber(home.Settings.IdleTime.X, home.Settings.IdleTime.Y), 0, now)
-    table.insert(home.Animals, record)
-    table.insert(home.Production.Animals, record.Care)
+    newRecord(home, folder, now, point, home.Random:NextNumber(home.Settings.IdleTime.X, home.Settings.IdleTime.Y))
     folder.Parent = animalFolder(object)
     object:SetAttribute("AnimalCount", #home.Animals)
     publishCare(home, now)

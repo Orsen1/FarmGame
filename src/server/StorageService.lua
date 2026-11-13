@@ -31,18 +31,6 @@ local function getCapacity(object)
     end
 end
 
-local function validRow(row)
-    if typeof(row) ~= "table" or typeof(row.ItemName) ~= "string" then
-        return false
-    end
-
-    if row.ItemName == "" then
-        return row.Amount == 0 and row.ObjectData == nil
-    end
-
-    return ItemDefinitions[row.ItemName] ~= nil and row.Amount > 0 and InventoryService.IsValidObjectRow(row)
-end
-
 local function getInventory(object)
     local count = getCapacity(object)
 
@@ -63,22 +51,7 @@ local function getInventory(object)
     folder = Instance.new("Folder")
     folder.Name = "StorageInventory"
 
-    for index = 1, count do
-        local slot = Instance.new("Folder")
-        slot.Name = "Slot" .. index
-
-        local itemName = Instance.new("StringValue")
-        itemName.Name = "ItemName"
-        itemName.Value = ""
-        itemName.Parent = slot
-
-        local amount = Instance.new("IntValue")
-        amount.Name = "Amount"
-        amount.Value = 0
-        amount.Parent = slot
-
-        slot.Parent = folder
-    end
+    InventoryService.CreateSlots(folder, count)
 
     folder.Parent = object
 
@@ -114,7 +87,7 @@ function StorageService.getData(object)
             ObjectData = slot:GetAttribute("ObjectData")
         }
 
-        if not validRow(row) then
+        if not InventoryService.IsValidObjectRow(row) then
             return nil, "Invalid stored item"
         end
 
@@ -142,7 +115,7 @@ function StorageService.loadData(object, savedObject)
     end
 
     for index, row in pairs(data) do
-        if not isInteger(index, 1, count) or not validRow(row) then
+        if not isInteger(index, 1, count) or not InventoryService.IsValidObjectRow(row) then
             return false, "Invalid saved storage slot"
         end
     end

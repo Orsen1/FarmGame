@@ -4,7 +4,6 @@ local ServerScriptService = game:GetService("ServerScriptService")
 
 local BuyService = require(ServerScriptService:WaitForChild("BuyService"))
 local buyEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("BuyItemEvent")
-local MAX_INTEGER = 9007199254740991
 local REQUEST_INTERVAL = 0.15
 local lastRequest = {}
 
@@ -35,11 +34,6 @@ buyEvent.OnServerEvent:Connect(function(player, itemName, amount, requestId)
         reply(false, "InvalidItem")
         return
     end
-    if typeof(amount) ~= "number" or amount < 1 or amount > MAX_INTEGER or amount % 1 ~= 0 then
-        reply(false, "InvalidAmount")
-        return
-    end
-
     local ok, success, reason = pcall(BuyService.BuyItem, player, itemName, amount)
     if not ok then
         warn("BuyService error for " .. player.Name .. ": " .. tostring(success))

@@ -16,13 +16,13 @@ container.Parent = workspace
 local function bindCoop(object)
     if not object:IsA("Model") or coops[object] or not Config.Coops[object:GetAttribute("ItemName") or object.Name] then return end
     local basket, feeder = object:FindFirstChild("EggBasket"), object:FindFirstChild("Feeder")
-    local output = object:FindFirstChild("OutputInventory")
-    local egg = output and output:FindFirstChild("Egg")
-    local slots = basket and basket:FindFirstChild("EggSlots")
     local settings = Config.Coops[object:GetAttribute("ItemName") or object.Name]
-    if not feeder or (settings.EggItem and (not egg or not slots)) then return end
+    local output = object:FindFirstChild("OutputInventory")
+    local egg = output and settings.EggItem and output:FindFirstChild(settings.EggItem)
+    local slots = basket and basket:FindFirstChild("EggSlots")
+    if not feeder or (settings.EggItem and not egg) then return end
     local function update()
-        for _, shell in ipairs(slots and slots:GetChildren() or {}) do
+        for _, shell in ipairs(egg and slots and slots:GetChildren() or {}) do
             if shell:IsA("BasePart") then
                 local index = tonumber(shell.Name:match("^Egg(%d+)$")) or math.huge
                 shell.Transparency = index <= egg.Value and 0 or 1
@@ -30,7 +30,6 @@ local function bindCoop(object)
         end
         for _, grain in ipairs(feeder:GetChildren()) do
             if grain.Name == "Wheat" or grain.Name:match("^Grain") then
-                local settings = Config.Coops[object:GetAttribute("ItemName") or object.Name]
                 local filled = settings.FeedCapacity > 0 and (object:GetAttribute("FeedStock") or 0) > 0 or
                     settings.FeedCapacity == 0 and (object:GetAttribute("HungryCount") or 0) < (object:GetAttribute("AnimalCount") or 0)
                 grain.Transparency = filled and 0 or 1
@@ -55,7 +54,7 @@ local function bindCoop(object)
             local image = Instance.new("ImageLabel")
             image.Size = UDim2.fromScale(1, 1)
             image.BackgroundTransparency = 1
-            image.Image = definitions.Wheat.Icon
+            image.Image = definitions[settings.FeedItem].Icon
             image.Rotation = (index - 3) * 12
             image.Parent = gui
             gui.Parent = object.PlacementRoot
@@ -103,7 +102,6 @@ local function makeTimer(model, quadruped)
     icon.AnchorPoint = Vector2.new(1, 0.5)
     icon.Position = UDim2.new(1, -5, 0.5, 0)
     icon.BackgroundTransparency = 1
-    icon.Image = definitions.Egg.Icon
     icon.Parent = panel
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 10)
@@ -131,7 +129,8 @@ local function bind(folder)
     local state = {Model = model, Coop = coop, Motion = Motion.read(folder), Body = body, Head = head,
         Quadruped = quadruped, Legs = {}, BodyOffset = root:ToObjectSpace(body:GetPivot()),
         HeadOffset = body:GetPivot():ToObjectSpace(head:GetPivot()),
-        Settings = Config.Animals[itemName], Sit = 0, Stride = 0}
+        Settings = Config.Animals[itemName], HomeSettings = Config.Coops[coop:GetAttribute("ItemName") or coop.Name],
+        Sit = 0, Stride = 0}
     local legNames = quadruped and {"FrontLeftLeg", "FrontRightLeg", "BackLeftLeg", "BackRightLeg"} or {"LeftLeg", "RightLeg"}
     for index, name in ipairs(legNames) do
         table.insert(state.Legs, {Model = model[name], Offset = root:ToObjectSpace(model[name]:GetPivot()),
@@ -200,14 +199,15 @@ RunService.RenderStepped:Connect(function(dt)
                 local fedUntil = folder:GetAttribute("FedUntil") or 0
                 local hungry = folder:GetAttribute("Hungry") == true or fedUntil <= now
                 local remaining = readyAt and readyAt - math.min(now, fedUntil) or folder:GetAttribute("WorkRemaining") or 0
-                if state.Quadruped then remaining = math.max(0, fedUntil - now) end
+                if not state.HomeSettings.EggItem then remaining = math.max(0, fedUntil - now) end
                 local seconds = math.max(0, math.ceil(remaining))
                 local text = string.format("%d:%02d", math.floor(seconds / 60), seconds % 60)
                 if not hungry and folder:GetAttribute("WaitingForSpace") then text = "Full" end
                 state.Timer.Enabled = true
                 state.TimerPanel.BackgroundColor3 = hungry and Color3.fromRGB(177, 65, 47) or Color3.fromRGB(255, 224, 160)
                 state.TimerText.TextColor3 = hungry and Color3.fromRGB(255, 242, 214) or Color3.fromRGB(89, 55, 26)
-                state.TimerIcon.Image = (hungry or state.Quadruped) and definitions.Wheat.Icon or definitions.Egg.Icon
+                local iconItem = not hungry and state.HomeSettings.EggItem or state.HomeSettings.FeedItem
+                state.TimerIcon.Image = definitions[iconItem].Icon
                 if state.TimerText.Text ~= text then state.TimerText.Text = text end
             end
         end

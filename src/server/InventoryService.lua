@@ -3,14 +3,24 @@ local InventoryService = {}
 local SLOT_COUNT = 6
 local MAX_INTEGER = 9007199254740991
 
+local function isValidAmount(amount)
+    return typeof(amount) == "number" and amount >= 1 and amount <= MAX_INTEGER and amount % 1 == 0
+end
+
+local function isValidItemName(itemName)
+    return typeof(itemName) == "string" and ItemDefinitions[itemName] ~= nil
+end
+
 function InventoryService.IsValidObjectRow(row)
     if typeof(row) ~= "table" or typeof(row.ItemName) ~= "string" or typeof(row.Amount) ~= "number" then return false end
+    if row.ItemName == "" then return row.Amount == 0 and row.ObjectData == nil end
     local definition = ItemDefinitions[row.ItemName]
+    if not definition or not isValidAmount(row.Amount) then return false end
     if row.ObjectData ~= nil then
-        return definition ~= nil and definition.InstanceItem == true and row.Amount == 1 and
+        return definition.InstanceItem == true and row.Amount == 1 and
             typeof(row.ObjectData) == "string" and #row.ObjectData > 0 and #row.ObjectData <= 32768
     end
-    return not (definition and definition.InstanceItem and row.Amount > 0)
+    return definition.InstanceItem ~= true
 end
 
 local function writeInventory(player, data)
@@ -20,14 +30,6 @@ local function writeInventory(player, data)
         slot.Amount.Value = row.Amount
         slot:SetAttribute("ObjectData", row.ObjectData)
     end
-end
-
-local function isValidAmount(amount)
-    return typeof(amount) == "number" and amount >= 1 and amount % 1 == 0
-end
-
-local function isValidItemName(itemName)
-    return typeof(itemName) == "string" and itemName ~= ""
 end
 
 local function createSlot(inventory, slotNumber)
@@ -46,29 +48,14 @@ local function createSlot(inventory, slotNumber)
     amount.Parent = slot
 end
 
-local function findTargetSlot(inventory, itemName)
-    local emptySlot = nil
-
-    for slotNumber = 1, SLOT_COUNT do
-        local slot = inventory:FindFirstChild("Slot" .. slotNumber)
-        local nameValue = slot and slot:FindFirstChild("ItemName")
-        local amountValue = slot and slot:FindFirstChild("Amount")
-
-        if nameValue and amountValue then
-            if nameValue.Value == itemName then
-                return slot
-            end
-
-            if nameValue.Value == "" and not emptySlot then
-                emptySlot = slot
-            end
-        end
+function InventoryService.CreateSlots(inventory, count)
+    for index = 1, count do
+        createSlot(inventory, index)
     end
-
-    return emptySlot
 end
 
 local function planExchange(player, inputs, outputs)
+    if player:GetAttribute("DataLoaded") ~= true then return nil, "InventoryNotReady" end
     if typeof(inputs) ~= "table" or typeof(outputs) ~= "table" then
         return nil, "InvalidRecipeItems"
     end
@@ -134,6 +121,7 @@ local function planExchange(player, inputs, outputs)
         if not target then
             return nil, "InventoryFull"
         end
+        if target.Amount > MAX_INTEGER - amount then return nil, "AmountTooLarge" end
 
         target.ItemName = itemName
         target.Amount = target.Amount + amount
@@ -169,45 +157,21 @@ function InventoryService.Initialize(player)
     inventory.Name = "Inventory"
     inventory.Parent = player
 
-    for slotNumber = 1, SLOT_COUNT do
-        createSlot(inventory, slotNumber)
-    end
+    InventoryService.CreateSlots(inventory, SLOT_COUNT)
 end
 
 function InventoryService.CanAddItem(player, itemName, amount)
     if not isValidItemName(itemName) or not isValidAmount(amount) then
         return false, "InvalidItemOrAmount"
     end
-    if ItemDefinitions[itemName] and ItemDefinitions[itemName].InstanceItem then return false, "MissingObjectData" end
-
-    local inventory = player:FindFirstChild("Inventory")
-    if not inventory then
-        return false, "InventoryNotReady"
-    end
-
-    local slot = findTargetSlot(inventory, itemName)
-    if not slot then
-        return false, "InventoryFull"
-    end
-
-    local currentAmount = slot.Amount.Value
-    if currentAmount < 0 or currentAmount % 1 ~= 0 then
-        return false, "AmountTooLarge"
-    end
-
-    return true
+    return InventoryService.CanExchangeItems(player, {}, {[itemName] = amount})
 end
 
 function InventoryService.AddItem(player, itemName, amount)
-    local canAdd, reason = InventoryService.CanAddItem(player, itemName, amount)
-    if not canAdd then
-        return false, reason
+    if not isValidItemName(itemName) or not isValidAmount(amount) then
+        return false, "InvalidItemOrAmount"
     end
-
-    local slot = findTargetSlot(player.Inventory, itemName)
-    slot.ItemName.Value = itemName
-    slot.Amount.Value = slot.Amount.Value + amount
-    return true
+    return InventoryService.ExchangeItems(player, {}, {[itemName] = amount})
 end
 
 function InventoryService.RemoveItem(player, itemName, amount)
@@ -294,7 +258,10 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
         return false, "SourceSlotEmpty"
     end
 
-    if (toName.Value == "" and toAmount.Value ~= 0) or (toName.Value ~= "" and not isValidAmount(toAmount.Value)) then
+    if not InventoryService.IsValidObjectRow({ItemName = fromName.Value, Amount = fromAmount.Value,
+        ObjectData = from:GetAttribute("ObjectData")}) or
+        not InventoryService.IsValidObjectRow({ItemName = toName.Value, Amount = toAmount.Value,
+            ObjectData = to:GetAttribute("ObjectData")}) then
         return false, "InvalidSlot"
     end
 
@@ -307,6 +274,7 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
     local aData, bData = from:GetAttribute("ObjectData"), to:GetAttribute("ObjectData")
 
     if aName == bName and not aData and not bData then
+        if bAmount > MAX_INTEGER - aAmount then return false, "AmountTooLarge" end
         aName, aAmount, bAmount = "", 0, bAmount + aAmount
     else
         aName, aAmount, bName, bAmount = bName, bAmount, aName, aAmount
