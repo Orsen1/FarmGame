@@ -50,6 +50,13 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
         TextXAlignment = Enum.TextXAlignment.Left})
     action.TextScaled = true
     make("UITextSizeConstraint", action, {MinTextSize = 12, MaxTextSize = 21})
+    if prompt:GetAttribute("Icon") then
+        context.Size = UDim2.fromOffset(140, 20)
+        action.Size = UDim2.fromOffset(140, 30)
+        make("ImageLabel", button, {Name = "ItemIcon", BackgroundTransparency = 1,
+            Image = prompt:GetAttribute("Icon"), Size = UDim2.fromOffset(48, 48),
+            Position = UDim2.fromOffset(208, 14)})
+    end
     local messageUntil = 0
     local function update()
         if os.clock() >= messageUntil then

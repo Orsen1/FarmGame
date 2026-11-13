@@ -4,6 +4,8 @@ local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 local Config = require(ReplicatedStorage.Configs.AnimalConfig)
 local Motion = require(ReplicatedStorage.Animals.AnimalMotion)
+local MilkingVisual = require(ReplicatedStorage.Animals.MilkingVisual)
+local player = game:GetService("Players").LocalPlayer
 local templates = ReplicatedStorage:WaitForChild("AnimalModels")
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local plots = workspace:WaitForChild("Plots")
@@ -142,6 +144,31 @@ local function bind(folder)
     end
     state.Connection = folder:GetAttributeChangedSignal("Revision"):Connect(function() state.Motion = Motion.read(folder) end)
     state.Timer, state.TimerText, state.TimerIcon, state.TimerPanel = makeTimer(model, quadruped)
+    if state.HomeSettings.Milking then
+        local attachment = Instance.new("Attachment")
+        attachment.Name = "MilkingAttachment"
+        attachment.Position = Vector3.new(0, 4.5, 0)
+        attachment.Parent = model.PrimaryPart
+        local prompt = Instance.new("ProximityPrompt")
+        prompt.Name = "MilkPrompt"
+        prompt.Style = Enum.ProximityPromptStyle.Custom
+        prompt.ActionText = "Milk cow"
+        prompt.ObjectText = "Cow"
+        prompt.KeyboardKeyCode = Enum.KeyCode.E
+        prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
+        prompt.HoldDuration = 0
+        prompt.RequiresLineOfSight = false
+        prompt.MaxActivationDistance = state.HomeSettings.Milking.MaxDistance
+        prompt:SetAttribute("Context", "Milk is ready")
+        prompt:SetAttribute("Icon", definitions[state.HomeSettings.Milking.OutputItem].Icon)
+        local reference = Instance.new("ObjectValue")
+        reference.Name = "Animal"
+        reference.Value = folder
+        reference.Parent = prompt
+        prompt.Enabled = false
+        prompt.Parent = attachment
+        state.MilkPrompt = prompt
+    end
     visuals[folder] = state
     model.Parent = container
 end
@@ -163,11 +190,27 @@ RunService.RenderStepped:Connect(function(dt)
     local now = workspace:GetServerTimeNow()
     for folder, state in pairs(visuals) do
         if not folder:IsDescendantOf(plots) or not state.Coop.Parent then
+            if state.Milking then state.Milking:Destroy() end
             state.Connection:Disconnect();state.Model:Destroy();visuals[folder] = nil
         else
+            local milker = folder:GetAttribute("MilkerUserId")
             local motion = state.Motion
             local position = state.Coop:GetPivot():PointToWorldSpace(Motion.position(motion, now))
             local visible = motion.Activity ~= "Waiting" and (position - camera.CFrame.Position).Magnitude <= Config.VisualDistance
+            if state.Milking and (not visible or state.Milking.UserId ~= milker) then
+                state.Milking:Destroy();state.Milking = nil
+            end
+            if visible and milker and not state.Milking then state.Milking = MilkingVisual.new(folder, state.HomeSettings.Milking) end
+            if state.Milking then state.Milking:Update() end
+            if state.MilkPrompt then
+                local inventory = player:FindFirstChild("Inventory")
+                local slot = inventory and inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
+                state.MilkPrompt.Enabled = visible and folder:GetAttribute("MilkReady") == true and not milker and
+                    state.Coop:GetAttribute("OwnerUserId") == player.UserId and player:GetAttribute("DataLoaded") == true and
+                    player:GetAttribute("ProductionMode") ~= true and player:GetAttribute("StorageOpen") ~= true and
+                    player:GetAttribute("FeederOpen") ~= true and slot ~= nil and slot.Amount.Value > 0 and
+                    slot.ItemName.Value == state.HomeSettings.Milking.BucketItem
+            end
             if not visible then
                 state.Model.Parent = nil
             else
@@ -199,14 +242,18 @@ RunService.RenderStepped:Connect(function(dt)
                 local fedUntil = folder:GetAttribute("FedUntil") or 0
                 local hungry = folder:GetAttribute("Hungry") == true or fedUntil <= now
                 local remaining = readyAt and readyAt - math.min(now, fedUntil) or folder:GetAttribute("WorkRemaining") or 0
-                if not state.HomeSettings.EggItem then remaining = math.max(0, fedUntil - now) end
+                if not state.HomeSettings.EggItem and not state.HomeSettings.Milking then remaining = math.max(0, fedUntil - now) end
                 local seconds = math.max(0, math.ceil(remaining))
                 local text = string.format("%d:%02d", math.floor(seconds / 60), seconds % 60)
+                local milkReady = folder:GetAttribute("MilkReady") == true
+                if milkReady then text = "Ready" end
                 if not hungry and folder:GetAttribute("WaitingForSpace") then text = "Full" end
-                state.Timer.Enabled = true
+                state.Timer.Enabled = not milker and player:GetAttribute("Milking") ~= true
+                if milkReady then hungry = false end
                 state.TimerPanel.BackgroundColor3 = hungry and Color3.fromRGB(177, 65, 47) or Color3.fromRGB(255, 224, 160)
                 state.TimerText.TextColor3 = hungry and Color3.fromRGB(255, 242, 214) or Color3.fromRGB(89, 55, 26)
-                local iconItem = not hungry and state.HomeSettings.EggItem or state.HomeSettings.FeedItem
+                local product = state.HomeSettings.Milking and state.HomeSettings.Milking.OutputItem or state.HomeSettings.EggItem
+                local iconItem = not hungry and product or state.HomeSettings.FeedItem
                 state.TimerIcon.Image = definitions[iconItem].Icon
                 if state.TimerText.Text ~= text then state.TimerText.Text = text end
             end

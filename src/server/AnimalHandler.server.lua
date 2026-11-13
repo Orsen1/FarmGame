@@ -10,6 +10,15 @@ for _, plot in ipairs(plots:GetChildren()) do
 end
 
 local elapsed = 0
+local milkEvent = game.ReplicatedStorage.RemoteEvents:WaitForChild("MilkingEvent")
+milkEvent.OnServerEvent:Connect(function(player, action, animal)
+    if action == "Cancel" then
+        AnimalService.CancelMilking(player)
+    elseif action == "Start" then
+        local success, message = AnimalService.StartMilking(player, animal)
+        if not success then milkEvent:FireClient(player, "Rejected", message) end
+    end
+end)
 game.ReplicatedStorage.RemoteEvents.AnimalCommand.OnServerEvent:Connect(function(player, object, amount)
     if typeof(object) ~= "Instance" or not object:IsA("Model") then return end
     local success, message = AnimalService.DepositFeed(player, object, amount)

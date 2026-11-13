@@ -90,7 +90,8 @@ local function updatePrompt(prompt)
         local selectedItemName = getSelectedItem()
         local selected = ItemDefinitions[selectedItemName]
         local caring = (not selected or selected.UpgradeFrom ~= itemName) and
-            (not definition.BuildsInto or selectedItemName == home.FeedItem or selectedItemName == home.EggItem)
+            (not definition.BuildsInto or selectedItemName == home.FeedItem or selectedItemName == home.EggItem) and
+            not (home.Milking and selectedItemName == home.Milking.BucketItem)
         local amount = getOutputAmount(object)
         local hungry = (object:GetAttribute("HungryCount") or 0) > 0
         local refilling = home.FeedCapacity > 0 and selectedItemName == home.FeedItem and

@@ -109,6 +109,21 @@ cows.EggItem = nil
 cows.EggCapacity = 0
 cows.EggDuration = 0
 cows.EatingTime = 3
+cows.Milking = {
+    ProductionDuration = 300,
+    Duration = 4,
+    AnimationId = "rbxassetid://137284698258607",
+    BucketItem = "Bucket",
+    OutputItem = "MilkBucket",
+    MaxDistance = 10,
+    WorkOffset = Vector3.new(2.7, 0, 0.9),
+    BucketOffset = Vector3.new(1.6, 0.05, -0.65),
+    BucketScale = 0.7,
+    HandOffset = Vector3.new(0, 1.1, 0.92),
+    CameraOffset = Vector3.new(6, 9, -2),
+    CameraTarget = Vector3.new(1, 1.4, -0.4),
+    FieldOfView = 50,
+}
 Config.Coops.CowPen = cows
 
 for _, settings in ipairs({Config.Coops.ChickenCoop, upgraded, cows}) do

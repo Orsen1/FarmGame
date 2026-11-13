@@ -7,6 +7,9 @@ local plots = workspace:WaitForChild("Plots")
 local homes = {}
 local obstacleCache
 local AnimalService = {}
+local milking = {}
+local milkEvent = ReplicatedStorage.RemoteEvents:WaitForChild("MilkingEvent")
+local Players = game:GetService("Players")
 
 local function getConfig(object)
     return Config.Coops[object:GetAttribute("ItemName") or object.Name]
@@ -198,18 +201,20 @@ end
 
 local function publishCare(home, now)
     local hungry, working = 0, 0
-    local producing = home.Config.EggItem ~= nil
-    local full = producing and home.Production.Eggs >= home.Config.EggCapacity
+    local producing = home.Config.EggItem ~= nil or home.Config.Milking ~= nil
+    local full = home.Config.EggItem ~= nil and home.Production.Eggs >= home.Config.EggCapacity
     for _, record in ipairs(home.Animals) do
         local state = record.Care
         local fed = state.FoodRemaining > 0
         if not fed then hungry += 1 end
-        if producing and fed and not full then working += 1 end
+        local ready = state.MilkReady == true
+        if producing and fed and not full and not ready then working += 1 end
         record.Folder:SetAttribute("Hungry", not fed)
         record.Folder:SetAttribute("WaitingForSpace", full)
-        record.Folder:SetAttribute("EggDuration", home.Config.EggDuration)
-        if not fed or full then record.Folder:SetAttribute("WorkRemaining", state.WorkRemaining) end
-        setTime(record.Folder, "EggReadyAt", producing and fed and not full and now + state.WorkRemaining or nil)
+        record.Folder:SetAttribute("EggDuration", AnimalCare.workDuration(home.Config))
+        record.Folder:SetAttribute("MilkReady", ready)
+        if not fed or full or ready then record.Folder:SetAttribute("WorkRemaining", state.WorkRemaining) end
+        setTime(record.Folder, "EggReadyAt", producing and fed and not full and not ready and now + state.WorkRemaining or nil)
         setTime(record.Folder, "FedUntil", fed and now + state.FoodRemaining or nil)
     end
     local egg = eggValue(home.Object)
@@ -403,8 +408,9 @@ end
 local function newRecord(home, folder, now, point, duration)
     local record = {Folder = folder, From = Vector3.zero, To = Vector3.zero, StartedAt = now,
         Duration = 0, YawFrom = 0, YawTo = 0, Activity = "Waiting", Phase = home.Random:NextNumber(0, math.pi * 2),
-        Care = {ItemName = home.Config.ItemName, WorkRemaining = folder:GetAttribute("WorkRemaining") or home.Config.EggDuration,
+        Care = {ItemName = home.Config.ItemName, WorkRemaining = folder:GetAttribute("WorkRemaining") or AnimalCare.workDuration(home.Config),
             FoodRemaining = folder:GetAttribute("FoodRemaining") or 0}}
+    if home.Config.Milking then record.Care.MilkReady = folder:GetAttribute("MilkReady") == true end
     point = point or findPoint(home, record, nil, now)
     setState(record, point and "Idle" or "Waiting", point or Vector3.zero, point or Vector3.zero, duration or 2, 0, now)
     table.insert(home.Animals, record)
@@ -441,6 +447,7 @@ function AnimalService.Bind(object)
 end
 
 function AnimalService.Step(now)
+    AnimalService.StepMilking(now)
     obstacleCache = {}
     for object, home in pairs(homes) do
         if not object:IsDescendantOf(plots) then
@@ -449,7 +456,7 @@ function AnimalService.Step(now)
         else
             refreshCare(home, now)
             for _, record in ipairs(home.Animals) do
-                if now >= record.StartedAt + record.Duration then
+                if not record.Milker and now >= record.StartedAt + record.Duration then
                     nextActivity(home, record, now)
                 end
             end
@@ -474,6 +481,169 @@ local function canUse(player, object, promptName)
     end
     return true
 end
+
+local function selectedBucket(player, itemName)
+    local inventory = player:FindFirstChild("Inventory")
+    local slot = inventory and inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
+    return slot and slot.ItemName.Value == itemName and slot.Amount.Value > 0
+end
+
+local function milkAccess(player, home, record)
+    local object = home.Object
+    local plot = plots:FindFirstChild(player:GetAttribute("PlotName") or "")
+    local character = player.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    local root = character and character:FindFirstChild("HumanoidRootPart")
+    if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true or not plot or
+        object.Parent ~= plot:FindFirstChild("PlacedObjects") or object:GetAttribute("OwnerUserId") ~= player.UserId or
+        plot:GetAttribute("OwnerUserId") ~= player.UserId or not record.Folder:IsDescendantOf(object) then
+        return false, "This is not your cow."
+    end
+    local position = object:GetPivot():PointToWorldSpace(Motion.position(record, workspace:GetServerTimeNow()))
+    if not root or not humanoid or humanoid.Health <= 0 or
+        (root.Position - position).Magnitude > home.Config.Milking.MaxDistance then
+        return false, "Move closer to the cow."
+    end
+    if not selectedBucket(player, home.Config.Milking.BucketItem) then return false, "Select an empty bucket." end
+    return true
+end
+
+function AnimalService.CancelMilking(player, message)
+    local session = milking[player]
+    if not session then return end
+    milking[player] = nil
+    for _, connection in ipairs(session.Connections) do connection:Disconnect() end
+    local record = session.Record
+    record.Milker = nil
+    if record.Folder.Parent then
+        record.Folder:SetAttribute("MilkerUserId", nil)
+        record.Folder:SetAttribute("MilkingStartedAt", nil)
+        record.Folder:SetAttribute("MilkingDuration", nil)
+        record.StartedAt = workspace:GetServerTimeNow()
+        record.Duration = 1
+    end
+    if session.Track then session.Track:Stop(0.2);session.Track:Destroy() end
+    local humanoid = session.Humanoid
+    if humanoid.Parent then
+        for name, value in pairs(session.Movement) do humanoid[name] = value end
+    end
+    if session.Root.Parent then session.Root.Anchored = session.WasAnchored end
+    player:SetAttribute("Milking", nil)
+    player:SetAttribute("ProductionMode", nil)
+    if player.Parent == Players then milkEvent:FireClient(player, "Finished", message or "Milking cancelled.") end
+end
+
+local function workFrame(home, record, now, humanoid, root)
+    local frame = home.Object:GetPivot() * CFrame.new(Motion.position(record, now)) * CFrame.Angles(0, Motion.yaw(record, now), 0)
+    local offset = home.Config.Milking.WorkOffset
+    local height = humanoid.HipHeight + root.Size.Y / 2
+    if humanoid.RigType == Enum.HumanoidRigType.R6 then height += 2 end
+    local overlap = OverlapParams.new()
+    overlap.FilterType = Enum.RaycastFilterType.Exclude
+    overlap.FilterDescendantsInstances = {root.Parent}
+    for _, side in ipairs({1, -1}) do
+        local point = frame:PointToWorldSpace(Vector3.new(offset.X * side, 0, offset.Z))
+        local center = point + Vector3.new(0, 2, 0)
+        local clear = true
+        for _, part in ipairs(workspace:GetPartBoundsInBox(CFrame.new(center), Vector3.new(1.6, 3, 1.6), overlap)) do
+            if part.CanCollide then clear = false;break end
+        end
+        if clear then
+            local position = point + Vector3.new(0, height, 0)
+            local target = frame:PointToWorldSpace(home.Config.Milking.HandOffset)
+            return CFrame.lookAt(position, Vector3.new(target.X, position.Y, target.Z)), frame, side
+        end
+    end
+end
+
+function AnimalService.StartMilking(player, folder)
+    if milking[player] or player:GetAttribute("ProductionMode") == true or player:GetAttribute("StorageOpen") == true or
+        player:GetAttribute("FeederOpen") == true then return false, "Finish your current action first." end
+    if typeof(folder) ~= "Instance" or not folder:IsA("Folder") or not folder.Parent or folder.Parent.Name ~= "Animals" then
+        return false, "Unknown cow."
+    end
+    local home = homes[folder.Parent.Parent]
+    if not home or not home.Config.Milking then return false, "This animal cannot be milked." end
+    local record
+    for _, animal in ipairs(home.Animals) do if animal.Folder == folder then record = animal;break end end
+    if not record then return false, "Unknown cow." end
+    local allowed, reason = milkAccess(player, home, record)
+    if not allowed then return false, reason end
+    local now = workspace:GetServerTimeNow()
+    refreshCare(home, now)
+    if not record.Care.MilkReady then return false, "Milk is not ready yet." end
+    if record.Milker then return false, "This cow is being milked." end
+    if record.Route or record.Activity == "Waiting" then return false, "Let the cow finish moving through the gate." end
+    local settings = home.Config.Milking
+    if not InventoryService.CanExchangeItems(player, {[settings.BucketItem] = 1}, {[settings.OutputItem] = 1}) then
+        return false, "Make room for a milk bucket."
+    end
+    local character = player.Character
+    local humanoid, root = character:FindFirstChildOfClass("Humanoid"), character.HumanoidRootPart
+    if humanoid.Sit then return false, "Stand up first." end
+    local work, cow, side = workFrame(home, record, now, humanoid, root)
+    if not work then return false, "Wait until there is room beside the cow." end
+    local session = {Home = home, Record = record, Character = character, Humanoid = humanoid, Root = root,
+        StartedAt = now, Duration = settings.Duration, WasAnchored = root.Anchored, Connections = {},
+        Movement = {WalkSpeed = humanoid.WalkSpeed, JumpPower = humanoid.JumpPower,
+            JumpHeight = humanoid.JumpHeight, AutoRotate = humanoid.AutoRotate}}
+    milking[player], record.Milker = session, player
+    local position = Motion.position(record, now)
+    setState(record, "Idle", position, position, settings.Duration + 1, Motion.yaw(record, now), now)
+    root.CFrame = work
+    root.Anchored = true
+    root.AssemblyLinearVelocity = Vector3.zero
+    root.AssemblyAngularVelocity = Vector3.zero
+    humanoid.WalkSpeed, humanoid.JumpPower, humanoid.JumpHeight, humanoid.AutoRotate = 0, 0, 0, false
+    player:SetAttribute("Milking", true)
+    player:SetAttribute("ProductionMode", true)
+    folder:SetAttribute("MilkingFrame", cow)
+    folder:SetAttribute("MilkingSide", side)
+    folder:SetAttribute("MilkingDuration", settings.Duration)
+    folder:SetAttribute("MilkingStartedAt", now)
+    folder:SetAttribute("MilkerUserId", player.UserId)
+    if humanoid.RigType == Enum.HumanoidRigType.R15 then
+        local animation = Instance.new("Animation")
+        animation.AnimationId = settings.AnimationId
+        local animator = humanoid:FindFirstChildOfClass("Animator")
+        local ok, track = pcall(function() return animator:LoadAnimation(animation) end)
+        animation:Destroy()
+        if ok then
+            session.Track = track
+            track.Priority = Enum.AnimationPriority.Action4
+            track.Looped = false
+            track:Play(0.2)
+            if track.Length > 0 then track:AdjustSpeed(track.Length / settings.Duration) end
+        end
+    end
+    table.insert(session.Connections, humanoid.Died:Connect(function() AnimalService.CancelMilking(player) end))
+    table.insert(session.Connections, home.Object.Destroying:Connect(function() AnimalService.CancelMilking(player) end))
+    table.insert(session.Connections, player:GetAttributeChangedSignal("DataLoaded"):Connect(function()
+        if player:GetAttribute("DataLoaded") ~= true then AnimalService.CancelMilking(player) end
+    end))
+    milkEvent:FireClient(player, "Started", folder, now, settings.Duration, cow)
+    return true
+end
+
+function AnimalService.StepMilking(now)
+    for player, session in pairs(milking) do
+        local allowed, reason = milkAccess(player, session.Home, session.Record)
+        if not allowed or player.Character ~= session.Character then
+            AnimalService.CancelMilking(player, reason)
+        elseif now >= session.StartedAt + session.Duration then
+            local settings = session.Home.Config.Milking
+            local success = InventoryService.ExchangeItems(player, {[settings.BucketItem] = 1}, {[settings.OutputItem] = 1})
+            if success then
+                session.Record.Care.MilkReady = false
+                session.Record.Care.WorkRemaining = settings.ProductionDuration
+                publishCare(session.Home, now)
+            end
+            AnimalService.CancelMilking(player, success and "Milk collected!" or "Inventory changed. Milk is still ready.")
+        end
+    end
+end
+
+Players.PlayerRemoving:Connect(function(player) AnimalService.CancelMilking(player) end)
 
 function AnimalService.Add(player, object)
     local allowed, reason = canUse(player, object, "ActionPrompt")
@@ -584,7 +754,8 @@ function AnimalService.getData(object)
     local folder = object:FindFirstChild("Animals")
     for _, entry in ipairs(folder and folder:GetChildren() or {}) do
         table.insert(animals, {ItemName = entry:GetAttribute("ItemName"),
-            WorkRemaining = entry:GetAttribute("WorkRemaining"), FoodRemaining = entry:GetAttribute("FoodRemaining")})
+            WorkRemaining = entry:GetAttribute("WorkRemaining"), FoodRemaining = entry:GetAttribute("FoodRemaining"),
+            MilkReady = entry:GetAttribute("MilkReady")})
     end
     local egg = eggValue(object)
     local data, reason = AnimalCare.load(animals, egg and egg.Value or 0, object:GetAttribute("FeedStock") or 0, config)

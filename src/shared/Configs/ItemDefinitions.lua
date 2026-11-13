@@ -192,6 +192,21 @@ local ItemDefinitions = {
         Icon = "rbxassetid://119718856891391",
         ShopCategory = "Equipment"
     },
+    Bucket = {
+        DisplayName = "Bucket",
+        Type = "Tool",
+        BuyPriceCents = 100,
+        Icon = "rbxassetid://131759785828858",
+        ShopCategory = "Equipment",
+        ShowShopIcon = true
+    },
+    MilkBucket = {
+        DisplayName = "Milk Bucket",
+        Type = "Tool",
+        SellPriceCents = 50,
+        Icon = "rbxassetid://100619771486489",
+        ShowShopIcon = true
+    },
     CowPenBlueprint = {
         DisplayName = "Cow Pen",
         Type = "Blueprint",

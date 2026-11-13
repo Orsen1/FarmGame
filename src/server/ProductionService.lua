@@ -138,6 +138,7 @@ function ProductionService.Close(player, reason)
 end
 
 function ProductionService.Open(player, station)
+    if player:GetAttribute("Milking") == true then return false, "Finish milking first" end
     local allowed, reason = canUse(player, station)
     if not allowed then return false, reason end
     if sessions[player] then return false, "AlreadyOpen" end
