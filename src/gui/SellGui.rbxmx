@@ -124,6 +124,7 @@ end)
 		<Item class="LocalScript" referent="RBX800349FD342945EAABFEBC2D05EF361B">
 			<Properties>
 				<ProtectedString name="Source"><![CDATA[local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 local ShopQuantityControls = require(game:GetService("ReplicatedStorage"):WaitForChild("ShopQuantityControls"))
 
 local gui = script.Parent
@@ -140,16 +141,17 @@ local function resize()
 
     local narrow = screen.X < 600
     local short = screen.Y < 500
-    local desktop = not narrow and not short
+    local desktop = not narrow and (not short or not UserInputService.TouchEnabled)
     local desktopScale = math.clamp(math.min(screen.X / 1366, screen.Y / 768), 1, 1.35)
     local width = math.min(screen.X * (narrow and 0.9 or 0.86), 800 * desktopScale)
-    local height = math.min(screen.Y * (narrow and 0.84 or short and 0.8 or 0.82), narrow and 720 or 560 * desktopScale)
-    local compact = short and width >= 500
+    local height = desktop and short and screen.Y - 24 or
+        math.min(screen.Y * (narrow and 0.84 or short and 0.8 or 0.82), narrow and 720 or 560 * desktopScale)
+    local compact = short and not desktop and width >= 500
 
     main.ResponsiveMaxSize.MaxSize = Vector2.new(800 * desktopScale, narrow and 720 or 560 * desktopScale)
     main.ResponsiveAspect.AspectRatio = width / height
     main.Size = UDim2.fromOffset(width, height)
-    main.Position = UDim2.fromScale(0.5, short and not narrow and 0.41 or 0.48)
+    main.Position = UDim2.fromScale(0.5, desktop and short and 0.5 or short and not narrow and 0.41 or 0.48)
 
     local headerWidth = math.min(width * 0.5, 320)
     header.Size = UDim2.fromOffset(headerWidth, compact and 36 or 56)
@@ -187,7 +189,8 @@ local function resize()
         end
     end
 
-    local scale = compact and 1 or math.clamp((bodyHeight - 12) / 384, 0.75, desktopScale)
+    local scale = desktop and math.min(desktopScale, (bodyHeight - 12) / 384) or
+        compact and 1 or math.clamp((bodyHeight - 12) / 384, 0.75, desktopScale)
     local centre = compact and bodyWidth * 0.25 or bodyWidth * 0.5
     local quantityCentre = compact and bodyWidth * 0.75 or centre
     local columnWidth = compact and bodyWidth / 2 or bodyWidth

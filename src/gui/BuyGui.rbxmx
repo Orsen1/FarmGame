@@ -7354,6 +7354,7 @@
 		<Item class="LocalScript" referent="RBX25E2343A242B4AFEAEA6CB6EFF57A26E">
 			<Properties>
 				<ProtectedString name="Source"><![CDATA[
+local UserInputService = game:GetService("UserInputService")
 local ShopQuantityControls = require(game:GetService("ReplicatedStorage"):WaitForChild("ShopQuantityControls"))
 
 local gui = script.Parent
@@ -7369,13 +7370,14 @@ local function resize()
     if size.X <= 0 or size.Y <= 0 then return end
     local narrow = size.X < 600
     local short = size.Y < 500
-    local desktop = not narrow and not short
+    local desktop = not narrow and (not short or not UserInputService.TouchEnabled)
     local desktopScale = math.clamp(math.min(size.X / 1366, size.Y / 768), 1, 1.35)
     main.UISizeConstraint.MaxSize = Vector2.new(800 * desktopScale, narrow and 720 or 560 * desktopScale)
-    main.Size = UDim2.new(narrow and 0.9 or short and 0.86 or 0.86, 0, narrow and 0.84 or short and 0.8 or 0.82, 0)
-    main.Position = UDim2.fromScale(0.5, short and not narrow and 0.41 or 0.48)
-    local compact = short and main.AbsoluteSize.X >= 500
-    main:SetAttribute("LayoutProfile", narrow and "PhonePortrait" or short and "ShortLandscape" or "Desktop")
+    main.Size = UDim2.new(narrow and 0.9 or 0.86, 0,
+        desktop and short and 1 or narrow and 0.84 or short and 0.8 or 0.82, desktop and short and -24 or 0)
+    main.Position = UDim2.fromScale(0.5, desktop and short and 0.5 or short and not narrow and 0.41 or 0.48)
+    local compact = short and not desktop and main.AbsoluteSize.X >= 500
+    main:SetAttribute("LayoutProfile", narrow and "PhonePortrait" or not desktop and short and "ShortLandscape" or "Desktop")
     main.HeaderFrame.Size = UDim2.new(0.5, 0, 0, compact and 36 or 56)
     main.HeaderFrame.Position = UDim2.new(0.5, 0, 0, compact and 8 or 12)
     main.CloseButton.Size = UDim2.fromOffset(compact and 44 or 48, compact and 44 or 48)
@@ -7389,7 +7391,7 @@ local function resize()
     for _, frame in ipairs(grids) do
         local isCategory = frame.Name == "CategoriesFrame"
         local columnWidth = narrow and 130 or 170
-        local columns = math.clamp(math.floor((frame.AbsoluteSize.X - 8) / columnWidth), 1, isCategory and (narrow and 2 or 3) or 3)
+        local columns = math.clamp(math.floor((frame.AbsoluteSize.X - 8) / columnWidth), 1, isCategory and 2 or 3)
         local height = isCategory and (compact and 111 or 132) or (compact and 140 or 172)
         frame.UIGridLayout.FillDirectionMaxCells = columns
         frame.UIGridLayout.CellSize = UDim2.new(1 / columns, -16, 0, height)

@@ -152,6 +152,12 @@ end
 local function findPoint(home, record, from, now)
     local boxes = obstacles(home)
     local area = home.Config
+    if not from and area.SpawnPoints then
+        for _, spawn in ipairs(area.SpawnPoints) do
+            local point = clearPoint(home, spawn, boxes)
+            if point and separated(home, record, point, point, now) then return point end
+        end
+    end
     for _ = 1, from and home.Settings.TargetAttempts or home.Config.SpawnAttempts do
         local point
         if from then
@@ -178,7 +184,7 @@ end
 local function eggValue(object)
     local output = object:FindFirstChild("OutputInventory")
     local config = getConfig(object)
-    return output and config and output:FindFirstChild(config.EggItem)
+    return output and config and config.EggItem and output:FindFirstChild(config.EggItem)
 end
 
 local function setTime(folder, name, value)
@@ -188,27 +194,30 @@ end
 
 local function publishCare(home, now)
     local hungry, working = 0, 0
-    local full = home.Production.Eggs >= home.Config.EggCapacity
+    local producing = home.Config.EggItem ~= nil
+    local full = producing and home.Production.Eggs >= home.Config.EggCapacity
     for _, record in ipairs(home.Animals) do
         local state = record.Care
         local fed = state.FoodRemaining > 0
         if not fed then hungry += 1 end
-        if fed and not full then working += 1 end
+        if producing and fed and not full then working += 1 end
         record.Folder:SetAttribute("Hungry", not fed)
         record.Folder:SetAttribute("WaitingForSpace", full)
         record.Folder:SetAttribute("EggDuration", home.Config.EggDuration)
         if not fed or full then record.Folder:SetAttribute("WorkRemaining", state.WorkRemaining) end
-        setTime(record.Folder, "EggReadyAt", fed and not full and now + state.WorkRemaining or nil)
+        setTime(record.Folder, "EggReadyAt", producing and fed and not full and now + state.WorkRemaining or nil)
         setTime(record.Folder, "FedUntil", fed and now + state.FoodRemaining or nil)
     end
-    eggValue(home.Object).Value = home.Production.Eggs
+    local egg = eggValue(home.Object)
+    if egg then egg.Value = home.Production.Eggs end
     home.Object:SetAttribute("FeedStock", home.Production.FeedStock)
     home.Object:SetAttribute("HungryCount", hungry)
     home.Object:SetAttribute("PendingEggs", working)
 end
 
 local function refreshCare(home, now)
-    home.Production.Eggs = eggValue(home.Object).Value
+    local egg = eggValue(home.Object)
+    home.Production.Eggs = egg and egg.Value or 0
     AnimalCare.advance(home.Production, home.Config, now - home.CareUpdatedAt)
     home.CareUpdatedAt = now
     publishCare(home, now)
@@ -313,11 +322,16 @@ local function advanceRoute(home, record, position, now)
         record.IndoorSlot = nil
         record.NextVisitAt = now + home.Random:NextNumber(home.Config.OutsideTime.X, home.Config.OutsideTime.Y)
     end
-    setState(record, record.Inside and "Sit" or "Look", position, position, 2, record.YawTo, now)
+    local yaw = record.Inside and home.Config.RestYaw or record.YawTo
+    setState(record, record.Inside and "Sit" or "Look", position, position, 2, yaw, now)
 end
 
-local function enterHome(home, record)
+local function enterHome(home, record, now)
     if home.Gate then return false end
+    local position = Motion.position(record, now)
+    local target = home.Config.Entrance[1]
+    if not separated(home, record, position, target, now) and
+        not routeDetour(home, record, position, target, now, home.Config.OutdoorWaypoints) then return false end
     local used = {}
     for _, other in ipairs(home.Animals) do if other.IndoorSlot then used[other.IndoorSlot] = true end end
     for index, point in ipairs(home.Config.IndoorSpots) do
@@ -333,8 +347,12 @@ local function enterHome(home, record)
     return false
 end
 
-local function leaveHome(home, record)
+local function leaveHome(home, record, now)
     if home.Gate then return false end
+    local position = Motion.position(record, now)
+    local target = home.Config.Entrance[#home.Config.Entrance]
+    if not separated(home, record, position, target, now) and
+        not routeDetour(home, record, position, target, now, home.Config.IndoorWaypoints) then return false end
     home.Gate = record
     local points = {}
     for index = #home.Config.Entrance, 1, -1 do table.insert(points, home.Config.Entrance[index]) end
@@ -347,7 +365,7 @@ local function nextActivity(home, record, now)
     local yaw = Motion.yaw(record, now)
     if record.Route then advanceRoute(home, record, position, now);return end
     if record.Inside then
-        if now >= record.RestUntil and leaveHome(home, record) then
+        if now >= record.RestUntil and leaveHome(home, record, now) then
             advanceRoute(home, record, position, now)
             return
         end
@@ -355,7 +373,7 @@ local function nextActivity(home, record, now)
         setState(record, activity, position, position, home.Random:NextNumber(2, 4), yaw, now)
         return
     elseif record.Activity ~= "Waiting" and now >= (record.NextVisitAt or 0) and
-        home.Random:NextNumber() < home.Config.VisitChance and enterHome(home, record) then
+        home.Random:NextNumber() < home.Config.VisitChance and enterHome(home, record, now) then
         advanceRoute(home, record, position, now)
         return
     end
@@ -402,11 +420,12 @@ function AnimalService.Bind(object)
     local folder = animalFolder(object)
     local output = object:FindFirstChild("OutputInventory")
     if not output then output = Instance.new("Folder");output.Name = "OutputInventory";output.Parent = object end
-    if not eggValue(object) then
+    if config.EggItem and not eggValue(object) then
         local egg = Instance.new("IntValue");egg.Name = config.EggItem;egg.Parent = output
     end
     local now = workspace:GetServerTimeNow()
-    home.Production = {Animals = {}, Eggs = eggValue(object).Value, FeedStock = object:GetAttribute("FeedStock") or 0}
+    local egg = eggValue(object)
+    home.Production = {Animals = {}, Eggs = egg and egg.Value or 0, FeedStock = object:GetAttribute("FeedStock") or 0}
     home.CareUpdatedAt = now
     for _, animal in ipairs(folder:GetChildren()) do newRecord(home, animal, now) end
     refreshCare(home, now)
@@ -438,14 +457,14 @@ local function canUse(player, object, promptName)
     local plot = plots:FindFirstChild(player:GetAttribute("PlotName") or "")
     if not config or player:GetAttribute("DataLoaded") ~= true or not plot or
         object.Parent ~= plot:FindFirstChild("PlacedObjects") or plot:GetAttribute("OwnerUserId") ~= player.UserId or
-        object:GetAttribute("OwnerUserId") ~= player.UserId then return false, "This is not your coop." end
+        object:GetAttribute("OwnerUserId") ~= player.UserId then return false, "This is not your animal home." end
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
     local prompt = object:FindFirstChild(promptName, true)
     if not root or not humanoid or humanoid.Health <= 0 or player:GetAttribute("ProductionMode") == true or
         not prompt or not prompt.Parent:IsA("Attachment") or
         not ((root.Position - prompt.Parent.WorldPosition).Magnitude <= prompt.MaxActivationDistance) then
-        return false, "Move closer to the coop."
+        return false, "Move closer to the animal home."
     end
     return true
 end
@@ -456,14 +475,14 @@ function AnimalService.Add(player, object)
     local config = getConfig(object)
     local slot = player.Inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
     if not slot or slot.ItemName.Value ~= config.ItemName or slot.Amount.Value < 1 then
-        return false, "Select a chicken in your inventory."
+        return false, "Select " .. config.ItemName .. " in your inventory."
     end
     AnimalService.Bind(object)
     local home = homes[object]
-    if #home.Animals >= config.Capacity then return false, string.format("Coop full: %d / %d chickens.", config.Capacity, config.Capacity) end
+    if #home.Animals >= config.Capacity then return false, string.format("Home full: %d / %d.", config.Capacity, config.Capacity) end
     local now = workspace:GetServerTimeNow()
     local point = findPoint(home, nil, nil, now)
-    if not point then return false, "Clear some space in front of the coop." end
+    if not point then return false, "Clear some space in the animal home." end
     local removed, reason = InventoryService.ExchangeItems(player, {[config.ItemName] = 1}, {})
     if not removed then return false, reason end
     local folder = Instance.new("Folder")
@@ -478,7 +497,7 @@ function AnimalService.Add(player, object)
     folder.Parent = animalFolder(object)
     object:SetAttribute("AnimalCount", #home.Animals)
     publishCare(home, now)
-    return true, "Chicken added."
+    return true, config.ItemName .. " added."
 end
 
 function AnimalService.Feed(player, object)
@@ -496,7 +515,7 @@ function AnimalService.Feed(player, object)
             if not record.Inside and not record.Route then break end
         end
     end
-    if not chosen then return false, #home.Animals == 0 and "Add a chicken first." or "All chickens are fed." end
+    if not chosen then return false, #home.Animals == 0 and "Add an animal first." or "All animals are fed." end
     local removed = InventoryService.ExchangeItems(player, {[home.Config.FeedItem] = 1}, {})
     if not removed then return false, "You need 1 wheat." end
     chosen.Care.FoodRemaining = home.Config.FedDuration
@@ -505,6 +524,7 @@ function AnimalService.Feed(player, object)
         setState(chosen, "Eat", position, position, home.Config.EatingTime, chosen.YawTo, now)
     end
     publishCare(home, now)
+    object:SetAttribute("FeedEffectAt", now)
     return true, "1 wheat added."
 end
 
@@ -576,14 +596,14 @@ function AnimalService.loadData(object, animals, feedStock)
     local output = object:FindFirstChild("OutputInventory")
     if not output or not output:IsA("Folder") then return false, "Missing saved coop output." end
     local egg = eggValue(object)
-    if not egg and #output:GetChildren() == 0 then
+    if config.EggItem and not egg and #output:GetChildren() == 0 then
         egg = Instance.new("IntValue");egg.Name = config.EggItem;egg.Parent = output
     end
-    if not egg or not egg:IsA("IntValue") then return false, "Invalid saved eggs." end
+    if config.EggItem and (not egg or not egg:IsA("IntValue")) then return false, "Invalid saved eggs." end
     for _, item in ipairs(output:GetChildren()) do if item ~= egg then return false, "Unknown saved coop output." end end
     if animals == nil then animals = {} end
     if feedStock == nil then feedStock = 0 end
-    local data, reason = AnimalCare.load(animals, egg.Value, feedStock, config)
+    local data, reason = AnimalCare.load(animals, egg and egg.Value or 0, feedStock, config)
     if not data then return false, reason end
     local folder = animalFolder(object)
     if #folder:GetChildren() > 0 then return false, "Animals are already loaded." end
@@ -605,7 +625,8 @@ end
 function AnimalService.Snapshot(object)
     local animals, reason = AnimalService.getData(object)
     if not animals then return nil, reason end
-    return {Animals = animals, Eggs = eggValue(object).Value, FeedStock = object:GetAttribute("FeedStock") or 0,
+    local egg = eggValue(object)
+    return {Animals = animals, Eggs = egg and egg.Value or 0, FeedStock = object:GetAttribute("FeedStock") or 0,
         CapturedAt = workspace:GetServerTimeNow()}
 end
 
@@ -615,7 +636,8 @@ function AnimalService.Restore(object, snapshot, elapsed)
     local data, reason = AnimalCare.load(snapshot.Animals, snapshot.Eggs, snapshot.FeedStock, config)
     if not data then return false, reason end
     AnimalCare.advance(data, config, elapsed or 0)
-    eggValue(object).Value = data.Eggs
+    local egg = eggValue(object)
+    if egg then egg.Value = data.Eggs end
     return AnimalService.loadData(object, data.Animals, data.FeedStock)
 end
 
@@ -641,7 +663,7 @@ function AnimalService.Release(player, object)
     local egg = eggValue(object)
     if egg and egg.Value > 0 then outputs[config.EggItem] = egg.Value end
     local added = InventoryService.ExchangeItems(player, {}, outputs)
-    if not added then return false, "Free an inventory slot for the chickens first." end
+    if not added then return false, "Free an inventory slot for the animals first." end
     local home = homes[object]
     if home then home.Animals = {};home.Production.Animals = {};home.Gate = nil end
     local folder = object:FindFirstChild("Animals")

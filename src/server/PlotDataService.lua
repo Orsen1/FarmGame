@@ -96,7 +96,8 @@ function PlotDataService.getData(player)
             if not contents then return nil, reason end
             savedObject.Animals = contents.Animals
             savedObject.AnimalFeedStock = contents.FeedStock
-            savedObject.OutputInventory = {[AnimalConfig.Coops[itemName].EggItem] = contents.Eggs}
+            local outputItem = AnimalConfig.Coops[itemName].EggItem
+            savedObject.OutputInventory = outputItem and {[outputItem] = contents.Eggs} or {}
         end
 
         table.insert(result, savedObject)

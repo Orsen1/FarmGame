@@ -5,6 +5,7 @@ local Config = {
     Coops = {
         ChickenCoop = {
             ItemName = "Chicken",
+            PluralName = "Chickens",
             Capacity = 5,
             SpawnAttempts = 40,
             AreaMin = Vector2.new(-4.5, 5.8),
@@ -32,6 +33,20 @@ local Config = {
         }
     },
     Animals = {
+        Cow = {
+            Rig = "Quadruped",
+            Radius = 3.25,
+            WalkSpeed = 1.5,
+            WalkChance = 0.65,
+            SitChance = 0.18,
+            TurnAngle = 0.35,
+            WalkDistance = Vector2.new(1.5, 3.8),
+            StepRate = 4.2,
+            TargetAttempts = 16,
+            IdleTime = Vector2.new(3, 6),
+            SitTime = Vector2.new(12, 22),
+            LookTime = Vector2.new(3, 6),
+        },
         Chicken = {
             Radius = 1.06,
             WalkSpeed = 1.8,
@@ -71,7 +86,32 @@ table.insert(upgraded.IndoorSpots, Vector3.new(3.8, 1.92, 0.9))
 Config.Coops.ChickenCoop2 = upgraded
 Config.Coops.ChickenCoop2Blueprint = Config.Coops.ChickenCoop
 
-for _, settings in ipairs({Config.Coops.ChickenCoop, upgraded}) do
+local cows = table.clone(Config.Coops.ChickenCoop)
+cows.ItemName = "Cow"
+cows.PluralName = "Cows"
+cows.Capacity = 3
+cows.SpawnAttempts = 120
+cows.SpawnPoints = {Vector3.new(-7, 0, 6), Vector3.new(0, 0, 6), Vector3.new(7, 0, 6)}
+cows.AreaMin = Vector2.new(-7.5, 1.5)
+cows.AreaMax = Vector2.new(7.5, 8.4)
+cows.DoorLaneWidth = 0
+cows.DoorLaneLength = 0
+cows.IndoorRadius = 3.25
+cows.IndoorMin = Vector2.new(-7, -7.5)
+cows.IndoorMax = Vector2.new(7, -2.8)
+cows.IndoorSpots = {Vector3.new(-6.8, 0.49, -7.2), Vector3.new(0, 0.49, -7.2), Vector3.new(6.8, 0.49, -7.2)}
+cows.IndoorWaypoints = {Vector3.new(-6.8, 0.49, -3), Vector3.new(0, 0.49, -3), Vector3.new(6.8, 0.49, -3)}
+cows.Entrance = {Vector3.new(6.8, 0, 1.5), Vector3.new(6.8, 0, -1.5), Vector3.new(6.8, 0.49, -3)}
+cows.RestYaw = math.pi
+cows.FeedItem = "Wheat"
+cows.FedDuration = 180
+cows.EggItem = nil
+cows.EggCapacity = 0
+cows.EggDuration = 0
+cows.EatingTime = 3
+Config.Coops.CowPen = cows
+
+for _, settings in ipairs({Config.Coops.ChickenCoop, upgraded, cows}) do
     settings.OutdoorWaypoints = {}
     for _, x in ipairs({-1, -0.5, 0, 0.5, 1}) do
         for _, z in ipairs({0, 0.5, 1}) do

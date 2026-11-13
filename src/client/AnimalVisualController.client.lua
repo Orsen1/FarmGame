@@ -19,9 +19,10 @@ local function bindCoop(object)
     local output = object:FindFirstChild("OutputInventory")
     local egg = output and output:FindFirstChild("Egg")
     local slots = basket and basket:FindFirstChild("EggSlots")
-    if not basket or not feeder or not egg or not slots then return end
+    local settings = Config.Coops[object:GetAttribute("ItemName") or object.Name]
+    if not feeder or (settings.EggItem and (not egg or not slots)) then return end
     local function update()
-        for _, shell in ipairs(slots:GetChildren()) do
+        for _, shell in ipairs(slots and slots:GetChildren() or {}) do
             if shell:IsA("BasePart") then
                 local index = tonumber(shell.Name:match("^Egg(%d+)$")) or math.huge
                 shell.Transparency = index <= egg.Value and 0 or 1
@@ -36,8 +37,8 @@ local function bindCoop(object)
             end
         end
     end
-    local changed = egg.Changed:Connect(update)
-    local eggsAdded = slots.ChildAdded:Connect(update)
+    local changed = egg and egg.Changed:Connect(update)
+    local eggsAdded = slots and slots.ChildAdded:Connect(update)
     local grainAdded = feeder.ChildAdded:Connect(update)
     local feeding = object.AttributeChanged:Connect(function(name)
         if name == "FeedStock" or name == "HungryCount" or name == "AnimalCount" then update() end
@@ -65,18 +66,20 @@ local function bindCoop(object)
     end)
     coops[object] = true
     object.Destroying:Once(function()
-        changed:Disconnect();eggsAdded:Disconnect();grainAdded:Disconnect();feeding:Disconnect();effect:Disconnect()
+        if changed then changed:Disconnect() end
+        if eggsAdded then eggsAdded:Disconnect() end
+        grainAdded:Disconnect();feeding:Disconnect();effect:Disconnect()
         coops[object] = nil
     end)
     update()
 end
 
-local function makeTimer(model)
+local function makeTimer(model, quadruped)
     local gui = Instance.new("BillboardGui")
     gui.Name = "EggTimer"
     gui.Adornee = model.PrimaryPart
     gui.Size = UDim2.fromOffset(100, 32)
-    gui.StudsOffsetWorldSpace = Vector3.new(0, 2.2, 0)
+    gui.StudsOffsetWorldSpace = Vector3.new(0, quadruped and 4.5 or 2.2, 0)
     gui.MaxDistance = 55
     gui.Enabled = false
     local panel = Instance.new("Frame")
@@ -124,13 +127,22 @@ local function bind(folder)
     local model = template:Clone()
     local root = model:GetPivot()
     local body, head = model.Body, model.Body.Head
+    local quadruped = Config.Animals[itemName].Rig == "Quadruped"
     local state = {Model = model, Coop = coop, Motion = Motion.read(folder), Body = body, Head = head,
-        Left = model.LeftLeg, Right = model.RightLeg, BodyOffset = root:ToObjectSpace(body:GetPivot()),
+        Quadruped = quadruped, Legs = {}, BodyOffset = root:ToObjectSpace(body:GetPivot()),
         HeadOffset = body:GetPivot():ToObjectSpace(head:GetPivot()),
-        LeftOffset = root:ToObjectSpace(model.LeftLeg:GetPivot()), RightOffset = root:ToObjectSpace(model.RightLeg:GetPivot()),
         Settings = Config.Animals[itemName], Sit = 0, Stride = 0}
+    local legNames = quadruped and {"FrontLeftLeg", "FrontRightLeg", "BackLeftLeg", "BackRightLeg"} or {"LeftLeg", "RightLeg"}
+    for index, name in ipairs(legNames) do
+        table.insert(state.Legs, {Model = model[name], Offset = root:ToObjectSpace(model[name]:GetPivot()),
+            Phase = (index == 1 or index == 4) and 0 or math.pi})
+    end
+    if quadruped then
+        state.Tail = body.Tail
+        state.TailOffset = body:GetPivot():ToObjectSpace(state.Tail:GetPivot())
+    end
     state.Connection = folder:GetAttributeChangedSignal("Revision"):Connect(function() state.Motion = Motion.read(folder) end)
-    state.Timer, state.TimerText, state.TimerIcon, state.TimerPanel = makeTimer(model)
+    state.Timer, state.TimerText, state.TimerIcon, state.TimerPanel = makeTimer(model, quadruped)
     visuals[folder] = state
     model.Parent = container
 end
@@ -167,25 +179,35 @@ RunService.RenderStepped:Connect(function(dt)
                 local step = math.sin(age * state.Settings.StepRate + motion.Phase) * state.Stride
                 local frame = state.Coop:GetPivot() * CFrame.new(Motion.position(motion, now)) * CFrame.Angles(0, Motion.yaw(motion, now), 0)
                 state.Model:PivotTo(frame)
-                local body = frame * state.BodyOffset * CFrame.new(0, math.abs(step) * 0.035 - state.Sit * 0.32, 0) * CFrame.Angles(0, 0, step * 0.045)
+                local body = frame * state.BodyOffset * CFrame.new(0, math.abs(step) * 0.035 - state.Sit *
+                    (state.Quadruped and 1 or 0.32), 0) * CFrame.Angles(0, 0, step * (state.Quadruped and 0.015 or 0.045))
                 state.Body:PivotTo(body)
                 local look = math.sin(age * 1.6 + motion.Phase) * (motion.Activity == "Look" and 0.55 or 0.12)
-                local peck = motion.Activity == "Eat" and -0.65 + math.sin(age * 12) * 0.25 or step * 0.06
+                local peck = motion.Activity == "Eat" and (state.Quadruped and
+                    0.18 + math.sin(age * 4) * 0.06 or -0.65 + math.sin(age * 12) * 0.25) or step * 0.06
                 state.Head:PivotTo(body * state.HeadOffset * CFrame.Angles(peck, look, 0))
-                state.Left:PivotTo(frame * state.LeftOffset * CFrame.Angles(step * 0.55 - state.Sit * 1.2, 0, 0))
-                state.Right:PivotTo(frame * state.RightOffset * CFrame.Angles(-step * 0.55 - state.Sit * 1.2, 0, 0))
+                for index, leg in ipairs(state.Legs) do
+                    local swing = math.sin(age * state.Settings.StepRate + motion.Phase + leg.Phase) * state.Stride
+                    local fold = state.Quadruped and (index <= 2 and 1.2 or -1.2) or -1.2
+                    leg.Model:PivotTo(frame * leg.Offset * CFrame.new(0, state.Quadruped and -state.Sit * 0.65 or 0, 0) *
+                        CFrame.Angles(swing * (state.Quadruped and 0.35 or 0.55) + state.Sit * fold, 0, 0))
+                end
+                if state.Tail then
+                    state.Tail:PivotTo(body * state.TailOffset * CFrame.Angles(0, 0, math.sin(age * 1.7 + motion.Phase) * 0.16))
+                end
                 state.Model.Parent = container
                 local readyAt = folder:GetAttribute("EggReadyAt")
                 local fedUntil = folder:GetAttribute("FedUntil") or 0
                 local hungry = folder:GetAttribute("Hungry") == true or fedUntil <= now
                 local remaining = readyAt and readyAt - math.min(now, fedUntil) or folder:GetAttribute("WorkRemaining") or 0
+                if state.Quadruped then remaining = math.max(0, fedUntil - now) end
                 local seconds = math.max(0, math.ceil(remaining))
                 local text = string.format("%d:%02d", math.floor(seconds / 60), seconds % 60)
                 if not hungry and folder:GetAttribute("WaitingForSpace") then text = "Full" end
                 state.Timer.Enabled = true
                 state.TimerPanel.BackgroundColor3 = hungry and Color3.fromRGB(177, 65, 47) or Color3.fromRGB(255, 224, 160)
                 state.TimerText.TextColor3 = hungry and Color3.fromRGB(255, 242, 214) or Color3.fromRGB(89, 55, 26)
-                state.TimerIcon.Image = hungry and definitions.Wheat.Icon or definitions.Egg.Icon
+                state.TimerIcon.Image = (hungry or state.Quadruped) and definitions.Wheat.Icon or definitions.Egg.Icon
                 if state.TimerText.Text ~= text then state.TimerText.Text = text end
             end
         end

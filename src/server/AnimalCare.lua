@@ -14,7 +14,7 @@ function AnimalCare.load(animals, eggs, feed, config)
     for index, animal in pairs(animals) do
         if typeof(index) ~= "number" or index % 1 ~= 0 or index < 1 or index > #animals or
             typeof(animal) ~= "table" or animal.ItemName ~= config.ItemName then
-            return nil, "Invalid saved chicken."
+            return nil, "Invalid saved animal."
         end
         local work = animal.WorkRemaining
         local food = animal.FoodRemaining
@@ -22,7 +22,7 @@ function AnimalCare.load(animals, eggs, feed, config)
             work = animal.EggRemaining or config.EggDuration
             food = animal.EggRemaining ~= nil and config.FedDuration or 0
         end
-        if not validTime(work) or not validTime(food) then return nil, "Invalid saved chicken timer." end
+        if not validTime(work) or not validTime(food) then return nil, "Invalid saved animal timer." end
         state.Animals[index] = {ItemName = config.ItemName,
             WorkRemaining = math.min(work, config.EggDuration), FoodRemaining = math.min(food, config.FedDuration)}
     end

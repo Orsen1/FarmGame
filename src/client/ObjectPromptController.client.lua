@@ -95,7 +95,7 @@ local function updatePrompt(prompt)
         local hungry = (object:GetAttribute("HungryCount") or 0) > 0
         local refilling = home.FeedCapacity > 0 and selectedItemName == home.FeedItem and
             (object:GetAttribute("FeedStock") or 0) < home.FeedCapacity
-        prompt.Enabled = home ~= nil and selectedItemName ~= "Chicken" and selectedItemName ~= "Shovel" and
+        prompt.Enabled = selectedItemName ~= home.ItemName and selectedItemName ~= "Shovel" and
             player:GetAttribute("ProductionMode") ~= true and caring and
             (prompt.Name == "FeedPrompt" and (hungry or refilling) or
                 prompt.Name == "EggPrompt" and amount > 0)
@@ -150,8 +150,9 @@ local function updatePrompt(prompt)
     if home and (adding or upgrading) and not removing then
         if prompt.Style ~= Enum.ProximityPromptStyle.Custom then hidePrompt(prompt);prompt.Style = Enum.ProximityPromptStyle.Custom end
         local count = object:GetAttribute("AnimalCount") or 0
-        prompt.ActionText = upgrading and "Pack for upgrade" or count < home.Capacity and "Add chicken" or "Coop full"
-        prompt:SetAttribute("Context", upgrading and "Coop I to II" or string.format("Chickens: %d / %d", count, home.Capacity))
+        prompt.ActionText = upgrading and "Pack for upgrade" or count < home.Capacity and
+            "Add " .. (ItemDefinitions[home.ItemName].DisplayName or home.ItemName):lower() or "Home full"
+        prompt:SetAttribute("Context", upgrading and "Coop I to II" or string.format("%s: %d / %d", home.PluralName, count, home.Capacity))
         prompt.Enabled = player:GetAttribute("ProductionMode") ~= true
         if promptViews[prompt] then promptViews[prompt].update() end
         return
@@ -190,8 +191,8 @@ local function updatePrompt(prompt)
         local count = object:GetAttribute("AnimalCount") or 0
         local adding = home and selectedItemName == home.ItemName and selectedAmount > 0
         prompt.ActionText = removing and "Remove" or adding and
-            (count < home.Capacity and "Add chicken" or "Coop full") or definition.ShopPromptText
-        prompt:SetAttribute("Context", home and string.format("Chickens: %d / %d", count, home.Capacity) or prompt.ObjectText)
+            (count < home.Capacity and "Add " .. home.ItemName:lower() or "Home full") or definition.ShopPromptText
+        prompt:SetAttribute("Context", home and string.format("%s: %d / %d", home.PluralName, count, home.Capacity) or prompt.ObjectText)
         prompt.Enabled = removing or ((adding or count == 0) and player:GetAttribute("ProductionMode") ~= true)
         if not prompt.Enabled then hidePrompt(prompt)
         elseif promptViews[prompt] then promptViews[prompt].update() end
