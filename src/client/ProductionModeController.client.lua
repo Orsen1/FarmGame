@@ -189,7 +189,7 @@ local function openMode(data)
     placement.cancelPlacement()
     controls:Disable()
     ProximityPromptService.Enabled = false
-    for _, name in ipairs({"InventoryGui", "BuyGui", "SellGui", "DeleteConfirmGui"}) do
+    for _, name in ipairs({"InventoryGui", "BuyGui", "SellGui", "DeleteConfirmGui", "MoneyGui"}) do
         local gui = playerGui:FindFirstChild(name)
         if gui and gui:IsA("ScreenGui") then
             current.OtherGuis[gui] = gui.Enabled;
@@ -243,6 +243,13 @@ local function openMode(data)
             closeMode(true, true)
         end
     end))
+    table.insert(current.Connections, station.AttributeChanged:Connect(refresh))
+    local function watchStored(object)
+        if not current then return end
+        if object:IsA("IntValue") then table.insert(current.Connections, object.Changed:Connect(refresh)) end
+    end
+    for _, object in ipairs(station:GetDescendants()) do watchStored(object) end
+    table.insert(current.Connections, station.DescendantAdded:Connect(function(object) watchStored(object);refresh() end))
     local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
     if humanoid then
         table.insert(current.Connections, humanoid.Died:Connect(function()
@@ -260,7 +267,7 @@ remotes.ProductionState.OnClientEvent:Connect(function(action, data)
         if current.RecipeId ~= data.RecipeId then
             view:SetRecipe(data.RecipeId)
         end
-        for _, name in ipairs({"RecipeId", "Busy", "Held", "StartedAt", "Duration", "Message"}) do
+        for _, name in ipairs({"RecipeId", "Busy", "Held", "StartedAt", "Duration", "Message", "Automatic", "Phase"}) do
             current[name] = data[name]
         end
         refresh()

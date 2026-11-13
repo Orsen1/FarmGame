@@ -204,8 +204,56 @@ local ItemDefinitions = {
         DisplayName = "Milk Bucket",
         Type = "Tool",
         SellPriceCents = 50,
+        SellReturnItem = "Bucket",
         Icon = "rbxassetid://100619771486489",
         ShowShopIcon = true
+    },
+    DairyBlueprint = {
+        DisplayName = "Dairy",
+        Type = "Blueprint",
+        BuyPriceCents = 1500,
+        Icon = "rbxassetid://70812087432192",
+        Placeable = true,
+        BuildsInto = "Dairy",
+        ModelFolder = "DairyStages",
+        ShopCategory = "Equipment",
+        ShowShopIcon = true
+    },
+    Dairy = {
+        DisplayName = "Dairy",
+        Type = "Building",
+        Icon = "rbxassetid://70812087432192",
+        Placeable = true,
+        Recipes = {"MilkToCream", "CreamToButter"},
+        AutomaticProduction = true,
+        InteractionDistance = 18,
+        LoadingDuration = 3,
+        MilkTank = {Item = "MilkBucket", ReturnItem = "Bucket", Capacity = 10}
+    },
+    Cream = {
+        DisplayName = "Cream",
+        Type = "Product",
+        SellPriceCents = 40,
+        Icon = "rbxassetid://106109689591682",
+        ShowShopIcon = true
+    },
+    Butter = {
+        DisplayName = "Butter",
+        Type = "Product",
+        SellPriceCents = 110,
+        Icon = "rbxassetid://88842567118259",
+        ShowShopIcon = true
+    },
+    CowTipper = {
+        DisplayName = "Cow Tipper",
+        Type = "Building",
+        BuyPriceCents = 500,
+        Icon = "rbxassetid://94185916549800",
+        ShopCategory = "Equipment",
+        ShowShopIcon = true,
+        Placeable = true,
+        ShopCategoryWhenEmpty = "Animals",
+        ShopPromptText = "Buy a cow"
     },
     CowPenBlueprint = {
         DisplayName = "Cow Pen",

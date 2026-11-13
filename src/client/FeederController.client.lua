@@ -8,7 +8,16 @@ local inventory = player:WaitForChild("Inventory")
 local config = require(ReplicatedStorage.Configs.AnimalConfig)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
-local station, pending
+local station, pending, tankMode
+
+local function settings()
+    if tankMode then
+        local definition = definitions[station:GetAttribute("ItemName") or station.Name]
+        local tank = definition and definition.MilkTank
+        return tank and {FeedItem = tank.Item, FeedCapacity = tank.Capacity, Stock = "MilkStock", Label = "Milk"}
+    end
+    return config.Coops[station:GetAttribute("ItemName") or station.Name]
+end
 
 local function make(class, parent, properties)
     local object = Instance.new(class)
@@ -61,14 +70,14 @@ local status = label("Status", "Wheat cannot be taken back.", 20, 202, 340, 24, 
 
 local function refresh()
     if not station then return end
-    local settings = config.Coops[station:GetAttribute("ItemName") or station.Name]
+    local settings = settings()
     if not settings then close();return end
-    local count = station:GetAttribute("FeedStock") or 0
+    local count = station:GetAttribute(settings.Stock or "FeedStock") or 0
     local wheat = 0
     for _, slot in ipairs(inventory:GetChildren()) do
         if slot.ItemName.Value == settings.FeedItem then wheat += slot.Amount.Value end
     end
-    stock.Text = string.format("Wheat: %d / %d", count, settings.FeedCapacity)
+    stock.Text = string.format("%s: %d / %d", settings.Label or "Wheat", count, settings.FeedCapacity)
     owned.Text = string.format("In your inventory: %d", wheat)
     TweenService:Create(fill, TweenInfo.new(0.15), {Size = UDim2.fromScale(count / settings.FeedCapacity, 1)}):Play()
     for _, button in ipairs(buttons) do
@@ -91,29 +100,47 @@ for index, amount in ipairs({1, 10, "Max"}) do
         pending = true
         buttonScale.Scale = 0.94
         TweenService:Create(buttonScale, TweenInfo.new(0.18, Enum.EasingStyle.Back), {Scale = 1}):Play()
-        remotes.AnimalCommand:FireServer(station, amount)
+        if tankMode then remotes.ProductionCommand:FireServer("Deposit", station, amount)
+        else remotes.AnimalCommand:FireServer(station, amount) end
         refresh()
     end)
 end
 
+local function openPanel(object, isTank)
+    local shop = player.PlayerGui:FindFirstChild("BuyGui")
+    if shop and shop.Enabled and shop.MainFrame.Visible then return end
+    station, pending = object, false
+    tankMode = isTank
+    panel.Title.Text = tankMode and "Milk tank" or "Feeder"
+    panel.WheatIcon.Image = definitions[settings().FeedItem].Icon
+    status.Text = tankMode and "Empty buckets are returned." or "Wheat cannot be taken back."
+    status.TextColor3 = Color3.fromRGB(89, 55, 26)
+    player:SetAttribute("FeederOpen", true)
+    gui.Enabled = true
+    panel.GroupTransparency = 1
+    panel.Position = UDim2.fromScale(0.5, 0.5)
+    TweenService:Create(panel, TweenInfo.new(0.2), {GroupTransparency = 0,
+        Position = UDim2.fromScale(0.5, 0.46)}):Play()
+    refresh()
+end
+
 remotes.AnimalFeedback.OnClientEvent:Connect(function(object, success, message)
     if success and message == "OpenFeeder" then
-        local shop = player.PlayerGui:FindFirstChild("BuyGui")
-        if shop and shop.Enabled and shop.MainFrame.Visible then return end
-        station, pending = object, false
-        status.Text = "Wheat cannot be taken back."
-        status.TextColor3 = Color3.fromRGB(89, 55, 26)
-        player:SetAttribute("FeederOpen", true)
-        gui.Enabled = true
-        panel.GroupTransparency = 1
-        panel.Position = UDim2.fromScale(0.5, 0.5)
-        TweenService:Create(panel, TweenInfo.new(0.2), {GroupTransparency = 0,
-            Position = UDim2.fromScale(0.5, 0.46)}):Play()
-        refresh()
+        openPanel(object, false)
     elseif station == object then
         pending = false
         status.Text = message
         status.TextColor3 = success and Color3.fromRGB(75, 115, 47) or Color3.fromRGB(170, 55, 38)
+        refresh()
+    end
+end)
+
+remotes.ProductionState.OnClientEvent:Connect(function(action, data)
+    if action == "TankOpened" then openPanel(data.Station, true)
+    elseif action == "TankFeedback" and tankMode and station == data.Station then
+        pending = false
+        status.Text = data.Message
+        status.TextColor3 = data.Success and Color3.fromRGB(75, 115, 47) or Color3.fromRGB(170, 55, 38)
         refresh()
     end
 end)
@@ -133,7 +160,7 @@ RunService.Heartbeat:Connect(function(dt)
     elapsed = 0
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-    local prompt = station:FindFirstChild("FeedPrompt", true)
+    local prompt = station:FindFirstChild(tankMode and "TankPrompt" or "FeedPrompt", true)
     local shop = player.PlayerGui:FindFirstChild("BuyGui")
     if not station:IsDescendantOf(workspace) or not root or not humanoid or humanoid.Health <= 0 or not prompt or
         player:GetAttribute("DataLoaded") ~= true or station:GetAttribute("OwnerUserId") ~= player.UserId or

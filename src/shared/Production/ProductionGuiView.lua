@@ -327,6 +327,7 @@ function View:CreateCard(recipeId, parent, showOwned)
 end
 
 function View:ShowRecipes(station, onSelect)
+    self.Station = station
     for _, card in ipairs(self.Cards) do card:Destroy() end
     self.Cards = {}
     local definition = definitions[station:GetAttribute("ItemName") or station.Name] or {}
@@ -378,6 +379,14 @@ function View:UpdateMaterials(inventory)
             if name and amount then counts[name.Value] = (counts[name.Value] or 0) + amount.Value end
         end
     end
+    local station = self.Station
+    local definition = station and definitions[station:GetAttribute("ItemName") or station.Name]
+    if definition and definition.AutomaticProduction then
+        for _, value in ipairs(station.OutputInventory:GetChildren()) do
+            if value:IsA("IntValue") then counts[value.Name] = (counts[value.Name] or 0) + value.Value end
+        end
+        counts[definition.MilkTank.Item] = station:GetAttribute("MilkStock") or 0
+    end
     local enough = true
     for _, item in ipairs(self.MaterialRows) do
         local owned = counts[item.Name] or 0
@@ -392,9 +401,10 @@ end
 function View:UpdateState(state)
     self.LastState = state
     self.Busy = state.Busy == true
-    self.Work.StartButton.Text = UserInputService.PreferredInput == Enum.PreferredInput.Touch and "Hold" or "Hold E"
+    local touch = UserInputService.PreferredInput == Enum.PreferredInput.Touch
+    self.Work.StartButton.Text = state.Automatic and (self.Busy and "Working..." or touch and "Start" or "Start E") or touch and "Hold" or "Hold E"
     self.Work.StartButton.BackgroundColor3 = (self.Enough or self.Busy) and colors.Button or colors.Muted
-    self.Work.StartButton.Interactable = self.Enough or self.Busy
+    self.Work.StartButton.Interactable = state.Automatic and not self.Busy and self.Enough or not state.Automatic and (self.Enough or self.Busy)
     self.Work.BackButton.Interactable = not self.Busy
     self.Work.BackButton.AutoButtonColor = not self.Busy
     self.Work.BackButton.BackgroundColor3 = self.Busy and colors.Muted or colors.Button
@@ -406,8 +416,18 @@ function View:UpdateState(state)
         InvalidOutputInventory = "Storage error",
         MissingOutputInventory = "Storage missing",
         Ready = "",
+        Processing = "Working. You can leave.",
     }
     self.Work.StatusLabel.Text = not self.Enough and not self.Busy and "Need materials" or (messages[state.Message] or "")
+    if state.Automatic then
+        if state.Phase == "Processing" then self.Work.StatusLabel.Text = "Working. You can leave."
+        elseif state.Phase == "Loading" then self.Work.StatusLabel.Text = "Loading..."
+        elseif state.Message == "Completed" then self.Work.StatusLabel.Text = "Ready to collect"
+        elseif not self.Enough and self.RecipeId and recipes[self.RecipeId].Inputs[definitions[self.Station:GetAttribute("ItemName") or self.Station.Name].MilkTank.Item] then
+            self.Work.StatusLabel.Text = "Fill the milk tank"
+        elseif self.Enough then self.Work.StatusLabel.Text = string.format("Milk tank: %d / %d", self.Station:GetAttribute("MilkStock") or 0,
+            definitions[self.Station:GetAttribute("ItemName") or self.Station.Name].MilkTank.Capacity) end
+    end
 end
 
 function View:UpdateProgress(state)
@@ -430,11 +450,18 @@ function View:Show()
     if self.Tween then self.Tween:Cancel() end
     self.Tween = TweenService:Create(self.Panel, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
         {Position = self.OpenPosition, GroupTransparency = 0})
+    local id = self.TransitionId
+    self.Tween.Completed:Once(function()
+        if id == self.TransitionId then
+            self.Transitioning = false
+            self:Layout()
+        end
+    end)
     self.Tween:Play()
-    self.Transitioning = false
 end
 
 function View:Hide(immediate)
+    self.Transitioning = false
     self.TransitionId = (self.TransitionId or 0) + 1
     local id = self.TransitionId
     if self.Tween then self.Tween:Cancel() end

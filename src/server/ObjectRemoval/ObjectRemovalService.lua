@@ -71,6 +71,15 @@ function ObjectRemovalService.remove(player, object)
         if not released then return false, message end
     end
 
+    if definition.AutomaticProduction then
+        if object:GetAttribute("Busy") or (object:GetAttribute("MilkStock") or 0) > 0 then
+            return false, "Use the milk and finish production first."
+        end
+        for _, value in ipairs(object.OutputInventory:GetChildren()) do
+            if value.Value > 0 then return false, "Collect the products first." end
+        end
+    end
+
     object:Destroy()
 
     return true, "Object removed."

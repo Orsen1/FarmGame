@@ -31,14 +31,16 @@ function SellService.SellItem(player, itemName, amount)
 		return false, "InvalidBalanceOrAmountTooLarge"
 	end
 
-	local removed, reason = InventoryService.RemoveItem(player, itemName, amount)
+	local inputs = {[itemName] = amount}
+	local outputs = item.SellReturnItem and {[item.SellReturnItem] = amount} or {}
+	local removed, reason = InventoryService.ExchangeItems(player, inputs, outputs)
 	if not removed then
 		return false, reason
 	end
 
 	local added = MoneyService.AddMoney(player, totalPrice)
 	if not added then
-		InventoryService.AddItem(player, itemName, amount)
+		InventoryService.ExchangeItems(player, outputs, inputs)
 		return false, "MoneyCouldNotBeAdded"
 	end
 

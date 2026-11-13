@@ -56,11 +56,12 @@ function PlotDataService.getData(player)
         savedObject.Plant = PlantDataService.getData(object)
 
         if definition.Recipes then
-            local outputData, outputError = ProductionDataService.getData(object)
+            local outputData, outputError, production = ProductionDataService.getData(object)
             if not outputData then
                 return nil, outputError
             end
             savedObject.OutputInventory = outputData
+            savedObject.Production = production
         end
 
         if definition.BuildsInto then

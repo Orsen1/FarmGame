@@ -1,4 +1,22 @@
 local ConstructionDefinitions = {
+    DairyBlueprint = {
+        Stages = {{
+            DisplayName = "Foundation",
+            Model = "Stage1_Foundation",
+            Inputs = {Stone = 10}
+        }, {
+            DisplayName = "Frame",
+            Model = "Stage2_Frame",
+            Inputs = {Wood = 15}
+        }, {
+            DisplayName = "Walls & Roof",
+            Model = "Stage3_Walls",
+            Inputs = {Plank = 20}
+        }, {
+            DisplayName = "Dairy Equipment",
+            Inputs = {Plank = 15}
+        }}
+    },
     CowPenBlueprint = {
         Stages = {{
             DisplayName = "Foundation",

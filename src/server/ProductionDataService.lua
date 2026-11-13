@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local Jobs = require(script.Parent.ProductionJobs)
 
 local ProductionDataService = {}
 local MAX_INTEGER = 9007199254740991
@@ -12,6 +13,8 @@ local function isValidEntry(itemName, amount)
 end
 
 function ProductionDataService.getData(object)
+    local production, reason = Jobs.GetData(object)
+    if reason then return nil, reason end
     local outputInventory = object:FindFirstChild("OutputInventory")
 
     if not outputInventory or not outputInventory:IsA("Folder") then
@@ -29,10 +32,11 @@ function ProductionDataService.getData(object)
         data[storedItem.Name] = storedItem.Value
     end
 
-    return data
+    return data, nil, production
 end
 
 function ProductionDataService.loadData(object, savedObject)
+    if not Jobs.Validate(object, savedObject.Production) then return false, "Invalid saved production" end
     local outputInventory = object:FindFirstChild("OutputInventory")
 
     if not outputInventory or not outputInventory:IsA("Folder") then
@@ -67,11 +71,13 @@ function ProductionDataService.loadData(object, savedObject)
     end
 
     object:SetAttribute("Busy", false)
+    object:SetAttribute("ProductionPhase", nil)
     object:SetAttribute("ActiveRecipe", nil)
     object:SetAttribute("OperatorUserId", nil)
     object:SetAttribute("ProductionStartedAt", nil)
     object:SetAttribute("ProductionDuration", nil)
     object:SetAttribute("ProductionAngle", 0)
+    Jobs.Load(object, savedObject.Production)
 
     return true
 end

@@ -30,7 +30,7 @@ end
 ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
 
     if prompt.Name ~= "ActionPrompt" and prompt.Name ~= "CollectPrompt" and
-        prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt" then
+        prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt" and prompt.Name ~= "CarePrompt" and prompt.Name ~= "TankPrompt" then
         return
     end
 
@@ -67,6 +67,17 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local definition = ItemDefinitions[itemName]
 
     if not definition or definition.Placeable ~= true then
+        return
+    end
+
+    if prompt.Name == "TankPrompt" then
+        ProductionService.OpenTank(player, object)
+        return
+    end
+
+    if prompt.Name == "CarePrompt" then
+        local success, message = AnimalService.CleanHooves(player, object)
+        remotes.AnimalFeedback:FireClient(player, object, success, message, "CarePrompt")
         return
     end
 
@@ -152,6 +163,11 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
 end)
 
 command.OnServerEvent:Connect(function(player, action, sessionId, value)
+    if action == "Deposit" and typeof(sessionId) == "Instance" and sessionId:IsA("Model") then
+        local success, message = ProductionService.Deposit(player, sessionId, value)
+        state:FireClient(player, "TankFeedback", {Station = sessionId, Success = success, Message = message})
+        return
+    end
     if typeof(action) ~= "string" or typeof(sessionId) ~= "number" or sessionId ~=
         ProductionService.GetSessionId(player) then
         return

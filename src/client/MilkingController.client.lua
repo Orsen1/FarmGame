@@ -8,6 +8,7 @@ local ContextActionService = game:GetService("ContextActionService")
 local PromptView = require(script.Parent:WaitForChild("AnimalShopPromptView"))
 local Config = require(ReplicatedStorage.Configs.AnimalConfig)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
+local placement = require(ReplicatedStorage.PlacementScripts.PlacementController)
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local event = ReplicatedStorage.RemoteEvents:WaitForChild("MilkingEvent")
@@ -119,18 +120,19 @@ local function cancel(immediate)
     closeMode(immediate ~= false)
 end
 
-local function open(folder, startedAt, duration, frame)
+local function open(folder, startedAt, duration, frame, workType)
     closeMode(true)
     if not folder or not folder:IsDescendantOf(workspace) then event:FireServer("Cancel");return end
     local camera = workspace.CurrentCamera
     if not camera then event:FireServer("Cancel");return end
     local home = folder.Parent.Parent
-    local settings = Config.Coops[home:GetAttribute("ItemName") or home.Name].Milking
+    local settings = Config.Coops[home:GetAttribute("ItemName") or home.Name][workType or "Milking"]
     current = {Folder = folder, Home = home, StartedAt = startedAt, Duration = duration, Settings = settings, Frame = frame,
         PromptsEnabled = ProximityPromptService.Enabled, ControlsEnabled = controls.controlsEnabled, Connections = {}, Guis = {},
         Camera = {Camera = camera, CFrame = camera.CFrame, Focus = camera.Focus, Subject = camera.CameraSubject,
             Type = camera.CameraType, FieldOfView = camera.FieldOfView,
             MouseBehavior = UserInputService.MouseBehavior, MouseIconEnabled = UserInputService.MouseIconEnabled}}
+    placement.cancelPlacement()
     controls:Disable()
     ProximityPromptService.Enabled = false
     for prompt in pairs(views) do hidePrompt(prompt) end
@@ -169,7 +171,9 @@ local function open(folder, startedAt, duration, frame)
     cameraTween:Play()
     panel.GroupTransparency = 1
     fill.Size = UDim2.fromScale(0, 1)
-    title.Text = "Milking..."
+    current.StatusText = settings.StatusText or "Milking"
+    title.Text = current.StatusText .. "..."
+    icon.Image = definitions[settings.IconItem or settings.OutputItem].Icon
     gui.Enabled = true
     TweenService:Create(panel, TweenInfo.new(0.2), {GroupTransparency = 0}):Play()
     local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
@@ -190,8 +194,8 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
         event:FireServer("Start", prompt.Animal.Value)
     end
 end)
-event.OnClientEvent:Connect(function(action, value, startedAt, duration, frame)
-    if action == "Started" then open(value, startedAt, duration, frame)
+event.OnClientEvent:Connect(function(action, value, startedAt, duration, frame, workType)
+    if action == "Started" then open(value, startedAt, duration, frame, workType)
     elseif action == "Finished" then closeMode(false, value)
     elseif action == "Rejected" then
         for _, view in pairs(views) do view.message(value, false) end
@@ -209,7 +213,7 @@ RunService.RenderStepped:Connect(function()
         current.Home:GetAttribute("OwnerUserId") ~= player.UserId then cancel();return end
     local alpha = math.clamp((now - current.StartedAt) / current.Duration, 0, 1)
     fill.Size = UDim2.fromScale(alpha, 1)
-    title.Text = string.format("Milking... %ds", math.max(0, math.ceil(current.Duration - now + current.StartedAt)))
+    title.Text = string.format("%s... %ds", current.StatusText, math.max(0, math.ceil(current.Duration - now + current.StartedAt)))
     local viewport = workspace.CurrentCamera.ViewportSize
     panel.Size = UDim2.fromOffset(math.min(270, viewport.X - 24), 86)
     panel.Position = UDim2.new(0.5, 0, 1, viewport.X < viewport.Y and -120 or -34)

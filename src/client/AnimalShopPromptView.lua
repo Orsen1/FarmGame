@@ -95,7 +95,8 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
         end
         local coopPrompt = prompt.Name == "FeedPrompt" or prompt.Name == "EggPrompt"
         local root = attachment.Parent
-        local common = coopPrompt and root:FindFirstChild("InteractionAttachment")
+        local pair = prompt:GetAttribute("PairedPrompt")
+        local common = (coopPrompt or pair) and root:FindFirstChild("InteractionAttachment")
         local point, visible = camera:WorldToScreenPoint(common and common.WorldPosition or attachment.WorldPosition)
         local bounds = gui.AbsoluteSize
         local factor = math.min(1, (bounds.X - 16) / 268)
@@ -109,7 +110,13 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
         local halfWidth, halfHeight = 134 * factor, 38 * factor
         local offset = 0
         local extraHeight = 0
-        if coopPrompt then
+        if pair then
+            local otherPrompt = root:FindFirstChild(pair, true)
+            if otherPrompt and otherPrompt.Enabled then
+                offset = (prompt:GetAttribute("StackSide") or -1) * 42 * factor
+                extraHeight = 42 * factor
+            end
+        elseif coopPrompt then
             local other = root:FindFirstChild(prompt.Name == "FeedPrompt" and "EggAttachment" or "FeedAttachment")
             local otherPrompt = other and other:FindFirstChildOfClass("ProximityPrompt")
             if otherPrompt and otherPrompt.Enabled then

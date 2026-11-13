@@ -5,6 +5,7 @@ local Debris = game:GetService("Debris")
 local Config = require(ReplicatedStorage.Configs.AnimalConfig)
 local Motion = require(ReplicatedStorage.Animals.AnimalMotion)
 local MilkingVisual = require(ReplicatedStorage.Animals.MilkingVisual)
+local CowTipperMotion = require(ReplicatedStorage.Animals.CowTipperMotion)
 local player = game:GetService("Players").LocalPlayer
 local templates = ReplicatedStorage:WaitForChild("AnimalModels")
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
@@ -191,6 +192,9 @@ RunService.RenderStepped:Connect(function(dt)
     for folder, state in pairs(visuals) do
         if not folder:IsDescendantOf(plots) or not state.Coop.Parent then
             if state.Milking then state.Milking:Destroy() end
+            if state.HomeSettings.HoofCare and state.Coop.Parent then
+                state.Coop.Roller:PivotTo(state.Coop:GetPivot() * CFrame.new(state.HomeSettings.HoofCare.Pivot))
+            end
             state.Connection:Disconnect();state.Model:Destroy();visuals[folder] = nil
         else
             local milker = folder:GetAttribute("MilkerUserId")
@@ -200,8 +204,10 @@ RunService.RenderStepped:Connect(function(dt)
             if state.Milking and (not visible or state.Milking.UserId ~= milker) then
                 state.Milking:Destroy();state.Milking = nil
             end
-            if visible and milker and not state.Milking then state.Milking = MilkingVisual.new(folder, state.HomeSettings.Milking) end
-            if state.Milking then state.Milking:Update() end
+            if visible and milker and not state.Milking then
+                local settings = state.HomeSettings[folder:GetAttribute("AnimalWorkType") or "Milking"]
+                if settings then state.Milking = MilkingVisual.new(folder, settings, state.Model) end
+            end
             if state.MilkPrompt then
                 local inventory = player:FindFirstChild("Inventory")
                 local slot = inventory and inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
@@ -212,6 +218,10 @@ RunService.RenderStepped:Connect(function(dt)
                     slot.ItemName.Value == state.HomeSettings.Milking.BucketItem
             end
             if not visible then
+                if state.HomeSettings.HoofCare and state.TipAngle ~= 0 then
+                    state.Coop.Roller:PivotTo(state.Coop:GetPivot() * CFrame.new(state.HomeSettings.HoofCare.Pivot))
+                    state.TipAngle = 0
+                end
                 state.Model.Parent = nil
             else
                 local age = math.max(0, now - motion.StartedAt)
@@ -220,6 +230,15 @@ RunService.RenderStepped:Connect(function(dt)
                 state.Stride += ((motion.Activity == "Walk" and 1 or 0) - state.Stride) * alpha
                 local step = math.sin(age * state.Settings.StepRate + motion.Phase) * state.Stride
                 local frame = state.Coop:GetPivot() * CFrame.new(Motion.position(motion, now)) * CFrame.Angles(0, Motion.yaw(motion, now), 0)
+                if state.HomeSettings.HoofCare then
+                    local tipped = CowTipperMotion.frame(state.Coop, folder, state.HomeSettings.HoofCare, now)
+                    frame = tipped * CFrame.new(Motion.position(motion, now))
+                    local angle = CowTipperMotion.angle(folder, state.HomeSettings.HoofCare, now)
+                    if state.TipAngle ~= angle then
+                        state.Coop.Roller:PivotTo(tipped * CFrame.new(state.HomeSettings.HoofCare.Pivot))
+                        state.TipAngle = angle
+                    end
+                end
                 state.Model:PivotTo(frame)
                 local body = frame * state.BodyOffset * CFrame.new(0, math.abs(step) * 0.035 - state.Sit *
                     (state.Quadruped and 1 or 0.32), 0) * CFrame.Angles(0, 0, step * (state.Quadruped and 0.015 or 0.045))
@@ -238,6 +257,7 @@ RunService.RenderStepped:Connect(function(dt)
                     state.Tail:PivotTo(body * state.TailOffset * CFrame.Angles(0, 0, math.sin(age * 1.7 + motion.Phase) * 0.16))
                 end
                 state.Model.Parent = container
+                if state.Milking then state.Milking:Update(now) end
                 local readyAt = folder:GetAttribute("EggReadyAt")
                 local fedUntil = folder:GetAttribute("FedUntil") or 0
                 local hungry = folder:GetAttribute("Hungry") == true or fedUntil <= now
@@ -248,7 +268,7 @@ RunService.RenderStepped:Connect(function(dt)
                 local milkReady = folder:GetAttribute("MilkReady") == true
                 if milkReady then text = "Ready" end
                 if not hungry and folder:GetAttribute("WaitingForSpace") then text = "Full" end
-                state.Timer.Enabled = not milker and player:GetAttribute("Milking") ~= true
+                state.Timer.Enabled = not state.HomeSettings.FixedPosition and not milker and player:GetAttribute("Milking") ~= true
                 if milkReady then hungry = false end
                 state.TimerPanel.BackgroundColor3 = hungry and Color3.fromRGB(177, 65, 47) or Color3.fromRGB(255, 224, 160)
                 state.TimerText.TextColor3 = hungry and Color3.fromRGB(255, 242, 214) or Color3.fromRGB(89, 55, 26)

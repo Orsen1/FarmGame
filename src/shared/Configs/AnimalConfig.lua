@@ -126,6 +126,34 @@ cows.Milking = {
 }
 Config.Coops.CowPen = cows
 
+local tipper = table.clone(cows)
+tipper.Capacity = 1
+tipper.FixedPosition = Vector3.new(0, 0.56, 0)
+tipper.AreaMin = Vector2.new(-2, -3)
+tipper.AreaMax = Vector2.new(2, 3)
+tipper.FedDuration = 0
+tipper.Milking = nil
+tipper.HoofCare = {
+    Duration = 8,
+    TurnDuration = 1.4,
+    CleanFrom = 1.7,
+    CleanUntil = 5.8,
+    ReturnAt = 6.1,
+    TiltAngle = math.pi / 2,
+    Pivot = Vector3.new(0, 2.1, 0),
+    AnimationId = "rbxassetid://128559721502922",
+    MaxDistance = 12,
+    WorkOffset = Vector3.new(3.3, -0.26, -1.3),
+    WorkSides = {1},
+    HandOffset = Vector3.new(1.5, 2.6, -1.3),
+    CameraOffset = Vector3.new(9, 7, -9),
+    CameraTarget = Vector3.new(0.8, 1.8, -0.4),
+    FieldOfView = 50,
+    IconItem = "CowTipper",
+    StatusText = "Hoof care",
+}
+Config.Coops.CowTipper = tipper
+
 for _, settings in ipairs({Config.Coops.ChickenCoop, upgraded, cows}) do
     settings.OutdoorWaypoints = {}
     for _, x in ipairs({-1, -0.5, 0, 0.5, 1}) do

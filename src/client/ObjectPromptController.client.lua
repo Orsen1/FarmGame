@@ -34,7 +34,7 @@ end
 local function isSupportedPrompt(object)
     return object:IsA("ProximityPrompt") and
                (object.Name == "ActionPrompt" or object.Name == "CollectPrompt" or object.Name == "StoragePrompt" or
-                   object.Name == "FeedPrompt" or object.Name == "EggPrompt")
+                   object.Name == "FeedPrompt" or object.Name == "EggPrompt" or object.Name == "CarePrompt" or object.Name == "TankPrompt")
 end
 
 local function getSelectedItem()
@@ -83,6 +83,36 @@ local function updatePrompt(prompt)
     end
 
     prompt.ObjectText = definition.DisplayName or itemName
+    if definition.AutomaticProduction then
+        prompt:SetAttribute("PairedPrompt", prompt.Name == "CollectPrompt" and "ActionPrompt" or "CollectPrompt")
+        prompt:SetAttribute("StackSide", prompt.Name == "CollectPrompt" and 1 or -1)
+        prompt:SetAttribute("Icon", definition.Icon)
+        prompt:SetAttribute("Context", prompt.Name == "CollectPrompt" and "Ready to collect" or "Dairy workshop")
+    end
+
+    if prompt.Name == "TankPrompt" then
+        local selected = getSelectedItem()
+        prompt.Enabled = definition.MilkTank ~= nil and selected ~= "Shovel" and player:GetAttribute("ProductionMode") ~= true
+        prompt.ActionText = "Fill milk tank"
+        prompt:SetAttribute("Context", string.format("Milk: %d / %d", object:GetAttribute("MilkStock") or 0, definition.MilkTank.Capacity))
+        if not prompt.Enabled then hidePrompt(prompt)
+        elseif promptViews[prompt] then promptViews[prompt].update() end
+        return
+    end
+
+    if prompt.Name == "CarePrompt" then
+        local home = AnimalConfig.Coops[itemName]
+        local selected = getSelectedItem()
+        prompt.Enabled = home ~= nil and home.HoofCare ~= nil and (object:GetAttribute("AnimalCount") or 0) > 0 and
+            object:GetAttribute("AnimalBusy") ~= true and selected ~= "Shovel" and selected ~= home.ItemName and
+            player:GetAttribute("ProductionMode") ~= true
+        prompt.ActionText = "Clean hooves"
+        prompt:SetAttribute("Context", "Ready for a little spa?")
+        prompt:SetAttribute("Icon", definition.Icon)
+        if not prompt.Enabled then hidePrompt(prompt)
+        elseif promptViews[prompt] then promptViews[prompt].update() end
+        return
+    end
 
     if prompt.Name == "FeedPrompt" or prompt.Name == "EggPrompt" then
         local home = AnimalConfig.Coops[itemName]
@@ -285,7 +315,7 @@ local function bindPrompt(prompt)
 end
 
 ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
-    if not boundPrompts[prompt] or (prompt.Name ~= "ActionPrompt" and prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt") or
+    if not boundPrompts[prompt] or (prompt.Name ~= "ActionPrompt" and prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt" and prompt.Name ~= "CarePrompt" and prompt.Name ~= "TankPrompt" and prompt.Name ~= "CollectPrompt") or
         prompt.Style ~= Enum.ProximityPromptStyle.Custom or not prompt.Enabled then
         return
     end
@@ -297,7 +327,7 @@ ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
     local step = getConstructionStep(object, itemName)
     if prompt.Name ~= "ActionPrompt" or prompt:GetAttribute("CareAction") then step = nil end
     local definition = ItemDefinitions[itemName]
-    if not step and not (definition and (definition.ShopCategoryWhenEmpty or AnimalConfig.Coops[itemName])) then return end
+    if not step and not (definition and (definition.ShopCategoryWhenEmpty or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
     hidePrompt(prompt)
     if step then
         promptViews[prompt] = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)
