@@ -1,4 +1,5 @@
-<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+<?xml version='1.0' encoding='utf-8'?>
+<roblox xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
@@ -18,11 +19,11 @@
 			<token name="SelectionBehaviorRight">0</token>
 			<token name="SelectionBehaviorUp">0</token>
 			<bool name="SelectionGroup">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<string name="Name">BuyGui</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 		</Properties>
@@ -83,11 +84,11 @@
 				<token name="SelectionBehaviorRight">0</token>
 				<token name="SelectionBehaviorUp">0</token>
 				<bool name="SelectionGroup">false</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">MainFrame</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
@@ -109,11 +110,11 @@
 						<S>0</S>
 						<O>8</O>
 					</UDim>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">UICorner</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -137,11 +138,11 @@
 					<float name="Thickness">5</float>
 					<float name="Transparency">0</float>
 					<int name="ZIndex">1</int>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">UIStroke</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -203,11 +204,11 @@
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">InnerFrame</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -294,11 +295,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">true</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">ItemsFrame</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -322,11 +323,11 @@
 							<token name="HorizontalAlignment">1</token>
 							<token name="SortOrder">2</token>
 							<token name="VerticalAlignment">1</token>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UIGridLayout</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -349,11 +350,11 @@
 								<S>0</S>
 								<O>6</O>
 							</UDim>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UIPadding</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -367,10 +368,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">No items available yet.</string>
 						<Color3 name="TextColor3">
@@ -446,11 +447,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">EmptyLabel</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -458,11 +459,11 @@
 						<Properties>
 							<int name="MaxTextSize">22</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -476,10 +477,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">Choose a category</string>
 						<Color3 name="TextColor3">
@@ -555,11 +556,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">IntroLabel</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -567,11 +568,11 @@
 						<Properties>
 							<int name="MaxTextSize">24</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -660,11 +661,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">true</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">CategoriesFrame</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -688,11 +689,11 @@
 							<token name="HorizontalAlignment">1</token>
 							<token name="SortOrder">2</token>
 							<token name="VerticalAlignment">1</token>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UIGridLayout</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -722,7 +723,7 @@
 							<bool name="ClipsDescendants">false</bool>
 							<bool name="Draggable">false</bool>
 							<bool name="Interactable">true</bool>
-							<int name="LayoutOrder">3</int>
+							<int name="LayoutOrder">4</int>
 							<Ref name="NextSelectionDown">null</Ref>
 							<Ref name="NextSelectionLeft">null</Ref>
 							<Ref name="NextSelectionRight">null</Ref>
@@ -754,11 +755,11 @@
 							<token name="SelectionBehaviorRight">0</token>
 							<token name="SelectionBehaviorUp">0</token>
 							<bool name="SelectionGroup">false</bool>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">AnimalsFrame</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -780,11 +781,11 @@
 									<S>0</S>
 									<O>8</O>
 								</UDim>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UICorner</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -808,11 +809,11 @@
 								<float name="Thickness">2</float>
 								<float name="Transparency">0</float>
 								<int name="ZIndex">1</int>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UIStroke</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -825,10 +826,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Animals</string>
 								<Color3 name="TextColor3">
@@ -910,11 +911,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">SelectButton</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -936,11 +937,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -964,11 +965,11 @@
 									<float name="Thickness">3</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -977,11 +978,11 @@
 								<Properties>
 									<int name="MaxTextSize">27</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -995,10 +996,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Fill your barn</string>
 								<Color3 name="TextColor3">
@@ -1074,11 +1075,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">DescriptionLabel</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1086,11 +1087,11 @@
 								<Properties>
 									<int name="MaxTextSize">18</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1122,7 +1123,7 @@
 							<bool name="ClipsDescendants">false</bool>
 							<bool name="Draggable">false</bool>
 							<bool name="Interactable">true</bool>
-							<int name="LayoutOrder">4</int>
+							<int name="LayoutOrder">5</int>
 							<Ref name="NextSelectionDown">null</Ref>
 							<Ref name="NextSelectionLeft">null</Ref>
 							<Ref name="NextSelectionRight">null</Ref>
@@ -1154,11 +1155,11 @@
 							<token name="SelectionBehaviorRight">0</token>
 							<token name="SelectionBehaviorUp">0</token>
 							<bool name="SelectionGroup">false</bool>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">EquipmentFrame</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -1180,11 +1181,11 @@
 									<S>0</S>
 									<O>8</O>
 								</UDim>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UICorner</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1208,11 +1209,11 @@
 								<float name="Thickness">2</float>
 								<float name="Transparency">0</float>
 								<int name="ZIndex">1</int>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UIStroke</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1225,10 +1226,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Equipment</string>
 								<Color3 name="TextColor3">
@@ -1310,11 +1311,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">SelectButton</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1336,11 +1337,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1364,11 +1365,11 @@
 									<float name="Thickness">3</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1377,11 +1378,11 @@
 								<Properties>
 									<int name="MaxTextSize">27</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1395,12 +1396,12 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
-								<string name="Text">Upgrade your farm</string>
+								<string name="Text">Tools and supplies</string>
 								<Color3 name="TextColor3">
 									<R>0</R>
 									<G>0</G>
@@ -1474,11 +1475,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">DescriptionLabel</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1486,11 +1487,11 @@
 								<Properties>
 									<int name="MaxTextSize">18</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1554,11 +1555,11 @@
 							<token name="SelectionBehaviorRight">0</token>
 							<token name="SelectionBehaviorUp">0</token>
 							<bool name="SelectionGroup">false</bool>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">SeedsFrame</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -1580,11 +1581,11 @@
 									<S>0</S>
 									<O>8</O>
 								</UDim>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UICorner</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1608,11 +1609,11 @@
 								<float name="Thickness">2</float>
 								<float name="Transparency">0</float>
 								<int name="ZIndex">1</int>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UIStroke</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1625,10 +1626,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Seeds</string>
 								<Color3 name="TextColor3">
@@ -1710,11 +1711,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">SelectButton</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1736,11 +1737,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1764,11 +1765,11 @@
 									<float name="Thickness">3</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1777,11 +1778,11 @@
 								<Properties>
 									<int name="MaxTextSize">27</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1795,10 +1796,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Grow your next harvest</string>
 								<Color3 name="TextColor3">
@@ -1874,11 +1875,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">DescriptionLabel</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -1886,11 +1887,11 @@
 								<Properties>
 									<int name="MaxTextSize">18</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -1922,7 +1923,7 @@
 							<bool name="ClipsDescendants">false</bool>
 							<bool name="Draggable">false</bool>
 							<bool name="Interactable">true</bool>
-							<int name="LayoutOrder">2</int>
+							<int name="LayoutOrder">3</int>
 							<Ref name="NextSelectionDown">null</Ref>
 							<Ref name="NextSelectionLeft">null</Ref>
 							<Ref name="NextSelectionRight">null</Ref>
@@ -1954,11 +1955,11 @@
 							<token name="SelectionBehaviorRight">0</token>
 							<token name="SelectionBehaviorUp">0</token>
 							<bool name="SelectionGroup">false</bool>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">FurnitureFrame</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -1980,11 +1981,11 @@
 									<S>0</S>
 									<O>8</O>
 								</UDim>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UICorner</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -2008,11 +2009,11 @@
 								<float name="Thickness">2</float>
 								<float name="Transparency">0</float>
 								<int name="ZIndex">1</int>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UIStroke</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -2025,10 +2026,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Furniture</string>
 								<Color3 name="TextColor3">
@@ -2110,11 +2111,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">SelectButton</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -2136,11 +2137,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -2164,11 +2165,11 @@
 									<float name="Thickness">3</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -2177,11 +2178,11 @@
 								<Properties>
 									<int name="MaxTextSize">27</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -2195,10 +2196,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Decorate your farm</string>
 								<Color3 name="TextColor3">
@@ -2274,11 +2275,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">DescriptionLabel</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -2286,11 +2287,11 @@
 								<Properties>
 									<int name="MaxTextSize">18</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -2315,11 +2316,11 @@
 								<S>0</S>
 								<O>6</O>
 							</UDim>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UIPadding</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -2349,7 +2350,7 @@
         <bool name="ClipsDescendants">false</bool>
         <bool name="Draggable">false</bool>
         <bool name="Interactable">true</bool>
-        <int name="LayoutOrder">5</int>
+        <int name="LayoutOrder">6</int>
         <Ref name="NextSelectionDown">null</Ref>
         <Ref name="NextSelectionLeft">null</Ref>
         <Ref name="NextSelectionRight">null</Ref>
@@ -2728,6 +2729,406 @@
         </Item>
     </Item>
 </Item>
+					<Item class="Frame" referent="RBXA1CE0FD1836849A1A91DF7A741AB3F8B">
+						<Properties>
+							<token name="Style">0</token>
+							<bool name="Active">false</bool>
+							<Vector2 name="AnchorPoint">
+								<X>0</X>
+								<Y>0</Y>
+							</Vector2>
+							<token name="AutomaticSize">0</token>
+							<Color3 name="BackgroundColor3">
+								<R>1</R>
+								<G>0.937254906</G>
+								<B>0.745098054</B>
+							</Color3>
+							<float name="BackgroundTransparency">0</float>
+							<Color3 name="BorderColor3">
+								<R>0.105882354</R>
+								<G>0.164705887</G>
+								<B>0.20784314</B>
+							</Color3>
+							<token name="BorderMode">0</token>
+							<int name="BorderSizePixel">0</int>
+							<bool name="ClipsDescendants">false</bool>
+							<bool name="Draggable">false</bool>
+							<bool name="Interactable">true</bool>
+							<int name="LayoutOrder">2</int>
+							<Ref name="NextSelectionDown">null</Ref>
+							<Ref name="NextSelectionLeft">null</Ref>
+							<Ref name="NextSelectionRight">null</Ref>
+							<Ref name="NextSelectionUp">null</Ref>
+							<UDim2 name="Position">
+								<XS>0</XS>
+								<XO>0</XO>
+								<YS>0</YS>
+								<YO>0</YO>
+							</UDim2>
+							<float name="Rotation">0</float>
+							<bool name="Selectable">false</bool>
+							<Ref name="SelectionImageObject">null</Ref>
+							<int name="SelectionOrder">0</int>
+							<token name="Sink">0</token>
+							<UDim2 name="Size">
+								<XS>1</XS>
+								<XO>-16</XO>
+								<YS>0</YS>
+								<YO>104</YO>
+							</UDim2>
+							<token name="SizeConstraint">0</token>
+							<bool name="Visible">true</bool>
+							<int name="ZIndex">2</int>
+							<bool name="AutoLocalize">true</bool>
+							<Ref name="RootLocalizationTable">null</Ref>
+							<token name="SelectionBehaviorDown">0</token>
+							<token name="SelectionBehaviorLeft">0</token>
+							<token name="SelectionBehaviorRight">0</token>
+							<token name="SelectionBehaviorUp">0</token>
+							<bool name="SelectionGroup">false</bool>
+							<BinaryString name="AttributesSerialize" />
+							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+							<bool name="DefinesCapabilities">false</bool>
+							<string name="Name">BuildingsFrame</string>
+							<BinaryString name="SerializedOverrides" />
+							<int64 name="SourceAssetId">-1</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						</Properties>
+						<Item class="UICorner" referent="RBX6F30CA02A9DE4821821FE43CA9FEA2EF">
+							<Properties>
+								<UDim name="BottomLeftRadius">
+									<S>0</S>
+									<O>8</O>
+								</UDim>
+								<UDim name="BottomRightRadius">
+									<S>0</S>
+									<O>8</O>
+								</UDim>
+								<UDim name="TopLeftRadius">
+									<S>0</S>
+									<O>8</O>
+								</UDim>
+								<UDim name="TopRightRadius">
+									<S>0</S>
+									<O>8</O>
+								</UDim>
+								<BinaryString name="AttributesSerialize" />
+								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+								<bool name="DefinesCapabilities">false</bool>
+								<string name="Name">UICorner</string>
+								<BinaryString name="SerializedOverrides" />
+								<int64 name="SourceAssetId">-1</int64>
+								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+							</Properties>
+						</Item>
+						<Item class="UIStroke" referent="RBX36F326383F3B4AA2A4941E8F51F55142">
+							<Properties>
+								<token name="ApplyStrokeMode">1</token>
+								<UDim name="BorderOffset">
+									<S>0</S>
+									<O>0</O>
+								</UDim>
+								<token name="BorderStrokePosition">0</token>
+								<Color3 name="Color">
+									<R>0.70588237</R>
+									<G>0.490196079</G>
+									<B>0.215686277</B>
+								</Color3>
+								<bool name="Enabled">true</bool>
+								<token name="LineJoinMode">0</token>
+								<token name="StrokeSizingMode">0</token>
+								<float name="Thickness">2</float>
+								<float name="Transparency">0</float>
+								<int name="ZIndex">1</int>
+								<BinaryString name="AttributesSerialize" />
+								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+								<bool name="DefinesCapabilities">false</bool>
+								<string name="Name">UIStroke</string>
+								<BinaryString name="SerializedOverrides" />
+								<int64 name="SourceAssetId">-1</int64>
+								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+							</Properties>
+						</Item>
+						<Item class="TextButton" referent="RBXA16810F700AE424FBE5229AF477FF286">
+							<Properties>
+								<Font name="FontFace">
+									<Family><url>rbxasset://fonts/families/FredokaOne.json</url></Family>
+									<Weight>400</Weight>
+									<Style>Normal</Style>
+								</Font>
+								<float name="LineHeight">1</float>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
+								<int name="MaxVisibleGraphemes">-1</int>
+								<string name="OpenTypeFeatures" />
+								<bool name="RichText">false</bool>
+								<string name="Text">Buildings</string>
+								<Color3 name="TextColor3">
+									<R>1</R>
+									<G>1</G>
+									<B>1</B>
+								</Color3>
+								<token name="TextDirection">0</token>
+								<bool name="TextScaled">true</bool>
+								<float name="TextSize">27</float>
+								<Color3 name="TextStrokeColor3">
+									<R>0</R>
+									<G>0</G>
+									<B>0</B>
+								</Color3>
+								<float name="TextStrokeTransparency">1</float>
+								<float name="TextTransparency">0</float>
+								<token name="TextTruncate">0</token>
+								<bool name="TextWrapped">true</bool>
+								<token name="TextXAlignment">2</token>
+								<token name="TextYAlignment">1</token>
+								<bool name="AutoButtonColor">true</bool>
+								<Ref name="HoverHapticEffect">null</Ref>
+								<bool name="Modal">false</bool>
+								<Ref name="PressHapticEffect">null</Ref>
+								<bool name="Selected">false</bool>
+								<token name="Style">0</token>
+								<bool name="Active">true</bool>
+								<Vector2 name="AnchorPoint">
+									<X>0</X>
+									<Y>0</Y>
+								</Vector2>
+								<token name="AutomaticSize">0</token>
+								<Color3 name="BackgroundColor3">
+									<R>0.333333343</R>
+									<G>0.607843161</G>
+									<B>0.215686277</B>
+								</Color3>
+								<float name="BackgroundTransparency">0</float>
+								<Color3 name="BorderColor3">
+									<R>0.105882354</R>
+									<G>0.164705887</G>
+									<B>0.20784314</B>
+								</Color3>
+								<token name="BorderMode">0</token>
+								<int name="BorderSizePixel">0</int>
+								<bool name="ClipsDescendants">false</bool>
+								<bool name="Draggable">false</bool>
+								<bool name="Interactable">true</bool>
+								<int name="LayoutOrder">0</int>
+								<Ref name="NextSelectionDown">null</Ref>
+								<Ref name="NextSelectionLeft">null</Ref>
+								<Ref name="NextSelectionRight">null</Ref>
+								<Ref name="NextSelectionUp">null</Ref>
+								<UDim2 name="Position">
+									<XS>0</XS>
+									<XO>12</XO>
+									<YS>0</YS>
+									<YO>10</YO>
+								</UDim2>
+								<float name="Rotation">0</float>
+								<bool name="Selectable">true</bool>
+								<Ref name="SelectionImageObject">null</Ref>
+								<int name="SelectionOrder">0</int>
+								<token name="Sink">1</token>
+								<UDim2 name="Size">
+									<XS>1</XS>
+									<XO>-24</XO>
+									<YS>0</YS>
+									<YO>52</YO>
+								</UDim2>
+								<token name="SizeConstraint">0</token>
+								<bool name="Visible">true</bool>
+								<int name="ZIndex">3</int>
+								<bool name="AutoLocalize">false</bool>
+								<Ref name="RootLocalizationTable">null</Ref>
+								<token name="SelectionBehaviorDown">0</token>
+								<token name="SelectionBehaviorLeft">0</token>
+								<token name="SelectionBehaviorRight">0</token>
+								<token name="SelectionBehaviorUp">0</token>
+								<bool name="SelectionGroup">false</bool>
+								<BinaryString name="AttributesSerialize" />
+								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+								<bool name="DefinesCapabilities">false</bool>
+								<string name="Name">SelectButton</string>
+								<BinaryString name="SerializedOverrides" />
+								<int64 name="SourceAssetId">-1</int64>
+								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+							</Properties>
+							<Item class="UICorner" referent="RBX6F3231B2FA7D49C7A83899BC54D9DF15">
+								<Properties>
+									<UDim name="BottomLeftRadius">
+										<S>0</S>
+										<O>8</O>
+									</UDim>
+									<UDim name="BottomRightRadius">
+										<S>0</S>
+										<O>8</O>
+									</UDim>
+									<UDim name="TopLeftRadius">
+										<S>0</S>
+										<O>8</O>
+									</UDim>
+									<UDim name="TopRightRadius">
+										<S>0</S>
+										<O>8</O>
+									</UDim>
+									<BinaryString name="AttributesSerialize" />
+									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+									<bool name="DefinesCapabilities">false</bool>
+									<string name="Name">UICorner</string>
+									<BinaryString name="SerializedOverrides" />
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+							</Item>
+							<Item class="UIStroke" referent="RBXE97214166E294559ADEB4F5015F6E6CF">
+								<Properties>
+									<token name="ApplyStrokeMode">1</token>
+									<UDim name="BorderOffset">
+										<S>0</S>
+										<O>0</O>
+									</UDim>
+									<token name="BorderStrokePosition">0</token>
+									<Color3 name="Color">
+										<R>0.176470593</R>
+										<G>0.411764711</G>
+										<B>0.117647059</B>
+									</Color3>
+									<bool name="Enabled">true</bool>
+									<token name="LineJoinMode">0</token>
+									<token name="StrokeSizingMode">0</token>
+									<float name="Thickness">3</float>
+									<float name="Transparency">0</float>
+									<int name="ZIndex">1</int>
+									<BinaryString name="AttributesSerialize" />
+									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+									<bool name="DefinesCapabilities">false</bool>
+									<string name="Name">UIStroke</string>
+									<BinaryString name="SerializedOverrides" />
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+							</Item>
+							<Item class="UITextSizeConstraint" referent="RBX33B24AB0089B4F86AFCD59299856827C">
+								<Properties>
+									<int name="MaxTextSize">27</int>
+									<int name="MinTextSize">12</int>
+									<BinaryString name="AttributesSerialize" />
+									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+									<bool name="DefinesCapabilities">false</bool>
+									<string name="Name">UITextSizeConstraint</string>
+									<BinaryString name="SerializedOverrides" />
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+							</Item>
+						</Item>
+						<Item class="TextLabel" referent="RBXE4B237AD20394A749581CAF21E27C437">
+							<Properties>
+								<Font name="FontFace">
+									<Family><url>rbxasset://fonts/families/FredokaOne.json</url></Family>
+									<Weight>400</Weight>
+									<Style>Normal</Style>
+								</Font>
+								<float name="LineHeight">1</float>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
+								<int name="MaxVisibleGraphemes">-1</int>
+								<string name="OpenTypeFeatures" />
+								<bool name="RichText">false</bool>
+								<string name="Text">Build your farm</string>
+								<Color3 name="TextColor3">
+									<R>0</R>
+									<G>0</G>
+									<B>0</B>
+								</Color3>
+								<token name="TextDirection">0</token>
+								<bool name="TextScaled">true</bool>
+								<float name="TextSize">18</float>
+								<Color3 name="TextStrokeColor3">
+									<R>0</R>
+									<G>0</G>
+									<B>0</B>
+								</Color3>
+								<float name="TextStrokeTransparency">1</float>
+								<float name="TextTransparency">0</float>
+								<token name="TextTruncate">0</token>
+								<bool name="TextWrapped">true</bool>
+								<token name="TextXAlignment">2</token>
+								<token name="TextYAlignment">1</token>
+								<bool name="Active">false</bool>
+								<Vector2 name="AnchorPoint">
+									<X>0</X>
+									<Y>0</Y>
+								</Vector2>
+								<token name="AutomaticSize">0</token>
+								<Color3 name="BackgroundColor3">
+									<R>1</R>
+									<G>1</G>
+									<B>1</B>
+								</Color3>
+								<float name="BackgroundTransparency">1</float>
+								<Color3 name="BorderColor3">
+									<R>0.105882354</R>
+									<G>0.164705887</G>
+									<B>0.20784314</B>
+								</Color3>
+								<token name="BorderMode">0</token>
+								<int name="BorderSizePixel">0</int>
+								<bool name="ClipsDescendants">false</bool>
+								<bool name="Draggable">false</bool>
+								<bool name="Interactable">true</bool>
+								<int name="LayoutOrder">0</int>
+								<Ref name="NextSelectionDown">null</Ref>
+								<Ref name="NextSelectionLeft">null</Ref>
+								<Ref name="NextSelectionRight">null</Ref>
+								<Ref name="NextSelectionUp">null</Ref>
+								<UDim2 name="Position">
+									<XS>0</XS>
+									<XO>12</XO>
+									<YS>0</YS>
+									<YO>72</YO>
+								</UDim2>
+								<float name="Rotation">0</float>
+								<bool name="Selectable">false</bool>
+								<Ref name="SelectionImageObject">null</Ref>
+								<int name="SelectionOrder">0</int>
+								<token name="Sink">0</token>
+								<UDim2 name="Size">
+									<XS>1</XS>
+									<XO>-24</XO>
+									<YS>0</YS>
+									<YO>24</YO>
+								</UDim2>
+								<token name="SizeConstraint">0</token>
+								<bool name="Visible">true</bool>
+								<int name="ZIndex">3</int>
+								<bool name="AutoLocalize">false</bool>
+								<Ref name="RootLocalizationTable">null</Ref>
+								<token name="SelectionBehaviorDown">0</token>
+								<token name="SelectionBehaviorLeft">0</token>
+								<token name="SelectionBehaviorRight">0</token>
+								<token name="SelectionBehaviorUp">0</token>
+								<bool name="SelectionGroup">false</bool>
+								<BinaryString name="AttributesSerialize" />
+								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+								<bool name="DefinesCapabilities">false</bool>
+								<string name="Name">DescriptionLabel</string>
+								<BinaryString name="SerializedOverrides" />
+								<int64 name="SourceAssetId">-1</int64>
+								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+							</Properties>
+							<Item class="UITextSizeConstraint" referent="RBX5E9670209DB74D87A120FD381691FE6E">
+								<Properties>
+									<int name="MaxTextSize">18</int>
+									<int name="MinTextSize">12</int>
+									<BinaryString name="AttributesSerialize" />
+									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+									<bool name="DefinesCapabilities">false</bool>
+									<string name="Name">UITextSizeConstraint</string>
+									<BinaryString name="SerializedOverrides" />
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+							</Item>
+						</Item>
+					</Item>
 					</Item>
 				<Item class="TextButton" referent="RBX86F51598D83F44D1AB082AE9B44EB303">
 					<Properties>
@@ -2737,10 +3138,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">&lt;</string>
 						<Color3 name="TextColor3">
@@ -2822,11 +3223,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">CategoryBackButton</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2848,11 +3249,11 @@
 								<S>0</S>
 								<O>8</O>
 							</UDim>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UICorner</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -2861,11 +3262,11 @@
 						<Properties>
 							<int name="MaxTextSize">30</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -2889,11 +3290,11 @@
 							<float name="Thickness">3</float>
 							<float name="Transparency">0</float>
 							<int name="ZIndex">1</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UIStroke</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -2917,11 +3318,11 @@
 							<S>0</S>
 							<O>8</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -2945,11 +3346,11 @@
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -3012,11 +3413,11 @@
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">HeaderFrame</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -3028,10 +3429,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">What to buy?</string>
 						<Color3 name="TextColor3">
@@ -3107,11 +3508,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">TextLabel</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -3119,11 +3520,11 @@
 						<Properties>
 							<int name="MaxTextSize">30</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -3139,11 +3540,11 @@
 							<X>0</X>
 							<Y>0</Y>
 						</Vector2>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UISizeConstraint</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -3167,11 +3568,11 @@
 						<float name="Thickness">4</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -3194,11 +3595,11 @@
 							<S>0</S>
 							<O>8</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -3261,11 +3662,11 @@
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">ItemBuyFrame</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -3352,11 +3753,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">true</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">Content</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -3417,11 +3818,11 @@
 							<token name="SelectionBehaviorRight">0</token>
 							<token name="SelectionBehaviorUp">0</token>
 							<bool name="SelectionGroup">false</bool>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">ItemDetails</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -3433,10 +3834,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">&lt;</string>
 								<Color3 name="TextColor3">
@@ -3518,11 +3919,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">BackButton</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -3544,11 +3945,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -3572,11 +3973,11 @@
 									<float name="Thickness">3</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -3585,11 +3986,11 @@
 								<Properties>
 									<int name="MaxTextSize">30</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -3652,11 +4053,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">ItemHeaderFrame</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -3668,10 +4069,10 @@
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
 									<string name="Text">Carrot seeds</string>
 									<Color3 name="TextColor3">
@@ -3747,11 +4148,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">ItemNameLabel</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -3759,11 +4160,11 @@
 									<Properties>
 										<int name="MaxTextSize">25</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -3788,11 +4189,11 @@
 									<float name="Thickness">4</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -3815,11 +4216,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -3882,11 +4283,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">PriceFrame</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -3908,11 +4309,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -3936,11 +4337,11 @@
 									<float name="Thickness">3</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -3953,10 +4354,10 @@
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
 									<string name="Text">$0.02</string>
 									<Color3 name="TextColor3">
@@ -4032,11 +4433,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">PriceLabel</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4044,11 +4445,11 @@
 									<Properties>
 										<int name="MaxTextSize">23</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -4062,10 +4463,10 @@
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
 									<string name="Text">0</string>
 									<Color3 name="TextColor3">
@@ -4141,11 +4542,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">OwnedAmountLabel</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4153,11 +4554,11 @@
 									<Properties>
 										<int name="MaxTextSize">23</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -4171,10 +4572,10 @@
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
 									<string name="Text">Price for each:</string>
 									<Color3 name="TextColor3">
@@ -4250,11 +4651,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">PriceTextLabel</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4262,11 +4663,11 @@
 									<Properties>
 										<int name="MaxTextSize">23</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -4280,10 +4681,10 @@
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
 									<string name="Text">You have:</string>
 									<Color3 name="TextColor3">
@@ -4359,11 +4760,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">OwnedTextLabel</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4371,11 +4772,11 @@
 									<Properties>
 										<int name="MaxTextSize">23</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -4390,10 +4791,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Max</string>
 								<Color3 name="TextColor3">
@@ -4475,11 +4876,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">MaxButton</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -4501,11 +4902,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4514,11 +4915,11 @@
 								<Properties>
 									<int name="MaxTextSize">18</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4542,11 +4943,11 @@
 									<float name="Thickness">2</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4560,10 +4961,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Can buy: 50</string>
 								<Color3 name="TextColor3">
@@ -4639,11 +5040,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">QuantityHintLabel</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -4651,11 +5052,11 @@
 								<Properties>
 									<int name="MaxTextSize">17</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4718,11 +5119,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">ItemBuyButtonFrame</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -4734,10 +5135,10 @@
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
 									<string name="Text">$0.02</string>
 									<Color3 name="TextColor3">
@@ -4813,11 +5214,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">TotalPriceLabel</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4825,11 +5226,11 @@
 									<Properties>
 										<int name="MaxTextSize">21</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -4843,10 +5244,10 @@
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
 									<string name="Text">Buy</string>
 									<Color3 name="TextColor3">
@@ -4928,11 +5329,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">BuyButton</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -4954,11 +5355,11 @@
 											<S>0</S>
 											<O>8</O>
 										</UDim>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UICorner</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -4982,11 +5383,11 @@
 										<float name="Thickness">3</float>
 										<float name="Transparency">0</float>
 										<int name="ZIndex">1</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UIStroke</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -4995,11 +5396,11 @@
 									<Properties>
 										<int name="MaxTextSize">25</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -5024,11 +5425,11 @@
 									<float name="Thickness">3</float>
 									<float name="Transparency">0</float>
 									<int name="ZIndex">1</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UIStroke</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -5051,11 +5452,11 @@
 										<S>0</S>
 										<O>8</O>
 									</UDim>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UICorner</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -5068,10 +5469,10 @@
 										<Style>Normal</Style>
 									</Font>
 									<float name="LineHeight">1</float>
-									<string name="LocalizationMatchIdentifier"></string>
-									<string name="LocalizationMatchedSourceText"></string>
+									<string name="LocalizationMatchIdentifier" />
+									<string name="LocalizationMatchedSourceText" />
 									<int name="MaxVisibleGraphemes">-1</int>
-									<string name="OpenTypeFeatures"></string>
+									<string name="OpenTypeFeatures" />
 									<bool name="RichText">false</bool>
 									<string name="Text">Total:</string>
 									<Color3 name="TextColor3">
@@ -5147,11 +5548,11 @@
 									<token name="SelectionBehaviorRight">0</token>
 									<token name="SelectionBehaviorUp">0</token>
 									<bool name="SelectionGroup">false</bool>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">TotalTextLabel</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -5159,11 +5560,11 @@
 									<Properties>
 										<int name="MaxTextSize">21</int>
 										<int name="MinTextSize">12</int>
-										<BinaryString name="AttributesSerialize"></BinaryString>
+										<BinaryString name="AttributesSerialize" />
 										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 										<bool name="DefinesCapabilities">false</bool>
 										<string name="Name">UITextSizeConstraint</string>
-										<BinaryString name="SerializedOverrides"></BinaryString>
+										<BinaryString name="SerializedOverrides" />
 										<int64 name="SourceAssetId">-1</int64>
 										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 									</Properties>
@@ -5178,10 +5579,10 @@
 									<Style>Normal</Style>
 								</Font>
 								<float name="LineHeight">1</float>
-								<string name="LocalizationMatchIdentifier"></string>
-								<string name="LocalizationMatchedSourceText"></string>
+								<string name="LocalizationMatchIdentifier" />
+								<string name="LocalizationMatchedSourceText" />
 								<int name="MaxVisibleGraphemes">-1</int>
-								<string name="OpenTypeFeatures"></string>
+								<string name="OpenTypeFeatures" />
 								<bool name="RichText">false</bool>
 								<string name="Text">Choose an amount, then press Buy.</string>
 								<Color3 name="TextColor3">
@@ -5257,11 +5658,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">StatusLabel</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -5269,11 +5670,11 @@
 								<Properties>
 									<int name="MaxTextSize">16</int>
 									<int name="MinTextSize">12</int>
-									<BinaryString name="AttributesSerialize"></BinaryString>
+									<BinaryString name="AttributesSerialize" />
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
 									<string name="Name">UITextSizeConstraint</string>
-									<BinaryString name="SerializedOverrides"></BinaryString>
+									<BinaryString name="SerializedOverrides" />
 									<int64 name="SourceAssetId">-1</int64>
 									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 								</Properties>
@@ -5336,11 +5737,11 @@
 								<token name="SelectionBehaviorRight">0</token>
 								<token name="SelectionBehaviorUp">0</token>
 								<bool name="SelectionGroup">false</bool>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">QuantityFrame</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -6273,11 +6674,11 @@
 						<Item class="UIScale" referent="RBX1E7DC94706A74675AD475EB3489D82A1">
 							<Properties>
 								<float name="Scale">1</float>
-								<BinaryString name="AttributesSerialize"></BinaryString>
+								<BinaryString name="AttributesSerialize" />
 								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 								<bool name="DefinesCapabilities">false</bool>
 								<string name="Name">UIScale</string>
-								<BinaryString name="SerializedOverrides"></BinaryString>
+								<BinaryString name="SerializedOverrides" />
 								<int64 name="SourceAssetId">-1</int64>
 								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							</Properties>
@@ -6303,11 +6704,11 @@
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6330,11 +6731,11 @@
 							<S>0</S>
 							<O>8</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6397,11 +6798,11 @@
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">FooterFrame</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -6413,10 +6814,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">Balance: $0.00</string>
 						<Color3 name="TextColor3">
@@ -6492,11 +6893,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">MoneyLabel</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6504,11 +6905,11 @@
 						<Properties>
 							<int name="MaxTextSize">18</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -6522,10 +6923,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">Farm shop</string>
 						<Color3 name="TextColor3">
@@ -6601,11 +7002,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">HintLabel</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6613,11 +7014,11 @@
 						<Properties>
 							<int name="MaxTextSize">18</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -6634,11 +7035,11 @@
 						<X>0</X>
 						<Y>0</Y>
 					</Vector2>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">UISizeConstraint</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -6651,10 +7052,10 @@
 						<Style>Normal</Style>
 					</Font>
 					<float name="LineHeight">1</float>
-					<string name="LocalizationMatchIdentifier"></string>
-					<string name="LocalizationMatchedSourceText"></string>
+					<string name="LocalizationMatchIdentifier" />
+					<string name="LocalizationMatchedSourceText" />
 					<int name="MaxVisibleGraphemes">-1</int>
-					<string name="OpenTypeFeatures"></string>
+					<string name="OpenTypeFeatures" />
 					<bool name="RichText">false</bool>
 					<string name="Text">X</string>
 					<Color3 name="TextColor3">
@@ -6736,11 +7137,11 @@
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">CloseButton</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -6762,11 +7163,11 @@
 							<S>0</S>
 							<O>8</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6775,11 +7176,11 @@
 					<Properties>
 						<int name="MaxTextSize">32</int>
 						<int name="MinTextSize">12</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UITextSizeConstraint</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6803,11 +7204,11 @@
 						<float name="Thickness">3</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6821,11 +7222,11 @@
 					<G>0</G>
 					<B>0</B>
 				</Color3>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">Templates</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
@@ -6886,11 +7287,11 @@
 					<token name="SelectionBehaviorRight">0</token>
 					<token name="SelectionBehaviorUp">0</token>
 					<bool name="SelectionGroup">false</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">ItemCardTemplate</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
@@ -6912,11 +7313,11 @@
 							<S>0</S>
 							<O>8</O>
 						</UDim>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UICorner</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6940,11 +7341,11 @@
 						<float name="Thickness">2</float>
 						<float name="Transparency">0</float>
 						<int name="ZIndex">1</int>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">UIStroke</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -6957,10 +7358,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">Carrot seeds</string>
 						<Color3 name="TextColor3">
@@ -7042,11 +7443,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">SelectButton</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -7068,11 +7469,11 @@
 								<S>0</S>
 								<O>8</O>
 							</UDim>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UICorner</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -7096,11 +7497,11 @@
 							<float name="Thickness">3</float>
 							<float name="Transparency">0</float>
 							<int name="ZIndex">1</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UIStroke</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -7109,11 +7510,11 @@
 						<Properties>
 							<int name="MaxTextSize">25</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -7127,10 +7528,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">$0.02 / each</string>
 						<Color3 name="TextColor3">
@@ -7206,11 +7607,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">PriceLabel</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -7218,11 +7619,11 @@
 						<Properties>
 							<int name="MaxTextSize">19</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -7236,10 +7637,10 @@
 							<Style>Normal</Style>
 						</Font>
 						<float name="LineHeight">1</float>
-						<string name="LocalizationMatchIdentifier"></string>
-						<string name="LocalizationMatchedSourceText"></string>
+						<string name="LocalizationMatchIdentifier" />
+						<string name="LocalizationMatchedSourceText" />
 						<int name="MaxVisibleGraphemes">-1</int>
-						<string name="OpenTypeFeatures"></string>
+						<string name="OpenTypeFeatures" />
 						<bool name="RichText">false</bool>
 						<string name="Text">You have: 0</string>
 						<Color3 name="TextColor3">
@@ -7315,11 +7716,11 @@
 						<token name="SelectionBehaviorRight">0</token>
 						<token name="SelectionBehaviorUp">0</token>
 						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<BinaryString name="AttributesSerialize" />
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">OwnedLabel</string>
-						<BinaryString name="SerializedOverrides"></BinaryString>
+						<BinaryString name="SerializedOverrides" />
 						<int64 name="SourceAssetId">-1</int64>
 						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
@@ -7327,11 +7728,11 @@
 						<Properties>
 							<int name="MaxTextSize">15</int>
 							<int name="MinTextSize">12</int>
-							<BinaryString name="AttributesSerialize"></BinaryString>
+							<BinaryString name="AttributesSerialize" />
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<string name="Name">UITextSizeConstraint</string>
-							<BinaryString name="SerializedOverrides"></BinaryString>
+							<BinaryString name="SerializedOverrides" />
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
@@ -7353,7 +7754,7 @@
 		</Item>
 		<Item class="LocalScript" referent="RBX25E2343A242B4AFEAEA6CB6EFF57A26E">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[
+				<ProtectedString name="Source">
 local UserInputService = game:GetService("UserInputService")
 local ShopQuantityControls = require(game:GetService("ReplicatedStorage"):WaitForChild("ShopQuantityControls"))
 
@@ -7367,16 +7768,16 @@ local queued = false
 
 local function resize()
     local size = bounds.AbsoluteSize
-    if size.X <= 0 or size.Y <= 0 then return end
-    local narrow = size.X < 600
-    local short = size.Y < 500
+    if size.X &lt;= 0 or size.Y &lt;= 0 then return end
+    local narrow = size.X &lt; 600
+    local short = size.Y &lt; 500
     local desktop = not narrow and (not short or not UserInputService.TouchEnabled)
     local desktopScale = math.clamp(math.min(size.X / 1366, size.Y / 768), 1, 1.35)
     main.UISizeConstraint.MaxSize = Vector2.new(800 * desktopScale, narrow and 720 or 560 * desktopScale)
     main.Size = UDim2.new(narrow and 0.9 or 0.86, 0,
-        desktop and short and 1 or narrow and 0.84 or short and 0.8 or 0.82, desktop and short and -24 or 0)
-    main.Position = UDim2.fromScale(0.5, desktop and short and 0.5 or short and not narrow and 0.41 or 0.48)
-    local compact = short and not desktop and main.AbsoluteSize.X >= 500
+        desktop and short and 1 or narrow and 0.84 or short and 0.94 or 0.82, desktop and short and -24 or 0)
+    main.Position = UDim2.fromScale(0.5, desktop and short and 0.5 or short and not narrow and 0.5 or 0.48)
+    local compact = short and not desktop and main.AbsoluteSize.X &gt;= 500
     main:SetAttribute("LayoutProfile", narrow and "PhonePortrait" or not desktop and short and "ShortLandscape" or "Desktop")
     main.HeaderFrame.Size = UDim2.new(0.5, 0, 0, compact and 36 or 56)
     main.HeaderFrame.Position = UDim2.new(0.5, 0, 0, compact and 8 or 12)
@@ -7386,18 +7787,19 @@ local function resize()
         frame.Position = UDim2.new(0, 15, 0, compact and 52 or 80)
         frame.Size = UDim2.new(1, -30, 1, compact and -94 or -126)
     end
-    main.FooterFrame.HintLabel.Visible = main.AbsoluteSize.X >= 500
-    main.FooterFrame.MoneyLabel.Size = UDim2.new(main.AbsoluteSize.X >= 500 and 0.5 or 1, 0, 1, 0)
+    main.FooterFrame.HintLabel.Visible = main.AbsoluteSize.X &gt;= 500
+    main.FooterFrame.MoneyLabel.Size = UDim2.new(main.AbsoluteSize.X &gt;= 500 and 0.5 or 1, 0, 1, 0)
     for _, frame in ipairs(grids) do
         local isCategory = frame.Name == "CategoriesFrame"
         local columnWidth = narrow and 130 or 170
         local columns = math.clamp(math.floor((frame.AbsoluteSize.X - 8) / columnWidth), 1, isCategory and 2 or 3)
         local height = isCategory and (compact and 111 or 132) or (compact and 140 or 172)
+        if compact then height = math.min(height, math.max(104, frame.AbsoluteSize.Y - 8)) end
         frame.UIGridLayout.FillDirectionMaxCells = columns
         frame.UIGridLayout.CellSize = UDim2.new(1 / columns, -16, 0, height)
     end
     local body = content.AbsoluteSize
-    if body.X <= 12 or body.Y <= 8 then return end
+    if body.X &lt;= 12 or body.Y &lt;= 8 then return end
     local desktopHeight = 410
     local scale = math.clamp((body.Y - 8) / 412, 0.75, desktopScale)
     if desktop then
@@ -7467,16 +7869,16 @@ schedule()
 
 main:GetPropertyChangedSignal("Visible"):Connect(function() gui.Overlay.Visible = main.Visible end)
 gui.Overlay.Visible = main.Visible
-]]></ProtectedString>
+</ProtectedString>
 				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
+				<Content name="LinkedSource"><null /></Content>
 				<token name="RunContext">0</token>
 				<string name="ScriptGuid">{4E3C1655-5567-4F75-ADE4-A2AA8514F9D0}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">ResponsiveLayout</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
@@ -7538,18 +7940,18 @@ gui.Overlay.Visible = main.Visible
 				<token name="SelectionBehaviorRight">0</token>
 				<token name="SelectionBehaviorUp">0</token>
 				<bool name="SelectionGroup">false</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">ViewportBounds</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
 		</Item>
 		<Item class="LocalScript" referent="RBX3F048CE582D841D481F0162D831A1BF1">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[
+				<ProtectedString name="Source">
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -7589,7 +7991,7 @@ local pending = nil
 local requestNumber = 0
 local message = ""
 local messageColor = MUTED
-local categoryNames = {"Seeds", "Furniture", "Animals", "Equipment", "Upgrades"}
+local categoryNames = {"Seeds", "Buildings", "Furniture", "Animals", "Equipment", "Upgrades"}
 
 local function formatMoney(cents)
     return string.format("$%.2f", cents / 100)
@@ -7599,6 +8001,7 @@ local function categoryOf(item)
     for _, category in ipairs(categoryNames) do
         if item.ShopCategory == category then return category end
     end
+    if item.Placeable then return "Buildings" end
     if item.Type == "Seed" then return "Seeds" end
     if item.Type == "Furniture" then return "Furniture" end
     if item.Type == "Animal" then return "Animals" end
@@ -7677,8 +8080,8 @@ detailsIcon.ZIndex = details.ItemHeaderFrame.ItemNameLabel.ZIndex + 1
 detailsIcon.Parent = details.ItemHeaderFrame
 
 local function validPrice(price)
-    return typeof(price) == "number" and price >= 0
-        and price <= MAX_INTEGER and price % 1 == 0
+    return typeof(price) == "number" and price &gt;= 0
+        and price &lt;= MAX_INTEGER and price % 1 == 0
 end
 
 local function maximumAmount(price)
@@ -7730,9 +8133,9 @@ local function refresh()
     quantity.SelectedAmountFrame.ItemAmountToBuyLabel.Text = tostring(selectedAmount)
     action.TotalPriceLabel.Text = formatMoney(price * selectedAmount)
     details.QuantityHintLabel.Text = "Can buy: " .. tostring(maximum)
-    QuantityControls.update(quantity, not pending and selectedAmount > 0, not pending and room and selectedAmount < maximum)
-    enableButton(details.MaxButton, not pending and room and maximum > 0, GREEN)
-    enableButton(action.BuyButton, not pending and room and selectedAmount > 0, GREEN)
+    QuantityControls.update(quantity, not pending and selectedAmount &gt; 0, not pending and room and selectedAmount &lt; maximum)
+    enableButton(details.MaxButton, not pending and room and maximum &gt; 0, GREEN)
+    enableButton(action.BuyButton, not pending and room and selectedAmount &gt; 0, GREEN)
     action.BuyButton.Text = pending and "Buying..." or "Buy"
 
     local text, color = message, messageColor
@@ -7772,7 +8175,7 @@ end
 local function selectItem(id)
     selectedId = id
     purchase:SetAttribute("ItemName", id)
-    selectedAmount = maximumAmount(definitions[id].BuyPriceCents) > 0 and 1 or 0
+    selectedAmount = maximumAmount(definitions[id].BuyPriceCents) &gt; 0 and 1 or 0
     message = ""
     catalogue.Visible = false
     purchase.Visible = true
@@ -7789,8 +8192,8 @@ end
 table.sort(ids, function(a, b)
     local orderA = definitions[a].SortOrder or math.huge
     local orderB = definitions[b].SortOrder or math.huge
-    if orderA ~= orderB then return orderA < orderB end
-    return a < b
+    if orderA ~= orderB then return orderA &lt; orderB end
+    return a &lt; b
 end)
 
 local stocked = {}
@@ -7850,7 +8253,8 @@ local categoryArt = {
     Upgrades = definitions.ChickenCoopUpgrade.Icon,
     Animals = definitions.Chicken.Icon,
     Seeds = definitions.CarrotSeed.Icon,
-    Equipment = definitions.GardenBed.Icon,
+    Equipment = definitions.Axe.Icon,
+    Buildings = definitions.WarehouseBlueprint.Icon,
 }
 for _, category in ipairs(categoryNames) do
     local card = categories[category .. "Frame"]
@@ -8017,8 +8421,8 @@ shopLabel.Parent = shopButton
 
 local function resizeShopButton()
     local viewportSize = gui.ViewportBounds.AbsoluteSize
-    if viewportSize.X <= 0 or viewportSize.Y <= 0 then return end
-    local compact = UserInputService.TouchEnabled or viewportSize.X < 600
+    if viewportSize.X &lt;= 0 or viewportSize.Y &lt;= 0 then return end
+    local compact = UserInputService.TouchEnabled or viewportSize.X &lt; 600
     shopButton.Size = UDim2.fromOffset(compact and 132 or 150, compact and 52 or 58)
     shopButton.Position = UDim2.new(0, 12, 0.42, 0)
     shopLabel.TextSize = compact and 18 or 20
@@ -8058,16 +8462,16 @@ UserInputService.InputBegan:Connect(function(input)
     end
 end)
 refresh()
-]]></ProtectedString>
+</ProtectedString>
 				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
+				<Content name="LinkedSource"><null /></Content>
 				<token name="RunContext">0</token>
 				<string name="ScriptGuid">{70D86009-9E35-42B9-9816-E576F72CCC7F}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">ShopController</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
@@ -8129,17 +8533,17 @@ refresh()
 				<token name="SelectionBehaviorRight">0</token>
 				<token name="SelectionBehaviorUp">0</token>
 				<bool name="SelectionGroup">false</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">Overlay</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
 		</Item>
 	</Item>
 	<SharedStrings>
-		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
+		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA==" />
 	</SharedStrings>
 </roblox>

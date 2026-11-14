@@ -25,7 +25,7 @@ return {
         ActionText = "Chop",
         Tool = "Axe",
         RewardItem = "Wood",
-        RewardAmount = 1,
+        RewardAmount = 3,
         HoldDuration = 3,
         MaxDistance = 7,
         Swing = "Chop",

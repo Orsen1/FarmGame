@@ -22,7 +22,7 @@ local ProductionRecipes = {
     },
     WoodToPlank = {
         Inputs = {Wood = 1},
-        Outputs = {Plank = 1},
+        Outputs = {Plank = 3},
         Duration = 5
     }
 }

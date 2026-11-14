@@ -135,7 +135,7 @@ local ItemDefinitions = {
         Placeable = true,
         PlacementSnapGroup = "GardenBed",
         Plantable = true,
-        ShopCategory = "Equipment"
+        ShopCategory = "Buildings"
     },
     FieldBed10 = {
         DisplayName = "Грядка 10 мест",
@@ -145,14 +145,14 @@ local ItemDefinitions = {
         Placeable = true,
         PlacementSnapGroup = "GardenBed",
         Plantable = true,
-        ShopCategory = "Equipment"
+        ShopCategory = "Buildings"
     },
     HandMill = {
         DisplayName = "Hand Mill",
         Type = "Tool",
         BuyPriceCents = 50,
         Icon = "rbxassetid://70965951401388",
-        ShopCategory = "Equipment",
+        ShopCategory = "Buildings",
         Placeable = true,
         Recipes = {"WheatToFlour"}
     },
@@ -162,7 +162,7 @@ local ItemDefinitions = {
         BuyPriceCents = 200,
         Icon = "rbxassetid://126264449555960",
         ShowShopIcon = true,
-        ShopCategory = "Equipment",
+        ShopCategory = "Buildings",
         Placeable = true,
         Recipes = {"WoodToPlank"}
     },
@@ -216,7 +216,7 @@ local ItemDefinitions = {
         Placeable = true,
         BuildsInto = "Dairy",
         ModelFolder = "DairyStages",
-        ShopCategory = "Equipment",
+        ShopCategory = "Buildings",
         ShowShopIcon = true
     },
     Dairy = {
@@ -249,7 +249,7 @@ local ItemDefinitions = {
         Type = "Building",
         BuyPriceCents = 500,
         Icon = "rbxassetid://94185916549800",
-        ShopCategory = "Equipment",
+        ShopCategory = "Buildings",
         ShowShopIcon = true,
         Placeable = true,
         ShopCategoryWhenEmpty = "Animals",
@@ -263,7 +263,7 @@ local ItemDefinitions = {
         Placeable = true,
         BuildsInto = "CowPen",
         ModelFolder = "CowPenStages",
-        ShopCategory = "Equipment"
+        ShopCategory = "Buildings"
     },
     CowPen = {
         DisplayName = "Cow Pen",
@@ -281,7 +281,7 @@ local ItemDefinitions = {
         Placeable = true,
         BuildsInto = "ChickenCoop",
         ModelFolder = "ChickenCoopStages",
-        ShopCategory = "Equipment"
+        ShopCategory = "Buildings"
     },
     ChickenCoop = {
         DisplayName = "Chicken Coop",
@@ -346,7 +346,7 @@ local ItemDefinitions = {
         Placeable = true,
         BuildsInto = "Warehouse",
         ModelFolder = "WarehouseStages",
-        ShopCategory = "Equipment"
+        ShopCategory = "Buildings"
     },
     Warehouse = {
         DisplayName = "Склад",
