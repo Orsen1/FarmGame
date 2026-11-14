@@ -300,7 +300,7 @@ local function readSlot(index, area)
     local name = slot and slot:FindFirstChild("ItemName")
     local amount = slot and slot:FindFirstChild("Amount")
     if name and amount then
-        return {ItemName = name.Value, Amount = amount.Value, ObjectData = slot:GetAttribute("ObjectData")}
+        return {ItemName = name.Value, Amount = amount.Value, ObjectData = slot:GetAttribute("ObjectData"), Variants = slot:GetAttribute("Variants")}
     end
 end
 

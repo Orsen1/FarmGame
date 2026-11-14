@@ -1491,7 +1491,8 @@ end)
 				</Properties>
 				<Item class="LocalScript" referent="RBXDA65C45B58CC473D860DD1DA0BC9A78D">
 					<Properties>
-						<ProtectedString name="Source"><![CDATA[local Players = game:GetService("Players")
+						<ProtectedString name="Source"><![CDATA[local CropItems = require(game.ReplicatedStorage.CropItems)
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local player = Players.LocalPlayer
@@ -1562,7 +1563,13 @@ local function updateItemSellFrame()
     amountLabel.Text = tostring(ownedAmount)
     priceLabel.Text = string.format("$%.2f", price / 100)
     selectedAmountLabel.Text = tostring(selectedAmount)
-    totalPriceLabel.Text = string.format("$%.2f", selectedAmount * price / 100)
+    local rows = {}
+    for _, slot in ipairs(inventory:GetChildren()) do
+        table.insert(rows, {ItemName = slot.ItemName.Value, Amount = slot.Amount.Value, Variants = CropItems.Read(slot)})
+    end
+    local groups = selectedAmount > 0 and CropItems.Take(rows, itemName, selectedAmount) or {}
+    local total = groups and CropItems.Value(itemName, groups, ItemDefinitions) or 0
+    totalPriceLabel.Text = string.format("$%.2f", total / 100)
 
     QuantityControls.update(quantity, selectedAmount > 0, selectedAmount < ownedAmount)
     enableButton(maxButton, ownedAmount > 0, GREEN)
@@ -1619,6 +1626,7 @@ local function watch(value)
         watched[value] = value.Changed:Connect(updateItemSellFrame)
     end
 end
+for _, slot in ipairs(inventory:GetChildren()) do slot:GetAttributeChangedSignal("Variants"):Connect(updateItemSellFrame) end
 for _, value in ipairs(inventory:GetDescendants()) do watch(value) end
 inventory.DescendantAdded:Connect(function(value)
     watch(value)

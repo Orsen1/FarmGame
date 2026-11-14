@@ -173,6 +173,11 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
         return
     end
 
+    if definition.Plantable and selectedItemName == "WateringCan" then
+        PlantService.Water(player, object)
+        return
+    end
+
     if definition.Plantable == true then
         local seedDefinition = ItemDefinitions[selectedItemName]
 

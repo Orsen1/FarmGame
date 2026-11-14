@@ -1,3 +1,4 @@
+local CropItems = require(game.ReplicatedStorage.CropItems)
 local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
 
@@ -13,6 +14,7 @@ local PlotSectionService = plotModule and require(ServerScriptService:WaitForChi
 local ProductionService = plotModule and require(ServerScriptService:WaitForChild("ProductionService"))
 local OrderService = plotModule and require(ServerScriptService:WaitForChild("OrderService"))
 
+local CropRecords = require(ServerScriptService.CropRecordService)
 local loadedData = {}
 local savingPlayers = {}
 
@@ -60,6 +62,7 @@ local function loadPlayerData(player)
             slot.ItemName.Value = savedSlot.ItemName
             slot.Amount.Value = savedSlot.Amount
             slot:SetAttribute("ObjectData", savedSlot.ObjectData)
+            CropItems.Write(slot, savedSlot.Variants)
         end
     end
 
@@ -86,6 +89,7 @@ local function loadPlayerData(player)
         end
     end
 
+    if not CropRecords.Load(player, data.CropRecord) then player:Kick("Failed to load crop record.");return end
     loadedData[player] = data
     player:SetAttribute("DataLoaded", true)
 end
@@ -114,6 +118,7 @@ local function savePlayerData(player, preparingTeleport)
         data = table.clone(loadedData[player])
         data.Money = MoneyService.GetMoney(player)
         data.Inventory = inventoryData
+        data.CropRecord = CropRecords.GetData(player)
 
         if OrderService then
             data.Orders = OrderService.GetData(player)
@@ -175,6 +180,7 @@ end)
 Players.PlayerRemoving:Connect(function(player)
     savePlayerData(player)
     loadedData[player] = nil
+    CropRecords.Clear(player)
     if OrderService then
         OrderService.Clear(player)
     end

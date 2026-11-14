@@ -34,6 +34,12 @@
       },
       "ResourceSpawnService": {
         "$path": "src/places/ResourceWorld/ResourceSpawnService.lua"
+      },
+      "CropRecordService": {
+        "$path": "src/server/CropRecordService.lua"
+      },
+      "CropRecordHandler": {
+        "$path": "src/server/CropRecordHandler.server.lua"
       }
     },
     "ServerStorage": {
@@ -57,6 +63,9 @@
         },
         "ResourceDefinitions": {
           "$path": "src/shared/Configs/ResourceDefinitions.lua"
+        },
+        "CropConfig": {
+          "$path": "src/shared/Configs/CropConfig.lua"
         }
       },
       "Tools": {
@@ -70,7 +79,13 @@
         },
         "MoveInventorySlotEvent": {
           "$path": "src/shared/RemoteEvents/MoveInventorySlotEvent.model.json"
+        },
+        "CropRecords": {
+          "$path": "src/shared/RemoteEvents/CropRecords.model.json"
         }
+      },
+      "CropItems": {
+        "$path": "src/shared/CropItems.lua"
       }
     },
     "Workspace": {
@@ -107,6 +122,9 @@
         "$ignoreUnknownInstances": true,
         "ResourceGatherVisual": {
           "$path": "src/places/ResourceWorld/ResourceGatherVisual.client.lua"
+        },
+        "CropInterfaceController": {
+          "$path": "src/client/CropInterfaceController.client.lua"
         }
       }
     }

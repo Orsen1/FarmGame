@@ -277,6 +277,11 @@ local function updatePrompt(prompt)
     if definition.Plantable == true then
         local selectedDefinition = ItemDefinitions[selectedItemName]
 
+        if selectedItemName == "WateringCan" then
+            prompt.ActionText = "Water"
+            setEnabled(prompt, object:GetAttribute("NeedsWater") == true)
+            return
+        end
         prompt.ActionText = "Plant"
         setEnabled(prompt,
             object:GetAttribute("Occupied") ~= true and selectedAmount > 0 and selectedDefinition ~= nil and

@@ -61,6 +61,27 @@ local function validateData(template, plant)
         return false, "Missing growth models for " .. plant.Type
     end
 
+    if plant.Version ~= nil then
+        if plant.Version ~= 2 or typeof(plant.Fruits) ~= "table" or #plant.Fruits ~= #spots or
+            typeof(plant.Intervals) ~= "table" or #plant.Intervals < 1 or #plant.Intervals > 10 or
+            typeof(plant.Segment) ~= "number" or plant.Segment % 1 ~= 0 or plant.Segment < 1 or
+            plant.Segment > #plant.Intervals or typeof(plant.Remaining) ~= "number" or plant.Remaining ~= plant.Remaining or
+            plant.Remaining < 0 or typeof(plant.NeedsWater) ~= "boolean" or typeof(plant.Ready) ~= "boolean" then
+            return false, "Invalid growth state"
+        end
+        for _, seconds in ipairs(plant.Intervals) do
+            if typeof(seconds) ~= "number" or seconds <= 0 or seconds > 86400 then return false, "Invalid crop timing" end
+        end
+        if plant.Remaining > plant.Intervals[plant.Segment] or plant.NeedsWater and
+            (plant.Segment == #plant.Intervals or plant.Remaining ~= 0) or plant.Ready and
+            (plant.Segment ~= #plant.Intervals or plant.Remaining ~= 0 or plant.NeedsWater) then return false, "Invalid crop checkpoint" end
+        for _, fruits in ipairs(plant.Fruits) do
+            if typeof(fruits) ~= "table" or #fruits < 1 or #fruits > 20 then return false, "Invalid crop yield" end
+            for _, size in ipairs(fruits) do
+                if typeof(size) ~= "number" or size % 1 ~= 0 or size < 1 or size > 10000 then return false, "Invalid fruit size" end
+            end
+        end
+    end
     return true
 end
 
@@ -69,10 +90,7 @@ function PlantDataService.getData(object)
         return nil
     end
 
-    return {
-        Type = object:GetAttribute("PlantType"),
-        Stage = object:GetAttribute("GrowthStage") or 0
-    }
+    return PlantService.GetData(object)
 end
 
 function PlantDataService.loadData(template, object, savedObject)
@@ -83,15 +101,12 @@ function PlantDataService.loadData(template, object, savedObject)
         return false, errorMessage
     end
 
-    object:SetAttribute("Occupied", plant ~= nil)
-    object:SetAttribute("PlantType", plant and plant.Type or "")
-    object:SetAttribute("GrowthStage", plant and plant.Stage or 0)
+    if plant then return PlantService.Restore(object, plant) end
+    object:SetAttribute("Occupied", false)
+    object:SetAttribute("PlantType", "")
+    object:SetAttribute("GrowthStage", 0)
     object:SetAttribute("ReadyToHarvest", false)
-
-    if plant then
-        task.spawn(PlantService.Grow, object, plant.Type, plant.Stage)
-    end
-
+    object:SetAttribute("NeedsWater", false)
     return true
 end
 

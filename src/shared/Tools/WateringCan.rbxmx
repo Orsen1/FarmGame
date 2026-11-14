@@ -1,0 +1,402 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Tool" referent="CanTool">
+    <Properties>
+      <string name="Name">WateringCan</string>
+      <bool name="RequiresHandle">true</bool>
+      <bool name="CanBeDropped">false</bool>
+    </Properties>
+    <Item class="Part" referent="CanPart0">
+      <Properties>
+        <string name="Name">CanBody</string>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>1.343999981880188</X>
+          <Y>0.9520000219345093</Y>
+          <Z>1.343999981880188</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.5137255191802979</R>
+          <G>0.686274528503418</G>
+          <B>0.5529412031173706</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.44799891114234924</X>
+          <Y>-1.1480002403259277</Y>
+          <Z>-1.376867317048891e-06</Z>
+          <R00>-1.0000001192092896</R00>
+          <R01>0</R01>
+          <R02>-5.513429641723633e-06</R02>
+          <R10>0</R10>
+          <R11>1.0000001192092896</R11>
+          <R12>0</R12>
+          <R20>5.513429641723633e-06</R20>
+          <R21>0</R21>
+          <R22>-1</R22>
+        </CoordinateFrame>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+      </Properties>
+      <Item class="SpecialMesh" referent="CanMesh0">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://120088558279555</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>2.800000024835269</X>
+            <Y>2.8000000350615553</Y>
+            <Z>2.800000024835269</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="CanPart1">
+      <Properties>
+        <string name="Name">CanRim</string>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>1.4279999732971191</X>
+          <Y>0.1260000467300415</Y>
+          <Z>1.4279999732971191</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.7529411911964417</R>
+          <G>0.6078431606292725</G>
+          <B>0.3921568691730499</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.44799891114234924</X>
+          <Y>-0.616000235080719</Y>
+          <Z>-1.376867317048891e-06</Z>
+          <R00>-1.0000001192092896</R00>
+          <R01>0</R01>
+          <R02>-5.513429641723633e-06</R02>
+          <R10>0</R10>
+          <R11>1.0000001192092896</R11>
+          <R12>0</R12>
+          <R20>5.513429641723633e-06</R20>
+          <R21>0</R21>
+          <R22>-1</R22>
+        </CoordinateFrame>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+      </Properties>
+      <Item class="SpecialMesh" referent="CanMesh1">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://104068159413642</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>2.8</X>
+            <Y>2.8</Y>
+            <Z>2.8</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="CanPart2">
+      <Properties>
+        <string name="Name">Sprinkler</string>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.501990795135498</X>
+          <Y>0.6145061254501343</Y>
+          <Z>0.671999990940094</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.7529411911964417</R>
+          <G>0.6078431606292725</G>
+          <B>0.3921568691730499</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>1.9879966974258423</X>
+          <Y>-0.5180001854896545</Y>
+          <Z>-2.2739171981811523e-05</Z>
+          <R00>-1.0000001192092896</R00>
+          <R01>0</R01>
+          <R02>-5.513429641723633e-06</R02>
+          <R10>0</R10>
+          <R11>1.0000001192092896</R11>
+          <R12>0</R12>
+          <R20>5.513429641723633e-06</R20>
+          <R21>0</R21>
+          <R22>-1</R22>
+        </CoordinateFrame>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+      </Properties>
+      <Item class="SpecialMesh" referent="CanMesh2">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://115341321035936</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>2.8</X>
+            <Y>2.799999945682233</Y>
+            <Z>2.800000024835269</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="CanPart3">
+      <Properties>
+        <string name="Name">Spout</string>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>1.1676303148269653</X>
+          <Y>0.9932568669319153</Y>
+          <Z>0.36400002241134644</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.5137255191802979</R>
+          <G>0.686274528503418</G>
+          <B>0.5529412031173706</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>1.4279946088790894</X>
+          <Y>-0.9380002617835999</Y>
+          <Z>-1.376867317048891e-06</Z>
+          <R00>-1.0000001192092896</R00>
+          <R01>0</R01>
+          <R02>-5.513429641723633e-06</R02>
+          <R10>0</R10>
+          <R11>1.0000001192092896</R11>
+          <R12>0</R12>
+          <R20>5.513429641723633e-06</R20>
+          <R21>0</R21>
+          <R22>-1</R22>
+        </CoordinateFrame>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+      </Properties>
+      <Item class="SpecialMesh" referent="CanMesh3">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://118856313809904</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>2.799999885653535</X>
+            <Y>2.799999966394795</Y>
+            <Z>2.7999999541502767</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="CanPart4">
+      <Properties>
+        <string name="Name">WaterSurface</string>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>1.2095999717712402</X>
+          <Y>0.04199995845556259</Y>
+          <Z>1.2095999717712402</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.3490196168422699</R>
+          <G>0.6392157077789307</G>
+          <B>0.7450980544090271</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.44799891114234924</X>
+          <Y>-0.5404002070426941</Y>
+          <Z>-1.376867317048891e-06</Z>
+          <R00>-1.0000001192092896</R00>
+          <R01>0</R01>
+          <R02>-5.513429641723633e-06</R02>
+          <R10>0</R10>
+          <R11>1.0000001192092896</R11>
+          <R12>0</R12>
+          <R20>5.513429641723633e-06</R20>
+          <R21>0</R21>
+          <R22>-1</R22>
+        </CoordinateFrame>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+      </Properties>
+      <Item class="SpecialMesh" referent="CanMesh4">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://117202918803100</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>2.7999998620262887</X>
+            <Y>2.7999999006588308</Y>
+            <Z>2.7999998620262887</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="CanPart5">
+      <Properties>
+        <string name="Name">Handle</string>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.1960001438856125</X>
+          <Y>0.1960001438856125</Y>
+          <Z>0.5040000677108765</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.7529411911964417</R>
+          <G>0.6078431606292725</G>
+          <B>0.3921568691730499</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>-6.675720101156912e-07</X>
+          <Y>0</Y>
+          <Z>-1.376867317048891e-06</Z>
+          <R00>-1.0000001192092896</R00>
+          <R01>0</R01>
+          <R02>-5.513429641723633e-06</R02>
+          <R10>0</R10>
+          <R11>1.0000001192092896</R11>
+          <R12>0</R12>
+          <R20>5.513429641723633e-06</R20>
+          <R21>0</R21>
+          <R22>-1</R22>
+        </CoordinateFrame>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+      </Properties>
+      <Item class="SpecialMesh" referent="CanMesh5">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://110671002286689</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>2.799999957425286</X>
+            <Y>2.799999957425286</Y>
+            <Z>2.7999998013178917</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="CanPart6">
+      <Properties>
+        <string name="Name">HandleSideA</string>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.14560003578662872</X>
+          <Y>0.671999990940094</Y>
+          <Z>0.14560000598430634</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.7529411911964417</R>
+          <G>0.6078431606292725</G>
+          <B>0.3921568691730499</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>-6.675720101156912e-07</X>
+          <Y>-0.3360001742839813</Y>
+          <Z>0.25199905037879944</Z>
+          <R00>-1.0000001192092896</R00>
+          <R01>0</R01>
+          <R02>-5.513429641723633e-06</R02>
+          <R10>0</R10>
+          <R11>1.0000001192092896</R11>
+          <R12>0</R12>
+          <R20>5.513429641723633e-06</R20>
+          <R21>0</R21>
+          <R22>-1</R22>
+        </CoordinateFrame>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+      </Properties>
+      <Item class="SpecialMesh" referent="CanMesh6">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://92467828281716</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>2.7999998280635774</X>
+            <Y>2.799999850988394</Y>
+            <Z>2.800000057312157</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="CanPart7">
+      <Properties>
+        <string name="Name">HandleSideB</string>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.14560003578662872</X>
+          <Y>0.671999990940094</Y>
+          <Z>0.14560000598430634</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.7529411911964417</R>
+          <G>0.6078431606292725</G>
+          <B>0.3921568691730499</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>-1.1348724001436494e-05</X>
+          <Y>-0.3360001742839813</Y>
+          <Z>-0.2520017921924591</Z>
+          <R00>-1.0000001192092896</R00>
+          <R01>0</R01>
+          <R02>-5.513429641723633e-06</R02>
+          <R10>0</R10>
+          <R11>1.0000001192092896</R11>
+          <R12>0</R12>
+          <R20>5.513429641723633e-06</R20>
+          <R21>0</R21>
+          <R22>-1</R22>
+        </CoordinateFrame>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="Massless">true</bool>
+      </Properties>
+      <Item class="SpecialMesh" referent="CanMesh7">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://113301027362007</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>2.7999998280635774</X>
+            <Y>2.799999850988394</Y>
+            <Z>2.800000057312157</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+  </Item>
+</roblox>

@@ -192,6 +192,14 @@ local ItemDefinitions = {
         Icon = "rbxassetid://119718856891391",
         ShopCategory = "Equipment"
     },
+    WateringCan = {
+        DisplayName = "Watering Can",
+        Type = "Tool",
+        BuyPriceCents = require(script.Parent.CropConfig).WateringCanPriceCents,
+        Icon = "rbxassetid://131974166500332",
+        ShopCategory = "Equipment",
+        ShowShopIcon = true
+    },
     Bucket = {
         DisplayName = "Bucket",
         Type = "Tool",

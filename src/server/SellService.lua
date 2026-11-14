@@ -1,3 +1,4 @@
+local CropItems = require(game.ReplicatedStorage.CropItems)
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -26,7 +27,9 @@ function SellService.SellItem(player, itemName, amount)
 		return false, "ItemCannotBeSold"
 	end
 
-	local totalPrice = price * amount
+	local removedGroups, removalError = InventoryService.GetRemoval(player, {[itemName] = amount})
+    if not removedGroups then return false, removalError end
+    local totalPrice = CropItems.Value(itemName, removedGroups[itemName], ItemDefinitions)
 	if not MoneyService.CanAddMoney(player, totalPrice) then
 		return false, "InvalidBalanceOrAmountTooLarge"
 	end
@@ -40,7 +43,7 @@ function SellService.SellItem(player, itemName, amount)
 
 	local added = MoneyService.AddMoney(player, totalPrice)
 	if not added then
-		InventoryService.ExchangeItems(player, outputs, inputs)
+		InventoryService.ExchangeItems(player, outputs, inputs, removedGroups)
 		return false, "MoneyCouldNotBeAdded"
 	end
 

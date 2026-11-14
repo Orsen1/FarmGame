@@ -2,6 +2,8 @@ local DataStoreService = game:GetService("DataStoreService")
 local dataStore = DataStoreService:GetDataStore("FarmGame_MoneyInventory")
 
 local function saveData(userId, value)
+    local encoded = game:GetService("HttpService"):JSONEncode(value)
+    if #encoded > 3500000 then warn("[SAVE ERROR] Player data exceeds safe size", userId);return false end
     local success, err = pcall(function()
         dataStore:SetAsync(tostring(userId), value)
     end)
