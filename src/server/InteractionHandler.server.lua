@@ -9,11 +9,28 @@ local ConstructionService = require(script.Parent:WaitForChild("ConstructionServ
 local AnimalService = require(script.Parent:WaitForChild("AnimalService"))
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
 local CoopUpgradeService = require(script.Parent.CoopUpgradeService)
+local InteractionConfig = require(ReplicatedStorage.Configs.InteractionConfig)
 
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
 local state = remotes:WaitForChild("ProductionState")
 local plots = workspace:WaitForChild("Plots")
+
+local function configurePrompt(prompt)
+    if not prompt:IsA("ProximityPrompt") then return end
+    local object = prompt:FindFirstAncestorOfClass("Model")
+    local definition = object and ItemDefinitions[object:GetAttribute("ItemName") or object.Name]
+    if not definition or not definition.Placeable then return end
+    local building = definition.Type == "Building" or definition.StorageSlots or
+        AnimalConfig.Coops[object:GetAttribute("ItemName") or object.Name]
+    local distance = definition.BuildsInto and InteractionConfig.ConstructionDistance or
+        building and InteractionConfig.BuildingDistance or InteractionConfig.DefaultDistance
+    prompt.MaxActivationDistance = math.min(prompt.MaxActivationDistance, distance)
+    prompt.Exclusivity = Enum.ProximityPromptExclusivity.OnePerButton
+end
+
+plots.DescendantAdded:Connect(configurePrompt)
+for _, prompt in ipairs(plots:GetDescendants()) do configurePrompt(prompt) end
 
 local function getSelectedItem(player)
     local inventory = player:FindFirstChild("Inventory")
@@ -111,6 +128,19 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
         return
     end
 
+    local home = AnimalConfig.Coops[itemName]
+    if home and home.InteractionMenu then
+        local success, message = AnimalService.OpenMenu(player, object)
+        remotes.AnimalFeedback:FireClient(player, object, success, message, "HomeMenu")
+        return
+    end
+
+    if definition.InteractionMenu then
+        local success, message = ProductionService.OpenMenu(player, object)
+        state:FireClient(player, "MenuOpened", {Station = object, Success = success, Message = message})
+        return
+    end
+
     local selectedDefinition = ItemDefinitions[selectedItemName]
     if selectedDefinition and selectedDefinition.UpgradeFrom == itemName then
         local success, message = CoopUpgradeService.Pack(player, object)
@@ -118,7 +148,6 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
         return
     end
 
-    local home = AnimalConfig.Coops[itemName]
     if home and selectedItemName == home.ItemName and selectedAmount > 0 then
         local success, message = AnimalService.Add(player, object)
         remotes.AnimalFeedback:FireClient(player, object, success, message, "ActionPrompt")
@@ -163,7 +192,22 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
 end)
 
 command.OnServerEvent:Connect(function(player, action, sessionId, value)
+    if action == "Menu" and typeof(sessionId) == "Instance" and sessionId:IsA("Model") then
+        if value ~= "Work" and value ~= "Collect" then return end
+        local success, message = ProductionService.OpenMenu(player, sessionId)
+        if success then
+            if value == "Work" then success, message = ProductionService.Open(player, sessionId)
+            else success, message = ProductionService.Collect(player, sessionId) end
+        end
+        state:FireClient(player, "MenuFeedback", {Station = sessionId, Success = success, Message = message or ""})
+        return
+    end
     if action == "Deposit" and typeof(sessionId) == "Instance" and sessionId:IsA("Model") then
+        local definition = ItemDefinitions[sessionId:GetAttribute("ItemName") or sessionId.Name]
+        if definition and definition.InteractionMenu then
+            local allowed, reason = ProductionService.OpenMenu(player, sessionId)
+            if not allowed then state:FireClient(player, "TankFeedback", {Station = sessionId, Success = false, Message = reason});return end
+        end
         local success, message = ProductionService.Deposit(player, sessionId, value)
         state:FireClient(player, "TankFeedback", {Station = sessionId, Success = success, Message = message})
         return

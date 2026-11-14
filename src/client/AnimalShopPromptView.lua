@@ -20,9 +20,11 @@ local function decorate(object, radius)
 end
 
 function AnimalShopPromptView.show(playerGui, prompt, inputType)
+    local compact = prompt:GetAttribute("Compact") == true
+    local width, height = compact and 176 or 268, compact and 52 or 76
     local gui = make("ScreenGui", playerGui, {Name = prompt.Name == "ActionPrompt" and "AnimalShopPromptGui" or prompt.Name .. "Gui", ResetOnSpawn = false,
         DisplayOrder = 10, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets})
-    local group = make("CanvasGroup", gui, {Name = "Prompt", Size = UDim2.fromOffset(268, 76),
+    local group = make("CanvasGroup", gui, {Name = "Prompt", Size = UDim2.fromOffset(width, height),
         AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = panelColor, BorderSizePixel = 0,
         GroupTransparency = 1, Visible = false})
     decorate(group, 14)
@@ -56,6 +58,13 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
         make("ImageLabel", button, {Name = "ItemIcon", BackgroundTransparency = 1,
             Image = prompt:GetAttribute("Icon"), Size = UDim2.fromOffset(48, 48),
             Position = UDim2.fromOffset(208, 14)})
+    end
+    if compact then
+        key.Position, key.Size = UDim2.fromOffset(8, 8), UDim2.fromOffset(32, 36)
+        context.Visible = false
+        action.Position, action.Size = UDim2.fromOffset(50, 0), UDim2.fromOffset(76, 52)
+        local icon = button:FindFirstChild("ItemIcon")
+        if icon then icon.Position, icon.Size = UDim2.fromOffset(132, 10), UDim2.fromOffset(32, 32) end
     end
     local messageUntil = 0
     local function update()
@@ -99,15 +108,15 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
         local common = (coopPrompt or pair) and root:FindFirstChild("InteractionAttachment")
         local point, visible = camera:WorldToScreenPoint(common and common.WorldPosition or attachment.WorldPosition)
         local bounds = gui.AbsoluteSize
-        local factor = math.min(1, (bounds.X - 16) / 268)
+        local factor = math.min(1, (bounds.X - 16) / width)
         local bottom = UserInputService.TouchEnabled and 116 or 90
-        if not visible or factor <= 0 or bounds.Y < 76 * factor + bottom + 16 then
+        if not visible or factor <= 0 or bounds.Y < height * factor + bottom + 16 then
             group.Visible = false
             return
         end
         update()
         scale.Scale = factor
-        local halfWidth, halfHeight = 134 * factor, 38 * factor
+        local halfWidth, halfHeight = width / 2 * factor, height / 2 * factor
         local offset = 0
         local extraHeight = 0
         if pair then

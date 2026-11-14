@@ -473,8 +473,9 @@ local function canUse(player, object, promptName)
         object:GetAttribute("OwnerUserId") ~= player.UserId then return false, "This is not your animal home." end
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-    local prompt = object:FindFirstChild(promptName, true)
+    local prompt = object:FindFirstChild(config.InteractionMenu and "ActionPrompt" or promptName, true)
     if not root or not humanoid or humanoid.Health <= 0 or player:GetAttribute("ProductionMode") == true or
+        player:GetAttribute("Milking") == true or player:GetAttribute("Teleporting") == true or
         not prompt or not prompt.Parent:IsA("Attachment") or
         not ((root.Position - prompt.Parent.WorldPosition).Magnitude <= prompt.MaxActivationDistance) then
         return false, "Move closer to the animal home."
@@ -668,12 +669,20 @@ end
 
 Players.PlayerRemoving:Connect(function(player) AnimalService.CancelMilking(player) end)
 
+function AnimalService.OpenMenu(player, object)
+    local allowed, reason = canUse(player, object, "ActionPrompt")
+    if not allowed then return false, reason end
+    if not getConfig(object).InteractionMenu then return false, "This home has no action menu." end
+    AnimalService.Bind(object)
+    return true, "OpenHome"
+end
+
 function AnimalService.Add(player, object)
     local allowed, reason = canUse(player, object, "ActionPrompt")
     if not allowed then return false, reason end
     local config = getConfig(object)
     local slot = player.Inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
-    if not slot or slot.ItemName.Value ~= config.ItemName or slot.Amount.Value < 1 then
+    if not config.InteractionMenu and (not slot or slot.ItemName.Value ~= config.ItemName or slot.Amount.Value < 1) then
         return false, "Select " .. config.ItemName .. " in your inventory."
     end
     AnimalService.Bind(object)
@@ -694,7 +703,9 @@ function AnimalService.Add(player, object)
     return true, config.ItemName .. " added."
 end
 
-function AnimalService.Feed(player, object)
+function AnimalService.Feed(player, object, amount)
+    if amount == nil then amount = 1 end
+    if amount ~= 1 and amount ~= 10 and amount ~= "Max" then return false, "Invalid feed amount." end
     local allowed, reason = canUse(player, object, "FeedPrompt")
     if not allowed then return false, reason end
     AnimalService.Bind(object)
@@ -702,24 +713,33 @@ function AnimalService.Feed(player, object)
     local now = workspace:GetServerTimeNow()
     refreshCare(home, now)
     if home.Config.FeedCapacity > 0 then return true, "OpenFeeder" end
-    local chosen
+    local hungry = {}
     for _, record in ipairs(home.Animals) do
         if record.Care.FoodRemaining <= 0 then
-            chosen = record
-            if not record.Inside and not record.Route then break end
+            if not record.Inside and not record.Route then table.insert(hungry, 1, record)
+            else table.insert(hungry, record) end
         end
     end
-    if not chosen then return false, #home.Animals == 0 and "Add an animal first." or "All animals are fed." end
-    local removed = InventoryService.ExchangeItems(player, {[home.Config.FeedItem] = 1}, {})
-    if not removed then return false, "You need 1 wheat." end
-    chosen.Care.FoodRemaining = home.Config.FedDuration
-    if not chosen.Route and not chosen.Inside and chosen.Activity ~= "Waiting" then
-        local position = Motion.position(chosen, now)
-        setState(chosen, "Eat", position, position, home.Config.EatingTime, chosen.YawTo, now)
+    if #hungry == 0 then return false, #home.Animals == 0 and "Add an animal first." or "All animals are fed." end
+    local available = 0
+    for _, slot in ipairs(InventoryService.GetInventory(player)) do
+        if slot.ItemName == home.Config.FeedItem then available += slot.Amount end
+    end
+    local count = math.min(#hungry, available, amount == "Max" and #hungry or amount)
+    if count == 0 then return false, "You need wheat." end
+    local removed = InventoryService.ExchangeItems(player, {[home.Config.FeedItem] = count}, {})
+    if not removed then return false, "Inventory changed." end
+    for index = 1, count do
+        local chosen = hungry[index]
+        chosen.Care.FoodRemaining = home.Config.FedDuration
+        if not chosen.Route and not chosen.Inside and chosen.Activity ~= "Waiting" then
+            local position = Motion.position(chosen, now)
+            setState(chosen, "Eat", position, position, home.Config.EatingTime, chosen.YawTo, now)
+        end
     end
     publishCare(home, now)
     object:SetAttribute("FeedEffectAt", now)
-    return true, "1 wheat added."
+    return true, string.format("Fed %d animals.", count)
 end
 
 function AnimalService.DepositFeed(player, object, amount)

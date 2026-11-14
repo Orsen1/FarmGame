@@ -84,7 +84,6 @@ end
 table.insert(upgraded.IndoorSpots, Vector3.new(-3.8, 1.92, 0.9))
 table.insert(upgraded.IndoorSpots, Vector3.new(3.8, 1.92, 0.9))
 Config.Coops.ChickenCoop2 = upgraded
-Config.Coops.ChickenCoop2Blueprint = Config.Coops.ChickenCoop
 
 local cows = table.clone(Config.Coops.ChickenCoop)
 cows.ItemName = "Cow"
@@ -115,7 +114,7 @@ cows.Milking = {
     AnimationId = "rbxassetid://137284698258607",
     BucketItem = "Bucket",
     OutputItem = "MilkBucket",
-    MaxDistance = 10,
+    MaxDistance = 5,
     WorkOffset = Vector3.new(2.7, 0, 0.9),
     BucketOffset = Vector3.new(1.6, 0.05, -0.65),
     BucketScale = 0.7,
@@ -142,7 +141,7 @@ tipper.HoofCare = {
     TiltAngle = math.pi / 2,
     Pivot = Vector3.new(0, 2.1, 0),
     AnimationId = "rbxassetid://128559721502922",
-    MaxDistance = 12,
+    MaxDistance = 5,
     WorkOffset = Vector3.new(3.3, -0.26, -1.3),
     WorkSides = {1},
     HandOffset = Vector3.new(1.5, 2.6, -1.3),
@@ -166,5 +165,10 @@ for _, settings in ipairs({Config.Coops.ChickenCoop, upgraded, cows}) do
 end
 table.insert(upgraded.OutdoorWaypoints, Vector3.new(-3, 0, upgraded.AreaMin.Y - 1.2))
 table.insert(upgraded.OutdoorWaypoints, Vector3.new(3, 0, upgraded.AreaMin.Y - 1.2))
+
+Config.Coops.ChickenCoop2Blueprint = table.clone(Config.Coops.ChickenCoop)
+Config.Coops.ChickenCoop.InteractionMenu = true
+Config.Coops.ChickenCoop2.InteractionMenu = true
+Config.Coops.CowPen.InteractionMenu = true
 
 return Config

@@ -4,14 +4,16 @@ local InventoryService = require(script.Parent.InventoryService)
 local AnimalService = require(script.Parent.AnimalService)
 local CoopUpgradeService = {}
 
-function CoopUpgradeService.Pack(player, object)
+function CoopUpgradeService.Pack(player, object, upgradeItemName)
     local allowed, reason = AnimalService.CanUse(player, object)
     if not allowed then return false, reason end
     local slot = player.Inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
-    local itemName = slot and slot.ItemName.Value
+    local itemName = upgradeItemName or slot and slot.ItemName.Value
     local definition = ItemDefinitions[itemName]
     if not definition or definition.UpgradeFrom ~= (object:GetAttribute("ItemName") or object.Name) or
-        slot.Amount.Value < 1 then return false, "Select the matching coop upgrade." end
+        not InventoryService.CanExchangeItems(player, {[itemName] = 1}, {}) then
+        return false, "You need the matching coop upgrade."
+    end
     local contents, message = AnimalService.Snapshot(object)
     if not contents then return false, message end
     local data = HttpService:JSONEncode({Version = 1, ItemName = definition.PacksInto, Contents = contents})

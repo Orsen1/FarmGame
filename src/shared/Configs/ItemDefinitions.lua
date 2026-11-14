@@ -226,6 +226,7 @@ local ItemDefinitions = {
         Placeable = true,
         Recipes = {"MilkToCream", "CreamToButter"},
         AutomaticProduction = true,
+        InteractionMenu = true,
         InteractionDistance = 18,
         LoadingDuration = 3,
         MilkTank = {Item = "MilkBucket", ReturnItem = "Bucket", Capacity = 10}

@@ -395,6 +395,23 @@ function ProductionService.Collect(player, station)
     return true, "Items collected"
 end
 
+function ProductionService.OpenMenu(player, station)
+    local allowed, reason = canUse(player, station)
+    if not allowed then return false, reason end
+    local definition = getDefinition(station)
+    local prompt = station:FindFirstChild("ActionPrompt", true)
+    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if not definition or not definition.InteractionMenu or not definition.MilkTank or
+        player:GetAttribute("ProductionMode") == true or player:GetAttribute("Milking") == true or
+        player:GetAttribute("Teleporting") == true then return false, "Not available" end
+    if not prompt or not prompt.Parent:IsA("Attachment") or not root or
+        not ((root.Position - prompt.Parent.WorldPosition).Magnitude <= prompt.MaxActivationDistance) then
+        return false, "Move closer to the workshop."
+    end
+    Jobs.Advance(station)
+    return true
+end
+
 function ProductionService.OpenTank(player, station)
     local allowed, reason = canUse(player, station)
     if not allowed then return false, reason end
