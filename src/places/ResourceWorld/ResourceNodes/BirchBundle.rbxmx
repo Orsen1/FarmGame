@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Model" referent="RW00000077">
+    <Properties>
+      <string name="Name">BirchBundle</string>
+      <Ref name="PrimaryPart">RW00000078</Ref>
+    </Properties>
+    <Item class="Part" referent="RW00000078">
+      <Properties>
+        <string name="Name">ResourceRoot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">1</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.2</X>
+          <Y>0.2</Y>
+          <Z>0.2</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.4</R>
+          <G>0.3</G>
+          <B>0.2</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+      <Item class="Attachment" referent="RW00000079">
+        <Properties>
+          <string name="Name">GatherPoint</string>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>1.2</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>0</R01>
+            <R02>0.0</R02>
+            <R10>0</R10>
+            <R11>1</R11>
+            <R12>0</R12>
+            <R20>-0.0</R20>
+            <R21>0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RW00000080">
+      <Properties>
+        <string name="Name">Log</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>2.7</X>
+          <Y>0.6</Y>
+          <Z>0.6</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.77</R>
+          <G>0.69</G>
+          <B>0.49</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>-0.55</X>
+          <Y>0.36</Y>
+          <Z>0</Z>
+          <R00>6.123233995736766e-17</R00>
+          <R01>0</R01>
+          <R02>1.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-1.0</R20>
+          <R21>0</R21>
+          <R22>6.123233995736766e-17</R22>
+        </CoordinateFrame>
+        <token name="shape">2</token>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RW00000081">
+      <Properties>
+        <string name="Name">Log</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>2.7</X>
+          <Y>0.6</Y>
+          <Z>0.6</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.77</R>
+          <G>0.69</G>
+          <B>0.49</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.0</X>
+          <Y>0.36</Y>
+          <Z>0</Z>
+          <R00>6.123233995736766e-17</R00>
+          <R01>0</R01>
+          <R02>1.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-1.0</R20>
+          <R21>0</R21>
+          <R22>6.123233995736766e-17</R22>
+        </CoordinateFrame>
+        <token name="shape">2</token>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RW00000082">
+      <Properties>
+        <string name="Name">Log</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>2.7</X>
+          <Y>0.6</Y>
+          <Z>0.6</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.77</R>
+          <G>0.69</G>
+          <B>0.49</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.55</X>
+          <Y>0.36</Y>
+          <Z>0</Z>
+          <R00>6.123233995736766e-17</R00>
+          <R01>0</R01>
+          <R02>1.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-1.0</R20>
+          <R21>0</R21>
+          <R22>6.123233995736766e-17</R22>
+        </CoordinateFrame>
+        <token name="shape">2</token>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+    </Item>
+  </Item>
+</roblox>

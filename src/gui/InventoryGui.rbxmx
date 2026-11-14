@@ -79,6 +79,16 @@ local function getIcon(itemName)
 	return ""
 end
 
+local iconStates = {}
+task.spawn(function()
+    while script.Parent do
+        task.wait(0.5)
+        for icon, state in pairs(iconStates) do
+            state.Fallback.Visible = state.Slot.ItemName.Value ~= "" and state.Slot.Amount.Value &gt; 0 and not icon.IsLoaded
+        end
+    end
+end)
+
 local function updateSlot(slotData)
 	local guiSlot = hotbarFrame:FindFirstChild(slotData.Name)
 	if not guiSlot then
@@ -105,6 +115,7 @@ local function updateSlot(slotData)
         limit.MaxTextSize = 15
         limit.Parent = fallback
     end
+    iconStates[itemIcon] = {Slot = slotData, Fallback = fallback}
     fallback.Visible = false
     local badge = guiSlot:FindFirstChild("CoopContents")
     if not badge then
@@ -146,7 +157,7 @@ local function updateSlot(slotData)
 	itemIcon.Image = getIcon(itemName)
     local definition = ItemDefinitions[itemName]
     fallback.Text = definition and definition.DisplayName or itemName
-    fallback.Visible = itemIcon.Image == ""
+    fallback.Visible = not itemIcon.IsLoaded
 	amountText.Text = tostring(amount)
 end
 

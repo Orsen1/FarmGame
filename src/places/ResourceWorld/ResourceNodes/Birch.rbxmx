@@ -1,0 +1,260 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Model" referent="RW00000011">
+    <Properties>
+      <string name="Name">Birch</string>
+      <Ref name="PrimaryPart">RW00000012</Ref>
+    </Properties>
+    <Item class="Part" referent="RW00000012">
+      <Properties>
+        <string name="Name">ResourceRoot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">1</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.2</X>
+          <Y>0.2</Y>
+          <Z>0.2</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.4</R>
+          <G>0.3</G>
+          <B>0.2</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+      <Item class="Attachment" referent="RW00000013">
+        <Properties>
+          <string name="Name">GatherPoint</string>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>1.2</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>0</R01>
+            <R02>0.0</R02>
+            <R10>0</R10>
+            <R11>1</R11>
+            <R12>0</R12>
+            <R20>-0.0</R20>
+            <R21>0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RW00000014">
+      <Properties>
+        <string name="Name">Birch_Birch</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>2.9771170616149902</X>
+          <Y>7.800000190734863</Y>
+          <Z>3.388472318649292</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.9063317593127924</R>
+          <G>0.8860039666877558</G>
+          <B>0.8036309952765883</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>-0.4404084086418152</X>
+          <Y>3.90000057220459</Y>
+          <Z>-0.007122039794921875</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+      <Item class="SpecialMesh" referent="RW00000015">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://112025652929931</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>1.0</X>
+            <Y>1.0</Y>
+            <Z>1.0</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RW00000016">
+      <Properties>
+        <string name="Name">Birch_BirchDark</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.3803721070289612</X>
+          <Y>5.329999923706055</Y>
+          <Z>0.11469706892967224</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.3810918544541135</R>
+          <G>0.41002090312257067</G>
+          <B>0.3810918544541135</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>-3.725290298461914e-08</X>
+          <Y>3.2599992752075195</Y>
+          <Z>-0.39999961853027344</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+      <Item class="SpecialMesh" referent="RW00000017">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://73535078878590</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>1.0</X>
+            <Y>1.0</Y>
+            <Z>1.0</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RW00000018">
+      <Properties>
+        <string name="Name">Birch_BirchLeaf</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>6.3465375900268555</X>
+          <Y>5.536075592041016</Y>
+          <Z>5.831324577331543</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.701410709184914</R>
+          <G>0.7857769270190482</G>
+          <B>0.43662706283816693</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.016091227531433105</X>
+          <Y>9.159372329711914</Y>
+          <Z>0.20540618896484375</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+      <Item class="SpecialMesh" referent="RW00000019">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://113222436887863</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>1.0</X>
+            <Y>1.0</Y>
+            <Z>1.0</Z>
+          </Vector3>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RW00000020">
+      <Properties>
+        <string name="Name">TrunkCollision</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">1</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>1.15</X>
+          <Y>5.6</Y>
+          <Z>1.15</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.3</R>
+          <G>0.2</G>
+          <B>0.1</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>2.8</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+    </Item>
+  </Item>
+</roblox>

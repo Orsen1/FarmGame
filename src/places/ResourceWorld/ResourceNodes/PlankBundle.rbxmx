@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Model" referent="RW00000083">
+    <Properties>
+      <string name="Name">PlankBundle</string>
+      <Ref name="PrimaryPart">RW00000084</Ref>
+    </Properties>
+    <Item class="Part" referent="RW00000084">
+      <Properties>
+        <string name="Name">ResourceRoot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">false</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">1</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.2</X>
+          <Y>0.2</Y>
+          <Z>0.2</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.4</R>
+          <G>0.3</G>
+          <B>0.2</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+      <Item class="Attachment" referent="RW00000085">
+        <Properties>
+          <string name="Name">GatherPoint</string>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>1.2</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>0</R01>
+            <R02>0.0</R02>
+            <R10>0</R10>
+            <R11>1</R11>
+            <R12>0</R12>
+            <R20>-0.0</R20>
+            <R21>0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Part" referent="RW00000086">
+      <Properties>
+        <string name="Name">Plank</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.45</X>
+          <Y>0.3</Y>
+          <Z>2.8</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.5</R>
+          <G>0.32</G>
+          <B>0.16</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>-0.55</X>
+          <Y>0.2</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RW00000087">
+      <Properties>
+        <string name="Name">Plank</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.45</X>
+          <Y>0.3</Y>
+          <Z>2.8</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.5</R>
+          <G>0.32</G>
+          <B>0.16</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.0</X>
+          <Y>0.2</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RW00000088">
+      <Properties>
+        <string name="Name">Plank</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CastShadow">true</bool>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.45</X>
+          <Y>0.3</Y>
+          <Z>2.8</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.5</R>
+          <G>0.32</G>
+          <B>0.16</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.55</X>
+          <Y>0.2</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
+      </Properties>
+    </Item>
+  </Item>
+</roblox>

@@ -1,75 +1,207 @@
 <?xml version='1.0' encoding='utf-8'?>
 <roblox version="4">
-  <Item class="Model" referent="RBX00000000000000000000000000000010">
+  <Item class="Model" referent="RW00000037">
     <Properties>
       <string name="Name">LargeBoulder</string>
-      <Ref name="PrimaryPart">RBX00000000000000000000000000000011</Ref>
+      <Ref name="PrimaryPart">RW00000038</Ref>
     </Properties>
-    <Item class="Part" referent="RBX00000000000000000000000000000011">
+    <Item class="Part" referent="RW00000038">
       <Properties>
-        <string name="Name">BoulderRoot</string>
+        <string name="Name">ResourceRoot</string>
         <bool name="Anchored">true</bool>
-        <bool name="CanCollide">true</bool>
-        <bool name="CanQuery">true</bool>
+        <bool name="CanCollide">false</bool>
+        <bool name="CanQuery">false</bool>
         <bool name="CanTouch">false</bool>
         <bool name="CastShadow">true</bool>
-        <token name="Material">272</token>
-        <Color3uint8 name="Color3uint8">4286549149</Color3uint8>
-        <token name="shape">0</token>
-        <Vector3 name="size"><X>6.25</X><Y>4.25</Y><Z>5.35</Z></Vector3>
-        <CoordinateFrame name="CFrame"><X>40</X><Y>1.95</Y><Z>14</Z><R00>0.9689124</R00><R01>0</R01><R02>0.247404</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0.247404</R20><R21>0</R21><R22>0.9689124</R22></CoordinateFrame>
-        <CoordinateFrame name="PivotOffset"><X>0</X><Y>-1.95</Y><Z>0</Z><R00>0.9689124</R00><R01>0</R01><R02>-0.247404</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0.247404</R20><R21>0</R21><R22>0.9689124</R22></CoordinateFrame>
+        <float name="Transparency">1</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>0.2</X>
+          <Y>0.2</Y>
+          <Z>0.2</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.4</R>
+          <G>0.3</G>
+          <B>0.2</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>0</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
       </Properties>
-      <Item class="Attachment" referent="RBX00000000000000000000000000000012">
+      <Item class="Attachment" referent="RW00000039">
         <Properties>
           <string name="Name">GatherPoint</string>
-          <CoordinateFrame name="CFrame"><X>0</X><Y>1.5</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+          <CoordinateFrame name="CFrame">
+            <X>0</X>
+            <Y>1.2</Y>
+            <Z>0</Z>
+            <R00>1.0</R00>
+            <R01>0</R01>
+            <R02>0.0</R02>
+            <R10>0</R10>
+            <R11>1</R11>
+            <R12>0</R12>
+            <R20>-0.0</R20>
+            <R21>0</R21>
+            <R22>1.0</R22>
+          </CoordinateFrame>
         </Properties>
       </Item>
     </Item>
-    <Item class="Part" referent="RBX00000000000000000000000000000013">
+    <Item class="Part" referent="RW00000040">
       <Properties>
-        <string name="Name">Shoulder</string>
+        <string name="Name">LargeBoulder_Stone</string>
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanQuery">true</bool>
         <bool name="CanTouch">false</bool>
         <bool name="CastShadow">true</bool>
-        <token name="Material">272</token>
-        <Color3uint8 name="Color3uint8">4285562769</Color3uint8>
-        <token name="shape">0</token>
-        <Vector3 name="size"><X>3.74</X><Y>2.66</Y><Z>3.65</Z></Vector3>
-        <CoordinateFrame name="CFrame"><X>41.55</X><Y>1.12</Y><Z>13.04</Z><R00>0.8253356</R00><R01>0</R01><R02>0.5646425</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0.5646425</R20><R21>0</R21><R22>0.8253356</R22></CoordinateFrame>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>3.38906192779541</X>
+          <Y>3.37766695022583</Y>
+          <Z>2.70463490486145</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.5563933376209205</R>
+          <G>0.5838315006372918</G>
+          <B>0.601243396864941</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>-0.0424121618270874</X>
+          <Y>1.2632474899291992</Y>
+          <Z>-0.09409332275390625</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
       </Properties>
+      <Item class="SpecialMesh" referent="RW00000041">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://128147592707684</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>1.0</X>
+            <Y>1.0</Y>
+            <Z>1.0</Z>
+          </Vector3>
+        </Properties>
+      </Item>
     </Item>
-    <Item class="Part" referent="RBX00000000000000000000000000000014">
+    <Item class="Part" referent="RW00000042">
       <Properties>
-        <string name="Name">UpperFace</string>
+        <string name="Name">LargeBoulder_StoneLight</string>
         <bool name="Anchored">true</bool>
         <bool name="CanCollide">false</bool>
         <bool name="CanQuery">true</bool>
         <bool name="CanTouch">false</bool>
         <bool name="CastShadow">true</bool>
-        <token name="Material">272</token>
-        <Color3uint8 name="Color3uint8">4287470506</Color3uint8>
-        <token name="shape">0</token>
-        <Vector3 name="size"><X>3.94</X><Y>2.45</Y><Z>3.1</Z></Vector3>
-        <CoordinateFrame name="CFrame"><X>39.3</X><Y>2.86</Y><Z>14.3</Z><R00>0.9950042</R00><R01>0</R01><R02>-0.09983342</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0.09983342</R20><R21>0</R21><R22>0.9950042</R22></CoordinateFrame>
+        <float name="Transparency">0</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>1.601062536239624</X>
+          <Y>2.113104820251465</Y>
+          <Z>1.8596291542053223</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.6576277105937022</R>
+          <G>0.6799757188024689</G>
+          <B>0.6872171511475417</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0.982995867729187</X>
+          <Y>0.8588056564331055</Y>
+          <Z>0.5314922332763672</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
       </Properties>
+      <Item class="SpecialMesh" referent="RW00000043">
+        <Properties>
+          <string name="Name">Mesh</string>
+          <token name="MeshType">5</token>
+          <Content name="MeshId">
+            <url>rbxassetid://75939102705951</url>
+          </Content>
+          <Vector3 name="Scale">
+            <X>1.0</X>
+            <Y>1.0</Y>
+            <Z>1.0</Z>
+          </Vector3>
+        </Properties>
+      </Item>
     </Item>
-    <Item class="Part" referent="RBX00000000000000000000000000000015">
+    <Item class="Part" referent="RW00000044">
       <Properties>
-        <string name="Name">Foot</string>
+        <string name="Name">RockCollision</string>
         <bool name="Anchored">true</bool>
-        <bool name="CanCollide">false</bool>
-        <bool name="CanQuery">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanQuery">false</bool>
         <bool name="CanTouch">false</bool>
         <bool name="CastShadow">true</bool>
-        <token name="Material">272</token>
-        <Color3uint8 name="Color3uint8">4285102476</Color3uint8>
-        <token name="shape">0</token>
-        <Vector3 name="size"><X>2.5</X><Y>1.38</Y><Z>2.4</Z></Vector3>
-        <CoordinateFrame name="CFrame"><X>38.02</X><Y>0.51</Y><Z>15.4</Z><R00>0.9553365</R00><R01>0</R01><R02>-0.2955202</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0.2955202</R20><R21>0</R21><R22>0.9553365</R22></CoordinateFrame>
+        <float name="Transparency">1</float>
+        <token name="Material">256</token>
+        <Vector3 name="size">
+          <X>2.7224999999999997</X>
+          <Y>1.815</Y>
+          <Z>2.4749999999999996</Z>
+        </Vector3>
+        <Color3 name="Color">
+          <R>0.3</R>
+          <G>0.3</G>
+          <B>0.3</B>
+        </Color3>
+        <CoordinateFrame name="CFrame">
+          <X>0</X>
+          <Y>0.9899999999999999</Y>
+          <Z>0</Z>
+          <R00>1.0</R00>
+          <R01>0</R01>
+          <R02>0.0</R02>
+          <R10>0</R10>
+          <R11>1</R11>
+          <R12>0</R12>
+          <R20>-0.0</R20>
+          <R21>0</R21>
+          <R22>1.0</R22>
+        </CoordinateFrame>
+        <token name="TopSurface">0</token>
+        <token name="BottomSurface">0</token>
       </Properties>
     </Item>
   </Item>

@@ -164,7 +164,7 @@ local ItemDefinitions = {
         ShowShopIcon = true,
         ShopCategory = "Buildings",
         Placeable = true,
-        Recipes = {"WoodToPlank"}
+        Recipes = {"WoodToPlank", "BirchToPlank"}
     },
     Plank = {
         DisplayName = "Plank",
@@ -295,7 +295,7 @@ local ItemDefinitions = {
     ChickenCoop = {
         DisplayName = "Chicken Coop",
         Type = "Building",
-        Icon = "",
+        Icon = "rbxassetid://75908875153706",
         Placeable = true,
         ShopCategoryWhenEmpty = "Animals",
         ShopPromptText = "Buy chickens"
@@ -358,11 +358,17 @@ local ItemDefinitions = {
         ShopCategory = "Buildings"
     },
     Warehouse = {
-        DisplayName = "Склад",
+        DisplayName = "Warehouse",
         Type = "Building",
-        Icon = "",
+        Icon = "rbxassetid://90973533858262",
         Placeable = true,
         StorageSlots = 24
+    },
+    BirchWood = {
+        DisplayName = "Birch Wood", Type = "Material", Icon = "rbxassetid://73266410773149"
+    },
+    IronOre = {
+        DisplayName = "Iron Ore", Type = "Material", Icon = "rbxassetid://90648700193211"
     },
     Wood = {
         DisplayName = "Wood",

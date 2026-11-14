@@ -20,6 +20,11 @@ local ProductionRecipes = {
         },
         Duration = 5
     },
+    BirchToPlank = {
+        Inputs = {BirchWood = 1},
+        Outputs = {Plank = 3},
+        Duration = 5
+    },
     WoodToPlank = {
         Inputs = {Wood = 1},
         Outputs = {Plank = 3},
