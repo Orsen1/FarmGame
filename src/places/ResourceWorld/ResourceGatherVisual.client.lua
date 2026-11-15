@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 
 local definitions = require(ReplicatedStorage.Configs.ResourceDefinitions)
 local swings = {
@@ -169,6 +170,47 @@ local nodes = workspace:WaitForChild("ResourceNodes")
 local prompts = {}
 local characterConnections = {}
 local equippedName
+local visibleTreePrompts = {}
+local outline = Instance.new("Highlight")
+outline.Name = "HarvestableTreeFocus"
+outline.FillTransparency = 1
+outline.OutlineColor = Color3.new(1, 1, 1)
+outline.OutlineTransparency = 0.25
+outline.DepthMode = Enum.HighlightDepthMode.Occluded
+outline.Enabled = false
+outline.Parent = workspace
+
+local function updateOutline()
+    local root = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+    local nearest, distance = nil, math.huge
+    for prompt, node in pairs(visibleTreePrompts) do
+        if root and prompt.Enabled and node.Parent == nodes and node.PrimaryPart then
+            local currentDistance = (node.PrimaryPart.Position - root.Position).Magnitude
+            if currentDistance < distance then
+                nearest, distance = node, currentDistance
+            end
+        end
+    end
+    outline.Adornee = nearest
+    outline.Enabled = nearest ~= nil
+end
+
+ProximityPromptService.PromptShown:Connect(function(prompt)
+    if prompt.Name ~= "GatherPrompt" or not prompt:IsDescendantOf(nodes) then return end
+    local node = prompt:FindFirstAncestorOfClass("Model")
+    local definition = node and definitions[node:GetAttribute("ResourceId")]
+    if definition and definition.Swing == "Chop" then
+        visibleTreePrompts[prompt] = node
+        updateOutline()
+    end
+end)
+
+ProximityPromptService.PromptHidden:Connect(function(prompt)
+    if visibleTreePrompts[prompt] then
+        visibleTreePrompts[prompt] = nil
+        updateOutline()
+    end
+end)
 
 local function updatePrompt(prompt)
     local requiredTool = prompt:GetAttribute("RequiredTool")
@@ -182,6 +224,7 @@ local function updateEquipment(character)
     for prompt in pairs(prompts) do
         updatePrompt(prompt)
     end
+    updateOutline()
 end
 
 local function trackPrompt(prompt)
@@ -219,6 +262,10 @@ watchCharacter(localPlayer.Character)
 nodes.DescendantAdded:Connect(trackPrompt)
 nodes.DescendantRemoving:Connect(function(object)
     prompts[object] = nil
+    if visibleTreePrompts[object] then
+        visibleTreePrompts[object] = nil
+        updateOutline()
+    end
 end)
 for _, object in ipairs(nodes:GetDescendants()) do
     trackPrompt(object)

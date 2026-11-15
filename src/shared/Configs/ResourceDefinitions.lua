@@ -13,10 +13,13 @@ return {
         CellCooldown = 12,
         PlayerClearance = 10,
         Families = {
-            Trees = {Zone = "Forest", Count = 20, Interval = 8, Variants = {
+            Trees = {Zone = "Forest", AlternateZone = "Meadow", Count = 18, Interval = 8, Variants = {
                 {Id = "Oak", Weight = 65}, {Id = "Birch", Weight = 35}
             }},
-            Rocks = {Zone = "Quarry", Count = 24, Interval = 4, Variants = {
+            SawmillTrees = {Zone = "SawmillTrees", Count = 2, Interval = 8, Variants = {
+                {Id = "Oak", Weight = 65}, {Id = "Birch", Weight = 35}
+            }},
+            Rocks = {Zone = "Quarry", AlternateZone = "Meadow", Count = 24, Interval = 4, Variants = {
                 {Id = "Pebble", Weight = 30}, {Id = "Stone", Weight = 35},
                 {Id = "LargeBoulder", Weight = 20}, {Id = "IronVein", Weight = 15, Zone = "Mine"}
             }},

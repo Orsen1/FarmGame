@@ -18,7 +18,9 @@ local function buildCells()
     local blockers = {}
     for _, group in ipairs({map.Paths, map.Landmarks, workspace:WaitForChild("TravelPortals")}) do
         for _, part in ipairs(group:GetDescendants()) do
-            if part:IsA("BasePart") and (group == map.Paths or part.CanCollide) then table.insert(blockers, part) end
+            if part:IsA("BasePart") and (group == map.Paths or part.CanCollide or part:GetAttribute("ResourceSpawnBlocker")) then
+                table.insert(blockers, part)
+            end
         end
     end
     for _, zone in ipairs(map.SpawnZones:GetChildren()) do
@@ -30,7 +32,8 @@ local function buildCells()
                 local blocked = false
                 for _, part in ipairs(blockers) do
                     local offset = part.CFrame:PointToObjectSpace(position)
-                    if math.abs(offset.X) < part.Size.X / 2 + 3 and math.abs(offset.Z) < part.Size.Z / 2 + 3 and
+                    if part:GetAttribute("AllowedSpawnZone") ~= zone.Name and
+                        math.abs(offset.X) < part.Size.X / 2 + 3 and math.abs(offset.Z) < part.Size.Z / 2 + 3 and
                         (part:IsDescendantOf(map.Paths) or part.Position.Y - part.Size.Y / 2 < position.Y + 5 and part.Position.Y + part.Size.Y / 2 > position.Y + 0.5) then
                         blocked = true;break
                     end
@@ -67,7 +70,9 @@ local function spawnNode(family, now, positions)
     end
     if not variant then return false end
     local zone = variant.Zone or family.Definition.Zone
-    if not variant.Zone and family.Name ~= "Lumber" and random:NextNumber() > config.PreferredChance then zone = "Meadow" end
+    if not variant.Zone and family.Definition.AlternateZone and random:NextNumber() > config.PreferredChance then
+        zone = family.Definition.AlternateZone
+    end
     local cell = chooseCell(zone, now, positions)
     if not cell and not variant.Zone then cell = chooseCell(family.Definition.Zone, now, positions) end
     if not cell then return false end
