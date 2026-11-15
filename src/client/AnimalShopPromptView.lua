@@ -137,7 +137,8 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
         local minY, maxY = groupHalfHeight + 8, bounds.Y - groupHalfHeight - bottom
         local x = math.clamp(point.X, halfWidth + 8, bounds.X - halfWidth - 8)
         local y = math.clamp(point.Y - 20, minY, math.max(minY, maxY))
-        local shopButton = shop and shop:FindFirstChild("ShopButton")
+        local menuGui = playerGui:FindFirstChild("FarmMenuGui")
+        local shopButton = menuGui and menuGui.Enabled and menuGui:FindFirstChild("LeftMenu")
         if shopButton and shopButton.Visible then
             local start = shopButton.AbsolutePosition - gui.AbsolutePosition
             local finish = start + shopButton.AbsoluteSize

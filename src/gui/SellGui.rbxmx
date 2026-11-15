@@ -28,7 +28,7 @@
 		</Properties>
 		<Item class="LocalScript" referent="RBX672F25DC38E24D55911D051A41E26B6B">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[local ReplicatedStorage = game:GetService("ReplicatedStorage")
+				<ProtectedString name="Source">local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local sellGui = script.Parent
 local mainFrame = sellGui:WaitForChild("MainFrame")
@@ -41,6 +41,8 @@ local closeButton = mainFrame.HeaderFrame.CloseButton
 local remoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
 local openSellGuiEvent = remoteEvents:WaitForChild("OpenSellGuiEvent")
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local HudMenu = require(ReplicatedStorage.HudMenu)
+local sellButton = HudMenu.Add("SellButton", "Sell", 2)
 local MAX_INTEGER = 9007199254740991
 
 mainFrame.Visible = false
@@ -63,8 +65,8 @@ local itemNames = {}
 for itemName, item in pairs(ItemDefinitions) do
     if typeof(itemName) == "string" and typeof(item) == "table" then
         local price = item.SellPriceCents
-        if typeof(price) == "number" and price >= 0
-            and price <= MAX_INTEGER and price % 1 == 0 then
+        if typeof(price) == "number" and price &gt;= 0
+            and price &lt;= MAX_INTEGER and price % 1 == 0 then
             table.insert(itemNames, itemName)
         end
     end
@@ -73,8 +75,8 @@ end
 table.sort(itemNames, function(a, b)
     local orderA = ItemDefinitions[a].SortOrder or math.huge
     local orderB = ItemDefinitions[b].SortOrder or math.huge
-    if orderA ~= orderB then return orderA < orderB end
-    return a < b
+    if orderA ~= orderB then return orderA &lt; orderB end
+    return a &lt; b
 end)
 
 for order, itemName in ipairs(itemNames) do
@@ -97,17 +99,22 @@ end
 
 innerFrame.EmptyLabel.Visible = #itemNames == 0
 
-openSellGuiEvent.OnClientEvent:Connect(function()
+local function openSell()
+    HudMenu.CloseStorage()
+    sellGui.Enabled = true
     innerFrame.Visible = true
     itemSellFrame.Visible = false
     itemsFrame.CanvasPosition = Vector2.new(0, 0)
     mainFrame.Visible = true
-end)
+end
+
+openSellGuiEvent.OnClientEvent:Connect(openSell)
+sellButton.Activated:Connect(openSell)
 
 closeButton.Activated:Connect(function()
     mainFrame.Visible = false
 end)
-]]></ProtectedString>
+</ProtectedString>
 				<bool name="Disabled">false</bool>
 				<Content name="LinkedSource"><null></null></Content>
 				<token name="RunContext">0</token>

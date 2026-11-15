@@ -4,7 +4,24 @@
     "$className": "DataModel",
     "ServerScriptService": {
       "$path": "src/server",
-      "$ignoreUnknownInstances": true
+      "$ignoreUnknownInstances": true,
+      "ResourceGatherHandler": {
+        "$path": "src/places/ResourceWorld/ResourceGatherHandler.server.lua"
+      },
+      "ResourceSpawnService": {
+        "$path": "src/places/ResourceWorld/ResourceSpawnService.lua"
+      }
+    },
+    "ServerStorage": {
+      "$className": "ServerStorage",
+      "$ignoreUnknownInstances": true,
+      "ResourceTemplates": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true,
+        "Oak": {"$path": "src/places/ResourceWorld/ResourceNodes/Oak.rbxmx"},
+        "Birch": {"$path": "src/places/ResourceWorld/ResourceNodes/Birch.rbxmx"},
+        "Stone": {"$path": "src/places/ResourceWorld/ResourceNodes/Stone.rbxmx"}
+      }
     },
     "ReplicatedStorage": {
       "$path": "src/shared",
@@ -16,7 +33,10 @@
       },
       "StarterPlayerScripts": {
         "$path": "src/client",
-        "$ignoreUnknownInstances": true
+        "$ignoreUnknownInstances": true,
+        "ResourceGatherVisual": {
+          "$path": "src/places/ResourceWorld/ResourceGatherVisual.client.lua"
+        }
       }
     },
     "StarterGui": {
@@ -25,7 +45,11 @@
     },
     "Workspace": {
       "$path": "src/workspace",
-      "$ignoreUnknownInstances": true
+      "$ignoreUnknownInstances": true,
+      "ResourceNodes": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true
+      }
     }
   }
 }

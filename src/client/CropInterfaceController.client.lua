@@ -5,6 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 local Items = require(ReplicatedStorage.CropItems)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local config = require(ReplicatedStorage.Configs.CropConfig)
+local HudMenu = require(ReplicatedStorage.HudMenu)
 local player = Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
 local inventoryGui = player:WaitForChild("PlayerGui"):WaitForChild("InventoryGui")
@@ -35,7 +36,7 @@ local function button(parent, name, text, position, size)
     round(object)
     return object
 end
-local openRecords = button(gui, "Records", "Harvest Records", UDim2.new(1, -172, 0, 74), UDim2.fromOffset(160, 44))
+local openRecords = HudMenu.Add("Records", "Records", 4)
 local sizes = button(gui, "Sizes", "Sizes", UDim2.new(0.5, -62, 1, -150), UDim2.fromOffset(124, 44))
 local panel = make("Frame", gui, {Name = "Panel", Visible = false, BorderSizePixel = 0,
     BackgroundColor3 = Color3.fromRGB(255, 221, 151), AnchorPoint = Vector2.new(1, 0.5),
@@ -90,6 +91,7 @@ local function hide()
     moneyGui = nil
 end
 local function show(nextMode)
+    HudMenu.CloseStorage()
     mode, key = nextMode, nil
     if not panel.Visible then
         snapshot = game.ProximityPromptService.Enabled
@@ -192,7 +194,7 @@ RunService.Heartbeat:Connect(function(dt)
     if elapsed < 0.2 then return end
     elapsed = 0
     local other = player:GetAttribute("FarmJournalOpen") == true or player:GetAttribute("ProductionMode") == true or player:GetAttribute("AnimalMenuOpen") == true or
-        player:GetAttribute("Milking") == true or player:GetAttribute("StorageOpen") == true or player:GetAttribute("FeederOpen") == true
+        player:GetAttribute("Milking") == true or player:GetAttribute("FeederOpen") == true
     for _, name in ipairs({"BuyGui", "SellGui"}) do
         local shop = player.PlayerGui:FindFirstChild(name)
         if shop and shop.Enabled and shop.MainFrame.Visible then other = true end
@@ -201,7 +203,7 @@ RunService.Heartbeat:Connect(function(dt)
     if not active then hide() end
     openRecords.Visible = active == true and not panel.Visible
     local slot = inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
-    sizes.Visible = active == true and not panel.Visible and slot.Amount.Value > 0 and config.Crops[slot.ItemName.Value] ~= nil
+    sizes.Visible = active == true and not player:GetAttribute("StorageOpen") and not panel.Visible and slot.Amount.Value > 0 and config.Crops[slot.ItemName.Value] ~= nil
     local size = gui.AbsoluteSize
     local touch, portrait = UserInputService.TouchEnabled, size.Y > size.X
     local bar = inventoryGui:FindFirstChild("HotbarFrame")

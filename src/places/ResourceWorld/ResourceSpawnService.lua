@@ -1,9 +1,11 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
-local config = require(ReplicatedStorage.Configs.ResourceDefinitions).Spawn
+local definitions = require(ReplicatedStorage.Configs.ResourceDefinitions)
+local config = definitions.Spawn
+local farm = workspace:FindFirstChild("Plots") and definitions.FarmSpawn
 local templates = ServerStorage:WaitForChild("ResourceTemplates")
-local map = workspace:WaitForChild("ResourceMap")
+local map = not farm and workspace:WaitForChild("ResourceMap")
 local nodes = workspace:WaitForChild("ResourceNodes")
 local random = Random.new()
 local cellsByZone, active, families = {}, {}, {}
@@ -14,7 +16,39 @@ function ResourceSpawnService.getSpawnInterval(playerCount, definition)
     return math.max(config.MinimumInterval, definition.Interval / math.max(1, math.min(playerCount, config.PlayerCap)) ^ config.GrowthExponent)
 end
 
+local function buildFarmCells()
+    local spawn = workspace:WaitForChild("SpawnLocation")
+    local ground = RaycastParams.new()
+    ground.FilterType = Enum.RaycastFilterType.Include
+    ground.FilterDescendantsInstances = {workspace.Terrain, workspace:WaitForChild("Baseplate")}
+    local clearance = OverlapParams.new()
+    clearance.FilterType = Enum.RaycastFilterType.Exclude
+    local excluded = {workspace.Terrain, workspace.Baseplate, nodes}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player.Character then table.insert(excluded, player.Character) end
+    end
+    clearance.FilterDescendantsInstances = excluded
+    local cells = {}
+    cellsByZone.Farm = cells
+    for x = farm.CellSpacing / 2, farm.AreaSize.X, farm.CellSpacing do
+        for z = farm.CellSpacing / 2, farm.AreaSize.Y, farm.CellSpacing do
+            local position = spawn.CFrame:PointToWorldSpace(farm.Offset +
+                Vector3.new(x - farm.AreaSize.X / 2, 0, z - farm.AreaSize.Y / 2))
+            local distance = (position - spawn.Position).Magnitude
+            if distance < farm.MinimumRadius or distance > farm.MaximumRadius then continue end
+            local hit = workspace:Raycast(position + Vector3.yAxis * 40, -Vector3.yAxis * 80, ground)
+            if not hit or hit.Normal.Y < 0.9 then continue end
+            position = hit.Position
+            local size = Vector3.new(farm.Clearance * 2, 14, farm.Clearance * 2)
+            if #workspace:GetPartBoundsInBox(CFrame.new(position + Vector3.yAxis * 7.1), size, clearance) == 0 then
+                table.insert(cells, {Position = position, AvailableAt = 0})
+            end
+        end
+    end
+end
+
 local function buildCells()
+    if farm then buildFarmCells();return end
     local blockers = {}
     for _, group in ipairs({map.Paths, map.Landmarks, workspace:WaitForChild("TravelPortals")}) do
         for _, part in ipairs(group:GetDescendants()) do
@@ -46,15 +80,16 @@ end
 
 local function nearPlayer(position, positions)
     for _, other in ipairs(positions) do
-        if (other - position).Magnitude < config.PlayerClearance then return true end
+        if (other - position).Magnitude < (farm and farm.PlayerClearance or config.PlayerClearance) then return true end
     end
     return false
 end
 
-local function chooseCell(zone, now, positions)
+local function chooseCell(zone, now, positions, nearby)
     local chosen, count = nil, 0
     for _, cell in ipairs(cellsByZone[zone] or {}) do
-        if not cell.Node and cell.AvailableAt <= now and not nearPlayer(cell.Position, positions) then
+        if not cell.Node and cell.AvailableAt <= now and not nearPlayer(cell.Position, positions) and
+            (not nearby or (cell.Position - nearby).Magnitude <= farm.RespawnRadius) then
             count += 1
             if random:NextInteger(1, count) == 1 then chosen = cell end
         end
@@ -62,18 +97,20 @@ local function chooseCell(zone, now, positions)
     return chosen
 end
 
-local function spawnNode(family, now, positions)
+local function spawnNode(family, now, positions, nearby, resourceId)
     local roll, variant = random:NextNumber(0, family.TotalWeight), nil
     for _, entry in ipairs(family.Definition.Variants) do
         roll -= entry.Weight
         if roll <= 0 then variant = entry;break end
     end
+    if resourceId then variant = {Id = resourceId} end
     if not variant then return false end
     local zone = variant.Zone or family.Definition.Zone
     if not variant.Zone and family.Definition.AlternateZone and random:NextNumber() > config.PreferredChance then
         zone = family.Definition.AlternateZone
     end
-    local cell = chooseCell(zone, now, positions)
+    local cell = chooseCell(zone, now, positions, nearby)
+    if not cell and nearby then cell = chooseCell(zone, now, positions) end
     if not cell and not variant.Zone then cell = chooseCell(family.Definition.Zone, now, positions) end
     if not cell then return false end
     local node = templates[variant.Id]:Clone()
@@ -91,20 +128,33 @@ local function releaseCell(node)
     if not entry then return end
     active[node] = nil
     entry.Cell.Node = nil
-    entry.Cell.AvailableAt = time() + config.CellCooldown
+    entry.Cell.AvailableAt = time() + (farm and 0.5 or config.CellCooldown)
     entry.Family.Count -= 1
 end
 
+local function playerPositions()
+    local positions = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if root then table.insert(positions, root.Position) end
+    end
+    return positions
+end
+
 function ResourceSpawnService.harvest(node)
-    if not active[node] then return end
+    local entry = active[node]
+    if not entry then return end
+    local resourceId = node:GetAttribute("ResourceId")
     releaseCell(node)
     node:Destroy()
+    if farm then spawnNode(entry.Family, time(), playerPositions(), entry.Cell.Position, resourceId) end
 end
 
 function ResourceSpawnService.update(dt, playerCount, positions)
     if playerCount < 1 then return end
     for _, family in ipairs(families) do
         if family.Count < family.Definition.Count then
+            if farm then spawnNode(family, time(), positions);continue end
             family.Progress += dt / (ResourceSpawnService.getSpawnInterval(playerCount, family.Definition) * family.IntervalScale)
             if family.Progress >= 1 then
                 spawnNode(family, time(), positions)
@@ -118,9 +168,11 @@ end
 function ResourceSpawnService.start()
     if started then return end
     started = true
-    for name, value in pairs(require(ReplicatedStorage.Configs.ResourceDefinitions).Environment) do game.Lighting[name] = value end
+    if not farm then
+        for name, value in pairs(definitions.Environment) do game.Lighting[name] = value end
+    end
     buildCells()
-    for name, definition in pairs(config.Families) do
+    for name, definition in pairs(farm and farm.Families or config.Families) do
         local totalWeight = 0
         for _, variant in ipairs(definition.Variants) do totalWeight += variant.Weight end
         local family = {Name = name, Definition = definition, TotalWeight = totalWeight, Count = 0, Progress = 0, IntervalScale = 1}
@@ -132,11 +184,7 @@ function ResourceSpawnService.start()
         local last = time()
         while true do
             task.wait(0.5)
-            local players, positions = Players:GetPlayers(), {}
-            for _, player in ipairs(players) do
-                local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-                if root then table.insert(positions, root.Position) end
-            end
+            local players, positions = Players:GetPlayers(), playerPositions()
             local now = time()
             ResourceSpawnService.update(math.min(now - last, 1), #players, positions)
             last = now

@@ -4,6 +4,24 @@ return {
         Ambient = Color3.fromRGB(125, 133, 140), OutdoorAmbient = Color3.fromRGB(145, 150, 135),
         FogStart = 420, FogEnd = 950
     },
+    FarmSpawn = {
+        CellSpacing = 10,
+        Offset = Vector3.new(-10, 0, 0),
+        AreaSize = Vector2.new(64, 80),
+        MinimumRadius = 18,
+        MaximumRadius = 46,
+        Clearance = 5,
+        PlayerClearance = 6,
+        RespawnRadius = 22,
+        Families = {
+            Trees = {Zone = "Farm", Count = 6, Variants = {
+                {Id = "Oak", Weight = 65}, {Id = "Birch", Weight = 35}
+            }},
+            Rocks = {Zone = "Farm", Count = 6, Variants = {
+                {Id = "Stone", Weight = 1}
+            }}
+        }
+    },
     Spawn = {
         PlayerCap = 25,
         GrowthExponent = 0.6,

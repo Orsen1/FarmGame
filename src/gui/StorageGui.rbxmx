@@ -11042,6 +11042,8 @@ local plots = workspace:WaitForChild("Plots")
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local PlacementController = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementController"))
 
+local HudMenu = require(ReplicatedStorage.HudMenu)
+local moneyGui, moneyEnabled
 local activePrompt = nil
 local pendingPrompt = nil
 local slotConnections = {}
@@ -11059,10 +11061,15 @@ local function updateLayout()
     end
 
     local compact = viewport.Y &lt; 480
+    local portrait = viewport.Y &gt; viewport.X
+    local menuEnd = HudMenu.Panel.AbsolutePosition + HudMenu.Panel.AbsoluteSize
+    local left = portrait and 14 or menuEnd.X + 16
+    local availableWidth = viewport.X - left - 14
+    local minimumTop = 14
     local columns
-    if viewport.X &gt;= 1050 or (compact and viewport.X &gt;= 680) then
+    if availableWidth &gt;= 1050 or (compact and availableWidth &gt;= 680) then
         columns = 8
-    elseif viewport.X &gt;= 620 then
+    elseif availableWidth &gt;= 620 then
         columns = 6
     else
         columns = 4
@@ -11073,8 +11080,14 @@ local function updateLayout()
     local gap = compact and 8 or 12
     local header = compact and 54 or 68
     local footer = compact and 28 or 38
-    local maxWidth = math.min(1040, viewport.X - 28)
+    local maxWidth = math.min(1040, availableWidth)
     local bottom = math.min(viewport.Y - 14, hotbar.AbsolutePosition.Y - 16)
+    if portrait then
+        local above = HudMenu.Panel.AbsolutePosition.Y - 12
+        local below = menuEnd.Y + 12
+        if above - minimumTop &gt;= bottom - below then bottom = math.min(bottom, above)
+        else minimumTop = below end
+    end
     local targetCell = referenceSlot.AbsoluteSize.X
 
     -- Удобная область нажатия на телефоне, даже если хотбар очень маленький.
@@ -11090,13 +11103,13 @@ local function updateLayout()
     local gridWidth = cell * columns + gap * (columns - 1)
     local gridHeight = cell * rows + gap * (rows - 1)
     local canvasHeight = gridHeight + 8
-    local availableHeight = math.max(1, bottom - 14 - header - footer)
+    local availableHeight = math.max(1, bottom - minimumTop - header - footer)
     local visibleHeight = math.min(canvasHeight, availableHeight)
     local height = header + visibleHeight + footer
-    local panelBottom = math.min(bottom, viewport.Y * 0.46 + height / 2)
+    local panelBottom = math.max(minimumTop + height, math.min(bottom, viewport.Y * 0.46 + height / 2))
 
     panel.Size = UDim2.fromOffset(gridWidth + padding * 2 + 16, height)
-    panel.Position = UDim2.new(0.5, 0, 0, panelBottom)
+    panel.Position = UDim2.fromOffset(left + availableWidth / 2, panelBottom)
     grid.Size = UDim2.fromOffset(gridWidth + 16, visibleHeight)
     grid.Position = UDim2.fromOffset(padding, header)
     grid.CanvasSize = UDim2.fromOffset(0, canvasHeight)
@@ -11171,6 +11184,8 @@ local function canUse(prompt)
 end
 
 local function closeStorage()
+    if moneyGui and moneyGui.Parent then moneyGui.Enabled = moneyEnabled end
+    moneyGui = nil
     activePrompt = nil
     pendingPrompt = nil
     storageObject.Value = nil
@@ -11181,6 +11196,11 @@ local function closeStorage()
     panel.Visible = false
     player:SetAttribute("StorageOpen", false)
 end
+
+local closeMenu = Instance.new("BindableFunction")
+closeMenu.Name = "CloseMenu"
+closeMenu.Parent = gui
+closeMenu.OnInvoke = closeStorage
 
 local function openStorage(prompt)
     if not canUse(prompt) then
@@ -11233,9 +11253,9 @@ storageEvent.OnClientEvent:Connect(function(object, success, reason)
     for index, row in ipairs(rows) do
         local guiSlot = grid:FindFirstChild("Slot" .. index)
         local function refresh()
-            local occupied = row.Name.Value ~= "" and row.Amount.Value &gt; 0
             local definition = ItemDefinitions[row.Name.Value]
             local icon = definition and definition.Icon
+            local occupied = row.Name.Value ~= "" and row.Amount.Value &gt; 0
             guiSlot.ItemIcon.Image = occupied and typeof(icon) == "string" and icon or ""
             guiSlot.AmountText.Text = occupied and tostring(row.Amount.Value) or ""
         end
@@ -11251,6 +11271,10 @@ storageEvent.OnClientEvent:Connect(function(object, success, reason)
     title.Text = "Warehouse"
     updateLayout()
     grid.CanvasPosition = Vector2.new(0, 0)
+    if not panel.Visible then
+        moneyGui = player.PlayerGui:FindFirstChild("MoneyGui")
+        if moneyGui then moneyEnabled = moneyGui.Enabled;moneyGui.Enabled = false end
+    end
     panel.Visible = true
     player:SetAttribute("StorageOpen", true)
 end)
@@ -11287,6 +11311,8 @@ RunService.Heartbeat:Connect(function(deltaTime)
     end
 end)
 
+HudMenu.Panel:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateLayout)
+HudMenu.Panel:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateLayout)
 gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateLayout)
 hotbar:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateLayout)
 hotbar:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateLayout)

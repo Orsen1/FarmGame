@@ -171,8 +171,8 @@ function ConstructionPromptView.show(playerGui, prompt, object, step, definition
         local maxY = math.max(8, bounds.Y - scaledHeight - bottom)
         local x = math.clamp(point.X - PROMPT_WIDTH * factor / 2, 8, maxX)
         local y = math.clamp(point.Y - scaledHeight / 2, 8, maxY)
-        local shopGui = playerGui:FindFirstChild("BuyGui")
-        local shop = shopGui and shopGui.Enabled and shopGui:FindFirstChild("ShopButton")
+        local shopGui = playerGui:FindFirstChild("FarmMenuGui")
+        local shop = shopGui and shopGui.Enabled and shopGui:FindFirstChild("LeftMenu")
         if shop and shop.Visible then
             local start = shop.AbsolutePosition - gui.AbsolutePosition - Vector2.new(8, 8)
             local finish = start + shop.AbsoluteSize + Vector2.new(16, 16)

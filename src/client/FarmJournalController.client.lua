@@ -5,6 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local config = require(ReplicatedStorage.Configs.FarmJournalConfig)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
+local HudMenu = require(ReplicatedStorage.HudMenu)
 local remote = ReplicatedStorage.RemoteEvents:WaitForChild("FarmJournal")
 local ink = Color3.fromRGB(91, 56, 31)
 local paper = Color3.fromRGB(255, 237, 194)
@@ -47,14 +48,7 @@ end
 
 local gui = make("ScreenGui", player:WaitForChild("PlayerGui"), {Name = "FarmJournalGui", ResetOnSpawn = false,
     DisplayOrder = 20, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets, ZIndexBehavior = Enum.ZIndexBehavior.Sibling})
-local openButton = button(gui, "OpenJournal", "Journal", UDim2.new(1, -172, 0, 128), UDim2.fromOffset(160, 44), Color3.fromRGB(132, 83, 43))
-openButton.TextXAlignment = Enum.TextXAlignment.Right
-make("UIPadding", openButton, {PaddingRight = UDim.new(0, 12)})
-local book = make("Frame", openButton, {Name = "BookIcon", Position = UDim2.fromOffset(13, 9), Size = UDim2.fromOffset(28, 27),
-    BackgroundColor3 = paper, BorderSizePixel = 0, Rotation = -5})
-round(book, 4)
-make("Frame", book, {Size = UDim2.new(0, 3, 1, 0), Position = UDim2.fromOffset(5, 0), BackgroundColor3 = Color3.fromRGB(198, 151, 85), BorderSizePixel = 0})
-make("Frame", book, {Size = UDim2.fromOffset(6, 15), Position = UDim2.fromOffset(16, 0), BackgroundColor3 = green, BorderSizePixel = 0})
+local openButton = HudMenu.Add("OpenJournal", "Journal", 3)
 
 local tracker = button(gui, "Tracker", "", UDim2.new(1, -252, 0, 182), UDim2.fromOffset(240, 100), Color3.fromRGB(255, 222, 157))
 stroke(tracker)
@@ -187,13 +181,14 @@ refresh = function(message)
             if objective.Id == state.Tracked then
                 trackedTitle.Text = objective.Text .. "  " .. (state.Counts[objective.Id] or 0) .. "/" .. objective.Goal
                 trackedHint.Text = objective.Hint
-                tracker.Visible = not opened
+                tracker.Visible = not opened and player:GetAttribute("StorageOpen") ~= true
             end
         end
     end
 end
 
 local function setOpen(value)
+    if value then HudMenu.CloseStorage() end
     opened = value
     player:SetAttribute("FarmJournalOpen", value)
     if transition then transition:Cancel() end
@@ -299,7 +294,7 @@ game:GetService("RunService").Heartbeat:Connect(function(dt)
     if elapsed < 0.25 then return end
     elapsed = 0
     local other = false
-    for _, attribute in ipairs({"ProductionMode", "AnimalMenuOpen", "Milking", "StorageOpen", "FeederOpen", "Teleporting"}) do
+    for _, attribute in ipairs({"ProductionMode", "AnimalMenuOpen", "Milking", "FeederOpen", "Teleporting"}) do
         if player:GetAttribute(attribute) then other = true end
     end
     for _, name in ipairs({"BuyGui", "SellGui"}) do
@@ -310,5 +305,5 @@ game:GetService("RunService").Heartbeat:Connect(function(dt)
     local active = player:GetAttribute("DataLoaded") == true and humanoid and humanoid.Health > 0 and not other
     if not active and opened then setOpen(false) end
     openButton.Visible = active == true and not opened
-    if state then tracker.Visible = active == true and not opened and state.Tracked ~= nil end
+    if state then tracker.Visible = active == true and not opened and state.Tracked ~= nil and player:GetAttribute("StorageOpen") ~= true end
 end)

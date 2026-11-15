@@ -104,6 +104,9 @@
       },
       "CropItems": {
         "$path": "src/shared/CropItems.lua"
+      },
+      "HudMenu": {
+        "$path": "src/shared/HudMenu.lua"
       }
     },
     "Workspace": {
