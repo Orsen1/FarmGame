@@ -3,8 +3,8 @@
 ## Working agreement
 
 - Work directly in the user's local FarmGame checkout, where `default.project.json` and `resources.project.json` live. Check the working tree before editing and preserve the user's changes. Use the current checkout and Rojo mappings to verify paths, instance names, and behavior.
-- Use Git for inspection only. Do not stage changes, create branches or worktrees, run `git commit`, or run `git push`. Leave the edits in place for the owner to review and commit in Sourcetree.
-- Make the smallest change that completes the request. Take routine implementation decisions yourself. Confirm material gameplay choices, major rewrites, destructive changes, and publishing with the owner. For diagnosis-only requests, report the cause and the proposed fix in chat.
+- After completing and verifying changes, create a focused Git commit, push the current branch, and publish the affected Roblox place or places. This is the owner's standing authorization; do not ask again for routine commits, pushes, or publication. Preserve unrelated changes and do not create branches or worktrees unless requested.
+- Make the smallest change that completes the request. Take routine implementation decisions yourself. Confirm material gameplay choices, major rewrites, and destructive changes with the owner. For diagnosis-only requests, report the cause and the proposed fix in chat.
 
 ## Luau style
 

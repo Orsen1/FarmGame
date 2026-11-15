@@ -937,6 +937,158 @@
           </Properties>
         </Item>
       </Item>
+      <Item class="Part" referent="HouseCameraMainRoofLeftBacking">
+        <Properties>
+          <string name="Name">MainRoofLeftBacking</string>
+          <Vector3 name="size">
+            <X>10.236690521240234</X>
+            <Y>0.07999999821186066</Y>
+            <Z>13.800000190734863</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-4.499975681304932</X>
+            <Y>11.297450065612793</Y>
+            <Z>0</Z>
+            <R00>0.8973499536514282</R00>
+            <R01>-0.44131964445114136</R01>
+            <R02>0</R02>
+            <R10>0.44131964445114136</R10>
+            <R11>0.8973499536514282</R11>
+            <R12>0</R12>
+            <R20>0</R20>
+            <R21>0</R21>
+            <R22>1</R22>
+          </CoordinateFrame>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="HouseCameraMainRoofRightBacking">
+        <Properties>
+          <string name="Name">MainRoofRightBacking</string>
+          <Vector3 name="size">
+            <X>10.236690521240234</X>
+            <Y>0.07999999821186066</Y>
+            <Z>13.800000190734863</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>4.499975681304932</X>
+            <Y>11.297450065612793</Y>
+            <Z>0</Z>
+            <R00>0.8973499536514282</R00>
+            <R01>0.44131964445114136</R01>
+            <R02>0</R02>
+            <R10>-0.44131964445114136</R10>
+            <R11>0.8973499536514282</R11>
+            <R12>0</R12>
+            <R20>0</R20>
+            <R21>0</R21>
+            <R22>1</R22>
+          </CoordinateFrame>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="HouseCameraWingRoofLeftBacking">
+        <Properties>
+          <string name="Name">WingRoofLeftBacking</string>
+          <Vector3 name="size">
+            <X>4.546938896179199</X>
+            <Y>0.07999999821186066</Y>
+            <Z>11.699999809265137</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>9.119298934936523</X>
+            <Y>8.208551406860352</Y>
+            <Z>-0.4000000059604645</Z>
+            <R00>0.8320503234863281</R00>
+            <R01>-0.5547001957893372</R01>
+            <R02>0</R02>
+            <R10>0.5547001957893372</R10>
+            <R11>0.8320503234863281</R11>
+            <R12>0</R12>
+            <R20>0</R20>
+            <R21>0</R21>
+            <R22>1</R22>
+          </CoordinateFrame>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
+        </Properties>
+      </Item>
+      <Item class="Part" referent="HouseCameraWingRoofRightBacking">
+        <Properties>
+          <string name="Name">WingRoofRightBacking</string>
+          <Vector3 name="size">
+            <X>4.546938896179199</X>
+            <Y>0.07999999821186066</Y>
+            <Z>11.699999809265137</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>12.680700302124023</X>
+            <Y>8.208551406860352</Y>
+            <Z>-0.4000000059604645</Z>
+            <R00>0.8320503234863281</R00>
+            <R01>0.5547001957893372</R01>
+            <R02>0</R02>
+            <R10>-0.5547001957893372</R10>
+            <R11>0.8320503234863281</R11>
+            <R12>0</R12>
+            <R20>0</R20>
+            <R21>0</R21>
+            <R22>1</R22>
+          </CoordinateFrame>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
+        </Properties>
+      </Item>
     </Item>
     <Item class="Folder" referent="House40">
       <Properties>
@@ -1519,6 +1671,44 @@
           </Properties>
         </Item>
       </Item>
+      <Item class="Part" referent="HouseCameraDoorBacking">
+        <Properties>
+          <string name="Name">DoorBacking</string>
+          <Vector3 name="size">
+            <X>3.119999885559082</X>
+            <Y>6.039999961853027</Y>
+            <Z>0.07999999821186066</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-4.014110565185547</X>
+            <Y>4.449999809265137</Y>
+            <Z>7.8454813957214355</Z>
+            <R00>-0.258819043636322</R00>
+            <R01>0</R01>
+            <R02>-0.9659258127212524</R02>
+            <R10>0</R10>
+            <R11>1</R11>
+            <R12>0</R12>
+            <R20>0.9659258127212524</R20>
+            <R21>0</R21>
+            <R22>-0.258819043636322</R22>
+          </CoordinateFrame>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
+        </Properties>
+      </Item>
     </Item>
     <Item class="Folder" referent="House64">
       <Properties>
@@ -1731,6 +1921,44 @@
             </Vector3>
           </Properties>
         </Item>
+      </Item>
+      <Item class="Part" referent="HouseCameraPorchRoofBacking">
+        <Properties>
+          <string name="Name">PorchRoofBacking</string>
+          <Vector3 name="size">
+            <X>9.550000190734863</X>
+            <Y>0.07999999821186066</Y>
+            <Z>5.849999904632568</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-1.899999976158142</X>
+            <Y>7.555246829986572</Y>
+            <Z>8.558089256286621</Z>
+            <R00>1</R00>
+            <R01>0</R01>
+            <R02>0</R02>
+            <R10>0</R10>
+            <R11>0.9691340923309326</R11>
+            <R12>-0.24653410911560059</R12>
+            <R20>0</R20>
+            <R21>0.24653410911560059</R21>
+            <R22>0.9691340923309326</R22>
+          </CoordinateFrame>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
+        </Properties>
       </Item>
     </Item>
     <Item class="Folder" referent="House73">
@@ -2601,7 +2829,7 @@
         <Properties>
           <string name="Name">MainGableLeft</string>
           <Vector3 name="size">
-            <X>12.3</X>
+            <X>11.979999542236328</X>
             <Y>4</Y>
             <Z>8.19</Z>
           </Vector3>
@@ -2623,11 +2851,16 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionWingRoofLeft">
@@ -2799,7 +3032,7 @@
         <Properties>
           <string name="Name">MainGableRight</string>
           <Vector3 name="size">
-            <X>12.3</X>
+            <X>11.979999542236328</X>
             <Y>4</Y>
             <Z>8.19</Z>
           </Vector3>
@@ -2821,11 +3054,16 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionWingRoofRight">
@@ -3198,7 +3436,7 @@
           <Vector3 name="size">
             <X>16.3</X>
             <Y>8.6</Y>
-            <Z>0.3</Z>
+            <Z>0.11999999731779099</Z>
           </Vector3>
           <CoordinateFrame name="CFrame">
             <X>0</X>
@@ -3218,18 +3456,23 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionLeftWall">
         <Properties>
           <string name="Name">LeftWall</string>
           <Vector3 name="size">
-            <X>0.3</X>
+            <X>0.11999999731779099</X>
             <Y>8.6</Y>
             <Z>12.3</Z>
           </Vector3>
@@ -3251,18 +3494,23 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionRightWall">
         <Properties>
           <string name="Name">RightWall</string>
           <Vector3 name="size">
-            <X>0.3</X>
+            <X>0.11999999731779099</X>
             <Y>8.6</Y>
             <Z>12.3</Z>
           </Vector3>
@@ -3284,11 +3532,16 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionFrontWallLeft">
@@ -3297,7 +3550,7 @@
           <Vector3 name="size">
             <X>4.45</X>
             <Y>8.6</Y>
-            <Z>0.3</Z>
+            <Z>0.11999999731779099</Z>
           </Vector3>
           <CoordinateFrame name="CFrame">
             <X>-5.925</X>
@@ -3317,11 +3570,16 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionFrontWallRight">
@@ -3330,7 +3588,7 @@
           <Vector3 name="size">
             <X>8.45</X>
             <Y>8.6</Y>
-            <Z>0.3</Z>
+            <Z>0.11999999731779099</Z>
           </Vector3>
           <CoordinateFrame name="CFrame">
             <X>3.925</X>
@@ -3350,11 +3608,16 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionDoorHeader">
@@ -3363,7 +3626,7 @@
           <Vector3 name="size">
             <X>3.4</X>
             <Y>2.05</Y>
-            <Z>0.3</Z>
+            <Z>0.11999999731779099</Z>
           </Vector3>
           <CoordinateFrame name="CFrame">
             <X>-2</X>
@@ -3383,11 +3646,16 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionInteriorFloor">
@@ -3400,7 +3668,7 @@
           </Vector3>
           <CoordinateFrame name="CFrame">
             <X>0</X>
-            <Y>0.995</Y>
+            <Y>0.9750000238418579</Y>
             <Z>0</Z>
             <R00>1.0</R00>
             <R01>0</R01>
@@ -3416,11 +3684,16 @@
           <bool name="CanCollide">true</bool>
           <bool name="CanTouch">false</bool>
           <bool name="CanQuery">true</bool>
-          <bool name="CastShadow">false</bool>
-          <float name="Transparency">1</float>
-          <token name="Material">256</token>
+          <bool name="CastShadow">true</bool>
+          <float name="Transparency">0</float>
+          <token name="Material">528</token>
           <token name="TopSurface">0</token>
           <token name="BottomSurface">0</token>
+          <Color3 name="Color">
+            <R>0.40784314274787903</R>
+            <G>0.2980392277240753</G>
+            <B>0.1882352977991104</B>
+          </Color3>
         </Properties>
       </Item>
       <Item class="Part" referent="HouseCollisionOpenDoor">
