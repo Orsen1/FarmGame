@@ -2,6 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ItemDefinitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local PlacementModels = require(script.Parent.PlacementModels)
+local StarterHouseLayout = require(script.Parent.StarterHouseLayout)
 local PlacementRules = {}
 local footprints = {}
 local snapDistance = 2.5
@@ -79,6 +80,10 @@ function PlacementRules.getPlacement(plot, position, template, rotation, preview
     local sections = plot:FindFirstChild("Sections")
     if not insideUnlockedLand(ground, sections, point, halfX, halfZ) then
         return targetPivot, false, "Keep the whole object inside your unlocked land"
+    end
+
+    if StarterHouseLayout.Overlaps(plot, targetBox, boxSize) then
+        return targetPivot, false, "Leave room for the farmhouse"
     end
 
     local ignored = {ground}

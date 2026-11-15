@@ -75,6 +75,9 @@
         },
         "FarmJournalConfig": {
           "$path": "src/shared/Configs/FarmJournalConfig.lua"
+        },
+        "StarterHouseConfig": {
+          "$path": "src/shared/Configs/StarterHouseConfig.lua"
         }
       },
       "Tools": {

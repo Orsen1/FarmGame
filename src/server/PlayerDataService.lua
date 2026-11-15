@@ -1,5 +1,6 @@
 local DataStoreService = game:GetService("DataStoreService")
 local dataStore = DataStoreService:GetDataStore("FarmGame_MoneyInventory")
+local houseConfig = require(game.ReplicatedStorage.Configs.StarterHouseConfig)
 
 local function saveData(userId, value)
     local encoded = game:GetService("HttpService"):JSONEncode(value)
@@ -26,6 +27,7 @@ local function loadData(userId)
 
     if value == nil then
         return {
+            StarterHouseMigrationVersion = houseConfig.MigrationVersion,
             Money = 250,
 
             Inventory = {{

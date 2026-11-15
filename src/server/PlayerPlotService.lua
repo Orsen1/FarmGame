@@ -1,8 +1,21 @@
 local Players = game:GetService("Players")
 local plotsFolder = workspace:WaitForChild("Plots")
 local PlotSectionService = require(script.Parent.PlotSectionService)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterHouseLayout = require(ReplicatedStorage.PlacementScripts.StarterHouseLayout)
+local houseTemplate = ReplicatedStorage:WaitForChild("FarmModels"):WaitForChild("StarterHouse")
 
 local PlayerPlotService = {}
+
+function PlayerPlotService.ensureStarterHouse(plot)
+    local house = plot:FindFirstChild("StarterHouse")
+    if not house then
+        house = houseTemplate:Clone()
+        house:PivotTo(StarterHouseLayout.GetPivot(plot))
+        house.Parent = plot
+    end
+    return house
+end
 
 function PlayerPlotService.assignPlotToPlayer(player)
     if player.Parent ~= Players or player:GetAttribute("PlotName") then
@@ -13,6 +26,7 @@ function PlayerPlotService.assignPlotToPlayer(player)
         local plot = plotsFolder:FindFirstChild("Plot" .. plotNumber)
 
         if plot and plot:GetAttribute("OwnerUserId") == 0 then
+            PlayerPlotService.ensureStarterHouse(plot)
             plot:SetAttribute("OwnerUserId", player.UserId)
             player:SetAttribute("PlotName", plot.Name)
 

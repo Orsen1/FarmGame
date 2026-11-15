@@ -37,6 +37,8 @@ local function loadPlayerData(player)
         return
     end
 
+    local houseMigrated = false
+
     if PlayerPlotService then
         PlayerPlotService.assignPlotToPlayer(player)
 
@@ -71,6 +73,12 @@ local function loadPlayerData(player)
         local plot = workspace.Plots[player:GetAttribute("PlotName")]
         local success, reason = PlotSectionService.loadData(plot, data.UnlockedPlotSections)
         if success then
+            local migrated
+            migrated, houseMigrated, reason = PlotDataService.migrateStarterHouse(plot, data)
+            success = migrated ~= nil
+            if success then data = migrated end
+        end
+        if success then
             success, reason = PlotDataService.loadData(player, data.PlacedObjects or {})
         end
 
@@ -92,6 +100,11 @@ local function loadPlayerData(player)
 
     if not CropRecords.Load(player, data.CropRecord) then player:Kick("Failed to load crop record.");return end
     if not Journal.Load(player, data.FarmJournal, data) then player:Kick("Failed to load your farm journal.");return end
+    if houseMigrated and not PlayerDataService.saveData(player.UserId, data) then
+        player:Kick("Could not save the farmhouse update. Your previous farm is safe. Please rejoin.")
+        return
+    end
+    if player.Parent ~= Players then return end
     loadedData[player] = data
     player:SetAttribute("DataLoaded", true)
     if not PlayerPlotService then Journal.Record(player, "VisitResources") end

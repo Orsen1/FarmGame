@@ -11,12 +11,82 @@ local StorageService = require(ServerScriptService:WaitForChild("StorageService"
 local ConstructionService = require(ServerScriptService:WaitForChild("ConstructionService"))
 local AnimalService = require(ServerScriptService:WaitForChild("AnimalService"))
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
+local StarterHouseLayout = require(ReplicatedStorage.PlacementScripts.StarterHouseLayout)
+local houseConfig = require(ReplicatedStorage.Configs.StarterHouseConfig)
 
 local models = ReplicatedStorage:WaitForChild("PlaceableModels")
 local plants = ReplicatedStorage:WaitForChild("Plants")
 local plots = workspace:WaitForChild("Plots")
 
 local PlotDataService = {}
+
+local function savedPlacement(savedObject)
+    if typeof(savedObject) ~= "table" or typeof(savedObject.ItemName) ~= "string" then
+        return nil, nil, "Invalid saved object"
+    end
+    local definition = ItemDefinitions[savedObject.ItemName]
+    local template = PlacementModels.getTemplate(savedObject.ItemName, savedObject.ConstructionStage)
+    if not definition or not definition.Placeable or not template or not template:IsA("Model") then
+        return nil, nil, "Missing definition or model: " .. savedObject.ItemName
+    end
+    local pivot = savedObject.Pivot
+    if typeof(pivot) ~= "table" or #pivot ~= 12 then return nil, nil, "Invalid saved pivot" end
+    for index = 1, 12 do
+        local value = pivot[index]
+        if typeof(value) ~= "number" or value ~= value or math.abs(value) == math.huge then
+            return nil, nil, "Invalid saved pivot"
+        end
+    end
+    local frame = CFrame.new(table.unpack(pivot))
+    if math.abs(frame.RightVector.Magnitude - 1) > 0.01 or math.abs(frame.UpVector.Magnitude - 1) > 0.01 or
+        math.abs(frame.LookVector.Magnitude - 1) > 0.01 or frame.RightVector:Cross(frame.UpVector):Dot(frame.ZVector) < 0.99 then
+        return nil, nil, "Invalid saved rotation"
+    end
+    return template, frame
+end
+
+function PlotDataService.migrateStarterHouse(plot, data)
+    local version = data.StarterHouseMigrationVersion
+    if version == nil then version = 0 end
+    if typeof(version) ~= "number" or version < 0 or version % 1 ~= 0 then
+        return nil, false, "Invalid starter house migration version"
+    end
+    if version >= houseConfig.MigrationVersion then return data, false end
+    local savedObjects = data.PlacedObjects
+    if savedObjects == nil then savedObjects = {} end
+    if typeof(savedObjects) ~= "table" then return nil, false, "Invalid placed objects" end
+    local objectCount = 0
+    for index in pairs(savedObjects) do
+        if typeof(index) ~= "number" or index % 1 ~= 0 or index < 1 or index > #savedObjects then
+            return nil, false, "Invalid placed object index"
+        end
+        objectCount += 1
+    end
+    if objectCount ~= #savedObjects then return nil, false, "Incomplete placed object list" end
+    local remaining = {}
+    for _, savedObject in ipairs(savedObjects) do
+        local template, relative, reason = savedPlacement(savedObject)
+        if not template then return nil, false, reason end
+        local world = plot.Ground.CFrame * relative
+        local transform = world * template:GetPivot():Inverse()
+        local box, size = template:GetBoundingBox()
+        local intersects = false
+        if StarterHouseLayout.Overlaps(plot, transform * box, size) then
+            for _, part in ipairs(template:GetDescendants()) do
+                if part:IsA("BasePart") and (part.CanCollide or part.Transparency < 1) and
+                    StarterHouseLayout.Overlaps(plot, transform * part.CFrame, part.Size) then
+                    intersects = true
+                    break
+                end
+            end
+        end
+        if not intersects then table.insert(remaining, savedObject) end
+    end
+    local migrated = table.clone(data)
+    migrated.PlacedObjects = remaining
+    migrated.StarterHouseMigrationVersion = houseConfig.MigrationVersion
+    return migrated, true
+end
 
 local function getPlot(player)
     local plotName = player:GetAttribute("PlotName")
@@ -121,27 +191,9 @@ function PlotDataService.loadData(player, savedObjects)
     end
 
     for _, savedObject in ipairs(savedObjects) do
-        if typeof(savedObject) ~= "table" or typeof(savedObject.ItemName) ~= "string" then
-            return false, "Invalid saved object"
-        end
-
+        local template, pivot, placementError = savedPlacement(savedObject)
+        if not template then return false, placementError end
         local definition = ItemDefinitions[savedObject.ItemName]
-        local template = PlacementModels.getTemplate(savedObject.ItemName, savedObject.ConstructionStage)
-        if not definition or definition.Placeable ~= true or not template or not template:IsA("Model") then
-            return false, "Missing definition or model: " .. savedObject.ItemName
-        end
-
-        local pivot = savedObject.Pivot
-
-        if typeof(pivot) ~= "table" or #pivot ~= 12 then
-            return false, "Invalid saved pivot"
-        end
-
-        for _, value in ipairs(pivot) do
-            if typeof(value) ~= "number" or value ~= value or math.abs(value) == math.huge then
-                return false, "Invalid saved pivot"
-            end
-        end
 
         local object = template:Clone()
 
@@ -191,7 +243,7 @@ function PlotDataService.loadData(player, savedObjects)
             end
         end
 
-        object:PivotTo(ground.CFrame * CFrame.new(table.unpack(pivot)))
+        object:PivotTo(ground.CFrame * pivot)
         object.Parent = objects
 
         if definition.Plantable then
