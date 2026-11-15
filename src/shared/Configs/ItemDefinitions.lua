@@ -171,6 +171,11 @@ local ItemDefinitions = {
         Type = "Material",
         Icon = "rbxassetid://135216081156968"
     },
+    BirchPlank = {
+        DisplayName = "Birch Plank",
+        Type = "Material",
+        Icon = "rbxassetid://122091851296016"
+    },
     Shovel = {
         DisplayName = "Лопата",
         Type = "Tool",
@@ -365,7 +370,7 @@ local ItemDefinitions = {
         StorageSlots = 24
     },
     BirchWood = {
-        DisplayName = "Birch Wood", Type = "Material", Icon = "rbxassetid://73266410773149"
+        DisplayName = "Birch Wood", Type = "Material", Icon = "rbxassetid://104660013357152"
     },
     IronOre = {
         DisplayName = "Iron Ore", Type = "Material", Icon = "rbxassetid://90648700193211"
@@ -373,7 +378,7 @@ local ItemDefinitions = {
     Wood = {
         DisplayName = "Wood",
         Type = "Material",
-        Icon = "rbxassetid://127192346292041"
+        Icon = "rbxassetid://80924612925975"
     },
 
     Stone = {
