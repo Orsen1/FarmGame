@@ -92,6 +92,9 @@
         "MoveInventorySlotEvent": {
           "$path": "src/shared/RemoteEvents/MoveInventorySlotEvent.model.json"
         },
+        "DiscardInventoryItemEvent": {
+          "$path": "src/shared/RemoteEvents/DiscardInventoryItemEvent.model.json"
+        },
         "CropRecords": {
           "$path": "src/shared/RemoteEvents/CropRecords.model.json"
         },

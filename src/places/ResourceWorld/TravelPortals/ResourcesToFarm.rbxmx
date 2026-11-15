@@ -11,9 +11,9 @@
       <Properties>
         <string name="Name">Threshold</string>
         <CoordinateFrame name="CFrame">
-          <X>0</X>
-          <Y>0.17</Y>
-          <Z>0</Z>
+          <X>-0.22000122</X>
+          <Y>36.22</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -64,9 +64,9 @@
       <Properties>
         <string name="Name">Tread</string>
         <CoordinateFrame name="CFrame">
-          <X>0</X>
-          <Y>0.4</Y>
-          <Z>0</Z>
+          <X>-0.22000122</X>
+          <Y>36.45</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -103,9 +103,9 @@
       <Properties>
         <string name="Name">StoneFooting</string>
         <CoordinateFrame name="CFrame">
-          <X>-3.22</X>
-          <Y>0.75</Y>
-          <Z>0</Z>
+          <X>-3.44000122</X>
+          <Y>36.8</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -142,9 +142,9 @@
       <Properties>
         <string name="Name">TimberPost</string>
         <CoordinateFrame name="CFrame">
-          <X>-3.22</X>
-          <Y>4.18</Y>
-          <Z>0</Z>
+          <X>-3.44000122</X>
+          <Y>40.23</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -181,9 +181,9 @@
       <Properties>
         <string name="Name">PostFace</string>
         <CoordinateFrame name="CFrame">
-          <X>-3.22</X>
-          <Y>4.17</Y>
-          <Z>-0.665</Z>
+          <X>-3.44000122</X>
+          <Y>40.22</Y>
+          <Z>-13.415</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -220,9 +220,9 @@
       <Properties>
         <string name="Name">IronBand</string>
         <CoordinateFrame name="CFrame">
-          <X>-3.22</X>
-          <Y>1.31</Y>
-          <Z>0</Z>
+          <X>-3.44000122</X>
+          <Y>37.36</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -259,9 +259,9 @@
       <Properties>
         <string name="Name">IronBand</string>
         <CoordinateFrame name="CFrame">
-          <X>-3.22</X>
-          <Y>6.95</Y>
-          <Z>0</Z>
+          <X>-3.44000122</X>
+          <Y>43</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -298,9 +298,9 @@
       <Properties>
         <string name="Name">AmberInlay</string>
         <CoordinateFrame name="CFrame">
-          <X>-3.22</X>
-          <Y>3.72</Y>
-          <Z>-0.779</Z>
+          <X>-3.44000122</X>
+          <Y>39.77</Y>
+          <Z>-13.529</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -337,9 +337,9 @@
       <Properties>
         <string name="Name">CornerBrace</string>
         <CoordinateFrame name="CFrame">
-          <X>-2.595</X>
-          <Y>6.895</Y>
-          <Z>0</Z>
+          <X>-2.81500122</X>
+          <Y>42.945</Y>
+          <Z>-12.75</Z>
           <R00>0.682099275</R00>
           <R01>-0.731259584</R01>
           <R02>0</R02>
@@ -376,9 +376,9 @@
       <Properties>
         <string name="Name">RoofBeam</string>
         <CoordinateFrame name="CFrame">
-          <X>-2.025</X>
-          <Y>8.795</Y>
-          <Z>0</Z>
+          <X>-2.24500122</X>
+          <Y>44.845</Y>
+          <Z>-12.75</Z>
           <R00>0.885060394</R00>
           <R01>-0.465476207</R01>
           <R02>0</R02>
@@ -415,9 +415,9 @@
       <Properties>
         <string name="Name">RoofTrim</string>
         <CoordinateFrame name="CFrame">
-          <X>-2.025</X>
-          <Y>8.785</Y>
-          <Z>-1.01</Z>
+          <X>-2.24500122</X>
+          <Y>44.835</Y>
+          <Z>-13.76</Z>
           <R00>0.883256864</R00>
           <R01>-0.468889446</R01>
           <R02>0</R02>
@@ -454,9 +454,9 @@
       <Properties>
         <string name="Name">StoneFooting</string>
         <CoordinateFrame name="CFrame">
-          <X>3.22</X>
-          <Y>0.75</Y>
-          <Z>0</Z>
+          <X>2.99999878</X>
+          <Y>36.8</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -493,9 +493,9 @@
       <Properties>
         <string name="Name">TimberPost</string>
         <CoordinateFrame name="CFrame">
-          <X>3.22</X>
-          <Y>4.18</Y>
-          <Z>0</Z>
+          <X>2.99999878</X>
+          <Y>40.23</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -532,9 +532,9 @@
       <Properties>
         <string name="Name">PostFace</string>
         <CoordinateFrame name="CFrame">
-          <X>3.22</X>
-          <Y>4.17</Y>
-          <Z>-0.665</Z>
+          <X>2.99999878</X>
+          <Y>40.22</Y>
+          <Z>-13.415</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -571,9 +571,9 @@
       <Properties>
         <string name="Name">IronBand</string>
         <CoordinateFrame name="CFrame">
-          <X>3.22</X>
-          <Y>1.31</Y>
-          <Z>0</Z>
+          <X>2.99999878</X>
+          <Y>37.36</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -610,9 +610,9 @@
       <Properties>
         <string name="Name">IronBand</string>
         <CoordinateFrame name="CFrame">
-          <X>3.22</X>
-          <Y>6.95</Y>
-          <Z>0</Z>
+          <X>2.99999878</X>
+          <Y>43</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -649,9 +649,9 @@
       <Properties>
         <string name="Name">AmberInlay</string>
         <CoordinateFrame name="CFrame">
-          <X>3.22</X>
-          <Y>3.72</Y>
-          <Z>-0.779</Z>
+          <X>2.99999878</X>
+          <Y>39.77</Y>
+          <Z>-13.529</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -688,9 +688,9 @@
       <Properties>
         <string name="Name">CornerBrace</string>
         <CoordinateFrame name="CFrame">
-          <X>2.595</X>
-          <Y>6.895</Y>
-          <Z>0</Z>
+          <X>2.37499878</X>
+          <Y>42.945</Y>
+          <Z>-12.75</Z>
           <R00>-0.682099275</R00>
           <R01>-0.731259584</R01>
           <R02>0</R02>
@@ -727,9 +727,9 @@
       <Properties>
         <string name="Name">RoofBeam</string>
         <CoordinateFrame name="CFrame">
-          <X>2.025</X>
-          <Y>8.795</Y>
-          <Z>0</Z>
+          <X>1.80499878</X>
+          <Y>44.845</Y>
+          <Z>-12.75</Z>
           <R00>-0.885060394</R00>
           <R01>-0.465476207</R01>
           <R02>0</R02>
@@ -766,9 +766,9 @@
       <Properties>
         <string name="Name">RoofTrim</string>
         <CoordinateFrame name="CFrame">
-          <X>2.025</X>
-          <Y>8.785</Y>
-          <Z>-1.01</Z>
+          <X>1.80499878</X>
+          <Y>44.835</Y>
+          <Z>-13.76</Z>
           <R00>-0.883256864</R00>
           <R01>-0.468889446</R01>
           <R02>0</R02>
@@ -805,9 +805,9 @@
       <Properties>
         <string name="Name">Crossbeam</string>
         <CoordinateFrame name="CFrame">
-          <X>0</X>
-          <Y>7.62</Y>
-          <Z>0</Z>
+          <X>-0.22000122</X>
+          <Y>43.67</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -844,9 +844,9 @@
       <Properties>
         <string name="Name">CrossbeamFace</string>
         <CoordinateFrame name="CFrame">
-          <X>0</X>
-          <Y>7.66</Y>
-          <Z>-0.861</Z>
+          <X>-0.22000122</X>
+          <Y>43.71</Y>
+          <Z>-13.611</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -883,9 +883,9 @@
       <Properties>
         <string name="Name">GablePost</string>
         <CoordinateFrame name="CFrame">
-          <X>0</X>
-          <Y>8.77</Y>
-          <Z>0</Z>
+          <X>-0.22000122</X>
+          <Y>44.82</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -922,9 +922,9 @@
       <Properties>
         <string name="Name">HomeMarker</string>
         <CoordinateFrame name="CFrame">
-          <X>0</X>
-          <Y>8.82</Y>
-          <Z>-0.769</Z>
+          <X>-0.22000122</X>
+          <Y>44.87</Y>
+          <Z>-13.519</Z>
           <R00>0.707106781</R00>
           <R01>-0.707106781</R01>
           <R02>0</R02>
@@ -961,9 +961,9 @@
       <Properties>
         <string name="Name">PortalVeil</string>
         <CoordinateFrame name="CFrame">
-          <X>0</X>
-          <Y>3.91</Y>
-          <Z>0</Z>
+          <X>-0.22000122</X>
+          <Y>39.96</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -1000,9 +1000,9 @@
       <Properties>
         <string name="Name">PortalTrigger</string>
         <CoordinateFrame name="CFrame">
-          <X>0</X>
-          <Y>3.93</Y>
-          <Z>0</Z>
+          <X>-0.22000122</X>
+          <Y>39.98</Y>
+          <Z>-12.75</Z>
           <R00>1</R00>
           <R01>-0</R01>
           <R02>0</R02>
@@ -1035,6 +1035,6 @@
         <token name="BackSurface">0</token>
         <BinaryString name="AttributesSerialize">AQAAAAsAAABEZXN0aW5hdGlvbgIEAAAARmFybQ==</BinaryString>
       </Properties>
-    </Item>
+    <Item class="BillboardGui" referent="ReturnSignReturnSign"><Properties><string name="Name">ReturnSign</string><UDim2 name="Size"><XS>0</XS><XO>240</XO><YS>0</YS><YO>48</YO></UDim2><Vector3 name="StudsOffsetWorldSpace"><X>0</X><Y>7</Y><Z>0</Z></Vector3><float name="MaxDistance">90</float><bool name="AlwaysOnTop">false</bool><float name="LightInfluence">0</float></Properties><Item class="TextLabel" referent="ReturnSignTitle"><Properties><string name="Name">Title</string><UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2><string name="Text">Return to Farm</string><token name="Font">26</token><float name="TextSize">23</float><Color3 name="TextColor3"><R>1</R><G>0.95</G><B>0.78</B></Color3><Color3 name="BackgroundColor3"><R>0.36</R><G>0.22</G><B>0.1</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="ReturnSignCorner"><Properties><string name="Name">Corner</string><UDim name="CornerRadius"><S>0</S><O>12</O></UDim></Properties></Item><Item class="UIStroke" referent="ReturnSignOutline"><Properties><string name="Name">Outline</string><Color3 name="Color"><R>0.85</R><G>0.64</G><B>0.31</B></Color3><float name="Thickness">2</float><token name="ApplyStrokeMode">1</token></Properties></Item></Item></Item></Item>
   </Item>
 </roblox>

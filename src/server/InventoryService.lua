@@ -302,6 +302,24 @@ function InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, exp
         expectedFrom, expectedTo)
 end
 
+function InventoryService.DiscardSlot(player, slotIndex, expected)
+    if player:GetAttribute("DataLoaded") ~= true then return false, "InventoryNotReady" end
+    if typeof(slotIndex) ~= "number" or slotIndex % 1 ~= 0 or slotIndex < 1 or slotIndex > SLOT_COUNT or
+        typeof(expected) ~= "table" then return false, "InvalidSlot" end
+    local data = InventoryService.GetInventory(player)
+    if not data then return false, "InventoryNotReady" end
+    local row = data[slotIndex]
+    local slot = player.Inventory["Slot" .. slotIndex]
+    if row.ItemName ~= expected.ItemName or row.Amount ~= expected.Amount or
+        row.ObjectData ~= expected.ObjectData or slot:GetAttribute("Variants") ~= expected.Variants then
+        return false, "InventoryChanged"
+    end
+    if row.Amount < 1 then return false, "SourceSlotEmpty" end
+    data[slotIndex] = {ItemName = "", Amount = 0}
+    writeInventory(player, data)
+    return true
+end
+
 function InventoryService.ExchangeForObject(player, inputs, itemName, objectData)
     local row = {ItemName = itemName, Amount = 1, ObjectData = objectData}
     if not InventoryService.IsValidObjectRow(row) then return false, "Invalid object data." end

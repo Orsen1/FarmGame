@@ -8,6 +8,7 @@ local StorageService = storageModule and require(storageModule)
 
 local moveInventorySlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("MoveInventorySlotEvent")
 local setSelectedSlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
+local discardItemEvent = ReplicatedStorage.RemoteEvents:WaitForChild("DiscardInventoryItemEvent")
 
 local watched = {}
 
@@ -46,6 +47,16 @@ moveInventorySlotEvent.OnServerEvent:Connect(function(player, fromIndex, toIndex
     end
 
     moveInventorySlotEvent:FireClient(player, success, reason)
+end)
+
+discardItemEvent.OnServerEvent:Connect(function(player, slotIndex, expected)
+    if player:GetAttribute("ProductionMode") == true or player:GetAttribute("Milking") == true or
+        player:GetAttribute("Teleporting") == true then
+        discardItemEvent:FireClient(player, false, "Inventory is not available")
+        return
+    end
+    local success, reason = InventoryService.DiscardSlot(player, slotIndex, expected)
+    discardItemEvent:FireClient(player, success, reason)
 end)
 
 local function bindPlayer(player)
