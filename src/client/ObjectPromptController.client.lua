@@ -93,13 +93,23 @@ local function updatePrompt(prompt)
     local itemName = object:GetAttribute("ItemName") or object.Name
     local definition = ItemDefinitions[itemName]
 
-    if not definition or definition.Placeable ~= true then
+    if not definition or not (definition.Placeable or definition.PermanentHouse) then
         setEnabled(prompt, false)
         hidePrompt(prompt)
         return
     end
 
     prompt.ObjectText = definition.DisplayName or itemName
+    if definition.PermanentHouse then
+        prompt.Style = Enum.ProximityPromptStyle.Custom
+        prompt.ActionText = "Open home"
+        prompt:SetAttribute("Compact", true)
+        prompt:SetAttribute("Icon", definition.Icon)
+        setEnabled(prompt, player:GetAttribute("ProductionMode") ~= true and player:GetAttribute("Milking") ~= true)
+        if not prompt.Enabled then hidePrompt(prompt)
+        elseif promptViews[prompt] then promptViews[prompt].update() end
+        return
+    end
     local home = AnimalConfig.Coops[itemName]
     if home and home.InteractionMenu or definition.InteractionMenu then
         local selected = getSelectedItem()
@@ -385,7 +395,7 @@ ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
     local step = getConstructionStep(object, itemName)
     if prompt.Name ~= "ActionPrompt" or prompt:GetAttribute("CareAction") then step = nil end
     local definition = ItemDefinitions[itemName]
-    if not step and not (definition and (definition.Plantable or definition.ShopCategoryWhenEmpty or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
+    if not step and not (definition and (definition.PermanentHouse or definition.Plantable or definition.ShopCategoryWhenEmpty or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
     hidePrompt(prompt)
     if step then
         promptViews[prompt] = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)

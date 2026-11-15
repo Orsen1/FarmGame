@@ -156,6 +156,7 @@ function View:Layout()
         end
     end
     local maxHeight = self.Portrait and math.min(size.Y * 0.5, 420) or math.min(size.Y - 24, 420)
+    contentHeight = self.HouseContentHeight or contentHeight
     local panelHeight = math.min(contentHeight + 66, maxHeight)
     if self.Portrait then
         self.OpenPosition = UDim2.new(0.5, 0, 1, -12)

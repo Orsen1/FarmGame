@@ -1,6 +1,20 @@
 return {
     MigrationVersion = 1,
     BoundaryGap = 4,
+    Objects = {
+        {Id = "Oven", DisplayName = "Oven", MinimumLevel = 0},
+        {Id = "Worktable", DisplayName = "Kitchen table", MinimumLevel = 0},
+    },
+    Levels = {
+        [0] = {
+            DisplayName = "Restore farmhouse",
+            Model = "StarterHouseRestored",
+            Stages = {{Inputs = {Wood = 30, Plank = 40, Stone = 15}}},
+        },
+    },
+    ExteriorDistance = 36,
+    ExteriorPortraitDistance = 56,
+    OrbitSensitivity = 0.006,
     BoundsMin = Vector3.new(-9.6, 0, -7.5),
     BoundsMax = Vector3.new(14.8, 17, 13.7),
     Footprints = {

@@ -4,6 +4,7 @@ local PlotSectionService = require(script.Parent.PlotSectionService)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterHouseLayout = require(ReplicatedStorage.PlacementScripts.StarterHouseLayout)
 local houseTemplate = ReplicatedStorage:WaitForChild("FarmModels"):WaitForChild("StarterHouse")
+local HouseService = require(script.Parent.HouseService)
 
 local PlayerPlotService = {}
 
@@ -26,7 +27,8 @@ function PlayerPlotService.assignPlotToPlayer(player)
         local plot = plotsFolder:FindFirstChild("Plot" .. plotNumber)
 
         if plot and plot:GetAttribute("OwnerUserId") == 0 then
-            PlayerPlotService.ensureStarterHouse(plot)
+            local house = PlayerPlotService.ensureStarterHouse(plot)
+            HouseService.SetOwner(house, player.UserId)
             plot:SetAttribute("OwnerUserId", player.UserId)
             player:SetAttribute("PlotName", plot.Name)
 
@@ -108,6 +110,11 @@ function PlayerPlotService.releasePlot(player)
     end
 
     plot:SetAttribute("OwnerUserId", 0)
+    local house = plot:FindFirstChild("StarterHouse")
+    if house then
+        HouseService.Load(house, nil)
+        HouseService.SetOwner(house, 0)
+    end
     PlotSectionService.loadData(plot)
     player:SetAttribute("PlotName", nil)
 

@@ -78,7 +78,7 @@ function ConstructionService.loadData(object, savedDeposits)
     return true
 end
 
-local function planDeposit(player, inputs, deposits)
+function ConstructionService.PlanDeposit(player, inputs, deposits)
     local inventory = InventoryService.GetInventory(player)
     if not inventory then
         return nil, "Inventory is not ready"
@@ -155,7 +155,7 @@ function ConstructionService.Build(player, object)
     if not deposits then
         return false, reason
     end
-    local payment, complete = planDeposit(player, step.Inputs, deposits)
+    local payment, complete = ConstructionService.PlanDeposit(player, step.Inputs, deposits)
     if not payment then
         return false, complete
     end

@@ -11,6 +11,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
 local View = require(ReplicatedStorage:WaitForChild("Production"):WaitForChild("ProductionGuiView"))
+local HouseView = require(ReplicatedStorage.Production.HouseGuiView)
 local view = View.new(playerGui:WaitForChild("ProductionGui"))
 local controls = require(player.PlayerScripts:WaitForChild("PlayerModule")):GetControls()
 local placement = require(ReplicatedStorage.PlacementScripts.PlacementController)
@@ -23,6 +24,8 @@ local eDown = false
 local pointerInput
 local lastHeld = false
 local pendingSelect = false
+local houseView
+local orbitPointer
 
 local function send(action, value)
     if current then
@@ -53,9 +56,14 @@ local function refresh()
     end
     view:UpdateMaterials(inventory)
     view:UpdateState(current)
+    if current.House then houseView:Refresh(current) end
 end
 
 local function cameraTarget()
+    if current and current.House then
+        local frame, fov = houseView:Camera(current)
+        if frame then return frame, fov end
+    end
     local station = current and current.Station
     local root = station and station:FindFirstChild("PlacementRoot")
     if not root then
@@ -73,6 +81,7 @@ local function cameraTarget()
     local distance = (point.WorldPosition - target.WorldPosition).Magnitude
     local fov = station:GetAttribute("ProductionFieldOfView") or 50
     local halfHeight = distance * math.tan(math.rad(fov / 2))
+    if current.House then return houseView:Frame(frame, fov, distance), fov end
     local offset
     if portrait then
         offset = -frame.UpVector * halfHeight * 0.35
@@ -160,8 +169,29 @@ local function closeMode(immediate, notifyServer)
         connection:Disconnect()
     end
     view:Hide(immediate)
+    houseView:Hide(immediate)
+    orbitPointer = nil
     restoreCamera(immediate)
 end
+
+local function showRecipes(station)
+    view:ShowRecipes(station, function(recipeId)
+        if not current or current.Busy or pendingSelect then return end
+        releaseHold()
+        pendingSelect = true
+        send("Select", recipeId)
+    end)
+end
+
+houseView = HouseView.new(view, function(action, value)
+    if not current then return end
+    if action == "HouseTarget" then
+        if current.Busy and not current.Automatic then return end
+        releaseHold()
+        orbitPointer, pendingSelect = nil, true
+    end
+    send(action, value)
+end)
 
 local function openMode(data)
     if current then
@@ -176,7 +206,7 @@ local function openMode(data)
     end
     current = {
         SessionId = data.SessionId,
-        Station = station,
+        Station = station, House = data.House, HouseSelection = data.House and "Overview" or nil,
         Busy = false,
         Held = false,
         StartedAt = 0,
@@ -203,14 +233,9 @@ local function openMode(data)
     eDown, pointerInput, lastHeld, pendingSelect = false, nil, false, false
     -- Нажатие E, открывшее prompt, уже началось до этой сессии.
     current.EArmed = not UserInputService:IsKeyDown(Enum.KeyCode.E)
-    view:ShowRecipes(station, function(recipeId)
-        if not current or current.Busy or pendingSelect then
-            return
-        end
-        releaseHold()
-        pendingSelect = true
-        send("Select", recipeId)
-    end)
+    view.Panel.Visible = true
+    showRecipes(station)
+    if data.House then houseView:Show(data.House) end
     view:SetRecipe(nil)
     view:Show()
     local camera = workspace.CurrentCamera
@@ -243,13 +268,21 @@ local function openMode(data)
             closeMode(true, true)
         end
     end))
-    table.insert(current.Connections, station.AttributeChanged:Connect(refresh))
+    if data.House then
+        table.insert(current.Connections, data.House.AttributeChanged:Connect(refresh))
+        for _, object in data.House.Stations:GetChildren() do
+            table.insert(current.Connections, object.AttributeChanged:Connect(refresh))
+        end
+    else
+        table.insert(current.Connections, station.AttributeChanged:Connect(refresh))
+    end
     local function watchStored(object)
         if not current then return end
         if object:IsA("IntValue") then table.insert(current.Connections, object.Changed:Connect(refresh)) end
     end
-    for _, object in ipairs(station:GetDescendants()) do watchStored(object) end
-    table.insert(current.Connections, station.DescendantAdded:Connect(function(object) watchStored(object);refresh() end))
+    local storedRoot = data.House and data.House.Stations or station
+    for _, object in ipairs(storedRoot:GetDescendants()) do watchStored(object) end
+    table.insert(current.Connections, storedRoot.DescendantAdded:Connect(function(object) watchStored(object);refresh() end))
     local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
     if humanoid then
         table.insert(current.Connections, humanoid.Died:Connect(function()
@@ -264,7 +297,12 @@ remotes.ProductionState.OnClientEvent:Connect(function(action, data)
         openMode(data)
     elseif action == "State" and current and data.SessionId == current.SessionId then
         pendingSelect = false
-        if current.RecipeId ~= data.RecipeId then
+        local changedStation = current.Station ~= data.Station or current.HouseSelection ~= data.HouseSelection
+        current.Station, current.HouseSelection = data.Station, data.HouseSelection
+        if changedStation then
+            showRecipes(data.Station)
+            view:SetRecipe(data.RecipeId)
+        elseif current.RecipeId ~= data.RecipeId then
             view:SetRecipe(data.RecipeId)
         end
         for _, name in ipairs({"RecipeId", "Busy", "Held", "StartedAt", "Duration", "Message", "Automatic", "Phase"}) do
@@ -293,6 +331,7 @@ UserInputService.InputBegan:Connect(function(input, processed)
     end
 end)
 UserInputService.InputEnded:Connect(function(input)
+    if input == orbitPointer or orbitPointer and input.UserInputType == orbitPointer.UserInputType then orbitPointer = nil end
     if input.KeyCode == Enum.KeyCode.E then
         if current then
             current.EArmed = true
@@ -304,6 +343,17 @@ UserInputService.InputEnded:Connect(function(input)
             Enum.UserInputType.MouseButton1) then
         pointerInput = nil
         updateHeld()
+    end
+end)
+UserInputService.InputBegan:Connect(function(input, processed)
+    if processed or not current or not current.House or current.HouseSelection ~= "Upgrade" then return end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.MouseButton2 or
+        input.UserInputType == Enum.UserInputType.Touch then orbitPointer = input end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if not orbitPointer or not current or not current.House or current.HouseSelection ~= "Upgrade" then return end
+    if input == orbitPointer or input.UserInputType == Enum.UserInputType.MouseMovement and orbitPointer.UserInputType ~= Enum.UserInputType.Touch then
+        houseView:Drag(Vector2.new(input.Delta.X, input.Delta.Y))
     end
 end)
 view.Work.StartButton.InputBegan:Connect(function(input)
@@ -333,7 +383,7 @@ end)
 view.Root.CloseButton.Activated:Connect(function()
     closeMode(false, true)
 end)
-UserInputService.WindowFocusReleased:Connect(releaseHold)
+UserInputService.WindowFocusReleased:Connect(function() orbitPointer = nil;releaseHold() end)
 player.CharacterRemoving:Connect(function()
     closeMode(true, true)
 end)
@@ -356,6 +406,7 @@ end)
 inventory.DescendantRemoving:Connect(function()
     task.defer(refresh)
 end)
+view.Root:GetPropertyChangedSignal("AbsoluteSize"):Connect(refresh)
 script.Destroying:Connect(function()
     closeMode(true, true)
 end)

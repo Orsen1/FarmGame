@@ -8,6 +8,8 @@ local ItemDefinitions = require(configs:WaitForChild("ItemDefinitions"))
 local ProductionRecipes = require(configs:WaitForChild("ProductionRecipes"))
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local Jobs = require(script.Parent.ProductionJobs)
+local HouseService = require(script.Parent.HouseService)
+local houseConfig = require(configs.StarterHouseConfig)
 local stateEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("ProductionState")
 local plots = workspace:WaitForChild("Plots")
 
@@ -52,7 +54,7 @@ local function consumeIngredients(player, station, recipe)
     return true
 end
 
-local function canUse(player, station)
+local function canUse(player, station, inspectHouse)
     if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true then
         return false, "Player data is not ready"
     end
@@ -60,10 +62,20 @@ local function canUse(player, station)
     local plotName = player:GetAttribute("PlotName")
     local plot = plotName and plots:FindFirstChild(plotName)
     local objects = plot and plot:FindFirstChild("PlacedObjects")
+    local house = HouseService.GetHouse(station)
+    local insideHouse = house and plot and plot:FindFirstChild("StarterHouse") == house and
+        house:GetAttribute("OwnerUserId") == player.UserId
 
-    if not objects or station.Parent ~= objects or plot:GetAttribute("OwnerUserId") ~= player.UserId or
+    if not objects or not insideHouse and station.Parent ~= objects or plot:GetAttribute("OwnerUserId") ~= player.UserId or
         station:GetAttribute("OwnerUserId") ~= player.UserId then
         return false, "You do not own this station"
+    end
+    if insideHouse and not inspectHouse then
+        local entry
+        for _, candidate in ipairs(houseConfig.Objects) do if candidate.Id == station.Name then entry = candidate;break end end
+        if not entry or (house:GetAttribute("HouseLevel") or -1) < entry.MinimumLevel then
+            return false, "Restore the farmhouse first"
+        end
     end
 
     local character = player.Character
@@ -122,6 +134,8 @@ local function sendState(session, message)
         stateEvent:FireClient(session.Player, "State", {
             SessionId = session.Id,
             Station = session.Station,
+            House = session.House,
+            HouseSelection = session.HouseSelection,
             RecipeId = session.RecipeId,
             Busy = job ~= nil or background,
             Held = session.Held,
@@ -183,8 +197,10 @@ function ProductionService.Close(player, reason)
 end
 
 function ProductionService.Open(player, station)
+    if typeof(station) ~= "Instance" or not station:IsA("Model") then return false, "InvalidStation" end
     if player:GetAttribute("Milking") == true then return false, "Finish milking first" end
-    local allowed, reason = canUse(player, station)
+    local house = HouseService.GetHouse(station)
+    local allowed, reason = canUse(player, station, house ~= nil)
     if not allowed then return false, reason end
     if sessions[player] then return false, "AlreadyOpen" end
     if operators[station] then return false, "StationBusy" end
@@ -206,6 +222,7 @@ function ProductionService.Open(player, station)
         Movement = {WalkSpeed = humanoid.WalkSpeed, JumpPower = humanoid.JumpPower,
         JumpHeight = humanoid.JumpHeight, AutoRotate = humanoid.AutoRotate},
         Automatic = definition.AutomaticProduction == true,
+        House = house, HouseSelection = house and "Overview" or nil,
     }
     Jobs.Advance(station)
     if Jobs.IsRunning(station) then session.RecipeId = station:GetAttribute("ActiveRecipe") end
@@ -225,14 +242,64 @@ function ProductionService.Open(player, station)
     table.insert(session.Connections, humanoid.Died:Connect(function() ProductionService.Close(player, "Died") end))
     table.insert(session.Connections, station.Destroying:Connect(function() ProductionService.Close(player, "StationRemoved") end))
     table.insert(session.Connections, player.CharacterRemoving:Connect(function() ProductionService.Close(player, "CharacterChanged") end))
-    stateEvent:FireClient(player, "Opened", {SessionId = session.Id, Station = station})
+    stateEvent:FireClient(player, "Opened", {SessionId = session.Id, Station = station, House = house})
     sendState(session, "ChooseRecipe")
     return true
+end
+
+function ProductionService.SelectHouseTarget(player, sessionId, target)
+    local session = sessions[player]
+    if not session or session.Id ~= sessionId or not session.House then return false end
+    if session.Job then sendState(session, "Finish the current batch first");return false end
+    local allowed, reason = canUse(player, session.Station, true)
+    if not allowed then ProductionService.Close(player, reason);return false end
+    local station = session.Station
+    if target ~= "Overview" and target ~= "Upgrade" then
+        local entry
+        for _, candidate in ipairs(houseConfig.Objects) do if candidate.Id == target then entry = candidate;break end end
+        if not entry then return false end
+        station = session.House.Stations:FindFirstChild(target)
+        if not station or operators[station] and operators[station] ~= session then return false end
+    end
+    session.Held = false
+    if station ~= session.Station then
+        stopJob(session)
+        operators[session.Station] = nil
+        session.Station:SetAttribute("OperatorUserId", nil)
+        session.Station = station
+        operators[station] = session
+        station:SetAttribute("OperatorUserId", player.UserId)
+    end
+    Jobs.Advance(station)
+    session.HouseSelection, session.RecipeId = target, nil
+    if Jobs.IsRunning(station) then session.RecipeId = station:GetAttribute("ActiveRecipe") end
+    session.Automatic = getDefinition(station).AutomaticProduction == true
+    sendState(session, "ChooseRecipe")
+    return true
+end
+
+function ProductionService.BuildHouse(player, sessionId)
+    local session = sessions[player]
+    if not session or session.Id ~= sessionId or not session.House or session.HouseSelection ~= "Upgrade" then return false end
+    local allowed, reason = canUse(player, session.Station, true)
+    if not allowed then ProductionService.Close(player, reason);return false end
+    local success, message = HouseService.Build(player, session.House)
+    sendState(session, message)
+    return success
+end
+
+function ProductionService.CollectHouse(player, sessionId)
+    local session = sessions[player]
+    if not session or session.Id ~= sessionId or not session.House or session.HouseSelection ~= session.Station.Name then return end
+    local success, message = ProductionService.Collect(player, session.Station)
+    sendState(session, message)
+    return success
 end
 
 function ProductionService.Select(player, sessionId, recipeId)
     local session = sessions[player]
     if not session or session.Id ~= sessionId then return false, "NoSession" end
+    if session.House and session.HouseSelection ~= session.Station.Name then return false, "Choose a workspace" end
     if session.Job or Jobs.IsRunning(session.Station) then sendState(session, "Working"); return false, "Working" end
     local allowed, reason = canUse(player, session.Station)
     if not allowed then ProductionService.Close(player, reason); return false, reason end
@@ -248,6 +315,7 @@ end
 function ProductionService.Start(player)
     local session = sessions[player]
     if not session or not session.Held or session.Job or not session.RecipeId or Jobs.IsRunning(session.Station) then return false, "NotReady" end
+    if session.House and session.HouseSelection ~= session.Station.Name then return false, "Choose a workspace" end
     local allowed, reason = canUse(player, session.Station)
     if not allowed then ProductionService.Close(player, reason); return false, reason end
     local recipe, recipeError = getRecipe(session.Station, session.RecipeId)
@@ -318,7 +386,7 @@ RunService.Heartbeat:Connect(function(dt)
     checkElapsed = 0
     Jobs.Step()
     for player, session in pairs(sessions) do
-        local allowed, reason = canUse(player, session.Station)
+        local allowed, reason = canUse(player, session.Station, session.House ~= nil)
         if not allowed or player.Character ~= session.Character then
             ProductionService.Close(player, reason or "CharacterChanged")
         else

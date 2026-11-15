@@ -1,4 +1,22 @@
 local ItemDefinitions = {
+    StarterHouse = {
+        DisplayName = "Farmhouse",
+        Type = "Building",
+        PermanentHouse = true,
+        Icon = "rbxassetid://135216081156968",
+    },
+    HouseOven = {
+        DisplayName = "Oven",
+        Type = "Station",
+        Recipes = {},
+        InteractionDistance = 20,
+    },
+    HouseWorktable = {
+        DisplayName = "Kitchen table",
+        Type = "Station",
+        Recipes = {},
+        InteractionDistance = 20,
+    },
     Carrot = {
         DisplayName = "Carrot",
         Type = "Product",

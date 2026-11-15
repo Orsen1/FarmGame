@@ -20,7 +20,7 @@ local function configurePrompt(prompt)
     if not prompt:IsA("ProximityPrompt") then return end
     local object = prompt:FindFirstAncestorOfClass("Model")
     local definition = object and ItemDefinitions[object:GetAttribute("ItemName") or object.Name]
-    if not definition or not definition.Placeable then return end
+    if not definition or not (definition.Placeable or definition.PermanentHouse) then return end
     local building = definition.Type == "Building" or definition.StorageSlots or
         AnimalConfig.Coops[object:GetAttribute("ItemName") or object.Name]
     local distance = definition.BuildsInto and InteractionConfig.ConstructionDistance or
@@ -60,7 +60,7 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local plot = plotName and plots:FindFirstChild(plotName)
     local objects = plot and plot:FindFirstChild("PlacedObjects")
 
-    if not object or not objects or object.Parent ~= objects or plot:GetAttribute("OwnerUserId") ~= player.UserId or
+    if not object or not objects or object.Parent ~= objects and object ~= plot:FindFirstChild("StarterHouse") or plot:GetAttribute("OwnerUserId") ~= player.UserId or
         object:GetAttribute("OwnerUserId") ~= player.UserId then
         return
     end
@@ -83,7 +83,12 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local itemName = object:GetAttribute("ItemName") or object.Name
     local definition = ItemDefinitions[itemName]
 
-    if not definition or definition.Placeable ~= true then
+    if not definition or not (definition.Placeable or definition.PermanentHouse) then
+        return
+    end
+
+    if definition.PermanentHouse then
+        ProductionService.Open(player, object.Stations.Worktable)
         return
     end
 
@@ -224,6 +229,17 @@ command.OnServerEvent:Connect(function(player, action, sessionId, value)
 
     if action == "Close" then
         ProductionService.Close(player, "Exit")
+        return
+    end
+
+    if action == "HouseTarget" and typeof(value) == "string" then
+        ProductionService.SelectHouseTarget(player, sessionId, value)
+        return
+    elseif action == "HouseBuild" then
+        ProductionService.BuildHouse(player, sessionId)
+        return
+    elseif action == "HouseCollect" then
+        ProductionService.CollectHouse(player, sessionId)
         return
     end
 

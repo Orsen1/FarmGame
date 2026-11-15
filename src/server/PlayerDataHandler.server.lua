@@ -12,6 +12,7 @@ local PlayerPlotService = plotModule and require(plotModule)
 local PlotDataService = plotModule and require(ServerScriptService:WaitForChild("PlotDataService"))
 local PlotSectionService = plotModule and require(ServerScriptService:WaitForChild("PlotSectionService"))
 local ProductionService = plotModule and require(ServerScriptService:WaitForChild("ProductionService"))
+local HouseService = plotModule and require(ServerScriptService:WaitForChild("HouseService"))
 local OrderService = plotModule and require(ServerScriptService:WaitForChild("OrderService"))
 
 local CropRecords = require(ServerScriptService.CropRecordService)
@@ -77,6 +78,9 @@ local function loadPlayerData(player)
             migrated, houseMigrated, reason = PlotDataService.migrateStarterHouse(plot, data)
             success = migrated ~= nil
             if success then data = migrated end
+        end
+        if success then
+            success, reason = HouseService.Load(plot.StarterHouse, data.House)
         end
         if success then
             success, reason = PlotDataService.loadData(player, data.PlacedObjects or {})
@@ -150,6 +154,8 @@ local function savePlayerData(player, preparingTeleport)
                 return false
             end
             data.PlacedObjects = placedObjects
+            data.House = HouseService.GetData(workspace.Plots[player:GetAttribute("PlotName")].StarterHouse)
+            if data.House == nil then return false end
             data.UnlockedPlotSections = PlotSectionService.getData(workspace.Plots[player:GetAttribute("PlotName")])
         end
 

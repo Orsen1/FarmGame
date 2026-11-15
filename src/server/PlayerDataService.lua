@@ -28,6 +28,7 @@ local function loadData(userId)
     if value == nil then
         return {
             StarterHouseMigrationVersion = houseConfig.MigrationVersion,
+            House = {Level = -1},
             Money = 250,
 
             Inventory = {{
