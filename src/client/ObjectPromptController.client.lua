@@ -268,6 +268,15 @@ local function updatePrompt(prompt)
         return
     end
 
+    if definition.Plantable then
+        local style = selectedItemName == "WateringCan" and Enum.ProximityPromptStyle.Custom or Enum.ProximityPromptStyle.Default
+        if prompt.Style ~= style then
+            setEnabled(prompt, false)
+            hidePrompt(prompt)
+            prompt.Style = style
+        end
+    end
+
     if removing then
         prompt.ActionText = "Remove"
         setEnabled(prompt, true)
@@ -278,8 +287,13 @@ local function updatePrompt(prompt)
         local selectedDefinition = ItemDefinitions[selectedItemName]
 
         if selectedItemName == "WateringCan" then
-            prompt.ActionText = "Water"
-            setEnabled(prompt, object:GetAttribute("NeedsWater") == true)
+            local crop = ItemDefinitions[object:GetAttribute("PlantType")]
+            prompt.ActionText = "Water crops"
+            prompt:SetAttribute("Icon", ItemDefinitions.WateringCan.Icon)
+            prompt:SetAttribute("Context", crop and crop.DisplayName or "Garden bed")
+            setEnabled(prompt, selectedAmount > 0 and object:GetAttribute("NeedsWater") == true)
+            if not prompt.Enabled then hidePrompt(prompt)
+            elseif promptViews[prompt] then promptViews[prompt].update() end
             return
         end
         prompt.ActionText = "Plant"
@@ -371,7 +385,7 @@ ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
     local step = getConstructionStep(object, itemName)
     if prompt.Name ~= "ActionPrompt" or prompt:GetAttribute("CareAction") then step = nil end
     local definition = ItemDefinitions[itemName]
-    if not step and not (definition and (definition.ShopCategoryWhenEmpty or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
+    if not step and not (definition and (definition.Plantable or definition.ShopCategoryWhenEmpty or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
     hidePrompt(prompt)
     if step then
         promptViews[prompt] = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)

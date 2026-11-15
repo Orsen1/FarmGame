@@ -46,7 +46,7 @@ local function button(parent, name, text, position, size, color)
 end
 
 local gui = make("ScreenGui", player:WaitForChild("PlayerGui"), {Name = "FarmJournalGui", ResetOnSpawn = false,
-    DisplayOrder = 32, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets, ZIndexBehavior = Enum.ZIndexBehavior.Sibling})
+    DisplayOrder = 20, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets, ZIndexBehavior = Enum.ZIndexBehavior.Sibling})
 local openButton = button(gui, "OpenJournal", "Journal", UDim2.new(1, -172, 0, 128), UDim2.fromOffset(160, 44), Color3.fromRGB(132, 83, 43))
 openButton.TextXAlignment = Enum.TextXAlignment.Right
 make("UIPadding", openButton, {PaddingRight = UDim.new(0, 12)})

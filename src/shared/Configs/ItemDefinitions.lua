@@ -128,7 +128,7 @@ local ItemDefinitions = {
         ShopCategory = "Seeds"
     },
     GardenBed = {
-        DisplayName = "Грядка",
+        DisplayName = "Garden Bed",
         Type = "GardenBed",
         BuyPriceCents = 30,
         Icon = "rbxassetid://114628718599456",
@@ -138,7 +138,7 @@ local ItemDefinitions = {
         ShopCategory = "Buildings"
     },
     FieldBed10 = {
-        DisplayName = "Грядка 10 мест",
+        DisplayName = "Field Bed (10)",
         Type = "GardenBed",
         BuyPriceCents = 100,
         Icon = "rbxassetid://132158221134383",
