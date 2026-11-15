@@ -4,6 +4,7 @@ local PlantsFolder = ReplicatedStorage:WaitForChild("Plants")
 local ServerScriptService = game:GetService("ServerScriptService")
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local ItemDefinitions = require(ReplicatedStorage.Configs.ItemDefinitions)
+local Journal = require(ServerScriptService.FarmJournalService)
 local plots = workspace:WaitForChild("Plots")
 
 local function canUse(player, gardenBed)
@@ -153,14 +154,18 @@ function PlantService.Plant(player, gardenBed, seedType)
         for _ = 1, count do table.insert(fruits[index], rollSize(settings)) end
     end
     if not InventoryService.RemoveItem(player, seedType, #positions) then return false end
-    return PlantService.Restore(gardenBed, {Version = 2, Type = seed.PlantId, Fruits = fruits})
+    local planted = PlantService.Restore(gardenBed, {Version = 2, Type = seed.PlantId, Fruits = fruits})
+    if planted then Journal.Record(player, "Plant") end
+    return planted
 end
 
 function PlantService.Water(player, gardenBed)
     if not canUse(player, gardenBed) then return false end
     local slot = player.Inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
     if not slot or slot.ItemName.Value ~= "WateringCan" or slot.Amount.Value < 1 then return false end
-    return PlantService.ApplyWater(gardenBed)
+    local watered = PlantService.ApplyWater(gardenBed)
+    if watered then Journal.Record(player, "Water") end
+    return watered
 end
 
 function PlantService.ApplyWater(gardenBed)
@@ -184,6 +189,7 @@ function PlantService.Harvest(player, gardenBed)
     end
     if not InventoryService.ExchangeItems(player, {}, {[state.Type] = count}, {[state.Type] = groups}) then return false end
     Records.Observe(player, state.Type, sizes)
+    Journal.Record(player, "Harvest", count)
     growing[gardenBed] = nil
     for _, name in ipairs({"CropFruits", "WateredAt"}) do gardenBed:SetAttribute(name, nil) end
     gardenBed:SetAttribute("Occupied", false)

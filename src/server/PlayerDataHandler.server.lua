@@ -15,6 +15,7 @@ local ProductionService = plotModule and require(ServerScriptService:WaitForChil
 local OrderService = plotModule and require(ServerScriptService:WaitForChild("OrderService"))
 
 local CropRecords = require(ServerScriptService.CropRecordService)
+local Journal = require(ServerScriptService.FarmJournalService)
 local loadedData = {}
 local savingPlayers = {}
 
@@ -90,8 +91,10 @@ local function loadPlayerData(player)
     end
 
     if not CropRecords.Load(player, data.CropRecord) then player:Kick("Failed to load crop record.");return end
+    if not Journal.Load(player, data.FarmJournal, data) then player:Kick("Failed to load your farm journal.");return end
     loadedData[player] = data
     player:SetAttribute("DataLoaded", true)
+    if not PlayerPlotService then Journal.Record(player, "VisitResources") end
 end
 
 local function savePlayerData(player, preparingTeleport)
@@ -119,6 +122,7 @@ local function savePlayerData(player, preparingTeleport)
         data.Money = MoneyService.GetMoney(player)
         data.Inventory = inventoryData
         data.CropRecord = CropRecords.GetData(player)
+        data.FarmJournal = Journal.GetData(player)
 
         if OrderService then
             data.Orders = OrderService.GetData(player)
@@ -181,6 +185,7 @@ Players.PlayerRemoving:Connect(function(player)
     savePlayerData(player)
     loadedData[player] = nil
     CropRecords.Clear(player)
+    Journal.Clear(player)
     if OrderService then
         OrderService.Clear(player)
     end

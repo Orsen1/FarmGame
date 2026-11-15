@@ -6,6 +6,7 @@ local config = require(ReplicatedStorage.Configs.OrderConfig)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local InventoryService = require(script.Parent.InventoryService)
 local MoneyService = require(script.Parent.MoneyService)
+local Journal = require(script.Parent.FarmJournalService)
 
 local OrderService = {}
 local orders = {}
@@ -194,6 +195,7 @@ function OrderService.Deliver(player, boardId, orderId)
             return false, "BalanceLimit"
         end
         orders[player][boardId] = nextOrder
+        Journal.Record(player, "Order")
         return true, "Completed", order.RewardCents
     end
     for _, item in ipairs(order.Items) do

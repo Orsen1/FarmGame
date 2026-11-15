@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local config = require(ReplicatedStorage.Configs.PlotSectionConfig)
 local MoneyService = require(script.Parent.MoneyService)
+local Journal = require(script.Parent.FarmJournalService)
 local PlotSectionService = {}
 local bound = {}
 
@@ -87,6 +88,7 @@ local function buy(player, plot, border, prompt)
         section:SetAttribute("Unlocked", true)
         section.Ground.Color = plot.Ground.Color
         refreshBorders(plot)
+        Journal.Update(player)
     end
 end
 

@@ -5,6 +5,7 @@ local RunService = game:GetService("RunService")
 
 local definitions = require(ReplicatedStorage.Configs.ResourceDefinitions)
 local InventoryService = require(script.Parent.InventoryService)
+local Journal = require(script.Parent.FarmJournalService)
 local ResourceSpawnService = require(script.Parent.ResourceSpawnService)
 local nodes = workspace:WaitForChild("ResourceNodes")
 local targets = {}
@@ -193,6 +194,9 @@ end)
 local function giveReward(player, target)
     local definition = target.Definition
     if InventoryService.AddItem(player, definition.RewardItem, definition.RewardAmount) then
+        local item = definition.RewardItem
+        if item == "Wood" or item == "BirchWood" then Journal.Record(player, "GatherWood", definition.RewardAmount)
+        elseif item == "Stone" then Journal.Record(player, "GatherStone", definition.RewardAmount) end
         ResourceSpawnService.harvest(target.Node)
     end
 end

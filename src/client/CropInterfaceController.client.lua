@@ -191,7 +191,7 @@ RunService.Heartbeat:Connect(function(dt)
     requested += dt
     if elapsed < 0.2 then return end
     elapsed = 0
-    local other = player:GetAttribute("ProductionMode") == true or player:GetAttribute("AnimalMenuOpen") == true or
+    local other = player:GetAttribute("FarmJournalOpen") == true or player:GetAttribute("ProductionMode") == true or player:GetAttribute("AnimalMenuOpen") == true or
         player:GetAttribute("Milking") == true or player:GetAttribute("StorageOpen") == true or player:GetAttribute("FeederOpen") == true
     for _, name in ipairs({"BuyGui", "SellGui"}) do
         local shop = player.PlayerGui:FindFirstChild(name)

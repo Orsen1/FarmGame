@@ -10,6 +10,7 @@ local AnimalConfig = require(configs.AnimalConfig)
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 
 local ConstructionService = {}
+local Journal = require(ServerScriptService.FarmJournalService)
 local DEPOSIT_PREFIX = "ConstructionDeposited_"
 
 local function getStage(object)
@@ -197,6 +198,7 @@ function ConstructionService.Build(player, object)
 
     nextObject.Parent = object.Parent
     object:Destroy()
+    Journal.Update(player)
     return true, final and "Construction completed" or step.DisplayName
 end
 

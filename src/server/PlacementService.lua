@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
+local Journal = require(ServerScriptService.FarmJournalService)
 local CoopUpgradeService = require(ServerScriptService.CoopUpgradeService)
 local PlacementRules = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementRules"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
@@ -82,6 +83,7 @@ function PlacementService.placeItem(player, itemName, position, rotation)
     end
 
     placedModel.Parent = placedObjects
+    Journal.Update(player)
 
     return true, "Item placed"
 end

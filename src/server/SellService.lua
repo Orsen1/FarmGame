@@ -7,6 +7,7 @@ local MoneyService = require(ServerScriptService:WaitForChild("MoneyService"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
 local SellService = {}
+local Journal = require(ServerScriptService.FarmJournalService)
 local MAX_INTEGER = 9007199254740991
 
 function SellService.SellItem(player, itemName, amount)
@@ -47,6 +48,7 @@ function SellService.SellItem(player, itemName, amount)
 		return false, "MoneyCouldNotBeAdded"
 	end
 
+    Journal.Record(player, "Sell")
 	print(player.Name .. " sold " .. amount .. "x " .. itemName
 		.. " for " .. totalPrice .. " cents")
 	return true
