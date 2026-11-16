@@ -29,12 +29,12 @@ local function planIngredients(player, station, recipe)
     for name, amount in pairs(recipe.Inputs) do
         local value = station.OutputInventory:FindFirstChild(name)
         if value and not value:IsA("IntValue") then return end
-        local count = name == tank.Item and (station:GetAttribute("MilkStock") or 0) or value and value.Value or 0
+        local count = tank and name == tank.Item and (station:GetAttribute("MilkStock") or 0) or value and value.Value or 0
         if count < 0 or count % 1 ~= 0 then return end
         local taken = math.min(count, amount)
         if taken > 0 then stored[name] = taken end
         if amount > taken then
-            if name == tank.Item then return end
+            if tank and name == tank.Item then return end
             inventory[name] = amount - taken
         end
     end
@@ -48,7 +48,7 @@ local function consumeIngredients(player, station, recipe)
     if not InventoryService.ExchangeItems(player, inventory, {}) then return false end
     local tank = getDefinition(station).MilkTank
     for name, amount in pairs(stored) do
-        if name == tank.Item then station:SetAttribute("MilkStock", station:GetAttribute("MilkStock") - amount)
+        if tank and name == tank.Item then station:SetAttribute("MilkStock", station:GetAttribute("MilkStock") - amount)
         else station.OutputInventory[name].Value -= amount end
     end
     return true
@@ -196,6 +196,17 @@ function ProductionService.Close(player, reason)
     end
 end
 
+local function positionCharacter(session, work)
+    local humanoid, root = session.Humanoid, session.Root
+    local height = humanoid.HipHeight + root.Size.Y / 2
+    if humanoid.RigType == Enum.HumanoidRigType.R6 then
+        local leg = session.Character:FindFirstChild("Left Leg")
+        height += leg and leg.Size.Y or 2
+    end
+    root.CFrame = work.WorldCFrame + Vector3.new(0, height, 0)
+    root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+end
+
 function ProductionService.Open(player, station)
     if typeof(station) ~= "Instance" or not station:IsA("Model") then return false, "InvalidStation" end
     if player:GetAttribute("Milking") == true then return false, "Finish milking first" end
@@ -227,13 +238,7 @@ function ProductionService.Open(player, station)
     Jobs.Advance(station)
     if Jobs.IsRunning(station) then session.RecipeId = station:GetAttribute("ActiveRecipe") end
     sessions[player], operators[station] = session, session
-    local height = humanoid.HipHeight + root.Size.Y / 2
-    if humanoid.RigType == Enum.HumanoidRigType.R6 then
-        local leg = character:FindFirstChild("Left Leg")
-        height = height + (leg and leg.Size.Y or 2)
-    end
-    root.CFrame = work.WorldCFrame + Vector3.new(0, height, 0)
-    root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+    positionCharacter(session, work)
     root.Anchored = true
     humanoid.WalkSpeed, humanoid.JumpPower, humanoid.JumpHeight = 0, 0, 0
     humanoid.AutoRotate, humanoid.Jump = false, false
@@ -328,6 +333,7 @@ function ProductionService.Start(player)
         return false, "NotEnoughItems"
     end
     local station = session.Station
+    if session.House then positionCharacter(session, station.PlacementRoot.WorkPosition) end
     local startedAt, angle = workspace:GetServerTimeNow(), station:GetAttribute("ProductionAngle") or 0
     local duration = session.Automatic and getDefinition(station).LoadingDuration or recipe.Duration
     session.Job = {Recipe = recipe, StartedAt = startedAt, Angle = angle, Duration = duration}
@@ -398,7 +404,7 @@ RunService.Heartbeat:Connect(function(dt)
                     session.Held = false
                     if success then Jobs.Start(session.Station, session.RecipeId) end
                     sendState(session, success and "Processing" or "NotEnoughItems")
-                    if success then ProductionService.Close(player, "Exit") end
+                    if success and not session.House then ProductionService.Close(player, "Exit") end
                     continue
                 end
                 local success, message = completeJob(session, job)

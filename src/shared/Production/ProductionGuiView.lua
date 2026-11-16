@@ -269,6 +269,14 @@ function View:CreateCard(recipeId, parent, showOwned)
     local function group(items, input)
         local container = make("Frame", input and "Inputs" or "Outputs", card.Content, {BackgroundTransparency = 1})
         local keys = sortedKeys(items)
+        local order = input and recipe.InputOrder or recipe.OutputOrder
+        if order then
+            table.sort(keys, function(a, b)
+                local first, second = table.find(order, a) or math.huge, table.find(order, b) or math.huge
+                if first == second then return a < b end
+                return first < second
+            end)
+        end
         local entries = input and layout.Inputs or layout.Outputs
         for index, name in ipairs(keys) do
             local row = self.Templates.ItemRow:Clone()
@@ -386,7 +394,7 @@ function View:UpdateMaterials(inventory)
         for _, value in ipairs(station.OutputInventory:GetChildren()) do
             if value:IsA("IntValue") then counts[value.Name] = (counts[value.Name] or 0) + value.Value end
         end
-        counts[definition.MilkTank.Item] = station:GetAttribute("MilkStock") or 0
+        if definition.MilkTank then counts[definition.MilkTank.Item] = station:GetAttribute("MilkStock") or 0 end
     end
     local enough = true
     for _, item in ipairs(self.MaterialRows) do
@@ -421,13 +429,15 @@ function View:UpdateState(state)
     }
     self.Work.StatusLabel.Text = not self.Enough and not self.Busy and "Need materials" or (messages[state.Message] or "")
     if state.Automatic then
-        if state.Phase == "Processing" then self.Work.StatusLabel.Text = "Working. You can leave."
+        local definition = definitions[self.Station:GetAttribute("ItemName") or self.Station.Name]
+        local tank = definition.MilkTank
+        if state.Phase == "Processing" then self.Work.StatusLabel.Text = definition.ProcessingText or "Working. You can leave."
         elseif state.Phase == "Loading" then self.Work.StatusLabel.Text = "Loading..."
         elseif state.Message == "Completed" then self.Work.StatusLabel.Text = "Ready to collect"
-        elseif not self.Enough and self.RecipeId and recipes[self.RecipeId].Inputs[definitions[self.Station:GetAttribute("ItemName") or self.Station.Name].MilkTank.Item] then
+        elseif tank and not self.Enough and self.RecipeId and recipes[self.RecipeId].Inputs[tank.Item] then
             self.Work.StatusLabel.Text = "Fill the milk tank"
-        elseif self.Enough then self.Work.StatusLabel.Text = string.format("Milk tank: %d / %d", self.Station:GetAttribute("MilkStock") or 0,
-            definitions[self.Station:GetAttribute("ItemName") or self.Station.Name].MilkTank.Capacity) end
+        elseif self.Enough and tank then self.Work.StatusLabel.Text = string.format("Milk tank: %d / %d", self.Station:GetAttribute("MilkStock") or 0, tank.Capacity)
+        elseif self.Enough then self.Work.StatusLabel.Text = "Ready to start" end
     end
 end
 

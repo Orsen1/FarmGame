@@ -5508,7 +5508,7 @@
         <Properties>
           <string name="Name">Oven</string>
           <Ref name="PrimaryPart">HouseInterior47</Ref>
-          <BinaryString name="AttributesSerialize">BAAAAAgAAABJdGVtTmFtZQIJAAAASG91c2VPdmVuCwAAAE93bmVyVXNlcklkBgAAAAAAAAAADQAAAFNvdXJjZUFzc2V0SWQCCgAAADgyMTAxNzMwNzEVAAAAUHJvZHVjdGlvbkZpZWxkT2ZWaWV3BgAAAAAAAE5A</BinaryString>
+          <BinaryString name="AttributesSerialize">BQAAAAgAAABJdGVtTmFtZQIJAAAASG91c2VPdmVuCwAAAE93bmVyVXNlcklkBgAAAAAAAAAADQAAAFNvdXJjZUFzc2V0SWQCCgAAADgyMTAxNzMwNzEVAAAAUHJvZHVjdGlvbkZpZWxkT2ZWaWV3BgAAAAAAAE5AEAAAAFByb2R1Y3Rpb25WaXN1YWwCCwAAAEtpdGNoZW5PdmVu</BinaryString>
         </Properties>
         <Item class="Part" referent="HouseInterior47">
           <Properties>
@@ -5570,9 +5570,9 @@
             <Properties>
               <string name="Name">CameraPoint</string>
               <CoordinateFrame name="CFrame">
-                <X>0.9</X>
-                <Y>4.555</Y>
-                <Z>5.8</Z>
+                <X>3.7</X>
+                <Y>4.8</Y>
+                <Z>5.2</Z>
                 <R00>1.0</R00>
                 <R01>-0.0</R01>
                 <R02>0.0</R02>
@@ -6377,7 +6377,7 @@
         <Properties>
           <string name="Name">Worktable</string>
           <Ref name="PrimaryPart">HouseInterior74</Ref>
-          <BinaryString name="AttributesSerialize">BAAAAAgAAABJdGVtTmFtZQIOAAAASG91c2VXb3JrdGFibGULAAAAT3duZXJVc2VySWQGAAAAAAAAAAANAAAAU291cmNlQXNzZXRJZAIKAAAAOTc0ODUxMjYzORUAAABQcm9kdWN0aW9uRmllbGRPZlZpZXcGAAAAAAAATkA=</BinaryString>
+          <BinaryString name="AttributesSerialize">BQAAAAgAAABJdGVtTmFtZQIOAAAASG91c2VXb3JrdGFibGULAAAAT3duZXJVc2VySWQGAAAAAAAAAAANAAAAU291cmNlQXNzZXRJZAIKAAAAOTc0ODUxMjYzORUAAABQcm9kdWN0aW9uRmllbGRPZlZpZXcGAAAAAAAATkAQAAAAUHJvZHVjdGlvblZpc3VhbAIMAAAAS2l0Y2hlblRhYmxl</BinaryString>
         </Properties>
         <Item class="Part" referent="HouseInterior74">
           <Properties>
@@ -6420,9 +6420,9 @@
             <Properties>
               <string name="Name">WorkPosition</string>
               <CoordinateFrame name="CFrame">
-                <X>1.8</X>
+                <X>0</X>
                 <Y>0</Y>
-                <Z>6.9</Z>
+                <Z>1.95</Z>
                 <R00>1.0</R00>
                 <R01>-0.0</R01>
                 <R02>0.0</R02>
@@ -6439,9 +6439,9 @@
             <Properties>
               <string name="Name">CameraPoint</string>
               <CoordinateFrame name="CFrame">
-                <X>3</X>
-                <Y>5.55</Y>
-                <Z>4.3</Z>
+                <X>4</X>
+                <Y>6.3</Y>
+                <Z>3.6</Z>
                 <R00>1.0</R00>
                 <R01>-0.0</R01>
                 <R02>0.0</R02>
@@ -6458,9 +6458,9 @@
             <Properties>
               <string name="Name">CameraPointPortrait</string>
               <CoordinateFrame name="CFrame">
-                <X>-4</X>
-                <Y>7.75</Y>
-                <Z>7.1</Z>
+                <X>4</X>
+                <Y>6.3</Y>
+                <Z>3.6</Z>
                 <R00>1.0</R00>
                 <R01>-0.0</R01>
                 <R02>0.0</R02>
@@ -6478,8 +6478,8 @@
               <string name="Name">CameraTarget</string>
               <CoordinateFrame name="CFrame">
                 <X>0</X>
-                <Y>1.7</Y>
-                <Z>0</Z>
+                <Y>3.08</Y>
+                <Z>0.55</Z>
                 <R00>1.0</R00>
                 <R01>-0.0</R01>
                 <R02>0.0</R02>

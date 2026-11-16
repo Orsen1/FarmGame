@@ -8,14 +8,29 @@ local ItemDefinitions = {
     HouseOven = {
         DisplayName = "Oven",
         Type = "Station",
-        Recipes = {},
+        Recipes = {"BakeBread"},
+        AutomaticProduction = true,
+        LoadingDuration = 4,
+        ProcessingText = "Baking. You can leave.",
         InteractionDistance = 20,
     },
     HouseWorktable = {
         DisplayName = "Kitchen table",
         Type = "Station",
-        Recipes = {},
+        Recipes = {"MakeDough"},
         InteractionDistance = 20,
+    },
+    Dough = {
+        DisplayName = "Bread Dough",
+        Type = "Product",
+        SellPriceCents = 165,
+        Icon = "rbxassetid://121857749822797"
+    },
+    Bread = {
+        DisplayName = "Bread",
+        Type = "Product",
+        SellPriceCents = 220,
+        Icon = "rbxassetid://130040038449925"
     },
     Carrot = {
         DisplayName = "Carrot",

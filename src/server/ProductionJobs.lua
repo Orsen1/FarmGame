@@ -65,7 +65,9 @@ function Jobs.Validate(object, saved)
     if saved == nil then return true end
     if typeof(saved) ~= "table" then return false end
     local stock = saved.MilkStock
-    if typeof(stock) ~= "number" or stock % 1 ~= 0 or stock < 0 or stock > item.MilkTank.Capacity then return false end
+    if item.MilkTank then
+        if typeof(stock) ~= "number" or stock % 1 ~= 0 or stock < 0 or stock > item.MilkTank.Capacity then return false end
+    elseif stock ~= nil and stock ~= 0 then return false end
     local job = saved.Job
     if job == nil then return true end
     if typeof(job) ~= "table" or not table.find(item.Recipes, job.RecipeId) then return false end
@@ -78,7 +80,8 @@ function Jobs.GetData(object)
     local item = definition(object)
     if not item or not item.AutomaticProduction then return end
     Jobs.Advance(object)
-    local data = {MilkStock = object:GetAttribute("MilkStock") or 0}
+    local data = {}
+    if item.MilkTank then data.MilkStock = object:GetAttribute("MilkStock") or 0 end
     if Jobs.IsRunning(object) then
         data.Job = {RecipeId = object:GetAttribute("ActiveRecipe"), SavedAt = os.time(),
             Remaining = math.max(0, object:GetAttribute("ProductionStartedAt") + object:GetAttribute("ProductionDuration") - workspace:GetServerTimeNow())}
@@ -91,7 +94,7 @@ function Jobs.Load(object, saved)
     active[object] = nil
     local item = definition(object)
     if not item or not item.AutomaticProduction then return end
-    object:SetAttribute("MilkStock", saved and saved.MilkStock or 0)
+    if item.MilkTank then object:SetAttribute("MilkStock", saved and saved.MilkStock or 0) end
     if saved and saved.Job then
         local job = saved.Job
         local remaining = math.max(0, job.Remaining - math.max(0, os.time() - job.SavedAt))

@@ -3,6 +3,7 @@ local RunService = game:GetService("RunService")
 local plots = workspace:WaitForChild("Plots")
 local templates = ReplicatedStorage:WaitForChild("PlaceableModels")
 local recipes = require(ReplicatedStorage.Configs.ProductionRecipes)
+local Bakery = require(script.Parent.BakeryVisual)
 local stations = {}
 local TWO_PI = math.pi * 2
 local woodColors = {
@@ -97,6 +98,11 @@ end
 local function bindStation(station)
     if stations[station] or not station:IsA("Model") then return end
     local visual = station:GetAttribute("ProductionVisual")
+    if visual == "KitchenTable" or visual == "KitchenOven" then
+        local state = Bakery.new(station)
+        if state then stations[station] = {Bakery = state} end
+        return
+    end
     if visual ~= "HandMill" and visual ~= "Sawmill" then return end
     local root = station:FindFirstChild("PlacementRoot")
     local rotor = station:FindFirstChild("Rotor")
@@ -120,6 +126,9 @@ local function scanStations()
     for _, plot in ipairs(plots:GetChildren()) do
         local objects = plot:FindFirstChild("PlacedObjects")
         if objects then for _, station in ipairs(objects:GetChildren()) do bindStation(station) end end
+        local house = plot:FindFirstChild("StarterHouse")
+        local workspaces = house and house:FindFirstChild("Stations")
+        if workspaces then for _, station in ipairs(workspaces:GetChildren()) do bindStation(station) end end
     end
 end
 
@@ -138,6 +147,13 @@ end
 
 RunService.PreAnimation:Connect(function()
     for station, state in pairs(stations) do
+        if state.Bakery then
+            if not station:IsDescendantOf(plots) then
+                state.Bakery:Destroy()
+                stations[station] = nil
+            else state.Bakery:ResetPose() end
+            continue
+        end
         local objects = station.Parent
         if not objects or objects.Name ~= "PlacedObjects" or not station:IsDescendantOf(plots)
             or not state.Root.Parent or not state.Rotor.Parent then
@@ -153,6 +169,13 @@ RunService.PreAnimation:Connect(function()
                 state.LastFrame = frame
             end
         end
+    end
+end)
+
+RunService.PreSimulation:Connect(function(dt)
+    local now = workspace:GetServerTimeNow()
+    for _, state in pairs(stations) do
+        if state.Bakery then state.Bakery:Update(now, dt) end
     end
 end)
 

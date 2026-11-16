@@ -225,7 +225,7 @@ function HouseView:Refresh(state)
             self.Message.Text = state.Message ~= "ChooseRecipe" and state.Message or "Add materials in small batches"
         end
     elseif selected then
-        self.View.List.EmptyLabel.Text = "Recipes will be added later"
+        self.View.List.EmptyLabel.Text = "No recipes available"
     end
     self.Collect.Visible = selected ~= nil and level >= selected.MinimumLevel
     if self.Collect.Visible then
