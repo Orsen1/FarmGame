@@ -84,6 +84,7 @@ local function updatePrompt(prompt)
     local object = prompt:FindFirstAncestorOfClass("Model")
     if not object or player:GetAttribute("DataLoaded") ~= true or player:GetAttribute("StorageOpen") == true or
         player:GetAttribute("FeederOpen") == true or player:GetAttribute("AnimalMenuOpen") == true or
+        player:GetAttribute("LaboratoryOpen") == true or
         object:GetAttribute("OwnerUserId") ~= player.UserId then
         setEnabled(prompt, false)
         hidePrompt(prompt)
@@ -111,7 +112,7 @@ local function updatePrompt(prompt)
         return
     end
     local home = AnimalConfig.Coops[itemName]
-    if home and home.InteractionMenu or definition.InteractionMenu then
+    if home and home.InteractionMenu or definition.InteractionMenu or definition.Laboratory then
         local selected = getSelectedItem()
         if selected ~= "Shovel" then
             if prompt.Name ~= "ActionPrompt" then setEnabled(prompt, false);hidePrompt(prompt);return end
@@ -395,7 +396,7 @@ ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
     local step = getConstructionStep(object, itemName)
     if prompt.Name ~= "ActionPrompt" or prompt:GetAttribute("CareAction") then step = nil end
     local definition = ItemDefinitions[itemName]
-    if not step and not (definition and (definition.PermanentHouse or definition.Plantable or definition.ShopCategoryWhenEmpty or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
+    if not step and not (definition and (definition.PermanentHouse or definition.Plantable or definition.ShopCategoryWhenEmpty or definition.Laboratory or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
     hidePrompt(prompt)
     if step then
         promptViews[prompt] = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)
@@ -418,6 +419,7 @@ player:GetAttributeChangedSignal("DataLoaded"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("StorageOpen"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("FeederOpen"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("AnimalMenuOpen"):Connect(updateAllPrompts)
+player:GetAttributeChangedSignal("LaboratoryOpen"):Connect(updateAllPrompts)
 
 for i = 1, 6 do
     local slot = inventory:WaitForChild("Slot" .. i)
@@ -452,7 +454,7 @@ RunService.Heartbeat:Connect(function(dt)
     local blocked = not root or not humanoid or humanoid.Health <= 0 or not camera or not ProximityPromptService.Enabled or
         player:GetAttribute("AnimalMenuOpen") == true or player:GetAttribute("StorageOpen") == true or
         player:GetAttribute("FeederOpen") == true or player:GetAttribute("ProductionMode") == true or
-        player:GetAttribute("Milking") == true or
+        player:GetAttribute("Milking") == true or player:GetAttribute("LaboratoryOpen") == true or
         (shop and shop.Enabled and shop.MainFrame.Visible) or (sell and sell.Enabled and sell.MainFrame.Visible)
     local scores = {}
     if not blocked then

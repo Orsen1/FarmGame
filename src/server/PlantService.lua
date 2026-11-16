@@ -42,6 +42,8 @@ local config = require(ReplicatedStorage.Configs.CropConfig)
 local Records = require(script.Parent.CropRecordService)
 local growing = {}
 local random = Random.new()
+local Laboratory = require(script.Parent.LaboratoryService)
+local LaboratoryConfig = require(ReplicatedStorage.Configs.LaboratoryConfig)
 
 local function choose(weights)
     local total = 0
@@ -63,8 +65,8 @@ local function growthIntervals(settings)
     return intervals
 end
 
-local function rollSize(settings)
-    local band = choose(settings.SizeWeights)
+local function rollSize(settings, weights)
+    local band = choose(weights or settings.SizeWeights)
     local ranges = {{settings.SizeMin, 115}, {116, math.floor(115 + (settings.SizeMax - 115) * 0.45)},
         {math.floor(115 + (settings.SizeMax - 115) * 0.45) + 1, math.floor(settings.SizeMax * 0.88)},
         {math.floor(settings.SizeMax * 0.88) + 1, settings.SizeMax}}
@@ -147,14 +149,19 @@ function PlantService.Plant(player, gardenBed, seedType)
     local settings = seed and config.Crops[seed.PlantId]
     local positions = getPositions(gardenBed)
     if not settings or not positions or not PlantsFolder:FindFirstChild(seed.PlantId) then return false end
+    local bonuses = Laboratory.GetBonuses(player)
+    local yieldWeights = LaboratoryConfig.Weighted(settings.YieldWeights, bonuses.Yield)
+    local sizeWeights = LaboratoryConfig.Weighted(settings.SizeWeights, bonuses.Genetics)
+    local intervals = growthIntervals(settings)
+    for index, seconds in ipairs(intervals) do intervals[index] = seconds * (1 - bonuses.Growth / 100) end
     local fruits = {}
     for index in ipairs(positions) do
         fruits[index] = {}
-        local count = settings.YieldMin + choose(settings.YieldWeights) - 1
-        for _ = 1, count do table.insert(fruits[index], rollSize(settings)) end
+        local count = math.min(settings.YieldMax, settings.YieldMin + choose(yieldWeights) - 1)
+        for _ = 1, count do table.insert(fruits[index], rollSize(settings, sizeWeights)) end
     end
     if not InventoryService.RemoveItem(player, seedType, #positions) then return false end
-    local planted = PlantService.Restore(gardenBed, {Version = 2, Type = seed.PlantId, Fruits = fruits})
+    local planted = PlantService.Restore(gardenBed, {Version = 2, Type = seed.PlantId, Fruits = fruits, Intervals = intervals})
     if planted then Journal.Record(player, "Plant") end
     return planted
 end

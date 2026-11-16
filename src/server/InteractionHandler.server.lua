@@ -10,6 +10,7 @@ local AnimalService = require(script.Parent:WaitForChild("AnimalService"))
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
 local CoopUpgradeService = require(script.Parent.CoopUpgradeService)
 local InteractionConfig = require(ReplicatedStorage.Configs.InteractionConfig)
+local Laboratory = require(script.Parent.LaboratoryService)
 
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
@@ -140,6 +141,12 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
         return
     end
 
+    if definition.Laboratory then
+        local data = Laboratory.Open(player, object)
+        if data then remotes.LaboratoryEvent:FireClient(player, "Open", data) end
+        return
+    end
+
     if definition.InteractionMenu then
         local success, message = ProductionService.OpenMenu(player, object)
         state:FireClient(player, "MenuOpened", {Station = object, Success = success, Message = message})
@@ -253,5 +260,14 @@ command.OnServerEvent:Connect(function(player, action, sessionId, value)
 
     elseif action == "Hold" and value == true then
         ProductionService.SetHeld(player, sessionId, true)
+    end
+end)
+
+remotes.LaboratoryEvent.OnServerEvent:Connect(function(player, action, sessionId, attempt, track)
+    if action == "Close" then
+        Laboratory.Close(player, sessionId)
+    elseif action == "Attempt" then
+        local result = Laboratory.Attempt(player, sessionId, attempt, track)
+        if result then remotes.LaboratoryEvent:FireClient(player, "Result", result) end
     end
 end)

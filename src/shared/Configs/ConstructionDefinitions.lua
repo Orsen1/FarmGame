@@ -1,4 +1,12 @@
 local ConstructionDefinitions = {
+    LaboratoryBlueprint = {
+        Stages = {
+            {DisplayName = "Stone Foundation", Model = "Stage1_Foundation", Inputs = {Stone = 20}},
+            {DisplayName = "Timber Frame", Model = "Stage2_Frame", Inputs = {Wood = 25}},
+            {DisplayName = "Walls & Roof", Model = "Stage3_Walls", Inputs = {Plank = 30}},
+            {DisplayName = "Greenhouse & Equipment", Inputs = {BirchPlank = 15}},
+        }
+    },
     DairyBlueprint = {
         Stages = {{
             DisplayName = "Foundation",

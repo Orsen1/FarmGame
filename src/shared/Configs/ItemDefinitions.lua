@@ -1,4 +1,22 @@
 local ItemDefinitions = {
+    LaboratoryBlueprint = {
+        DisplayName = "Crop Laboratory",
+        Type = "Blueprint",
+        BuyPriceCents = 2500,
+        Placeable = true,
+        BuildsInto = "Laboratory",
+        ModelFolder = "LaboratoryStages",
+        ShopCategory = "Buildings",
+        ShowShopIcon = true,
+        Icon = "rbxassetid://140487910482479"
+    },
+    Laboratory = {
+        DisplayName = "Crop Laboratory",
+        Type = "Building",
+        Placeable = true,
+        Laboratory = true,
+        Icon = "rbxassetid://140487910482479"
+    },
     StarterHouse = {
         DisplayName = "Farmhouse",
         Type = "Building",
