@@ -170,6 +170,7 @@ function PlacementController.startPlacement(itemName, slotNumber)
             object.CanTouch = false
             object.CanQuery = false
             object.Transparency = math.max(object.Transparency, 0.5)
+            if object:IsA("PartOperation") then object.UsePartColor = true end
 
             table.insert(parts, object)
         end

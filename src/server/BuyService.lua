@@ -29,6 +29,9 @@ function BuyService.BuyItem(player, itemName, amount)
 
 	if not Journal.CanBuy(player, itemName) then return false, "FarmLevelRequired" end
 
+	local permitted, tutorialReason = Journal.CheckPurchase(player, itemName, amount)
+	if not permitted then return false, tutorialReason end
+
 	local totalPrice = price * amount
 	if totalPrice > MAX_INTEGER then
 		return false, "AmountTooLarge"
@@ -50,6 +53,7 @@ function BuyService.BuyItem(player, itemName, amount)
 		return false, addReason
 	end
 
+	Journal.Record(player, "Buy", amount, itemName)
 	print(player.Name .. " bought " .. amount .. "x " .. itemName
 		.. " for " .. totalPrice .. " cents")
 	return true

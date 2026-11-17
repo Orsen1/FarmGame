@@ -7977,6 +7977,7 @@ local openEvent = remotes:WaitForChild("OpenBuyGuiEvent")
 local buyEvent = remotes:WaitForChild("BuyItemEvent")
 local definitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local levels = require(ReplicatedStorage.Configs.FarmLevelConfig)
+local tutorialConfig = require(ReplicatedStorage.Configs.FarmTutorialConfig)
 local HudMenu = require(ReplicatedStorage.HudMenu)
 local QuantityControls = require(ReplicatedStorage:WaitForChild("ShopQuantityControls"))
 
@@ -8112,21 +8113,34 @@ local function enableButton(button, enabled, color)
 end
 
 local function refresh()
+    local tutorialStep = player:GetAttribute("TutorialStep")
+    local capacity = player:GetAttribute("TutorialCapacity") or 1
+    local tutorialInfo = tutorialConfig.Steps[tutorialStep]
+    if tutorialInfo then catalogue.IntroLabel.Text = "Tutorial: " .. tutorialInfo.Title end
     main.FooterFrame.MoneyLabel.Text = "Balance: " .. formatMoney(money.Value)
     for id, card in pairs(cards) do
         local owned = inventoryInfo(id)
         local required = levels.RequiredLevel(id)
         local locked = (player:GetAttribute("FarmLevel") or 1) &lt; required
-        card.OwnedLabel.Text = locked and "Farm level " .. required .. " required" or "Owned: " .. tostring(owned)
-        card.OwnedLabel.TextColor3 = locked and RED or MUTED
+        local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, id, definitions[id], capacity)
+        if card:GetAttribute("CatalogueOrder") == nil then card:SetAttribute("CatalogueOrder", card.LayoutOrder) end
+        local originalOrder = card:GetAttribute("CatalogueOrder")
+        card.LayoutOrder = tutorialLimit and tutorialLimit &gt; 0 and originalOrder - 100 or originalOrder
+        card.SelectButton.Interactable = tutorialLimit ~= 0
+        card.SelectButton.AutoButtonColor = tutorialLimit ~= 0
+        card.OwnedLabel.Text = tutorialLimit == 0 and "First harvest tutorial" or locked and "Farm level " .. required .. " required" or "Owned: " .. tostring(owned)
+        card.OwnedLabel.TextColor3 = (tutorialLimit == 0 or locked) and RED or MUTED
+        if tutorialLimit == 0 then card.OwnedLabel.TextColor3 = MUTED end
     end
     if not selectedId then return end
 
     local item = definitions[selectedId]
     local price = item.BuyPriceCents
     local required = levels.RequiredLevel(selectedId)
-    local unlocked = (player:GetAttribute("FarmLevel") or 1) &gt;= required
+    local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, selectedId, item, capacity)
+    local unlocked = (player:GetAttribute("FarmLevel") or 1) &gt;= required and tutorialLimit ~= 0
     local maximum = maximumAmount(price)
+    if tutorialLimit ~= nil then maximum = math.min(maximum, tutorialLimit);selectedAmount = maximum end
     local owned, room = inventoryInfo(selectedId)
     selectedAmount = math.clamp(selectedAmount, 0, maximum)
     local nameLabel = details.ItemHeaderFrame.ItemNameLabel
@@ -8140,17 +8154,19 @@ local function refresh()
     quantity.SelectedAmountFrame.ItemAmountToBuyLabel.Text = tostring(selectedAmount)
     action.TotalPriceLabel.Text = formatMoney(price * selectedAmount)
     details.QuantityHintLabel.Text = "Can buy: " .. tostring(maximum)
-    QuantityControls.update(quantity, unlocked and not pending and selectedAmount &gt; 0, unlocked and not pending and room and selectedAmount &lt; maximum)
-    enableButton(details.MaxButton, unlocked and not pending and room and maximum &gt; 0, GREEN)
+    QuantityControls.update(quantity, tutorialLimit == nil and unlocked and not pending and selectedAmount &gt; 0, tutorialLimit == nil and unlocked and not pending and room and selectedAmount &lt; maximum)
+    enableButton(details.MaxButton, tutorialLimit == nil and unlocked and not pending and room and maximum &gt; 0, GREEN)
     enableButton(action.BuyButton, unlocked and not pending and room and selectedAmount &gt; 0, GREEN)
-    action.BuyButton.Text = not unlocked and "Farm level " .. required or pending and "Buying..." or "Buy"
+    action.BuyButton.Text = tutorialLimit == 0 and "Follow tutorial" or not unlocked and "Farm level " .. required or pending and "Buying..." or "Buy"
 
     local text, color = message, messageColor
     if pending then text, color = "Waiting for the server...", MUTED
     elseif text ~= "" then
+    elseif tutorialLimit == 0 then text, color = "Follow the first harvest tutorial before buying other items.", MUTED
     elseif not unlocked then text, color = "Reach farm level " .. required .. " to buy this building.", RED
     elseif not room then text, color = "Inventory full. Free a slot to buy this item.", RED
     elseif maximum == 0 then text, color = "Not enough money.", RED
+    elseif tutorialLimit then text, color = "Tutorial: buy exactly " .. tutorialLimit .. ". Your watering budget is safe.", MUTED
     else text, color = "Choose an amount, then press Buy.", MUTED end
     details.StatusLabel.Text = text
     details.StatusLabel.TextColor3 = color
@@ -8318,6 +8334,7 @@ end)
 
 local errors = {
     FarmLevelRequired = "Reach the required farm level in My Farm first.",
+    TutorialPurchaseRequired = "Follow the tutorial and buy the highlighted item in the shown amount.",
     InventoryFull = "Inventory full. Free a slot first.",
     InventoryNotReady = "Inventory is loading. Try again shortly.",
     NotEnoughMoneyOrDataNotReady = "Not enough money, or data is still loading.",
@@ -8370,6 +8387,9 @@ local function openShop(category)
     showCatalogue(category)
     main.Visible = true
 end
+local openFunction = Instance.new("BindableFunction")
+openFunction.Name, openFunction.Parent = "OpenShop", gui
+openFunction.OnInvoke = openShop
 shopButton.Activated:Connect(function() openShop(nil) end)
 
 local function closeShop()
@@ -8386,6 +8406,18 @@ UserInputService.InputBegan:Connect(function(input)
     end
 end)
 refresh()
+
+player:GetAttributeChangedSignal("TutorialStep"):Connect(function()
+    stopQuantity()
+    local step = player:GetAttribute("TutorialStep")
+    if main.Visible then
+        if step == "BuySeeds" then showCatalogue("Seeds")
+        elseif step == "BuyCan" then showCatalogue("Equipment")
+        elseif step ~= "BuyBed" then closeShop() end
+    end
+    refresh()
+end)
+player:GetAttributeChangedSignal("TutorialCapacity"):Connect(refresh)
 </ProtectedString>
 				<bool name="Disabled">false</bool>
 				<Content name="LinkedSource"><null /></Content>

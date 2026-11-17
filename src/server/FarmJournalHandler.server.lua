@@ -11,6 +11,7 @@ remote.OnServerEvent:Connect(function(player, action, id)
     local success, message
     if action == "Claim" then success, message = Journal.Claim(player, id)
     elseif action == "LevelUp" then success, message = Journal.LevelUp(player, id)
+    elseif action == "Tutorial" then success = Journal.TutorialViewed(player, id)
     elseif action == "Track" then success = Journal.Track(player, id)
     elseif action ~= "Get" then return end
     local state = Journal.GetState(player)

@@ -90,12 +90,17 @@ end
 function PlantService.Advance(object, dt)
     local state = growing[object]
     if not state or state.Ready or state.NeedsWater then return end
+    local neededWater, ready = state.NeedsWater, state.Ready
     state.Remaining = math.max(0, state.Remaining - dt)
     if state.Remaining == 0 then
         if state.Segment < #state.Intervals then state.NeedsWater = true
         else state.Ready = true end
     end
     publish(object, state)
+    if neededWater ~= state.NeedsWater or ready ~= state.Ready then
+        local player = game.Players:GetPlayerByUserId(object:GetAttribute("OwnerUserId") or 0)
+        if player and not Journal.TutorialComplete(player) then Journal.Update(player) end
+    end
 end
 
 function PlantService.GetData(object)
@@ -144,7 +149,7 @@ function PlantService.Restore(object, saved)
 end
 
 function PlantService.Plant(player, gardenBed, seedType)
-    if not canUse(player, gardenBed) or gardenBed:GetAttribute("Occupied") then return false end
+    if not canUse(player, gardenBed) or gardenBed:GetAttribute("Occupied") or not Journal.CanPlant(player, gardenBed, seedType) then return false end
     local seed = typeof(seedType) == "string" and ItemDefinitions[seedType]
     local settings = seed and config.Crops[seed.PlantId]
     local positions = getPositions(gardenBed)
@@ -162,7 +167,7 @@ function PlantService.Plant(player, gardenBed, seedType)
     end
     if not InventoryService.RemoveItem(player, seedType, #positions) then return false end
     local planted = PlantService.Restore(gardenBed, {Version = 2, Type = seed.PlantId, Fruits = fruits, Intervals = intervals})
-    if planted then Journal.Record(player, "Plant") end
+    if planted then Journal.Record(player, "Plant", 1, seedType, gardenBed) end
     return planted
 end
 
@@ -171,7 +176,7 @@ function PlantService.Water(player, gardenBed)
     local slot = player.Inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
     if not slot or slot.ItemName.Value ~= "WateringCan" or slot.Amount.Value < 1 then return false end
     local watered = PlantService.ApplyWater(gardenBed)
-    if watered then Journal.Record(player, "Water") end
+    if watered then Journal.Record(player, "Water", 1, nil, gardenBed) end
     return watered
 end
 
@@ -187,7 +192,7 @@ function PlantService.ApplyWater(gardenBed)
 end
 
 function PlantService.Harvest(player, gardenBed)
-    if not canUse(player, gardenBed) or not gardenBed:GetAttribute("ReadyToHarvest") then return false end
+    if not canUse(player, gardenBed) or not gardenBed:GetAttribute("ReadyToHarvest") or not Journal.CanHarvest(player, gardenBed) then return false end
     local state = growing[gardenBed]
     if not state then return false end
     local groups, sizes, count = {}, {}, 0
@@ -196,7 +201,7 @@ function PlantService.Harvest(player, gardenBed)
     end
     if not InventoryService.ExchangeItems(player, {}, {[state.Type] = count}, {[state.Type] = groups}) then return false end
     Records.Observe(player, state.Type, sizes)
-    Journal.Record(player, "Harvest", count)
+    Journal.Record(player, "Harvest", count, state.Type, gardenBed)
     growing[gardenBed] = nil
     for _, name in ipairs({"CropFruits", "WateredAt"}) do gardenBed:SetAttribute(name, nil) end
     gardenBed:SetAttribute("Occupied", false)

@@ -3,6 +3,7 @@ local Players = game:GetService("Players")
 local config = require(ReplicatedStorage.Configs.FarmJournalConfig)
 local levels = require(ReplicatedStorage.Configs.FarmLevelConfig)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
+local tutorialConfig = require(ReplicatedStorage.Configs.FarmTutorialConfig)
 local InventoryService = require(script.Parent.InventoryService)
 local MoneyService = require(script.Parent.MoneyService)
 local Records = require(script.Parent.CropRecordService)
@@ -19,10 +20,67 @@ local function integer(value, minimum)
     return typeof(value) == "number" and value >= minimum and value % 1 == 0 and value < math.huge
 end
 
+local function tutorialBed(player, tutorial)
+    local plots = workspace:FindFirstChild("Plots")
+    local plot = plots and plots:FindFirstChild(player:GetAttribute("PlotName") or "")
+    local objects = plot and plot:GetAttribute("OwnerUserId") == player.UserId and plot:FindFirstChild("PlacedObjects")
+    for _, object in ipairs(objects and objects:GetChildren() or {}) do
+        if (object:GetAttribute("ItemName") or object.Name) == tutorial.BedItem then return object end
+    end
+end
+
+local function tutorialView(player, data)
+    local tutorial = table.clone(data.Tutorial)
+    local bed = tutorialBed(player, tutorial)
+    tutorial.Step = tutorialConfig.Step(tutorial, bed and {NeedsWater = bed:GetAttribute("NeedsWater"), Ready = bed:GetAttribute("ReadyToHarvest")})
+    tutorial.Capacity = tutorial.BedItem and definitions[tutorial.BedItem].PlantingCapacity or 1
+    tutorial.Bed = bed
+    return tutorial
+end
+
+local function loadTutorial(saved, data, playerData)
+    if saved == nil then
+        local fresh = data.FarmLevel == 1 and playerData.Money == tutorialConfig.StartingMoneyCents and
+            #(playerData.PlacedObjects or {}) == 0 and #(playerData.UnlockedPlotSections or {}) == 0 and
+            not playerData.CropRecord and (not playerData.House or playerData.House.Level == -1)
+        for _, row in ipairs(playerData.Inventory or {}) do
+            if row.ItemName ~= "" and (row.ItemName ~= "CarrotSeed" or row.Amount > 5) then fresh = false end
+        end
+        for _, count in pairs(data.Counts) do if count > 0 then fresh = false end end
+        for _, claimed in pairs(data.Claimed) do if claimed then fresh = false end end
+        return {Version = tutorialConfig.Version, Completed = not fresh, RewardClaimed = not fresh, Harvested = 0, Sold = 0}
+    end
+    if typeof(saved) ~= "table" or saved.Version ~= tutorialConfig.Version then return end
+    local result = {Version = saved.Version}
+    for _, key in ipairs({"Completed", "RewardClaimed", "CanBought", "Planted", "Watered", "FarmSeen", "JournalSeen"}) do
+        if saved[key] ~= nil and typeof(saved[key]) ~= "boolean" then return end
+        result[key] = saved[key] == true
+    end
+    for _, key in ipairs({"Harvested", "Sold"}) do
+        local count = saved[key] == nil and 0 or saved[key]
+        if not integer(count, 0) then return end
+        result[key] = count
+    end
+    if result.Sold > result.Harvested then return end
+    if saved.BedItem ~= nil then
+        if typeof(saved.BedItem) ~= "string" or not tutorialConfig.StarterBeds[saved.BedItem] then return end
+        result.BedItem = saved.BedItem
+    end
+    if saved.SeedItem ~= nil then
+        local definition = typeof(saved.SeedItem) == "string" and definitions[saved.SeedItem]
+        if not result.BedItem or not definition or definition.Type ~= "Seed" then return end
+        result.SeedItem, result.CropItem = saved.SeedItem, definition.PlantId
+    end
+    if result.CanBought and not result.SeedItem or result.Planted and not result.CanBought or
+        result.Harvested > 0 and not result.Planted then return end
+    return result
+end
+
 local function copy(data)
     return {Version = 2, FarmLevel = data.FarmLevel, Counts = table.clone(data.Counts),
         Completed = table.clone(data.Completed), Claimed = table.clone(data.Claimed),
-        LegacyAccess = table.clone(data.LegacyAccess), NotifiedLevel = data.NotifiedLevel, Tracked = data.Tracked}
+        LegacyAccess = table.clone(data.LegacyAccess), NotifiedLevel = data.NotifiedLevel, Tracked = data.Tracked,
+        Tutorial = table.clone(data.Tutorial)}
 end
 
 local function raise(data, id, amount)
@@ -68,6 +126,7 @@ local function snapshot(player, notify)
     if not data then return end
     local result = copy(data)
     result.Ready = ready(data)
+    result.Tutorial = tutorialView(player, data)
     if notify and result.Ready and data.NotifiedLevel < data.FarmLevel then
         data.NotifiedLevel = data.FarmLevel
         result.NotifiedLevel = data.NotifiedLevel
@@ -89,6 +148,48 @@ end
 
 function Journal.CanBuy(player, item)
     return journals[player] ~= nil and levels.HasAccess(Journal.GetLevel(player), item)
+end
+
+function Journal.CheckPurchase(player, item, amount)
+    local data = journals[player]
+    if not data then return false, "DataNotReady" end
+    local tutorial = tutorialView(player, data)
+    local required = tutorialConfig.PurchaseAmount(tutorial.Step, item, definitions[item], tutorial.Capacity)
+    if required ~= nil and (required == 0 or amount ~= required) then return false, "TutorialPurchaseRequired" end
+    return true
+end
+
+function Journal.CanDiscard(player, item)
+    local data = journals[player]
+    local tutorial = data and data.Tutorial
+    return tutorial and (tutorial.Completed or item ~= tutorial.BedItem and item ~= tutorial.SeedItem and
+        item ~= tutorial.CropItem and item ~= "WateringCan")
+end
+
+function Journal.CanSell(player, item, amount)
+    local data = journals[player]
+    if not data then return false end
+    local tutorial = data.Tutorial
+    return tutorial.Completed or
+        tutorial.Harvested > tutorial.Sold and item == tutorial.CropItem and amount <= tutorial.Harvested - tutorial.Sold
+end
+
+function Journal.TutorialComplete(player)
+    local data = journals[player]
+    return data and data.Tutorial.Completed == true
+end
+
+function Journal.CanPlant(player, object, seed)
+    local data = journals[player]
+    if not data then return false end
+    return data.Tutorial.Completed or not data.Tutorial.Planted and data.Tutorial.CanBought and
+        seed == data.Tutorial.SeedItem and object == tutorialBed(player, data.Tutorial)
+end
+
+function Journal.CanHarvest(player, object)
+    local data = journals[player]
+    if not data then return false end
+    return data.Tutorial.Completed or tutorialView(player, data).Step == "Harvest" and object == tutorialBed(player, data.Tutorial)
 end
 
 function Journal.CanBuild(player, item)
@@ -134,6 +235,16 @@ function Journal.Refresh(player)
         if chapter.Category == "Main" and chapter.Level <= data.FarmLevel and data.Completed[chapter.Id] and
             not data.Claimed[chapter.Id] and player:GetAttribute("DataLoaded") == true then reward(player, chapter, data) end
     end
+    if data.Tutorial.Completed and not data.Tutorial.RewardClaimed and player:GetAttribute("DataLoaded") == true then
+        if MoneyService.AddMoney(player, tutorialConfig.CompletionRewardCents) then data.Tutorial.RewardClaimed = true end
+    end
+    local tutorial = tutorialView(player, data)
+    player:SetAttribute("TutorialStep", tutorial.Step)
+    player:SetAttribute("TutorialCapacity", tutorial.Capacity)
+    player:SetAttribute("TutorialBedItem", tutorial.BedItem)
+    player:SetAttribute("TutorialSeedItem", tutorial.SeedItem)
+    player:SetAttribute("TutorialCropItem", tutorial.CropItem)
+    player:SetAttribute("TutorialRemaining", tutorial.Harvested - tutorial.Sold)
     player:SetAttribute("FarmLevelReady", ready(data))
 end
 
@@ -213,6 +324,19 @@ function Journal.Load(player, saved, playerData)
         if playerData.CropRecord and playerData.CropRecord.Size > 0 then raise(data, "Harvest", 1) end
     end
     for id, objective in pairs(objectives) do raise(data, id, data.Counts[objective.Event or id] or 0) end
+    if saved and saved.Tutorial == nil then
+        for _, row in ipairs(playerData.Inventory or {}) do
+            if row.ItemName == "FieldBed10" then levels.GrantLegacy(data.LegacyAccess, row.ItemName) end
+        end
+        for _, object in ipairs(playerData.PlacedObjects or {}) do
+            if object.ItemName == "FieldBed10" then levels.GrantLegacy(data.LegacyAccess, object.ItemName) end
+            for _, row in ipairs(object.StorageInventory or {}) do
+                if row.ItemName == "FieldBed10" then levels.GrantLegacy(data.LegacyAccess, row.ItemName) end
+            end
+        end
+    end
+    data.Tutorial = loadTutorial(saved and saved.Tutorial, data, playerData)
+    if not data.Tutorial then return false end
     journals[player] = data
     player:SetAttribute("FarmLevel", data.FarmLevel)
     Journal.Refresh(player)
@@ -229,10 +353,27 @@ function Journal.Update(player)
     send(player)
 end
 
-function Journal.Record(player, event, amount)
+function Journal.Record(player, event, amount, item, object)
     local data = journals[player]
     if not data or player:GetAttribute("DataLoaded") ~= true then return end
     local changed = false
+    local tutorial = data.Tutorial
+    if not tutorial.Completed then
+        local view = tutorialView(player, data)
+        if event == "Buy" then
+            if view.Step == "BuyBed" then tutorial.BedItem = item;changed = true
+            elseif view.Step == "BuySeeds" then tutorial.SeedItem = item;tutorial.CropItem = definitions[item].PlantId;changed = true
+            elseif view.Step == "BuyCan" then tutorial.CanBought = true;changed = true end
+        elseif object == view.Bed and object ~= nil then
+            if event == "Plant" then tutorial.Planted = true;changed = true
+            elseif event == "Water" then tutorial.Watered = true;changed = true
+            elseif event == "Harvest" then tutorial.Harvested = amount;changed = true end
+        elseif event == "Sell" and item == tutorial.CropItem and tutorial.Harvested > tutorial.Sold then
+            tutorial.Sold += amount
+            tutorial.Completed = tutorial.Sold >= tutorial.Harvested
+            changed = true
+        end
+    end
     for id, objective in pairs(objectives) do
         if objective.Kind == "Action" and (objective.Event or id) == event then
             local previous = data.Counts[id] or 0
@@ -247,6 +388,18 @@ function Journal.GetState(player)
     if player:GetAttribute("DataLoaded") ~= true then return end
     Journal.Refresh(player)
     return snapshot(player, true)
+end
+
+function Journal.TutorialViewed(player, menu)
+    local data = journals[player]
+    if not data or player:GetAttribute("DataLoaded") ~= true then return false end
+    local tutorial = data.Tutorial
+    if tutorial.Completed or not tutorial.Watered then return false end
+    if menu == "Farm" and not tutorial.FarmSeen then tutorial.FarmSeen = true
+    elseif menu == "Journal" and tutorial.FarmSeen and not tutorial.JournalSeen then tutorial.JournalSeen = true
+    else return false end
+    Journal.Update(player)
+    return true
 end
 
 function Journal.Track(player, id)

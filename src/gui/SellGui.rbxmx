@@ -99,17 +99,21 @@ end
 
 innerFrame.EmptyLabel.Visible = #itemNames == 0
 
-local function openSell()
+local function openSell(itemName)
     HudMenu.CloseStorage()
     sellGui.Enabled = true
     innerFrame.Visible = true
     itemSellFrame.Visible = false
     itemsFrame.CanvasPosition = Vector2.new(0, 0)
     mainFrame.Visible = true
+    if typeof(itemName) == "string" and ItemDefinitions[itemName] and ItemDefinitions[itemName].SellPriceCents then openItemSellFrame(itemName) end
 end
 
 openSellGuiEvent.OnClientEvent:Connect(openSell)
-sellButton.Activated:Connect(openSell)
+sellButton.Activated:Connect(function() openSell() end)
+local openFunction = Instance.new("BindableFunction")
+openFunction.Name, openFunction.Parent = "OpenSell", sellGui
+openFunction.OnInvoke = openSell
 
 closeButton.Activated:Connect(function()
     mainFrame.Visible = false
@@ -1498,7 +1502,7 @@ end)
 				</Properties>
 				<Item class="LocalScript" referent="RBXDA65C45B58CC473D860DD1DA0BC9A78D">
 					<Properties>
-						<ProtectedString name="Source"><![CDATA[local CropItems = require(game.ReplicatedStorage.CropItems)
+						<ProtectedString name="Source">local CropItems = require(game.ReplicatedStorage.CropItems)
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -1561,6 +1565,13 @@ local function updateItemSellFrame()
     if typeof(price) ~= "number" then return end
 
     local ownedAmount = getItemAmount(itemName)
+    local step = player:GetAttribute("TutorialStep")
+    local tutorial = step ~= nil and step ~= "Complete"
+    local allowed = not tutorial or step == "Sell" and itemName == player:GetAttribute("TutorialCropItem")
+    if tutorial then
+        ownedAmount = allowed and math.min(ownedAmount, player:GetAttribute("TutorialRemaining") or 0) or 0
+        selectedAmount = ownedAmount
+    end
     selectedAmount = math.clamp(selectedAmount, 0, ownedAmount)
     itemNameLabel.Text = itemDisplayName(itemName, item)
     itemIcon.Image = item.Icon or ""
@@ -1574,13 +1585,13 @@ local function updateItemSellFrame()
     for _, slot in ipairs(inventory:GetChildren()) do
         table.insert(rows, {ItemName = slot.ItemName.Value, Amount = slot.Amount.Value, Variants = CropItems.Read(slot)})
     end
-    local groups = selectedAmount > 0 and CropItems.Take(rows, itemName, selectedAmount) or {}
+    local groups = selectedAmount &gt; 0 and CropItems.Take(rows, itemName, selectedAmount) or {}
     local total = groups and CropItems.Value(itemName, groups, ItemDefinitions) or 0
     totalPriceLabel.Text = string.format("$%.2f", total / 100)
 
-    QuantityControls.update(quantity, selectedAmount > 0, selectedAmount < ownedAmount)
-    enableButton(maxButton, ownedAmount > 0, GREEN)
-    enableButton(sellButton, selectedAmount > 0, GREEN)
+    QuantityControls.update(quantity, not tutorial and selectedAmount &gt; 0, not tutorial and selectedAmount &lt; ownedAmount)
+    enableButton(maxButton, not tutorial and ownedAmount &gt; 0, GREEN)
+    enableButton(sellButton, selectedAmount &gt; 0, GREEN)
 end
 
 itemSellFrame:GetPropertyChangedSignal("Visible"):Connect(function()
@@ -1617,7 +1628,7 @@ end)
 sellButton.Activated:Connect(function()
     updateItemSellFrame()
     local itemName = itemSellFrame:GetAttribute("ItemName")
-    if not itemName or selectedAmount <= 0 or not sellButton.Interactable then return end
+    if not itemName or selectedAmount &lt;= 0 or not sellButton.Interactable then return end
     sellItemEvent:FireServer(itemName, selectedAmount)
 end)
 
@@ -1647,7 +1658,16 @@ inventory.DescendantRemoving:Connect(function(value)
     task.defer(updateItemSellFrame)
 end)
 updateItemSellFrame()
-]]></ProtectedString>
+
+player:GetAttributeChangedSignal("TutorialStep"):Connect(function()
+    updateItemSellFrame()
+    if player:GetAttribute("TutorialStep") == "Complete" then
+        local current = itemSellFrame:GetAttribute("ItemName")
+        if current == player:GetAttribute("TutorialCropItem") and getItemAmount(current) == 0 then itemSellFrame.Parent.Visible = false end
+    end
+end)
+player:GetAttributeChangedSignal("TutorialRemaining"):Connect(updateItemSellFrame)
+</ProtectedString>
 						<bool name="Disabled">false</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<token name="RunContext">0</token>

@@ -10,6 +10,7 @@ local moveInventorySlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):Wa
 local setSelectedSlotEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
 local discardItemEvent = ReplicatedStorage.RemoteEvents:WaitForChild("DiscardInventoryItemEvent")
 
+local Journal = require(ServerScriptService.FarmJournalService)
 local watched = {}
 
 setSelectedSlotEvent.OnServerEvent:Connect(function(player, slotNumber)
@@ -53,6 +54,10 @@ discardItemEvent.OnServerEvent:Connect(function(player, slotIndex, expected)
     if player:GetAttribute("ProductionMode") == true or player:GetAttribute("Milking") == true or
         player:GetAttribute("Teleporting") == true then
         discardItemEvent:FireClient(player, false, "Inventory is not available")
+        return
+    end
+    if typeof(expected) ~= "table" or not Journal.CanDiscard(player, expected.ItemName) then
+        discardItemEvent:FireClient(player, false, "Keep this item for your first harvest.")
         return
     end
     local success, reason = InventoryService.DiscardSlot(player, slotIndex, expected)

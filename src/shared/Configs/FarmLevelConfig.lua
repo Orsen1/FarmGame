@@ -6,6 +6,7 @@ local Config = {
         {Name = "Smallholding", Chapter = "FirstBuildings", SectionLimit = 1,
             Reward = {MoneyCents = 300, Items = {CarrotSeed = 5}},
             Unlocks = {
+                {Name = "Garden Bed (5)", Icon = "FieldBed5", Items = {"FieldBed5"}},
                 {Name = "Cow Pen", Icon = "CowPenBlueprint", Items = {"CowPenBlueprint", "CowPen"}},
                 {Name = "Chicken Coop II", Icon = "ChickenCoopUpgrade", Items = {"ChickenCoopUpgrade", "ChickenCoop2Blueprint", "ChickenCoop2"}},
                 {Name = "First land expansion", Icon = "GardenBed"},
@@ -13,6 +14,7 @@ local Config = {
         {Name = "Growing Farm", Chapter = "GrowingFarm", SectionLimit = 3,
             Reward = {MoneyCents = 500, Items = {CornSeed = 5}},
             Unlocks = {
+                {Name = "Garden Bed (10)", Icon = "FieldBed10", Items = {"FieldBed10"}},
                 {Name = "Dairy Workshop", Icon = "DairyBlueprint", Items = {"DairyBlueprint", "Dairy"}},
                 {Name = "Two more land expansions", Icon = "GardenBed"},
             }},

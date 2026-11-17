@@ -238,6 +238,10 @@ local function selectSlot(slotNumber, activatePlacement)
 	end
 end
 
+local selectFunction = Instance.new("BindableFunction")
+selectFunction.Name, selectFunction.Parent = "SelectSlot", script.Parent
+selectFunction.OnInvoke = function(index) selectSlot(index, true) end
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
 	if gameProcessed then
 		return

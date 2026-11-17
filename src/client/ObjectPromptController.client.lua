@@ -208,7 +208,8 @@ local function updatePrompt(prompt)
     if prompt.Name == "CollectPrompt" then
         if definition.Plantable == true then
             prompt.ActionText = "Harvest"
-            setEnabled(prompt, object:GetAttribute("ReadyToHarvest") == true)
+            local step = player:GetAttribute("TutorialStep")
+            setEnabled(prompt, object:GetAttribute("ReadyToHarvest") == true and (step == nil or step == "Complete" or step == "Harvest"))
         elseif definition.Recipes then
             local amount = getOutputAmount(object)
             prompt.ActionText = "Collect (" .. amount .. ")"
@@ -310,7 +311,8 @@ local function updatePrompt(prompt)
         prompt.ActionText = "Plant"
         setEnabled(prompt,
             object:GetAttribute("Occupied") ~= true and selectedAmount > 0 and selectedDefinition ~= nil and
-                selectedDefinition.Type == "Seed")
+                selectedDefinition.Type == "Seed" and ((player:GetAttribute("TutorialStep") or "Complete") == "Complete" or
+                    player:GetAttribute("TutorialStep") == "Plant" and selectedItemName == player:GetAttribute("TutorialSeedItem")))
 
     elseif definition.Recipes then
         prompt.ActionText = "Work"
@@ -490,3 +492,6 @@ RunService.Heartbeat:Connect(function(dt)
 end)
 
 script.Destroying:Connect(function() focusOutline:Destroy() end)
+
+
+player:GetAttributeChangedSignal("TutorialStep"):Connect(updateAllPrompts)

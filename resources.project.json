@@ -81,6 +81,9 @@
         },
         "FarmLevelConfig": {
           "$path": "src/shared/Configs/FarmLevelConfig.lua"
+        },
+        "FarmTutorialConfig": {
+          "$path": "src/shared/Configs/FarmTutorialConfig.lua"
         }
       },
       "Tools": {

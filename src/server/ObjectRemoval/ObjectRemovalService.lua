@@ -5,6 +5,7 @@ local plots = workspace:WaitForChild("Plots")
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
 local AnimalService = require(script.Parent.Parent.AnimalService)
 
+local Journal = require(script.Parent.Parent.FarmJournalService)
 local MAX_DISTANCE = 12
 
 local ObjectRemovalService = {}
@@ -33,6 +34,8 @@ function ObjectRemovalService.remove(player, object)
     if not definition or definition.Placeable ~= true then
         return false, "This object cannot be removed."
     end
+
+    if not Journal.TutorialComplete(player) then return false, "Finish your first harvest before removing the bed." end
 
     local character = player.Character
     local tool = character and character:FindFirstChild("EquippedItem")

@@ -28,6 +28,8 @@ function SellService.SellItem(player, itemName, amount)
 		return false, "ItemCannotBeSold"
 	end
 
+	if not Journal.CanSell(player, itemName, amount) then return false, "FinishTutorialSale" end
+
 	local removedGroups, removalError = InventoryService.GetRemoval(player, {[itemName] = amount})
     if not removedGroups then return false, removalError end
     local totalPrice = CropItems.Value(itemName, removedGroups[itemName], ItemDefinitions)
@@ -48,7 +50,7 @@ function SellService.SellItem(player, itemName, amount)
 		return false, "MoneyCouldNotBeAdded"
 	end
 
-    Journal.Record(player, "Sell")
+    Journal.Record(player, "Sell", amount, itemName)
     Journal.Record(player, "Sales", totalPrice)
 	print(player.Name .. " sold " .. amount .. "x " .. itemName
 		.. " for " .. totalPrice .. " cents")

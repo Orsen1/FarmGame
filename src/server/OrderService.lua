@@ -149,6 +149,7 @@ function OrderService.Open(player, boardId)
 end
 
 function OrderService.Deliver(player, boardId, orderId)
+    if not Journal.TutorialComplete(player) then return false, "Sell your first harvest before delivering Town orders." end
     local allowed, reason = checkAccess(player, boardId)
     if not allowed then
         return false, reason
