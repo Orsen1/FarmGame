@@ -4,6 +4,7 @@ local ConstructionService = require(script.Parent.ConstructionService)
 local InventoryService = require(script.Parent.InventoryService)
 local ProductionDataService = require(script.Parent.ProductionDataService)
 local models = ReplicatedStorage:WaitForChild("FarmModels")
+local Journal = require(script.Parent.FarmJournalService)
 local HouseService = {}
 local prefix = "ConstructionDeposited_"
 local skinFolders = {"Foundation", "Walls", "Roof", "Windows", "Door", "Porch", "Chimney", "Decorations", "Collision", "Furniture"}
@@ -150,6 +151,7 @@ function HouseService.Build(player, house)
     local stage = (house:GetAttribute("HouseUpgradeStage") or 0) + 1
     if stage == #upgrade.Stages then level, stage = level + 1, 0 end
     applySkin(house, level, stage)
+    Journal.Update(player)
     return true, stage == 0 and "Farmhouse restored!" or "Stage completed"
 end
 

@@ -10,12 +10,15 @@ local function refresh(prompt, plot)
     local visible = price ~= nil and player:GetAttribute("PlotName") == plot.Name
         and plot:GetAttribute("OwnerUserId") == player.UserId and player:GetAttribute("DataLoaded") == true
         and not player:GetAttribute("ProductionMode") and not player:GetAttribute("StorageOpen")
+        and not player:GetAttribute("FarmOverviewOpen")
     if prompt.Enabled ~= visible then
         prompt.Enabled = visible
     end
     if visible then
+        local requiredLevel = prompt:GetAttribute("RequiredFarmLevel") or 1
         local verb = money.Value >= price and "Buy for " or "Need "
-        prompt.ActionText = verb .. string.format("$%.2f", price / 100)
+        prompt.ActionText = (player:GetAttribute("FarmLevel") or 1) < requiredLevel and
+            "Requires farm level " .. requiredLevel or verb .. string.format("$%.2f", price / 100)
     end
 end
 
@@ -35,6 +38,7 @@ local function track(object)
         Update = update,
         Enabled = object:GetPropertyChangedSignal("Enabled"):Connect(update),
         Price = object:GetAttributeChangedSignal("PriceCents"):Connect(update),
+        Level = object:GetAttributeChangedSignal("RequiredFarmLevel"):Connect(update),
     }
     update()
 end
@@ -51,13 +55,14 @@ plots.DescendantRemoving:Connect(function(object)
     if entry then
         entry.Enabled:Disconnect()
         entry.Price:Disconnect()
+        entry.Level:Disconnect()
         tracked[object] = nil
     end
 end)
 for _, object in ipairs(plots:GetDescendants()) do
     track(object)
 end
-for _, attribute in ipairs({ "PlotName", "DataLoaded", "ProductionMode", "StorageOpen" }) do
+for _, attribute in ipairs({ "PlotName", "DataLoaded", "ProductionMode", "StorageOpen", "FarmLevel", "FarmOverviewOpen" }) do
     player:GetAttributeChangedSignal(attribute):Connect(refreshAll)
 end
 money.Changed:Connect(refreshAll)

@@ -2,6 +2,7 @@ local HttpService = game:GetService("HttpService")
 local ItemDefinitions = require(game:GetService("ReplicatedStorage").Configs.ItemDefinitions)
 local InventoryService = require(script.Parent.InventoryService)
 local AnimalService = require(script.Parent.AnimalService)
+local Journal = require(script.Parent.FarmJournalService)
 local CoopUpgradeService = {}
 
 function CoopUpgradeService.Pack(player, object, upgradeItemName)
@@ -14,6 +15,7 @@ function CoopUpgradeService.Pack(player, object, upgradeItemName)
         not InventoryService.CanExchangeItems(player, {[itemName] = 1}, {}) then
         return false, "You need the matching coop upgrade."
     end
+    if not Journal.CanBuild(player, itemName) then return false, "This upgrade requires a higher farm level" end
     local contents, message = AnimalService.Snapshot(object)
     if not contents then return false, message end
     local data = HttpService:JSONEncode({Version = 1, ItemName = definition.PacksInto, Contents = contents})

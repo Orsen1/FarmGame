@@ -151,6 +151,8 @@ function ConstructionService.Build(player, object)
         return false, "Invalid construction stage"
     end
 
+    if not Journal.CanBuild(player, itemName) then return false, "This building requires a higher farm level" end
+
     local deposits, reason = ConstructionService.getData(object)
     if not deposits then
         return false, reason

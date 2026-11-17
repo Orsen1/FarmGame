@@ -49,6 +49,7 @@ function SellService.SellItem(player, itemName, amount)
 	end
 
     Journal.Record(player, "Sell")
+    Journal.Record(player, "Sales", totalPrice)
 	print(player.Name .. " sold " .. amount .. "x " .. itemName
 		.. " for " .. totalPrice .. " cents")
 	return true

@@ -6,6 +6,7 @@ local Motion = require(ReplicatedStorage.Animals.AnimalMotion)
 local plots = workspace:WaitForChild("Plots")
 local homes = {}
 local obstacleCache
+local Journal = require(script.Parent.FarmJournalService)
 local AnimalService = {}
 local milking = {}
 local milkEvent = ReplicatedStorage.RemoteEvents:WaitForChild("MilkingEvent")
@@ -700,6 +701,7 @@ function AnimalService.Add(player, object)
     folder.Parent = animalFolder(object)
     object:SetAttribute("AnimalCount", #home.Animals)
     publishCare(home, now)
+    Journal.Update(player)
     return true, config.ItemName .. " added."
 end
 

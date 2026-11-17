@@ -4,6 +4,7 @@ local HttpService = game:GetService("HttpService")
 local Config = require(ReplicatedStorage.Configs.LaboratoryConfig)
 local Definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local Money = require(script.Parent.MoneyService)
+local Journal = require(script.Parent.FarmJournalService)
 local Laboratory = {}
 local profiles, sessions, nextAllowed = {}, {}, {}
 local random = Random.new()
@@ -92,7 +93,10 @@ function Laboratory.Attempt(player, sessionId, attempt, track)
         result.Success = random:NextNumber() * 100 < row.Chance
         result.PriceCents = row.PriceCents
         result.Chance = row.Chance
-        if result.Success then levels[track] = level + 1 end
+        if result.Success then
+            levels[track] = level + 1
+            Journal.Record(player, "Research")
+        end
         result.Message = result.Success and string.format("Research upgraded to +%d!", levels[track]) or
             "Experiment failed. Your level is safe."
     end

@@ -5,6 +5,7 @@ local InventoryService = require(ServerScriptService:WaitForChild("InventoryServ
 local MoneyService = require(ServerScriptService:WaitForChild("MoneyService"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
+local Journal = require(ServerScriptService.FarmJournalService)
 local BuyService = {}
 local MAX_INTEGER = 9007199254740991
 
@@ -25,6 +26,8 @@ function BuyService.BuyItem(player, itemName, amount)
 		or price > MAX_INTEGER or price % 1 ~= 0 then
 		return false, "ItemCannotBeBought"
 	end
+
+	if not Journal.CanBuy(player, itemName) then return false, "FarmLevelRequired" end
 
 	local totalPrice = price * amount
 	if totalPrice > MAX_INTEGER then

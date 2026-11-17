@@ -25,6 +25,8 @@ function PlacementService.placeItem(player, itemName, position, rotation)
         return false, "Missing placeable definition or model"
     end
 
+    if not Journal.CanBuild(player, itemName) then return false, "This building requires a higher farm level" end
+
     local plotName = player:GetAttribute("PlotName")
     local plot = plotName and plots:FindFirstChild(plotName)
 

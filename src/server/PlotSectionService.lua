@@ -2,6 +2,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local config = require(ReplicatedStorage.Configs.PlotSectionConfig)
+local levels = require(ReplicatedStorage.Configs.FarmLevelConfig)
 local MoneyService = require(script.Parent.MoneyService)
 local Journal = require(script.Parent.FarmJournalService)
 local PlotSectionService = {}
@@ -43,6 +44,9 @@ end
 local function refreshBorders(plot)
     local price = currentPrice(plot)
     local priceText = price and string.format("$%.2f", price / 100)
+    local owner = Players:GetPlayerByUserId(plot:GetAttribute("OwnerUserId") or 0)
+    local requiredLevel = levels.SectionLevel(#PlotSectionService.getData(plot) + 1)
+    local locked = owner and Journal.GetLevel(owner) < requiredLevel
     local owned = plot:GetAttribute("OwnerUserId") ~= 0
     for _, border in ipairs(plot.SectionBorders:GetChildren()) do
         local first, second = string.match(border.Name, "^(%w+)_(%w+)$")
@@ -60,10 +64,11 @@ local function refreshBorders(plot)
         for _, face in ipairs(sign:GetChildren()) do
             if face:IsA("SurfaceGui") then
                 face.Enabled = not hidden
-                face.Price.Text = target and priceText or "Expand next door"
+                face.Price.Text = target and (locked and "Farm level " .. requiredLevel or priceText) or "Expand next door"
             end
         end
         local prompt = sign.BuySectionPrompt
+        prompt:SetAttribute("RequiredFarmLevel", requiredLevel)
         prompt:SetAttribute("PriceCents", target and owned and price or nil)
         prompt.Enabled = target ~= nil and owned
     end
@@ -84,6 +89,7 @@ local function buy(player, plot, border, prompt)
     end
     local section = availableSection(plot, border)
     local price = section and currentPrice(plot)
+    if Journal.GetLevel(player) < levels.SectionLevel(#PlotSectionService.getData(plot) + 1) then return end
     if price and MoneyService.RemoveMoney(player, price) then
         section:SetAttribute("Unlocked", true)
         section.Ground.Color = plot.Ground.Color
@@ -117,6 +123,17 @@ function PlotSectionService.loadData(plot, purchased)
 
     if not bound[plot] then
         bound[plot] = true
+        local levelConnection
+        local function ownerChanged()
+            if levelConnection then levelConnection:Disconnect();levelConnection = nil end
+            local owner = Players:GetPlayerByUserId(plot:GetAttribute("OwnerUserId") or 0)
+            if owner then
+                levelConnection = owner:GetAttributeChangedSignal("FarmLevel"):Connect(function() refreshBorders(plot) end)
+            end
+            refreshBorders(plot)
+        end
+        plot:GetAttributeChangedSignal("OwnerUserId"):Connect(ownerChanged)
+        ownerChanged()
         for _, border in ipairs(borders:GetChildren()) do
             local prompt = border.Sign.BuySectionPrompt
             prompt.Triggered:Connect(function(player)

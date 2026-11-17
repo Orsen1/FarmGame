@@ -78,6 +78,9 @@
         },
         "StarterHouseConfig": {
           "$path": "src/shared/Configs/StarterHouseConfig.lua"
+        },
+        "FarmLevelConfig": {
+          "$path": "src/shared/Configs/FarmLevelConfig.lua"
         }
       },
       "Tools": {

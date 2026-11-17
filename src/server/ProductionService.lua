@@ -13,6 +13,7 @@ local houseConfig = require(configs.StarterHouseConfig)
 local stateEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("ProductionState")
 local plots = workspace:WaitForChild("Plots")
 
+local Journal = require(script.Parent.FarmJournalService)
 local ProductionService = {}
 local sessions = {}
 local operators = {}
@@ -466,6 +467,9 @@ function ProductionService.Collect(player, station)
         storedItem.Value = 0
     end
 
+    local produced = 0
+    for name, amount in pairs(outputs) do if name ~= "Bucket" then produced += amount end end
+    Journal.Record(player, "Produce", produced)
     return true, "Items collected"
 end
 

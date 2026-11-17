@@ -10,6 +10,7 @@ remote.OnServerEvent:Connect(function(player, action, id)
     lastRequest[player] = now
     local success, message
     if action == "Claim" then success, message = Journal.Claim(player, id)
+    elseif action == "LevelUp" then success, message = Journal.LevelUp(player, id)
     elseif action == "Track" then success = Journal.Track(player, id)
     elseif action ~= "Get" then return end
     local state = Journal.GetState(player)

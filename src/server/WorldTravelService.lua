@@ -12,6 +12,7 @@ local pending = {}
 local lastAttempt = {}
 local prepareData
 local restoreData
+local lastLocalTrip = {}
 local send
 local activeFarms
 
@@ -145,6 +146,82 @@ send = function(player, context)
     end
 end
 
+local function localDestination(destination)
+    local plots = workspace:FindFirstChild("Plots")
+    if not plots then return end
+    if destination:match("^Plot[1-4]$") then
+        local plot = plots:FindFirstChild(destination)
+        local spawn = plot and plot:FindFirstChild("SpawnPoint")
+        local ground = plot and plot:FindFirstChild("Ground")
+        if spawn and ground then
+            local facing = ground.CFrame.LookVector
+            return spawn.Position - facing * Config.FastTravel.PlotEntranceOffset, facing
+        end
+        return
+    end
+    local zones = workspace:FindFirstChild("PublicZones")
+    for _, location in ipairs(Config.FastTravel.Locations) do
+        if location.Id == destination then
+            local zone = zones and zones:FindFirstChild(destination)
+            local ground = zone and zone:FindFirstChild("Ground")
+            if not ground then return end
+            local east = location.Side == "East"
+            local offset = east and Vector3.new(ground.Size.X / 2 + Config.FastTravel.ArrivalGap, 0, 0) or
+                Vector3.new(0, 0, ground.Size.Z / 2 + Config.FastTravel.ArrivalGap)
+            local point = ground.CFrame:PointToWorldSpace(offset)
+            return point, (ground.Position - point).Unit
+        end
+    end
+end
+
+local function clearArrival(character, humanoid, root, point, facing)
+    local ray = RaycastParams.new()
+    ray.FilterDescendantsInstances = {character}
+    ray.RespectCanCollide = true
+    for _, offset in ipairs({Vector3.zero, Vector3.new(5, 0, 0), Vector3.new(-5, 0, 0),
+        Vector3.new(0, 0, 5), Vector3.new(0, 0, -5), Vector3.new(10, 0, 0), Vector3.new(-10, 0, 0)}) do
+        local hit = workspace:Raycast(point + offset + Vector3.yAxis * 12, -Vector3.yAxis * 40, ray)
+        if hit and hit.Normal.Y > 0.9 and
+            (hit.Instance == workspace.Terrain or hit.Instance == workspace:FindFirstChild("Baseplate") or hit.Instance.Name == "Ground") then
+            local position = hit.Position + Vector3.yAxis * (humanoid.HipHeight + root.Size.Y / 2 + .15)
+            local overlap = OverlapParams.new()
+            overlap.FilterDescendantsInstances = {character, hit.Instance}
+            overlap.RespectCanCollide = true
+            local occupied = workspace:GetPartBoundsInBox(CFrame.new(hit.Position + Vector3.yAxis * 2.7),
+                Vector3.new(4, 5, 4), overlap)
+            if #occupied == 0 then return CFrame.lookAt(position, position + facing) end
+        end
+    end
+end
+
+function WorldTravelService.TravelLocal(player, destination)
+    if typeof(destination) ~= "string" or #destination > 24 then return false, "Unknown destination." end
+    if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true or pending[player] or
+        player:GetAttribute("Teleporting") then return false, "Your farm is still loading." end
+    local character = player.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    local root = character and character:FindFirstChild("HumanoidRootPart")
+    if not root or not humanoid or humanoid.Health <= 0 then return false, "Character is not ready." end
+    if root.Anchored or humanoid.SeatPart or player:GetAttribute("ProductionMode") or
+        player:GetAttribute("Milking") or character:GetAttribute("GatherStartedAt") then
+        return false, "Finish your current action first."
+    end
+    local now = os.clock()
+    if now - (lastLocalTrip[player] or -math.huge) < Config.FastTravel.Cooldown then
+        return false, "Please wait a moment before travelling again."
+    end
+    local point, facing = localDestination(destination)
+    if not point then return false, "This destination is not available." end
+    lastLocalTrip[player] = now
+    local target = clearArrival(character, humanoid, root, point, facing)
+    if not target then return false, "No clear arrival point. Try again." end
+    root.AssemblyLinearVelocity = Vector3.zero
+    root.AssemblyAngularVelocity = Vector3.zero
+    humanoid.Jump = false
+    character:PivotTo(target * root.CFrame:ToObjectSpace(character:GetPivot()))
+    return true
+end
+
 function WorldTravelService.Travel(player, destination)
     if pending[player] or (lastAttempt[player] and os.clock() - lastAttempt[player] < Config.RetryCooldown) then
         return false, "Busy"
@@ -239,6 +316,7 @@ end)
 Players.PlayerRemoving:Connect(function(player)
     pending[player] = nil
     lastAttempt[player] = nil
+    lastLocalTrip[player] = nil
 end)
 
 return WorldTravelService

@@ -7976,6 +7976,7 @@ local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local openEvent = remotes:WaitForChild("OpenBuyGuiEvent")
 local buyEvent = remotes:WaitForChild("BuyItemEvent")
 local definitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local levels = require(ReplicatedStorage.Configs.FarmLevelConfig)
 local HudMenu = require(ReplicatedStorage.HudMenu)
 local QuantityControls = require(ReplicatedStorage:WaitForChild("ShopQuantityControls"))
 
@@ -8114,12 +8115,17 @@ local function refresh()
     main.FooterFrame.MoneyLabel.Text = "Balance: " .. formatMoney(money.Value)
     for id, card in pairs(cards) do
         local owned = inventoryInfo(id)
-        card.OwnedLabel.Text = "Owned: " .. tostring(owned)
+        local required = levels.RequiredLevel(id)
+        local locked = (player:GetAttribute("FarmLevel") or 1) &lt; required
+        card.OwnedLabel.Text = locked and "Farm level " .. required .. " required" or "Owned: " .. tostring(owned)
+        card.OwnedLabel.TextColor3 = locked and RED or MUTED
     end
     if not selectedId then return end
 
     local item = definitions[selectedId]
     local price = item.BuyPriceCents
+    local required = levels.RequiredLevel(selectedId)
+    local unlocked = (player:GetAttribute("FarmLevel") or 1) &gt;= required
     local maximum = maximumAmount(price)
     local owned, room = inventoryInfo(selectedId)
     selectedAmount = math.clamp(selectedAmount, 0, maximum)
@@ -8134,14 +8140,15 @@ local function refresh()
     quantity.SelectedAmountFrame.ItemAmountToBuyLabel.Text = tostring(selectedAmount)
     action.TotalPriceLabel.Text = formatMoney(price * selectedAmount)
     details.QuantityHintLabel.Text = "Can buy: " .. tostring(maximum)
-    QuantityControls.update(quantity, not pending and selectedAmount &gt; 0, not pending and room and selectedAmount &lt; maximum)
-    enableButton(details.MaxButton, not pending and room and maximum &gt; 0, GREEN)
-    enableButton(action.BuyButton, not pending and room and selectedAmount &gt; 0, GREEN)
-    action.BuyButton.Text = pending and "Buying..." or "Buy"
+    QuantityControls.update(quantity, unlocked and not pending and selectedAmount &gt; 0, unlocked and not pending and room and selectedAmount &lt; maximum)
+    enableButton(details.MaxButton, unlocked and not pending and room and maximum &gt; 0, GREEN)
+    enableButton(action.BuyButton, unlocked and not pending and room and selectedAmount &gt; 0, GREEN)
+    action.BuyButton.Text = not unlocked and "Farm level " .. required or pending and "Buying..." or "Buy"
 
     local text, color = message, messageColor
     if pending then text, color = "Waiting for the server...", MUTED
     elseif text ~= "" then
+    elseif not unlocked then text, color = "Reach farm level " .. required .. " to buy this building.", RED
     elseif not room then text, color = "Inventory full. Free a slot to buy this item.", RED
     elseif maximum == 0 then text, color = "Not enough money.", RED
     else text, color = "Choose an amount, then press Buy.", MUTED end
@@ -8310,6 +8317,7 @@ action.BuyButton.Activated:Connect(function()
 end)
 
 local errors = {
+    FarmLevelRequired = "Reach the required farm level in My Farm first.",
     InventoryFull = "Inventory full. Free a slot first.",
     InventoryNotReady = "Inventory is loading. Try again shortly.",
     NotEnoughMoneyOrDataNotReady = "Not enough money, or data is still loading.",
@@ -8352,6 +8360,7 @@ inventory.DescendantRemoving:Connect(function(value)
     task.defer(refresh)
 end)
 money.Changed:Connect(refresh)
+player:GetAttributeChangedSignal("FarmLevel"):Connect(refresh)
 
 local shopButton = HudMenu.Add("ShopButton", "Shop", 1)
 local function openShop(category)

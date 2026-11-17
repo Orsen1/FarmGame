@@ -5,6 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local config = require(ReplicatedStorage.Configs.FarmJournalConfig)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
+local levels = require(ReplicatedStorage.Configs.FarmLevelConfig)
 local HudMenu = require(ReplicatedStorage.HudMenu)
 local remote = ReplicatedStorage.RemoteEvents:WaitForChild("FarmJournal")
 local ink = Color3.fromRGB(91, 56, 31)
@@ -12,6 +13,8 @@ local paper = Color3.fromRGB(255, 237, 194)
 local green = Color3.fromRGB(91, 139, 61)
 local state, chapterIndex, opened = nil, 1, false
 local requestPending = false
+local category = "Main"
+local layout
 local transition, closing
 local rows, tabs = {}, {}
 local refresh
@@ -68,16 +71,16 @@ round(panel, 16)
 stroke(panel, Color3.fromRGB(94, 56, 29), 3)
 local title = label(panel, "Title", config.Title, UDim2.fromOffset(22, 9), UDim2.new(1, -90, 0, 36), 27)
 title.TextColor3 = paper
-local close = button(panel, "Close", "X", UDim2.new(1, -52, 0, 8), UDim2.fromOffset(42, 38), Color3.fromRGB(170, 68, 48))
-local navigation = make("Frame", panel, {Name = "Chapters", BackgroundColor3 = Color3.fromRGB(232, 196, 137),
-    BorderSizePixel = 0, Position = UDim2.fromOffset(10, 58), Size = UDim2.new(0, 168, 1, -68)})
+local close = button(panel, "Close", "X", UDim2.new(1, -52, 0, 8), UDim2.fromOffset(44, 44), Color3.fromRGB(170, 68, 48))
+local mainTab = button(panel, "MainTab", "Main chapters", UDim2.fromOffset(10, 54), UDim2.fromOffset(160, 34), green)
+local sideTab = button(panel, "SideTab", "Side stories", UDim2.fromOffset(178, 54), UDim2.fromOffset(160, 34), ink)
+local farmButton = button(panel, "MyFarm", "My Farm", UDim2.new(1, -138, 0, 54), UDim2.fromOffset(128, 34), green)
+local navigation = make("ScrollingFrame", panel, {Name = "Chapters", BackgroundColor3 = Color3.fromRGB(232, 196, 137),
+    BorderSizePixel = 0, ScrollBarThickness = 3, CanvasSize = UDim2.new(), Active = true})
 round(navigation)
-local navigationTitle = label(navigation, "Title", "OUR STORY", UDim2.fromOffset(14, 12), UDim2.new(1, -28, 0, 24), 16)
-local note = label(navigation, "Note", "Small steps.\nA farm of my own.", UDim2.new(0, 14, 1, -74), UDim2.new(1, -28, 0, 60), 16)
-note.TextColor3 = Color3.fromRGB(145, 100, 57)
 for index, chapter in ipairs(config.Chapters) do
-    local tab = button(navigation, "Chapter" .. index, "", UDim2.fromOffset(8, 50 + (index - 1) * 92), UDim2.new(1, -16, 0, 80), paper)
-    local number = label(tab, "Number", "CHAPTER " .. index, UDim2.fromOffset(10, 8), UDim2.new(1, -20, 0, 20), 13)
+    local tab = button(navigation, "Chapter" .. index, "", UDim2.new(), UDim2.new(), paper)
+    local number = label(tab, "Number", "", UDim2.fromOffset(10, 8), UDim2.new(1, -20, 0, 20), 13)
     local text = label(tab, "Title", chapter.Title, UDim2.fromOffset(10, 30), UDim2.new(1, -20, 0, 42), 18)
     tabs[index] = {Button = tab, Number = number, Title = text}
     tab.Activated:Connect(function() chapterIndex = index;refresh();remote:FireServer("Get") end)
@@ -105,7 +108,9 @@ description.Size = UDim2.new(1, 0, 0, 0)
 description.LayoutOrder = 0
 description.Font = Enum.Font.GothamMedium
 description.TextYAlignment = Enum.TextYAlignment.Top
-for index = 1, 4 do
+local maxObjectives = 0
+for _, chapter in ipairs(config.Chapters) do maxObjectives = math.max(maxObjectives, #chapter.Objectives) end
+for index = 1, maxObjectives do
     local row = button(list, "Objective" .. index, "", UDim2.new(), UDim2.new(1, 0, 0, 78), Color3.fromRGB(255, 224, 165))
     row.LayoutOrder = index
     stroke(row)
@@ -123,7 +128,7 @@ for index = 1, 4 do
     end)
 end
 local entry = label(list, "Entry", "", UDim2.new(), UDim2.new(1, 0, 0, 100), 16)
-entry.LayoutOrder = 5
+entry.LayoutOrder = maxObjectives + 1
 entry.TextColor3 = Color3.fromRGB(113, 113, 58)
 entry.Visible = false
 local reward = label(page, "Reward", "", UDim2.new(0, 16, 1, -83), UDim2.new(0.54, -22, 0, 42), 15)
@@ -139,23 +144,29 @@ refresh = function(message)
     if not state then return end
     local chapter = config.Chapters[chapterIndex]
     local complete = 0
-    local previousClaimed = true
+    local chapterLocked = chapter.Category == "Main" and chapter.Level > state.FarmLevel
+    mainTab.BackgroundColor3 = category == "Main" and green or ink
+    sideTab.BackgroundColor3 = category == "Side" and green or ink
     for index, tab in ipairs(tabs) do
         local selected = index == chapterIndex
         tab.Button.BackgroundColor3 = selected and paper or Color3.fromRGB(213, 174, 115)
-        tab.Number.Text = "CHAPTER " .. index .. (state.Claimed[config.Chapters[index].Id] and "  /  DONE" or "")
-        if index < chapterIndex and not state.Claimed[config.Chapters[index].Id] then previousClaimed = false end
+        local definition = config.Chapters[index]
+        tab.Number.Text = (definition.Level and "LEVEL " .. definition.Level or "SIDE " .. (index - levels.MaxLevel)) .. (state.Claimed[definition.Id] and "  /  DONE" or "")
     end
     chapterTitle.Text = chapter.Title
     description.Text = chapterIndex == 1 and config.Introduction .. "\n\n" .. chapter.Description or chapter.Description
+    for index, row in ipairs(rows) do row.Button.Visible = chapter.Objectives[index] ~= nil end
     for index, objective in ipairs(chapter.Objectives) do
         local row = rows[index]
         local count = math.min(objective.Goal, state.Counts[objective.Id] or 0)
-        local done = count >= objective.Goal
+        local done = count >= objective.Goal or state.Completed[chapter.Id] == true
         if done then complete += 1 end
         row.Icon.Image = definitions[objective.Icon].Icon
         row.Text.Text = objective.Text
-        row.Count.Text = count .. " / " .. objective.Goal .. (state.Tracked == objective.Id and "   /   TRACKED" or "")
+        local function format(value)
+            return objective.Format == "Money" and string.format("$%.2f", value / 100) or tostring(value) .. (objective.Format == "Percent" and "%" or "")
+        end
+        row.Count.Text = format(count) .. " / " .. format(objective.Goal) .. (state.Tracked == objective.Id and "   /   TRACKED" or "")
         row.Check.Text = done and "✓" or "+"
         row.Check.TextColor3 = done and green or Color3.fromRGB(175, 130, 74)
         row.Button.BackgroundColor3 = done and Color3.fromRGB(225, 232, 172) or state.Tracked == objective.Id and Color3.fromRGB(255, 209, 122) or Color3.fromRGB(255, 224, 165)
@@ -165,16 +176,16 @@ refresh = function(message)
     local rewards = {string.format("$%.2f", chapter.Reward.MoneyCents / 100)}
     for item, amount in pairs(chapter.Reward.Items) do table.insert(rewards, amount .. " " .. definitions[item].DisplayName) end
     reward.Text = "REWARD\n" .. table.concat(rewards, " + ")
-    local ready = complete == #chapter.Objectives and previousClaimed and not state.Claimed[chapter.Id]
-    claim.Text = state.Claimed[chapter.Id] and "Claimed" or not previousClaimed and "Previous chapter first" or ready and "Claim reward" or "Keep exploring"
-    claim.TextSize = not previousClaimed and 13 or 17
+    local ready = complete == #chapter.Objectives and not chapterLocked and not state.Claimed[chapter.Id]
+    claim.Text = state.Claimed[chapter.Id] and "Claimed" or chapterLocked and "Farm level " .. chapter.Level or ready and "Claim reward" or "Keep exploring"
+    claim.TextSize = 16
     claim.BackgroundColor3 = ready and green or Color3.fromRGB(171, 144, 98)
     claim.Active = ready and not requestPending
     entry.Visible = state.Claimed[chapter.Id] == true
     entry.Text = chapter.Entry
     status.Text = "Tap a step to track it. Explore at your own pace."
-    local messages = {InventoryFull = "Make room for the reward, then try again.", RewardClaimed = "A new page in your story!", ChapterLocked = "Claim the previous chapter first.", NotComplete = "A few steps are still waiting.", BalanceLimit = "The reward could not be added yet.", DataNotReady = "Please wait for your farm to load."}
-    if message then status.Text = messages[message] or "Could not claim yet. Please try again." end
+    local messages = {InventoryFull = "Make room for the reward, then try again.", RewardClaimed = "A new page in your story!", ChapterLocked = "Reach this farm level first.", AlreadyClaimed = "This reward is already yours.", NotComplete = "A few steps are still waiting.", BalanceLimit = "The reward could not be added yet.", DataNotReady = "Please wait for your farm to load."}
+    if typeof(message) == "string" then status.Text = messages[message] or "Could not claim yet. Please try again." end
     tracker.Visible = false
     for _, chapterData in ipairs(config.Chapters) do
         for _, objective in ipairs(chapterData.Objectives) do
@@ -206,6 +217,32 @@ local function setOpen(value)
     refresh()
 end
 
+local openChapter = make("BindableFunction", gui, {Name = "OpenChapter"})
+openChapter.OnInvoke = function(id)
+    for index, chapter in ipairs(config.Chapters) do
+        if chapter.Id == id then chapterIndex, category = index, chapter.Category;break end
+    end
+    layout()
+    setOpen(true)
+end
+local closeMenu = make("BindableFunction", gui, {Name = "CloseMenu"})
+closeMenu.OnInvoke = function() setOpen(false) end
+for _, tab in ipairs({{mainTab, "Main"}, {sideTab, "Side"}}) do
+    tab[1].Activated:Connect(function()
+        category = tab[2]
+        for index, chapter in ipairs(config.Chapters) do
+            if chapter.Category == category then chapterIndex = index;break end
+        end
+        layout()
+        refresh()
+    end)
+end
+farmButton.Activated:Connect(function()
+    local overview = player.PlayerGui:FindFirstChild("MyFarmGui")
+    local open = overview and overview:FindFirstChild("Open")
+    if open then setOpen(false);open:Invoke() end
+end)
+farmButton.Visible = workspace:FindFirstChild("Plots") ~= nil
 openButton.Activated:Connect(function() setOpen(true) end)
 close.Activated:Connect(function() setOpen(false) end)
 blocker.Activated:Connect(function() setOpen(false) end)
@@ -220,11 +257,11 @@ end)
 remote.OnClientEvent:Connect(function(data, message)
     if not state then
         for index, chapter in ipairs(config.Chapters) do
-            chapterIndex = index
-            if not data.Claimed[chapter.Id] then break end
+            if chapter.Level == data.FarmLevel then chapterIndex = index;break end
         end
     end
     state = data
+    layout()
     requestPending = false
     refresh(message)
     if message == "RewardClaimed" then
@@ -239,26 +276,38 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 player.CharacterRemoving:Connect(function() setOpen(false) end)
 
-local function layout()
+layout = function()
     local size = gui.AbsoluteSize
     local width, height = math.min(820, size.X - 24), math.min(610, size.Y - 20)
     local stacked = width < 560
     local compact = height < 500
     panel.Size = UDim2.fromOffset(width, height)
-    navigation.Position = UDim2.fromOffset(10, 54)
-    navigation.Size = stacked and UDim2.new(1, -20, 0, 40) or UDim2.new(0, compact and 112 or 168, 1, -64)
-    navigationTitle.Visible, note.Visible = not stacked and not compact, not stacked and not compact
+    local tabWidth = width < 500 and math.floor((width - 24) / (farmButton.Visible and 3 or 2)) or 160
+    mainTab.Size, sideTab.Size = UDim2.fromOffset(tabWidth, 44), UDim2.fromOffset(tabWidth, 44)
+    sideTab.Position = UDim2.fromOffset(tabWidth + 14, 54)
+    mainTab.TextSize, sideTab.TextSize = width < 500 and 14 or 18, width < 500 and 14 or 18
+    farmButton.Size = UDim2.fromOffset(width < 500 and tabWidth or 128, 44)
+    navigation.Position = UDim2.fromOffset(10, 104)
+    navigation.Size = stacked and UDim2.new(1, -20, 0, 42) or UDim2.new(0, compact and 112 or 168, 1, -114)
+    navigation.ScrollingDirection = stacked and Enum.ScrollingDirection.X or Enum.ScrollingDirection.Y
+    local visible = 0
     for index, tab in ipairs(tabs) do
-        tab.Button.Position = stacked and UDim2.new((index - 1) / 3, 4, 0, 0) or UDim2.fromOffset(8, (compact and 12 or 50) + (index - 1) * (compact and 60 or 92))
-        tab.Button.Size = stacked and UDim2.new(1 / 3, -8, 1, 0) or UDim2.new(1, -16, 0, compact and 48 or 80)
+        local shown = config.Chapters[index].Category == category
+        tab.Button.Visible = shown
+        if shown then
+            tab.Button.Position = stacked and UDim2.fromOffset(4 + visible * 104, 0) or UDim2.fromOffset(6, 6 + visible * (compact and 54 or 84))
+            tab.Button.Size = stacked and UDim2.fromOffset(96, 38) or UDim2.new(1, -14, 0, compact and 48 or 76)
+            visible += 1
+        end
         tab.Title.Visible = not stacked and not compact
         tab.Number.Position = (stacked or compact) and UDim2.fromOffset(4, 0) or UDim2.fromOffset(10, 8)
         tab.Number.Size = (stacked or compact) and UDim2.new(1, -8, 1, 0) or UDim2.new(1, -20, 0, 20)
         tab.Number.TextSize = (stacked or compact) and 12 or 13
     end
+    navigation.CanvasSize = stacked and UDim2.fromOffset(visible * 104 + 4, 0) or UDim2.fromOffset(0, 12 + visible * (compact and 54 or 84))
     local left = compact and 132 or 188
-    page.Position = stacked and UDim2.fromOffset(10, 102) or UDim2.fromOffset(left, 54)
-    page.Size = stacked and UDim2.new(1, -20, 1, -112) or UDim2.new(1, -left - 10, 1, -64)
+    page.Position = stacked and UDim2.fromOffset(10, 154) or UDim2.fromOffset(left, 104)
+    page.Size = stacked and UDim2.new(1, -20, 1, -164) or UDim2.new(1, -left - 10, 1, -114)
     chapterTitle.TextSize = width < 450 and 20 or 23
     description.Visible = not compact
     for _, row in ipairs(rows) do
@@ -294,7 +343,7 @@ game:GetService("RunService").Heartbeat:Connect(function(dt)
     if elapsed < 0.25 then return end
     elapsed = 0
     local other = false
-    for _, attribute in ipairs({"ProductionMode", "AnimalMenuOpen", "Milking", "FeederOpen", "Teleporting"}) do
+    for _, attribute in ipairs({"ProductionMode", "AnimalMenuOpen", "Milking", "FeederOpen", "Teleporting", "FarmOverviewOpen", "WorldMapOpen", "LaboratoryOpen"}) do
         if player:GetAttribute(attribute) then other = true end
     end
     for _, name in ipairs({"BuyGui", "SellGui"}) do

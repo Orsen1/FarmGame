@@ -39,3 +39,11 @@ for _, object in ipairs(portals:GetDescendants()) do
 end
 
 portals.DescendantAdded:Connect(bind)
+if workspace:FindFirstChild("Plots") then
+    local mapTravel = game.ReplicatedStorage.RemoteEvents:WaitForChild("MapTravelEvent")
+    mapTravel.OnServerEvent:Connect(function(player, destination)
+        if typeof(destination) ~= "string" or #destination > 24 then return end
+        local success, reason = Travel.TravelLocal(player, destination)
+        mapTravel:FireClient(player, destination, success, reason)
+    end)
+end

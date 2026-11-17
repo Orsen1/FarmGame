@@ -48,11 +48,28 @@ local function icon(parent, kind)
         shape(frame, 20, 10, 5, 7, paper)
         shape(frame, 6, 21, 8, 6, Color3.fromRGB(119, 174, 161))
         shape(frame, 21, 20, 6, 10, ink)
+    elseif kind == "Farm" then
+        local roof = shape(frame, 5, 3, 22, 22, Color3.fromRGB(179, 87, 47))
+        roof.Rotation = 45
+        shape(frame, 1, 19, 30, 13, paper)
+        shape(frame, 9, 16, 14, 16, paper)
+        shape(frame, 14, 21, 6, 11, ink)
+        shape(frame, 4, 23, 5, 5, green)
+        shape(frame, 25, 23, 5, 5, green)
     elseif kind == "Sell" then
         local coin = shape(frame, 3, 1, 26, 30, Color3.fromRGB(238, 182, 70))
         outline(coin, 13, 1.5)
         make("TextLabel", coin, {Size = UDim2.fromScale(1, 1), Text = "$", TextSize = 25,
             BackgroundTransparency = 1, Font = Enum.Font.FredokaOne, TextColor3 = ink})
+    elseif kind == "Map" then
+        for index, color in ipairs({paper, Color3.fromRGB(225, 202, 149), paper}) do
+            local fold = shape(frame, 2 + (index - 1) * 10, index == 2 and 5 or 2, 10, 27, color)
+            outline(fold, 2, 1)
+        end
+        local pin = shape(frame, 12, 8, 10, 10, green)
+        outline(pin, 5, 1)
+        local stem = shape(frame, 15, 15, 4, 8, green)
+        stem.Rotation = 15
     elseif kind == "Journal" then
         local book = shape(frame, 3, 2, 26, 29, paper)
         book.Rotation = -5
@@ -85,7 +102,7 @@ local function layout()
     end
 end
 
-local blockingAttributes = {"ProductionMode", "AnimalMenuOpen", "Milking", "FeederOpen", "Teleporting", "FarmJournalOpen"}
+local blockingAttributes = {"ProductionMode", "AnimalMenuOpen", "Milking", "FeederOpen", "Teleporting", "FarmJournalOpen", "WorldMapOpen", "FarmOverviewOpen"}
 local function refresh()
     local visible = player:GetAttribute("DataLoaded") == true
     for _, attribute in ipairs(blockingAttributes) do if player:GetAttribute(attribute) then visible = false end end
@@ -109,6 +126,8 @@ local function watchGui(other)
 end
 
 function Menu.Add(name, caption, order)
+    local existing = panel:FindFirstChild(name)
+    if existing then return existing end
     local button = make("TextButton", panel, {Name = name, Text = "", LayoutOrder = order,
         BackgroundColor3 = paper, BorderSizePixel = 0, AutoButtonColor = true})
     outline(button, 10)
