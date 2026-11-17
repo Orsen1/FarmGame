@@ -7,9 +7,11 @@ local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local InventoryService = require(script.Parent.InventoryService)
 local MoneyService = require(script.Parent.MoneyService)
 local Journal = require(script.Parent.FarmJournalService)
+local crops = require(ReplicatedStorage.Configs.CropConfig).Crops
 
 local OrderService = {}
 local orders = {}
+local firstDeliveries = {}
 local random = Random.new()
 local MAX_INTEGER = 9007199254740991
 local MAX_ITEMS = 5
@@ -98,6 +100,12 @@ function OrderService.LoadData(player, saved)
         end
         data[boardId] = order or newOrder(boardId)
     end
+    local first = saved and saved.FarmStand
+    if first ~= nil and (typeof(first) ~= "table" or not crops[first.Crop] or
+        not integer(first.Goal, 1) or not integer(first.Delivered, 0) or first.Delivered > first.Goal) then
+        return false, "Invalid first farm delivery"
+    end
+    firstDeliveries[player] = first and table.clone(first)
     orders[player] = data
     return true
 end
@@ -111,11 +119,49 @@ function OrderService.GetData(player)
     for boardId, order in pairs(data) do
         saved[boardId] = copyOrder(order)
     end
+    if firstDeliveries[player] then saved.FarmStand = table.clone(firstDeliveries[player]) end
     return saved
 end
 
 function OrderService.Clear(player)
     orders[player] = nil
+    firstDeliveries[player] = nil
+end
+
+function OrderService.FirstDelivery(player)
+    if not orders[player] or not Journal.TutorialComplete(player) then return end
+    if not firstDeliveries[player] then
+        local crop = player:GetAttribute("TutorialCropItem")
+        firstDeliveries[player] = {Crop = crops[crop] and crop or "Carrot", Goal = config.FirstDeliveryAmount, Delivered = 0}
+    end
+    return firstDeliveries[player]
+end
+
+function OrderService.CanUseMarket(player, market)
+    local plot = workspace.Plots:FindFirstChild(player:GetAttribute("PlotName") or "")
+    local character = player.Character
+    local root = character and character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    return player:GetAttribute("DataLoaded") == true and not player:GetAttribute("Teleporting") and
+        plot and plot:GetAttribute("OwnerUserId") == player.UserId and market and market == plot:FindFirstChild("FarmMarket") and
+        market.PrimaryPart and root and humanoid and humanoid.Health > 0 and
+        (root.Position - market.PrimaryPart.Position).Magnitude <= config.InteractionDistance
+end
+
+function OrderService.LoadWagon(player, wagon)
+    local order = firstDeliveries[player]
+    if not order or order.Delivered >= order.Goal or not OrderService.CanUseMarket(player, wagon) or
+        wagon:GetAttribute("MarketKind") ~= "Wagon" then return false end
+    local rows = InventoryService.GetInventory(player)
+    if not rows then return false end
+    local available = 0
+    for _, slot in ipairs(rows) do
+        if slot.ItemName == order.Crop then available += slot.Amount end
+    end
+    local amount = math.min(available, order.Goal - order.Delivered)
+    if amount == 0 or not InventoryService.RemoveItem(player, order.Crop, amount) then return false end
+    order.Delivered += amount
+    return true
 end
 
 local function checkAccess(player, boardId)

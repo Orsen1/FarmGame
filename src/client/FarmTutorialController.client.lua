@@ -5,12 +5,14 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local config = require(ReplicatedStorage.Configs.FarmTutorialConfig)
+local orderConfig = require(ReplicatedStorage.Configs.OrderConfig)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local remote = remotes:WaitForChild("FarmJournal")
 local ink, paper = Color3.fromRGB(94, 59, 32), Color3.fromRGB(255, 236, 190)
 local green, gold = Color3.fromRGB(91, 139, 61), Color3.fromRGB(237, 189, 87)
 local tutorial, minimized, hadTutorial, doneUntil = nil, false, false, 0
+local wagonGuideUntil = 0
 local inspected = {}
 local shownStep
 local refresh
@@ -119,7 +121,11 @@ action.Activated:Connect(function()
         invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
     elseif step == "Water" or step == "Grow" then selectItem("WateringCan")
     elseif step == "Farm" then invoke("MyFarmGui", "Open")
-    elseif step == "Journal" or step == "Complete" then invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
+    elseif step == "Journal" then invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
+    elseif step == "Complete" then
+        doneUntil = 0
+        wagonGuideUntil = os.clock() + 30
+        refresh()
     elseif step == "Sell" then invoke("SellGui", "OpenSell", tutorial.CropItem) end
 end)
 minimize.Activated:Connect(function()
@@ -153,6 +159,16 @@ refresh = function()
     local visible = active and player:GetAttribute("DataLoaded") == true and humanoid and humanoid.Health > 0 and not anyMenuOpen()
     card.Visible = visible == true
     marker.Enabled, outline.Enabled = false, false
+    if tutorial and tutorial.Completed and os.clock() < math.max(doneUntil, wagonGuideUntil) and
+        humanoid and humanoid.Health > 0 and not anyMenuOpen() then
+        local plot = workspace.Plots:FindFirstChild(player:GetAttribute("PlotName") or "")
+        local wagon = plot and plot:FindFirstChild("FarmMarket")
+        if wagon and wagon:GetAttribute("MarketKind") == "Wagon" and wagon.PrimaryPart then
+            marker.Adornee, markerText.Text, marker.Enabled = wagon.PrimaryPart, "Mara's wagon", true
+            markerText.BackgroundColor3 = green
+            outline.Adornee, outline.Enabled = wagon, true
+        end
+    end
     if not tutorial or not active then return end
     local step = tutorial.Step
     local info = config.Steps[step]
@@ -166,19 +182,22 @@ refresh = function()
     card.Position = UDim2.new(.5, 0, 0, placing and 50 or not compact and size.X < 700 and 64 or 8)
     card.Size = UDim2.fromOffset(width, folded and 44 or compact and 152 or 186)
     category.Text = tutorial.Completed and "FIRST HARVEST COMPLETE" or "FIRST HARVEST  /  " .. info.Order .. " OF 10"
-    title.Text = tutorial.Completed and "A great start!" or info.Title
+    title.Text = tutorial.Completed and "A visitor at your gate" or info.Title
     local iconName = tutorial.Completed and (tutorial.CropItem or "Carrot") or info.Icon
     if step == "Plant" then iconName = tutorial.SeedItem
     elseif step == "Place" then iconName = tutorial.BedItem
     elseif step == "Harvest" or step == "Sell" then iconName = tutorial.CropItem end
     icon.Image = definitions[iconName] and definitions[iconName].Icon or ""
     local description = tutorial.Completed and
-        string.format("Your first harvest is sold! +$%.2f. Shops are open; Town orders pay extra. Keep growing to unlock farm levels.", config.CompletionRewardCents / 100) or (compact and (info.ShortText or info.Text) or info.Text)
-    if tutorial.Completed and compact then description = string.format("First harvest sold! +$%.2f. Shops and Town orders are now available.", config.CompletionRewardCents / 100) end
+        string.format("First sale +$%.2f! Bring Mara your next harvest (%s x%d) to open your farm stand.", config.CompletionRewardCents / 100,
+            definitions[iconName].DisplayName, orderConfig.FirstDeliveryAmount) or (compact and (info.ShortText or info.Text) or info.Text)
+    if tutorial.Completed and compact then
+        description = string.format("Deliver %s x%d to Mara to open your farm stand.", definitions[iconName].DisplayName, orderConfig.FirstDeliveryAmount)
+    end
     description = description:gsub("{capacity}", tostring(tutorial.Capacity or 1))
         :gsub("{seed}", definitions[tutorial.SeedItem or ""] and definitions[tutorial.SeedItem].DisplayName or "seeds")
         :gsub("{remaining}", tostring(tutorial.Harvested - tutorial.Sold))
-    body.Text, action.Text = description:gsub("1 seeds", "1 seed"), tutorial.Completed and "See the next journal tasks" or info.Action
+    body.Text, action.Text = description:gsub("1 seeds", "1 seed"), tutorial.Completed and "Find Mara's wagon" or info.Action
     local bed = currentBed()
     if step == "Grow" and bed then
         local endsAt = bed:GetAttribute("GrowthEndsAt")

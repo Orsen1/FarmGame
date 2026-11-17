@@ -110,6 +110,8 @@ function PlayerPlotService.releasePlot(player)
     end
 
     plot:SetAttribute("OwnerUserId", 0)
+    local market = plot:FindFirstChild("FarmMarket")
+    if market then market:Destroy() end
     local house = plot:FindFirstChild("StarterHouse")
     if house then
         HouseService.Load(house, nil)

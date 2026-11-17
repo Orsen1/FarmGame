@@ -3,6 +3,7 @@ return {
     InteractionDistance = 12,
     RequestInterval = 0.25,
     MaxItemsPerOrder = 5,
+    FirstDeliveryAmount = 5,
     Effects = {Particles = 16, Duration = 0.75},
     Boards = {
         Market = {
