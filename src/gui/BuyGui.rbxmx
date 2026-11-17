@@ -8112,6 +8112,67 @@ local function enableButton(button, enabled, color)
     button.BackgroundColor3 = enabled and color or DISABLED
 end
 
+local function setCardLock(card, reason)
+    local cover = card:FindFirstChild("LockedCover")
+    if reason and not cover then
+        cover = Instance.new("Frame")
+        cover.Name = "LockedCover"
+        cover.Size = UDim2.fromScale(1, 1)
+        cover.BackgroundColor3 = Color3.fromRGB(214, 212, 205)
+        cover.BorderSizePixel = 0
+        cover.ZIndex = card.SelectButton.ZIndex + 4
+        card.UICorner:Clone().Parent = cover
+        local border = card.UIStroke:Clone()
+        border.Color = Color3.fromRGB(126, 124, 117)
+        border.Parent = cover
+
+        local icon = card.SelectButton:FindFirstChild("ItemIcon")
+        if icon then
+            local silhouette = icon:Clone()
+            silhouette.ImageColor3 = Color3.new(0, 0, 0)
+            silhouette.ImageTransparency = 0.70
+            silhouette.Position = UDim2.new(0.5, 0, 0, 5)
+            silhouette.Size = UDim2.new(0.76, 0, 0.43, 0)
+            silhouette.ZIndex = cover.ZIndex + 1
+            silhouette.Parent = cover
+        end
+
+        local name = card.OwnedLabel:Clone()
+        name.Name = "ItemName"
+        name.Text = card.SelectButton.Text
+        name.TextColor3 = Color3.fromRGB(65, 64, 60)
+        name.BackgroundTransparency = 1
+        name.Size = UDim2.new(1, -8, 0.22, 0)
+        name.Position = UDim2.new(0, 4, 0.47, 0)
+        name.TextXAlignment = Enum.TextXAlignment.Center
+        name.TextScaled = true
+        name.ZIndex = cover.ZIndex + 1
+        name.Parent = cover
+
+        local badge = name:Clone()
+        badge.Name = "Requirement"
+        badge.BackgroundColor3 = Color3.fromRGB(81, 80, 75)
+        badge.BackgroundTransparency = 0
+        badge.TextColor3 = Color3.new(1, 1, 1)
+        badge.Font = Enum.Font.GothamBold
+        badge.Size = UDim2.new(1, -12, 0.24, 0)
+        badge.Position = UDim2.new(0, 6, 0.71, 0)
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 6)
+        corner.Parent = badge
+        badge.Parent = cover
+        cover.Parent = card
+    end
+    if cover then
+        cover.Visible = reason ~= nil
+        if reason then cover.Requirement.Text = reason end
+    end
+    local available = reason == nil
+    card.SelectButton.Interactable = available
+    card.SelectButton.Selectable = available
+    card.SelectButton.AutoButtonColor = available
+end
+
 local function refresh()
     local tutorialStep = player:GetAttribute("TutorialStep")
     local capacity = player:GetAttribute("TutorialCapacity") or 1
@@ -8119,18 +8180,32 @@ local function refresh()
     if tutorialInfo then catalogue.IntroLabel.Text = "Tutorial: " .. tutorialInfo.Title end
     main.FooterFrame.MoneyLabel.Text = "Balance: " .. formatMoney(money.Value)
     for id, card in pairs(cards) do
-        local owned = inventoryInfo(id)
+        local owned, room = inventoryInfo(id)
         local required = levels.RequiredLevel(id)
         local locked = (player:GetAttribute("FarmLevel") or 1) &lt; required
         local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, id, definitions[id], capacity)
         if card:GetAttribute("CatalogueOrder") == nil then card:SetAttribute("CatalogueOrder", card.LayoutOrder) end
         local originalOrder = card:GetAttribute("CatalogueOrder")
         card.LayoutOrder = tutorialLimit and tutorialLimit &gt; 0 and originalOrder - 100 or originalOrder
-        card.SelectButton.Interactable = tutorialLimit ~= 0
-        card.SelectButton.AutoButtonColor = tutorialLimit ~= 0
-        card.OwnedLabel.Text = tutorialLimit == 0 and "First harvest tutorial" or locked and "Farm level " .. required .. " required" or "Owned: " .. tostring(owned)
-        card.OwnedLabel.TextColor3 = (tutorialLimit == 0 or locked) and RED or MUTED
-        if tutorialLimit == 0 then card.OwnedLabel.TextColor3 = MUTED end
+        local reason
+        if locked then
+            reason = "Farm level " .. required
+        elseif tutorialLimit == 0 then
+            if id == "WateringCan" and (tutorialStep == "BuyBed" or tutorialStep == "BuySeeds") then
+                reason = "Buy seeds first"
+            elseif definitions[id].Type == "Seed" and tutorialStep == "BuyBed" then
+                reason = "Buy a bed first"
+            else
+                reason = "After first sale"
+            end
+        elseif not room then
+            reason = "Inventory full"
+        elseif money.Value &lt; definitions[id].BuyPriceCents * (tutorialLimit or 1) then
+            reason = "Need " .. formatMoney(definitions[id].BuyPriceCents * (tutorialLimit or 1))
+        end
+        setCardLock(card, reason)
+        card.OwnedLabel.Text = "Owned: " .. tostring(owned)
+        card.OwnedLabel.TextColor3 = MUTED
     end
     if not selectedId then return end
 
@@ -8265,7 +8340,7 @@ for category, names in pairs(futureStock) do
             card.SelectButton.Text = name
             layoutCard(card)
             layoutPrice(card)
-            enableButton(card.SelectButton, false, GREEN)
+            setCardLock(card, "Coming soon")
             card.PriceLabel.Text = "Coming soon"
             card.OwnedLabel.Text = ""
             card.Visible = false

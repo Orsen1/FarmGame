@@ -39,6 +39,7 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local CropItems = require(ReplicatedStorage.CropItems)
 local config = require(ReplicatedStorage.Configs.CropConfig)
+local tutorialConfig = require(ReplicatedStorage.Configs.FarmTutorialConfig)
 local Records = require(script.Parent.CropRecordService)
 local growing = {}
 local random = Random.new()
@@ -73,13 +74,20 @@ local function rollSize(settings, weights)
     return random:NextInteger(ranges[band][1], ranges[band][2])
 end
 
-local function publish(object, state)
+local function publish(object, state, resetClock)
     local elapsed, total = 0, 0
     for index, seconds in ipairs(state.Intervals) do
         total += seconds
         if index < state.Segment then elapsed += seconds end
     end
     elapsed += state.Intervals[state.Segment] - state.Remaining
+    if resetClock then
+        local rate = state.Rate or 1
+        object:SetAttribute("GrowthTarget", (elapsed + state.Remaining) / total)
+        object:SetAttribute("GrowthPerSecond", rate / total)
+        object:SetAttribute("GrowthEndsAt", workspace:GetServerTimeNow() + state.Remaining / rate)
+        object:SetAttribute("GrowthLastSegment", state.Segment == #state.Intervals)
+    end
     local stage = math.min(state.Stages, 1 + math.floor(elapsed / total * (state.Stages - 1)))
     if state.Ready then stage = state.Stages end
     object:SetAttribute("GrowthStage", stage)
@@ -87,17 +95,20 @@ local function publish(object, state)
     object:SetAttribute("ReadyToHarvest", state.Ready)
 end
 
-function PlantService.Advance(object, dt)
+function PlantService.Advance(object, dt, rate)
     local state = growing[object]
     if not state or state.Ready or state.NeedsWater then return end
-    local neededWater, ready = state.NeedsWater, state.Ready
-    state.Remaining = math.max(0, state.Remaining - dt)
+    rate = rate or 1
+    local rateChanged = rate ~= state.Rate
+    state.Rate = rate
+    state.Remaining = math.max(0, state.Remaining - dt * rate)
     if state.Remaining == 0 then
         if state.Segment < #state.Intervals then state.NeedsWater = true
         else state.Ready = true end
     end
-    publish(object, state)
-    if neededWater ~= state.NeedsWater or ready ~= state.Ready then
+    local checkpoint = state.NeedsWater or state.Ready
+    publish(object, state, checkpoint or rateChanged)
+    if checkpoint then
         local player = game.Players:GetPlayerByUserId(object:GetAttribute("OwnerUserId") or 0)
         if player and not Journal.TutorialComplete(player) then Journal.Update(player) end
     end
@@ -144,7 +155,7 @@ function PlantService.Restore(object, saved)
     object:SetAttribute("Occupied", true)
     object:SetAttribute("PlantType", state.Type)
     object:SetAttribute("CropFruits", HttpService:JSONEncode(state.Fruits))
-    publish(object, state)
+    publish(object, state, true)
     return true
 end
 
@@ -158,7 +169,11 @@ function PlantService.Plant(player, gardenBed, seedType)
     local yieldWeights = LaboratoryConfig.Weighted(settings.YieldWeights, bonuses.Yield)
     local sizeWeights = LaboratoryConfig.Weighted(settings.SizeWeights, bonuses.Genetics)
     local intervals = growthIntervals(settings)
-    for index, seconds in ipairs(intervals) do intervals[index] = seconds * (1 - bonuses.Growth / 100) end
+    if Journal.TutorialComplete(player) then
+        for index, seconds in ipairs(intervals) do intervals[index] = seconds * (1 - bonuses.Growth / 100) end
+    else
+        intervals = table.clone(tutorialConfig.FirstCropIntervals)
+    end
     local fruits = {}
     for index in ipairs(positions) do
         fruits[index] = {}
@@ -187,7 +202,7 @@ function PlantService.ApplyWater(gardenBed)
     state.Remaining = state.Intervals[state.Segment]
     state.NeedsWater = false
     gardenBed:SetAttribute("WateredAt", workspace:GetServerTimeNow())
-    publish(gardenBed, state)
+    publish(gardenBed, state, true)
     return true
 end
 
@@ -203,7 +218,7 @@ function PlantService.Harvest(player, gardenBed)
     Records.Observe(player, state.Type, sizes)
     Journal.Record(player, "Harvest", count, state.Type, gardenBed)
     growing[gardenBed] = nil
-    for _, name in ipairs({"CropFruits", "WateredAt"}) do gardenBed:SetAttribute(name, nil) end
+    for _, name in ipairs({"CropFruits", "WateredAt", "GrowthTarget", "GrowthPerSecond", "GrowthEndsAt", "GrowthLastSegment"}) do gardenBed:SetAttribute(name, nil) end
     gardenBed:SetAttribute("Occupied", false)
     gardenBed:SetAttribute("PlantType", "")
     gardenBed:SetAttribute("GrowthStage", 0)
@@ -218,11 +233,15 @@ RunService.Heartbeat:Connect(function(dt)
     if elapsed < 0.2 then return end
     local step = elapsed
     elapsed = 0
+    local now = workspace:GetServerTimeNow()
     for object in pairs(growing) do
         if not object:IsDescendantOf(workspace) then growing[object] = nil
         else
             local owner = game.Players:GetPlayerByUserId(object:GetAttribute("OwnerUserId") or 0)
-            if owner and owner:GetAttribute("DataLoaded") == true then PlantService.Advance(object, step) end
+            if owner and owner:GetAttribute("DataLoaded") == true then
+                local boosted = (owner:GetAttribute("GrowthBoostEndsAt") or 0) > now
+                PlantService.Advance(object, step, boosted and tutorialConfig.GrowthBoostMultiplier or 1)
+            end
         end
     end
 end)

@@ -13,7 +13,7 @@ return {
                 {Id = "Water", Text = "Water a thirsty bed", Goal = 1, Kind = "Action", Icon = "WateringCan", Hint = "Use a Watering Can when a bed needs water."},
                 {Id = "Harvest", Text = "Harvest 10 crops", Goal = 10, Kind = "Action", Icon = "Carrot", Hint = "Collect ripe crops. Every fruit counts."},
                 {Id = "Sell", Text = "Make your first sale", Goal = 1, Kind = "Action", Icon = "Carrot", Hint = "Open Sell in the left menu."},
-                {Id = "FirstBed", Text = "Place a garden bed", Goal = 1, Kind = "GardenBeds", Icon = "GardenBed", Hint = "Buy and place a Garden Bed or Field Bed."},
+                {Id = "FirstBed", Text = "Place a garden bed", Goal = 1, Kind = "GardenBeds", Icon = "GardenBed", Hint = "Buy a five-spot Garden Bed and place it on your farm."},
             },
         },
         {

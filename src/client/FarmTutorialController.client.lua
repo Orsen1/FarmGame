@@ -115,6 +115,8 @@ action.Activated:Connect(function()
     elseif step == "BuyCan" then invoke("BuyGui", "OpenShop", "Equipment")
     elseif step == "Place" then selectItem(tutorial.BedItem)
     elseif step == "Plant" then selectItem(tutorial.SeedItem)
+    elseif step == "Grow" and currentBed() and currentBed():GetAttribute("GrowthLastSegment") then
+        invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
     elseif step == "Water" or step == "Grow" then selectItem("WateringCan")
     elseif step == "Farm" then invoke("MyFarmGui", "Open")
     elseif step == "Journal" or step == "Complete" then invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
@@ -177,6 +179,17 @@ refresh = function()
         :gsub("{seed}", definitions[tutorial.SeedItem or ""] and definitions[tutorial.SeedItem].DisplayName or "seeds")
         :gsub("{remaining}", tostring(tutorial.Harvested - tutorial.Sold))
     body.Text, action.Text = description:gsub("1 seeds", "1 seed"), tutorial.Completed and "See the next journal tasks" or info.Action
+    local bed = currentBed()
+    if step == "Grow" and bed then
+        local endsAt = bed:GetAttribute("GrowthEndsAt")
+        if endsAt then
+            local seconds = math.max(0, math.ceil(endsAt - workspace:GetServerTimeNow()))
+            local last = bed:GetAttribute("GrowthLastSegment")
+            title.Text = (last and "Harvest in " or "Water in ") .. seconds .. "s"
+            body.Text = last and "Your crop is ripening. Explore the journal while it grows." or "Equip the watering can and watch for the blue drop."
+            action.Text = last and "Open journal" or "Select watering can"
+        end
+    end
     minimize.Text = folded and "+" or "-"
     category.Visible, icon.Visible, body.Visible, action.Visible, rail.Visible = not folded, not folded, not folded, not folded, not folded
     title.Position = folded and UDim2.fromOffset(14, 2) or UDim2.fromOffset(compact and 62 or 76, compact and 23 or 29)
@@ -195,7 +208,6 @@ refresh = function()
         card.BackgroundColor3 = Color3.fromRGB(255, 223, 150)
         TweenService:Create(card, TweenInfo.new(.4), {BackgroundColor3 = paper}):Play()
     end
-    local bed = currentBed()
     if visible and step == "Place" then
         local plots = workspace:FindFirstChild("Plots")
         local plot = plots and plots:FindFirstChild(player:GetAttribute("PlotName") or "")

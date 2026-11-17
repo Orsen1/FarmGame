@@ -5,6 +5,7 @@ local config = require(ReplicatedStorage.Configs.CropConfig)
 local plots = workspace:WaitForChild("Plots")
 local beds = {}
 local cache = {}
+local stageHeights = {}
 
 local function physical(part)
     part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery = true, false, false, false
@@ -63,16 +64,64 @@ local function templates(crop, stage)
     return result
 end
 
+local function growthShape(crop)
+    if stageHeights[crop] then return stageHeights[crop] end
+    local shape = {Height = {}, Target = {}, Width = 0}
+    for _, model in ipairs(ReplicatedStorage.Plants[crop]:GetChildren()) do
+        local index = tonumber(model.Name:match("^Stage(%d+)$"))
+        if index and model:IsA("Model") then
+            local template = templates(crop, index)
+            local size = template.Base:GetExtentsSize()
+            shape.Height[index] = size.Y
+            if template.Whole then shape.Width = math.max(shape.Width, size.X, size.Z) end
+        end
+    end
+    for index = #shape.Height, 1, -1 do
+        local nextHeight = shape.Target[index + 1]
+        shape.Target[index] = nextHeight and math.min(shape.Height[index], nextHeight * 0.9) or shape.Height[index]
+    end
+    stageHeights[crop] = shape
+    return shape
+end
+
 local function clear(state)
     if state.Visual then state.Visual:Destroy();state.Visual = nil end
-    state.Key = nil
+    state.Key, state.Plants, state.Fraction = nil, nil, nil
+end
+
+local function growVisual(state, fraction)
+    if fraction == state.Fraction then return end
+    for _, plant in ipairs(state.Plants) do
+        plant.Model:ScaleTo(plant.Start + (plant.Finish - plant.Start) * fraction)
+    end
+    state.Fraction = fraction
 end
 
 local function render(bed, state)
-    local crop, stage = bed:GetAttribute("PlantType"), bed:GetAttribute("GrowthStage") or 0
+    local crop = bed:GetAttribute("PlantType")
+    if not config.Crops[crop] then
+        if state.Visual then clear(state) end
+        return
+    end
+    local shape = growthShape(crop)
+    local sizesByStage = shape.Height
+    local progress = bed:GetAttribute("GrowthTarget") or 0
+    if not bed:GetAttribute("NeedsWater") and not bed:GetAttribute("ReadyToHarvest") then
+        local remaining = math.max(0, (bed:GetAttribute("GrowthEndsAt") or 0) - workspace:GetServerTimeNow())
+        progress -= remaining * (bed:GetAttribute("GrowthPerSecond") or 0)
+    end
+    local phase = math.clamp(progress, 0, 1) * #sizesByStage
+    local stage = math.min(#sizesByStage, math.floor(phase) + 1)
+    if stage == 0 then return end
+    local target = shape.Target[stage]
+    local startHeight = shape.Target[stage - 1] or target * 0.25
+    local fraction = phase - stage + 1
     local encoded = bed:GetAttribute("CropFruits")
     local key = tostring(crop) .. stage .. tostring(encoded)
-    if state.Key == key then return end
+    if state.Key == key then
+        growVisual(state, fraction)
+        return
+    end
     clear(state)
     if not config.Crops[crop] or stage < 1 or not encoded then return end
     local ok, fruits = pcall(HttpService.JSONDecode, HttpService, encoded)
@@ -84,7 +133,10 @@ local function render(bed, state)
     table.sort(positions, function(a, b) return a.Parent.Name < b.Parent.Name end)
     local visual = Instance.new("Model")
     visual.Name = "CropVisuals"
+    state.Plants = {}
     for index, position in ipairs(positions) do
+        local plant = Instance.new("Model")
+        plant.Name = "Plant" .. index
         local sizes = fruits[index]
         local radius = 1.01
         for other, neighbor in ipairs(positions) do
@@ -94,14 +146,15 @@ local function render(bed, state)
             local foliage = data.Base:Clone()
             foliage.Name = "Foliage" .. index
             foliage:PivotTo(position.CFrame)
-            foliage.Parent = visual
+            foliage.Parent = plant
         end
         if data.Whole or data.Anchor then
             local width = data.Fruit:GetExtentsSize()
             local maxSize = config.Crops[crop].SizeMax / 100
             local spread = #sizes > 1 and radius * 0.57 or 0
             local clearance = config.Crops[crop].YieldMax > 1 and radius * 0.43 or radius
-            local fit = math.min(1, clearance * 2 / (math.max(width.X, width.Z) * maxSize))
+            local widest = data.Whole and shape.Width or math.max(width.X, width.Z)
+            local fit = math.min(1, clearance * 2 / (widest * maxSize))
             for number, size in ipairs(sizes) do
                 local model = data.Fruit:Clone()
                 model.Name = "Spot" .. index .. "Fruit" .. number
@@ -125,10 +178,16 @@ local function render(bed, state)
                     end
                 end
                 model:PivotTo(position.CFrame * CFrame.new(offset))
-                model.Parent = visual
+                model.Parent = plant
             end
         end
+        plant.WorldPivot = position.CFrame
+        local height = data.Whole and sizesByStage[stage] or plant:GetExtentsSize().Y
+        table.insert(state.Plants, {Model = plant, Start = startHeight / height,
+            Finish = stage == #sizesByStage and 1 or target / height})
+        plant.Parent = visual
     end
+    growVisual(state, fraction)
     visual.Parent = bed
     state.Visual, state.Key = visual, key
 end
@@ -142,13 +201,18 @@ plots.DescendantAdded:Connect(function(object) if object:IsA("Model") then task.
 local elapsed = 0
 RunService.Heartbeat:Connect(function(dt)
     elapsed += dt
-    if elapsed < 0.25 then return end
+    if elapsed < 0.1 then return end
     elapsed = 0
     local camera = workspace.CurrentCamera
+    local now = os.clock()
     for bed, state in pairs(beds) do
         if not bed:IsDescendantOf(plots) then clear(state);beds[bed] = nil
         elseif camera and (bed:GetPivot().Position - camera.CFrame.Position).Magnitude < config.VisualDistance then
-            render(bed, state)
+            if now >= (state.NextRender or 0) then
+                local distance = (bed:GetPivot().Position - camera.CFrame.Position).Magnitude
+                state.NextRender = now + (distance > 60 and 0.5 or 0)
+                render(bed, state)
+            end
             if bed:GetAttribute("NeedsWater") and not state.Hint then
                 local gui = Instance.new("BillboardGui")
                 gui.Name = "WaterHint"

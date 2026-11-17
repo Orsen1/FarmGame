@@ -63,7 +63,8 @@ local function loadTutorial(saved, data, playerData)
     end
     if result.Sold > result.Harvested then return end
     if saved.BedItem ~= nil then
-        if typeof(saved.BedItem) ~= "string" or not tutorialConfig.StarterBeds[saved.BedItem] then return end
+        local bed = typeof(saved.BedItem) == "string" and definitions[saved.BedItem]
+        if not bed or not bed.Plantable then return end
         result.BedItem = saved.BedItem
     end
     if saved.SeedItem ~= nil then
@@ -337,6 +338,16 @@ function Journal.Load(player, saved, playerData)
     end
     data.Tutorial = loadTutorial(saved and saved.Tutorial, data, playerData)
     if not data.Tutorial then return false end
+    local remaining = saved and saved.GrowthBoostRemaining
+    if remaining == nil and data.Tutorial.Planted and not data.Tutorial.Completed then
+        remaining = tutorialConfig.GrowthBoostSeconds
+    end
+    if remaining ~= nil and not integer(remaining, 0) then return false end
+    local boostEnd = nil
+    if remaining and remaining > 0 then
+        boostEnd = workspace:GetServerTimeNow() + math.min(remaining, tutorialConfig.GrowthBoostSeconds)
+    end
+    player:SetAttribute("GrowthBoostEndsAt", boostEnd)
     journals[player] = data
     player:SetAttribute("FarmLevel", data.FarmLevel)
     Journal.Refresh(player)
@@ -345,7 +356,13 @@ end
 
 function Journal.GetData(player)
     local data = journals[player]
-    return data and copy(data)
+    if not data then return end
+    local result = copy(data)
+    local deadline = player:GetAttribute("GrowthBoostEndsAt") or 0
+    if data.Tutorial.Planted or data.Tutorial.Completed then
+        result.GrowthBoostRemaining = math.max(0, math.floor(deadline - workspace:GetServerTimeNow()))
+    end
+    return result
 end
 
 function Journal.Update(player)
@@ -365,7 +382,10 @@ function Journal.Record(player, event, amount, item, object)
             elseif view.Step == "BuySeeds" then tutorial.SeedItem = item;tutorial.CropItem = definitions[item].PlantId;changed = true
             elseif view.Step == "BuyCan" then tutorial.CanBought = true;changed = true end
         elseif object == view.Bed and object ~= nil then
-            if event == "Plant" then tutorial.Planted = true;changed = true
+            if event == "Plant" then
+                tutorial.Planted = true
+                player:SetAttribute("GrowthBoostEndsAt", workspace:GetServerTimeNow() + tutorialConfig.GrowthBoostSeconds)
+                changed = true
             elseif event == "Water" then tutorial.Watered = true;changed = true
             elseif event == "Harvest" then tutorial.Harvested = amount;changed = true end
         elseif event == "Sell" and item == tutorial.CropItem and tutorial.Harvested > tutorial.Sold then
@@ -394,9 +414,9 @@ function Journal.TutorialViewed(player, menu)
     local data = journals[player]
     if not data or player:GetAttribute("DataLoaded") ~= true then return false end
     local tutorial = data.Tutorial
-    if tutorial.Completed or not tutorial.Watered then return false end
+    if tutorial.Completed or not tutorial.Planted then return false end
     if menu == "Farm" and not tutorial.FarmSeen then tutorial.FarmSeen = true
-    elseif menu == "Journal" and tutorial.FarmSeen and not tutorial.JournalSeen then tutorial.JournalSeen = true
+    elseif menu == "Journal" and tutorial.Watered and tutorial.FarmSeen and not tutorial.JournalSeen then tutorial.JournalSeen = true
     else return false end
     Journal.Update(player)
     return true

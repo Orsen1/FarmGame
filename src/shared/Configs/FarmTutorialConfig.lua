@@ -2,10 +2,13 @@ local Config = {
     Version = 1,
     StartingMoneyCents = 250,
     CompletionRewardCents = 50,
-    StarterBeds = {GardenBed = true, FieldBed3 = true},
+    StarterBed = "FieldBed5",
+    FirstCropIntervals = {12, 18},
+    GrowthBoostSeconds = 300,
+    GrowthBoostMultiplier = 2,
     Steps = {
-        BuyBed = {Order = 1, Title = "Your first garden bed", Icon = "GardenBed", Action = "Open shop",
-            Text = "Buy one Garden Bed or Garden Bed (3). Other purchases unlock after your first harvest."},
+        BuyBed = {Order = 1, Title = "Your first garden bed", Icon = "FieldBed5", Action = "Open shop",
+            Text = "Buy a five-spot bed. One planting fills the whole row."},
         BuySeeds = {Order = 2, Title = "Choose your first crop", Icon = "CarrotSeed", Action = "Choose seeds",
             Text = "Buy {capacity} seeds of any one crop. The shop selects the right amount for your bed."},
         BuyCan = {Order = 3, Title = "A little water goes a long way", Icon = "WateringCan", Action = "Buy watering can",
@@ -13,7 +16,7 @@ local Config = {
         Place = {Order = 4, Title = "Make room to grow", Icon = "GardenBed", Action = "Select garden bed",
             Text = "Place your bed on your own farm. Rotate it if you like; look for the green preview."},
         Plant = {Order = 5, Title = "Plant your seeds", Icon = "CarrotSeed", Action = "Select seeds",
-            Text = "Select your {seed}, walk close to the bed and use Plant. One action fills every spot."},
+            Text = "Select your {seed}, walk close to the bed and use Plant. Your first planting starts five minutes of double growth."},
         Grow = {Order = 6, Title = "Let it grow", Icon = "WateringCan", Action = "Select watering can",
             ShortText = "Wait for the blue drop, then water your bed. Dry crops pause safely.",
             Text = "Wait for the blue water drop over your bed. Growth pauses safely when the plants need water."},
@@ -21,8 +24,8 @@ local Config = {
             ShortText = "Equip the Watering Can and use Water crops at your bed. One action waters every spot.",
             Text = "Select the Watering Can, approach your bed and use Water crops. One action waters the whole bed."},
         Farm = {Order = 7, Title = "A farm with a future", Icon = "StarterHouse", Action = "See farm levels",
-            ShortText = "Explore free farm levels in My Farm. Close the menu to continue.",
-            Text = "Finish main journal chapters to level up for free. Open My Farm, explore the unlocks, then close it to continue."},
+            ShortText = "Your seeds are growing. Open My Farm to see what level 2 unlocks.",
+            Text = "Your seeds are growing. Open My Farm to see the ten-spot bed you can unlock at farm level 2."},
         Journal = {Order = 8, Title = "Your farm journal", Icon = "CarrotSeed", Action = "Open journal",
             ShortText = "Explore Main chapters and Side stories. Close the journal to continue.",
             Text = "Main chapters unlock farm levels; side stories are optional. Open the journal, then close it when you are ready."},
@@ -36,7 +39,7 @@ local Config = {
 
 function Config.PurchaseAmount(step, itemName, definition, capacity)
     if not step or step == "Complete" then return nil end
-    if step == "BuyBed" then return Config.StarterBeds[itemName] and 1 or 0 end
+    if step == "BuyBed" then return itemName == Config.StarterBed and 1 or 0 end
     if step == "BuySeeds" then return definition and definition.Type == "Seed" and capacity or 0 end
     if step == "BuyCan" then return itemName == "WateringCan" and 1 or 0 end
     return 0
@@ -51,7 +54,7 @@ function Config.Step(data, bed)
     if not bed then return "Place" end
     if not data.Planted then return "Plant" end
     if bed.NeedsWater then return "Water" end
-    if data.Watered and not data.FarmSeen then return "Farm" end
+    if not data.FarmSeen then return "Farm" end
     if data.Watered and not data.JournalSeen then return "Journal" end
     if bed.Ready then return "Harvest" end
     return "Grow"
