@@ -16,31 +16,22 @@ function ResourceSpawnService.getSpawnInterval(playerCount, definition)
     return math.max(config.MinimumInterval, definition.Interval / math.max(1, math.min(playerCount, config.PlayerCap)) ^ config.GrowthExponent)
 end
 
+local farmClearance
 local function buildFarmCells()
-    local spawn = workspace:WaitForChild("SpawnLocation")
-    local ground = RaycastParams.new()
-    ground.FilterType = Enum.RaycastFilterType.Include
-    ground.FilterDescendantsInstances = {workspace.Terrain, workspace:WaitForChild("Baseplate")}
-    local clearance = OverlapParams.new()
-    clearance.FilterType = Enum.RaycastFilterType.Exclude
-    local excluded = {workspace.Terrain, workspace.Baseplate, nodes}
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player.Character then table.insert(excluded, player.Character) end
-    end
-    clearance.FilterDescendantsInstances = excluded
-    local cells = {}
-    cellsByZone.Farm = cells
-    for x = farm.CellSpacing / 2, farm.AreaSize.X, farm.CellSpacing do
-        for z = farm.CellSpacing / 2, farm.AreaSize.Y, farm.CellSpacing do
-            local position = spawn.CFrame:PointToWorldSpace(farm.Offset +
-                Vector3.new(x - farm.AreaSize.X / 2, 0, z - farm.AreaSize.Y / 2))
-            local distance = (position - spawn.Position).Magnitude
-            if distance < farm.MinimumRadius or distance > farm.MaximumRadius then continue end
-            local hit = workspace:Raycast(position + Vector3.yAxis * 40, -Vector3.yAxis * 80, ground)
-            if not hit or hit.Normal.Y < 0.9 then continue end
-            position = hit.Position
-            local size = Vector3.new(farm.Clearance * 2, 14, farm.Clearance * 2)
-            if #workspace:GetPartBoundsInBox(CFrame.new(position + Vector3.yAxis * 7.1), size, clearance) == 0 then
+    local zones = workspace:WaitForChild("PublicZones")
+    farmClearance = OverlapParams.new()
+    farmClearance.FilterType = Enum.RaycastFilterType.Exclude
+    farmClearance.FilterDescendantsInstances = {workspace.Terrain, workspace:WaitForChild("Baseplate"), zones}
+    local configured = {}
+    for _, family in pairs(farm.Families) do configured[family.Zone] = true end
+    for name in pairs(configured) do
+        local floor = zones:WaitForChild(name):WaitForChild("Ground")
+        local cells = {}
+        cellsByZone[name] = cells
+        for x = farm.ZoneInset, floor.Size.X - farm.ZoneInset, farm.CellSpacing do
+            for z = farm.ZoneInset, floor.Size.Z - farm.ZoneInset, farm.CellSpacing do
+                local position = floor.CFrame:PointToWorldSpace(Vector3.new(x - floor.Size.X / 2,
+                    floor.Size.Y / 2, z - floor.Size.Z / 2))
                 table.insert(cells, {Position = position, AvailableAt = 0})
             end
         end
@@ -89,7 +80,9 @@ local function chooseCell(zone, now, positions, nearby)
     local chosen, count = nil, 0
     for _, cell in ipairs(cellsByZone[zone] or {}) do
         if not cell.Node and cell.AvailableAt <= now and not nearPlayer(cell.Position, positions) and
-            (not nearby or (cell.Position - nearby).Magnitude <= farm.RespawnRadius) then
+            (not nearby or (cell.Position - nearby).Magnitude <= farm.RespawnRadius) and
+            (not farm or #workspace:GetPartBoundsInBox(CFrame.new(cell.Position + Vector3.yAxis * 8.1),
+                Vector3.new(farm.Clearance * 2, 16, farm.Clearance * 2), farmClearance) == 0) then
             count += 1
             if random:NextInteger(1, count) == 1 then chosen = cell end
         end

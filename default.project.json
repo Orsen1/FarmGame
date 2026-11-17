@@ -20,7 +20,8 @@
         "$ignoreUnknownInstances": true,
         "Oak": {"$path": "src/places/ResourceWorld/ResourceNodes/Oak.rbxmx"},
         "Birch": {"$path": "src/places/ResourceWorld/ResourceNodes/Birch.rbxmx"},
-        "Stone": {"$path": "src/places/ResourceWorld/ResourceNodes/Stone.rbxmx"}
+        "Stone": {"$path": "src/places/ResourceWorld/ResourceNodes/Stone.rbxmx"},
+        "LargeBoulder": {"$path": "src/places/ResourceWorld/ResourceNodes/LargeBoulder.rbxmx"}
       }
     },
     "ReplicatedStorage": {

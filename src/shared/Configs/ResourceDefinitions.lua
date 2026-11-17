@@ -5,20 +5,17 @@ return {
         FogStart = 420, FogEnd = 950
     },
     FarmSpawn = {
-        CellSpacing = 10,
-        Offset = Vector3.new(-10, 0, 0),
-        AreaSize = Vector2.new(64, 80),
-        MinimumRadius = 18,
-        MaximumRadius = 46,
-        Clearance = 5,
+        CellSpacing = 14,
+        ZoneInset = 8,
+        Clearance = 6,
         PlayerClearance = 6,
-        RespawnRadius = 22,
+        RespawnRadius = 28,
         Families = {
-            Trees = {Zone = "Farm", Count = 6, Variants = {
+            Trees = {Zone = "Forest", Count = 18, Variants = {
                 {Id = "Oak", Weight = 65}, {Id = "Birch", Weight = 35}
             }},
-            Rocks = {Zone = "Farm", Count = 6, Variants = {
-                {Id = "Stone", Weight = 1}
+            Rocks = {Zone = "Quarry", Count = 18, Variants = {
+                {Id = "Stone", Weight = 65}, {Id = "LargeBoulder", Weight = 35}
             }}
         }
     },

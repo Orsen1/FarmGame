@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<roblox version="4">
+  <Item class="Folder" referent="PUBLICZONES">
+    <Properties>
+      <string name="Name">PublicZones</string>
+    </Properties>
+    <Item class="Model" referent="PUBLICTown">
+      <Properties>
+        <string name="Name">Town</string>
+        <Ref name="PrimaryPart">PUBLICTownGround</Ref>
+      </Properties>
+      <Item class="Part" referent="PUBLICTownGround">
+        <Properties>
+          <string name="Name">Ground</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <token name="Material">272</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <token name="shape">1</token>
+          <Color3uint8 name="Color3uint8">4289831298</Color3uint8>
+          <Vector3 name="size">
+            <X>96</X>
+            <Y>0.35</Y>
+            <Z>96</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-52</X>
+            <Y>0.175</Y>
+            <Z>190</Z>
+            <R00>1</R00>
+            <R01>0</R01>
+            <R02>0</R02>
+            <R10>0</R10>
+            <R11>1</R11>
+            <R12>0</R12>
+            <R20>0</R20>
+            <R21>0</R21>
+            <R22>1</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Model" referent="PUBLICForest">
+      <Properties>
+        <string name="Name">Forest</string>
+        <Ref name="PrimaryPart">PUBLICForestGround</Ref>
+      </Properties>
+      <Item class="Part" referent="PUBLICForestGround">
+        <Properties>
+          <string name="Name">Ground</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <token name="Material">272</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <token name="shape">1</token>
+          <Color3uint8 name="Color3uint8">4285633356</Color3uint8>
+          <Vector3 name="size">
+            <X>120</X>
+            <Y>0.35</Y>
+            <Z>120</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>-52</X>
+            <Y>0.175</Y>
+            <Z>-190</Z>
+            <R00>1</R00>
+            <R01>0</R01>
+            <R02>0</R02>
+            <R10>0</R10>
+            <R11>1</R11>
+            <R12>0</R12>
+            <R20>0</R20>
+            <R21>0</R21>
+            <R22>1</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+    <Item class="Model" referent="PUBLICQuarry">
+      <Properties>
+        <string name="Name">Quarry</string>
+        <Ref name="PrimaryPart">PUBLICQuarryGround</Ref>
+      </Properties>
+      <Item class="Part" referent="PUBLICQuarryGround">
+        <Properties>
+          <string name="Name">Ground</string>
+          <bool name="Anchored">true</bool>
+          <bool name="CanCollide">true</bool>
+          <bool name="CanTouch">false</bool>
+          <bool name="CanQuery">true</bool>
+          <token name="Material">272</token>
+          <token name="TopSurface">0</token>
+          <token name="BottomSurface">0</token>
+          <token name="shape">1</token>
+          <Color3uint8 name="Color3uint8">4287598990</Color3uint8>
+          <Vector3 name="size">
+            <X>112</X>
+            <Y>0.35</Y>
+            <Z>112</Z>
+          </Vector3>
+          <CoordinateFrame name="CFrame">
+            <X>442</X>
+            <Y>0.175</Y>
+            <Z>-190</Z>
+            <R00>1</R00>
+            <R01>0</R01>
+            <R02>0</R02>
+            <R10>0</R10>
+            <R11>1</R11>
+            <R12>0</R12>
+            <R20>0</R20>
+            <R21>0</R21>
+            <R22>1</R22>
+          </CoordinateFrame>
+        </Properties>
+      </Item>
+    </Item>
+  </Item>
+</roblox>
