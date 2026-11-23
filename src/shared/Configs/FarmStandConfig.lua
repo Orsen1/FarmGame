@@ -1,0 +1,16 @@
+return {
+    StockLimit = 10000,
+    MaxDistance = 12,
+    PromptDistance = 8,
+    VisitInterval = {2.5, 3.5},
+    BatchSize = {1, 5},
+    BulkBatchSize = {6, 15},
+    BulkThreshold = 25,
+    QueueLimit = 3,
+    QueueSpacing = 4,
+    WalkSpeed = 4.4,
+    ServiceSeconds = 2.8,
+    IdleAnimation = "rbxassetid://507766666",
+    WalkAnimation = "rbxassetid://507777826",
+    CoinSound = "rbxasset://sounds/volume_slider.ogg",
+}

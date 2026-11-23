@@ -12,7 +12,7 @@ return {
                 {Id = "Plant", Text = "Plant your first seeds", Goal = 1, Kind = "Action", Icon = "CarrotSeed", Hint = "Select seeds and use a garden bed."},
                 {Id = "Water", Text = "Water a thirsty bed", Goal = 1, Kind = "Action", Icon = "WateringCan", Hint = "Use a Watering Can when a bed needs water."},
                 {Id = "Harvest", Text = "Harvest 10 crops", Goal = 10, Kind = "Action", Icon = "Carrot", Hint = "Collect ripe crops. Every fruit counts."},
-                {Id = "Sell", Text = "Make your first sale", Goal = 1, Kind = "Action", Icon = "Carrot", Hint = "Open Sell in the left menu."},
+                {Id = "Sell", Text = "Make your first sale", Goal = 1, Kind = "Action", Icon = "Carrot", Hint = "Stock crops at the stand by your farm gate."},
                 {Id = "FirstBed", Text = "Place a garden bed", Goal = 1, Kind = "GardenBeds", Icon = "GardenBed", Hint = "Buy a five-spot Garden Bed and place it on your farm."},
             },
         },
@@ -70,7 +70,7 @@ return {
             Reward = {MoneyCents = 100, Items = {CarrotSeed = 5}},
             Objectives = {
                 {Id = "HarvestFifty", Event = "Harvest", Text = "Harvest 50 crops", Goal = 50, Kind = "Action", Icon = "Carrot", Hint = "Any crop counts."},
-                {Id = "Sales", Text = "Earn $10 from sales", Goal = 1000, Kind = "Action", Format = "Money", Icon = "Corn", Hint = "Sell crops or products through Sell."},
+                {Id = "Sales", Text = "Earn $10 from sales", Goal = 1000, Kind = "Action", Format = "Money", Icon = "Corn", Hint = "Stock crops at your farm stand for visiting buyers."},
             },
         },
         {

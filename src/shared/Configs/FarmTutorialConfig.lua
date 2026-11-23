@@ -31,9 +31,9 @@ local Config = {
             Text = "Main chapters unlock farm levels; side stories are optional. Open the journal, then close it when you are ready."},
         Harvest = {Order = 9, Title = "Your first harvest is ready", Icon = "Carrot", Action = "Find your garden bed",
             Text = "Approach the highlighted bed and use Harvest. Different plants can give different amounts and sizes."},
-        Sell = {Order = 10, Title = "Turn your harvest into coins", Icon = "Carrot", Action = "Sell your harvest",
-            ShortText = "Sell all {remaining} crops first. Town orders unlock after your first sale.",
-            Text = "Sell the {remaining} crops from your first harvest. Later, Town order boards pay extra and accept partial deliveries."},
+        Sell = {Order = 10, Title = "Open for business", Icon = "Carrot", Action = "Find your stand",
+            ShortText = "Stock {remaining} crops at your gate. Buyers will stop by on their own.",
+            Text = "Stock the remaining {remaining} crops from your first harvest at your farm stand. Buyers will stop by while you farm."},
     },
 }
 

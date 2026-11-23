@@ -106,7 +106,7 @@ local blockingAttributes = {"ProductionMode", "AnimalMenuOpen", "Milking", "Feed
 local function refresh()
     local visible = player:GetAttribute("DataLoaded") == true
     for _, attribute in ipairs(blockingAttributes) do if player:GetAttribute(attribute) then visible = false end end
-    for _, name in ipairs({"BuyGui", "SellGui", "CropInfoGui", "OrderGui"}) do
+    for _, name in ipairs({"BuyGui", "FarmStandGui", "CropInfoGui", "OrderGui"}) do
         local other = playerGui:FindFirstChild(name)
         local window = other and (other:FindFirstChild("MainFrame") or other:FindFirstChild("Panel"))
         if other and other.Enabled and (name == "OrderGui" or window and window.Visible) then visible = false end
@@ -115,7 +115,7 @@ local function refresh()
 end
 
 local function watchGui(other)
-    if not table.find({"BuyGui", "SellGui", "CropInfoGui", "OrderGui"}, other.Name) then return end
+    if not table.find({"BuyGui", "FarmStandGui", "CropInfoGui", "OrderGui"}, other.Name) then return end
     other:GetPropertyChangedSignal("Enabled"):Connect(refresh)
     local function watchWindow(window)
         if window.Name == "MainFrame" or window.Name == "Panel" then window:GetPropertyChangedSignal("Visible"):Connect(refresh) end

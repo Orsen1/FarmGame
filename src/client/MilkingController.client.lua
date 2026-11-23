@@ -136,7 +136,7 @@ local function open(folder, startedAt, duration, frame, workType)
     controls:Disable()
     ProximityPromptService.Enabled = false
     for prompt in pairs(views) do hidePrompt(prompt) end
-    for _, name in ipairs({"InventoryGui", "BuyGui", "SellGui"}) do
+    for _, name in ipairs({"InventoryGui", "BuyGui", "FarmStandGui"}) do
         local other = playerGui:FindFirstChild(name)
         if other then current.Guis[other] = other.Enabled;other.Enabled = false end
     end

@@ -219,7 +219,7 @@ local function openMode(data)
     placement.cancelPlacement()
     controls:Disable()
     ProximityPromptService.Enabled = false
-    for _, name in ipairs({"InventoryGui", "BuyGui", "SellGui", "DeleteConfirmGui", "MoneyGui"}) do
+    for _, name in ipairs({"InventoryGui", "BuyGui", "FarmStandGui", "DeleteConfirmGui", "MoneyGui"}) do
         local gui = playerGui:FindFirstChild(name)
         if gui and gui:IsA("ScreenGui") then
             current.OtherGuis[gui] = gui.Enabled;

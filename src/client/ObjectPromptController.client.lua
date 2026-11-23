@@ -50,7 +50,7 @@ end
 
 local function isSupportedPrompt(object)
     return object:IsA("ProximityPrompt") and
-               (object.Name == "MarketPrompt" or object.Name == "ActionPrompt" or object.Name == "CollectPrompt" or object.Name == "StoragePrompt" or
+               (object.Name == "FarmStandPrompt" or object.Name == "ActionPrompt" or object.Name == "CollectPrompt" or object.Name == "StoragePrompt" or
                    object.Name == "FeedPrompt" or object.Name == "EggPrompt" or object.Name == "CarePrompt" or object.Name == "TankPrompt")
 end
 
@@ -91,7 +91,7 @@ local function updatePrompt(prompt)
         return
     end
 
-    if prompt.Name == "MarketPrompt" then
+    if prompt.Name == "FarmStandPrompt" then
         setEnabled(prompt, true)
         return
     end
@@ -390,7 +390,7 @@ local function bindPrompt(prompt)
 end
 
 ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
-    if not boundPrompts[prompt] or (prompt.Name ~= "MarketPrompt" and prompt.Name ~= "ActionPrompt" and prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt" and prompt.Name ~= "CarePrompt" and prompt.Name ~= "TankPrompt" and prompt.Name ~= "CollectPrompt") or
+    if not boundPrompts[prompt] or (prompt.Name ~= "FarmStandPrompt" and prompt.Name ~= "ActionPrompt" and prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt" and prompt.Name ~= "CarePrompt" and prompt.Name ~= "TankPrompt" and prompt.Name ~= "CollectPrompt") or
         prompt.Style ~= Enum.ProximityPromptStyle.Custom or not prompt.Enabled then
         return
     end
@@ -402,7 +402,7 @@ ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
     local step = getConstructionStep(object, itemName)
     if prompt.Name ~= "ActionPrompt" or prompt:GetAttribute("CareAction") then step = nil end
     local definition = ItemDefinitions[itemName]
-    if prompt.Name ~= "MarketPrompt" and not step and not (definition and (definition.PermanentHouse or definition.Plantable or definition.ShopCategoryWhenEmpty or definition.Laboratory or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
+    if prompt.Name ~= "FarmStandPrompt" and not step and not (definition and (definition.PermanentHouse or definition.Plantable or definition.ShopCategoryWhenEmpty or definition.Laboratory or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
     hidePrompt(prompt)
     if step then
         promptViews[prompt] = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)
@@ -456,7 +456,7 @@ RunService.Heartbeat:Connect(function(dt)
     local humanoid = character and character:FindFirstChildOfClass("Humanoid")
     local camera = workspace.CurrentCamera
     local shop = playerGui:FindFirstChild("BuyGui")
-    local sell = playerGui:FindFirstChild("SellGui")
+    local sell = playerGui:FindFirstChild("FarmStandGui")
     local blocked = not root or not humanoid or humanoid.Health <= 0 or not camera or not ProximityPromptService.Enabled or
         player:GetAttribute("AnimalMenuOpen") == true or player:GetAttribute("StorageOpen") == true or
         player:GetAttribute("FeederOpen") == true or player:GetAttribute("ProductionMode") == true or

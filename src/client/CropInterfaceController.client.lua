@@ -195,7 +195,7 @@ RunService.Heartbeat:Connect(function(dt)
     elapsed = 0
     local other = player:GetAttribute("FarmJournalOpen") == true or player:GetAttribute("ProductionMode") == true or player:GetAttribute("AnimalMenuOpen") == true or
         player:GetAttribute("Milking") == true or player:GetAttribute("FeederOpen") == true
-    for _, name in ipairs({"BuyGui", "SellGui"}) do
+    for _, name in ipairs({"BuyGui", "FarmStandGui"}) do
         local shop = player.PlayerGui:FindFirstChild(name)
         if shop and shop.Enabled and shop.MainFrame.Visible then other = true end
     end

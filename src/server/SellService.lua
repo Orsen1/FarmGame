@@ -10,6 +10,15 @@ local SellService = {}
 local Journal = require(ServerScriptService.FarmJournalService)
 local MAX_INTEGER = 9007199254740991
 
+function SellService.Price(itemName, groups)
+    return CropItems.Value(itemName, groups, ItemDefinitions)
+end
+
+function SellService.RecordSale(player, itemName, amount, cents)
+    Journal.Record(player, "Sell", amount, itemName)
+    Journal.Record(player, "Sales", cents)
+end
+
 function SellService.SellItem(player, itemName, amount)
 	if typeof(itemName) ~= "string" then
 		return false, "InvalidItem"
@@ -32,7 +41,7 @@ function SellService.SellItem(player, itemName, amount)
 
 	local removedGroups, removalError = InventoryService.GetRemoval(player, {[itemName] = amount})
     if not removedGroups then return false, removalError end
-    local totalPrice = CropItems.Value(itemName, removedGroups[itemName], ItemDefinitions)
+    local totalPrice = SellService.Price(itemName, removedGroups[itemName])
 	if not MoneyService.CanAddMoney(player, totalPrice) then
 		return false, "InvalidBalanceOrAmountTooLarge"
 	end
@@ -50,8 +59,7 @@ function SellService.SellItem(player, itemName, amount)
 		return false, "MoneyCouldNotBeAdded"
 	end
 
-    Journal.Record(player, "Sell", amount, itemName)
-    Journal.Record(player, "Sales", totalPrice)
+    SellService.RecordSale(player, itemName, amount, totalPrice)
 	print(player.Name .. " sold " .. amount .. "x " .. itemName
 		.. " for " .. totalPrice .. " cents")
 	return true

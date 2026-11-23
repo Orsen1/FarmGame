@@ -285,7 +285,7 @@ local function openMap()
     end
     HudMenu.CloseStorage()
     if not ProximityPromptService.Enabled then return end
-    for _, name in ipairs({"BuyGui", "SellGui"}) do
+    for _, name in ipairs({"BuyGui", "FarmStandGui"}) do
         local other = playerGui:FindFirstChild(name)
         if other and other.Enabled and other.MainFrame.Visible then return end
     end

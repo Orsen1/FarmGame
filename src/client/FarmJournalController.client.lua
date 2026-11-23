@@ -346,7 +346,7 @@ game:GetService("RunService").Heartbeat:Connect(function(dt)
     for _, attribute in ipairs({"ProductionMode", "AnimalMenuOpen", "Milking", "FeederOpen", "Teleporting", "FarmOverviewOpen", "WorldMapOpen", "LaboratoryOpen"}) do
         if player:GetAttribute(attribute) then other = true end
     end
-    for _, name in ipairs({"BuyGui", "SellGui"}) do
+    for _, name in ipairs({"BuyGui", "FarmStandGui"}) do
         local shop = player.PlayerGui:FindFirstChild(name)
         if shop and shop.Enabled and shop.MainFrame.Visible then other = true end
     end

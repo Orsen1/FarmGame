@@ -263,7 +263,7 @@ event.OnClientEvent:Connect(function(action, state, success, reason, value)
     if action == "Open" then
         close(true)
         generation += 1
-        for _, name in ipairs({"BuyGui", "SellGui"}) do
+        for _, name in ipairs({"BuyGui", "FarmStandGui"}) do
             local shop = playerGui:FindFirstChild(name)
             if shop then
                 shop.MainFrame.Visible = false

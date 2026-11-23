@@ -14,6 +14,7 @@ local PlotSectionService = plotModule and require(ServerScriptService:WaitForChi
 local ProductionService = plotModule and require(ServerScriptService:WaitForChild("ProductionService"))
 local HouseService = plotModule and require(ServerScriptService:WaitForChild("HouseService"))
 local OrderService = plotModule and require(ServerScriptService:WaitForChild("OrderService"))
+local FarmStandService = plotModule and require(ServerScriptService:WaitForChild("FarmStandService"))
 local Laboratory = plotModule and require(ServerScriptService:WaitForChild("LaboratoryService"))
 
 local CropRecords = require(ServerScriptService.CropRecordService)
@@ -108,6 +109,11 @@ local function loadPlayerData(player)
         end
     end
 
+    if FarmStandService and not FarmStandService.Load(player, data.StandStock) then
+        player:Kick("Failed to load your farm stand. Please try again later.")
+        return
+    end
+
     if not CropRecords.Load(player, data.CropRecord) then player:Kick("Failed to load crop record.");return end
     if not Journal.Load(player, data.FarmJournal, data) then player:Kick("Failed to load your farm journal.");return end
     if houseMigrated and not PlayerDataService.saveData(player.UserId, data) then
@@ -157,6 +163,11 @@ local function savePlayerData(player, preparingTeleport)
             if data.Orders == nil then
                 return false
             end
+        end
+
+        if FarmStandService then
+            data.StandStock = FarmStandService.GetData(player)
+            if not data.StandStock then return false end
         end
 
         if PlotDataService then
@@ -220,6 +231,7 @@ Players.PlayerRemoving:Connect(function(player)
     if OrderService then
         OrderService.Clear(player)
     end
+    if FarmStandService then FarmStandService.Clear(player) end
     if PlayerPlotService then
         PlayerPlotService.releasePlot(player)
     end
