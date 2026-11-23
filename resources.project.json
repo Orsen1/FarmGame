@@ -35,12 +35,6 @@
       "ResourceSpawnService": {
         "$path": "src/places/ResourceWorld/ResourceSpawnService.lua"
       },
-      "CropRecordService": {
-        "$path": "src/server/CropRecordService.lua"
-      },
-      "CropRecordHandler": {
-        "$path": "src/server/CropRecordHandler.server.lua"
-      },
       "FarmJournalService": {
         "$path": "src/server/FarmJournalService.lua"
       },
@@ -101,15 +95,9 @@
         "DiscardInventoryItemEvent": {
           "$path": "src/shared/RemoteEvents/DiscardInventoryItemEvent.model.json"
         },
-        "CropRecords": {
-          "$path": "src/shared/RemoteEvents/CropRecords.model.json"
-        },
         "FarmJournal": {
           "$path": "src/shared/RemoteEvents/FarmJournal.model.json"
         }
-      },
-      "CropItems": {
-        "$path": "src/shared/CropItems.lua"
       },
       "HudMenu": {
         "$path": "src/shared/HudMenu.lua"
@@ -149,9 +137,6 @@
         "$ignoreUnknownInstances": true,
         "ResourceGatherVisual": {
           "$path": "src/places/ResourceWorld/ResourceGatherVisual.client.lua"
-        },
-        "CropInterfaceController": {
-          "$path": "src/client/CropInterfaceController.client.lua"
         },
         "FarmJournalController": {
           "$path": "src/client/FarmJournalController.client.lua"

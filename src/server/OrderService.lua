@@ -186,13 +186,13 @@ function OrderService.Deliver(player, boardId, orderId)
         return false, "BalanceLimit"
     end
     local nextOrder = complete and newOrder(boardId)
-    local removed, removeReason, variants = InventoryService.ExchangeItems(player, inputs, {})
+    local removed, removeReason = InventoryService.ExchangeItems(player, inputs, {})
     if not removed then
         return false, removeReason
     end
     if complete then
         if not MoneyService.AddMoney(player, order.RewardCents) then
-            InventoryService.ExchangeItems(player, {}, inputs, variants)
+            InventoryService.ExchangeItems(player, {}, inputs)
             return false, "BalanceLimit"
         end
         orders[player][boardId] = nextOrder

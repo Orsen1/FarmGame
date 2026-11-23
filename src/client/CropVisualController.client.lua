@@ -1,195 +1,140 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
-local HttpService = game:GetService("HttpService")
 local config = require(ReplicatedStorage.Configs.CropConfig)
 local plots = workspace:WaitForChild("Plots")
-local beds = {}
-local cache = {}
-local stageHeights = {}
+local beds, cache = {}, {}
+local transitionTime = 0.42
 
-local function physical(part)
-    part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery = true, false, false, false
-end
+local function stagesFor(crop)
+    if cache[crop] then return cache[crop] end
+    local stages = {}
+    for _, source in ipairs(ReplicatedStorage.Plants[crop]:GetChildren()) do
+        local index = tonumber(source.Name:match("^Stage(%d+)$"))
+        if not index or not source:IsA("Model") then continue end
 
-local function templates(crop, stage)
-    local key = crop .. stage
-    if cache[key] then return cache[key] end
-    local source = ReplicatedStorage.Plants[crop]:FindFirstChild("Stage" .. stage)
-    if not source then return end
-    local settings = config.Crops[crop]
-    local whole = settings.Visual == "Whole" or settings.Visual == "Wheat"
-    local base = source:Clone()
-    local fruit = whole and base or Instance.new("Model")
-    local anchor
-    for _, part in ipairs(source:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name == settings.FruitAnchor then anchor = part;break end
-    end
-    local anchors = {}
-    if whole then
-        for _, part in ipairs(base:GetDescendants()) do
-            if part:IsA("BasePart") then
-                if settings.Visual == "Wheat" and part.Name:match("^[A-Za-z]+[2-9]_") then part:Destroy()
-                else physical(part) end
+        local model = source:Clone()
+        for _, part in ipairs(model:GetDescendants()) do
+            if not part:IsA("BasePart") then continue end
+            local stalk = crop == "Wheat" and part.Name:match("^%a+(%d+)_")
+            if stalk == "2" or stalk == "4" or crop == "Potato" and part.Name:match("_Midrib$") then
+                part:Destroy()
+            else
+                part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery = true, false, false, false
             end
         end
-        base:PivotTo(CFrame.identity)
-    else
-        for _, part in ipairs(source:GetDescendants()) do
-            if part:IsA("BasePart") and part.Name == settings.FruitAnchor then table.insert(anchors, part) end
-        end
-        for _, part in ipairs(base:GetDescendants()) do
-            if part:IsA("BasePart") then
-                local isFruit = settings.FruitNames and settings.FruitNames[part.Name] or
-                    settings.FruitPattern and part.Name:match(settings.FruitPattern)
-                if isFruit then
-                    local selected = anchor
-                    for _, candidate in ipairs(anchors) do
-                        if (candidate.Position - part.Position).Magnitude < (selected.Position - part.Position).Magnitude then selected = candidate end
-                    end
-                    if anchor and selected == anchor and (crop ~= "Potato" or part.Name:match("^Potato1")) then
-                        local copy = part:Clone()
-                        physical(copy)
-                        copy.Parent = fruit
-                    end
-                    part:Destroy()
-                else physical(part) end
-            end
-        end
-        if anchor then fruit.WorldPivot = CFrame.new(anchor.Position) end
-    end
-    local points = {}
-    for _, point in ipairs(anchors) do table.insert(points, point.Position) end
-    local result = {Base = base, Fruit = fruit, Whole = whole, Anchor = anchor and anchor.Position, Points = points}
-    cache[key] = result
-    return result
-end
 
-local function growthShape(crop)
-    if stageHeights[crop] then return stageHeights[crop] end
-    local shape = {Height = {}, Target = {}, Width = 0}
-    for _, model in ipairs(ReplicatedStorage.Plants[crop]:GetChildren()) do
-        local index = tonumber(model.Name:match("^Stage(%d+)$"))
-        if index and model:IsA("Model") then
-            local template = templates(crop, index)
-            local size = template.Base:GetExtentsSize()
-            shape.Height[index] = size.Y
-            if template.Whole then shape.Width = math.max(shape.Width, size.X, size.Z) end
-        end
+        model:PivotTo(CFrame.identity)
+        local center, size = model:GetBoundingBox()
+        local outer = center.Position:Abs() + size * 0.5
+        stages[index] = {Model = model, Scale = model:GetScale(), Height = center.Position.Y + size.Y * 0.5,
+            Width = math.max(outer.X, outer.Z) * 2}
     end
-    for index = #shape.Height, 1, -1 do
-        local nextHeight = shape.Target[index + 1]
-        shape.Target[index] = nextHeight and math.min(shape.Height[index], nextHeight * 0.9) or shape.Height[index]
-    end
-    stageHeights[crop] = shape
-    return shape
+    cache[crop] = stages
+    return stages
 end
 
 local function clear(state)
-    if state.Visual then state.Visual:Destroy();state.Visual = nil end
-    state.Key, state.Plants, state.Fraction = nil, nil, nil
+    if state.Visual then state.Visual:Destroy() end
+    if state.Previous then state.Previous:Destroy() end
+    state.Visual, state.Previous, state.Stage, state.Crop = nil, nil, nil, nil
+    state.Models, state.Parts, state.PreviousParts = nil, nil, nil
 end
 
-local function growVisual(state, fraction)
-    if fraction == state.Fraction then return end
-    for _, plant in ipairs(state.Plants) do
-        plant.Model:ScaleTo(plant.Start + (plant.Finish - plant.Start) * fraction)
+local function opacity(parts, transparency)
+    for _, part in ipairs(parts) do part.LocalTransparencyModifier = transparency end
+end
+
+local function build(state, crop, stage, template, now)
+    local previous = state.Crop == crop and state.Stage and stage == state.Stage + 1 and state.Visual
+    local previousParts = state.Parts
+    if previous then state.Visual = nil end
+    clear(state)
+    local visual = Instance.new("Model")
+    visual.Name = "CropVisuals"
+    local models, parts = {}, {}
+    for index in ipairs(state.Positions) do
+        local model = template.Model:Clone()
+        model.Name = "Plant" .. index
+        model.Parent = visual
+        models[index] = model
+        for _, part in ipairs(model:GetDescendants()) do
+            if part:IsA("BasePart") and part.Transparency < 1 then table.insert(parts, part) end
+        end
     end
-    state.Fraction = fraction
+    if previous then
+        previous.Name = "PreviousCropVisuals"
+        opacity(parts, 1)
+        state.Previous, state.PreviousParts, state.Transition = previous, previousParts, now
+    end
+    state.Crop, state.Stage, state.Visual, state.Models, state.Parts = crop, stage, visual, models, parts
+    state.Scale, state.Lift = nil, nil
 end
 
-local function render(bed, state)
+local function positionsFor(bed)
+    local positions = {}
+    for _, spot in ipairs(bed.PlantingSpots:GetChildren()) do
+        local position = spot:FindFirstChild("PlantPosition")
+        if position and position:IsA("BasePart") then table.insert(positions, position) end
+    end
+    table.sort(positions, function(a, b) return a.Parent.Name < b.Parent.Name end)
+    local spacing = 2.2
+    for index, a in ipairs(positions) do
+        for other = index + 1, #positions do
+            local delta = a.Position - positions[other].Position
+            spacing = math.min(spacing, Vector2.new(delta.X, delta.Z).Magnitude)
+        end
+    end
+    return positions, spacing * .9
+end
+
+local function render(bed, state, now)
     local crop = bed:GetAttribute("PlantType")
-    if not config.Crops[crop] then
+    local setting = config.Crops[crop]
+    if not setting then
         if state.Visual then clear(state) end
         return
     end
-    local shape = growthShape(crop)
-    local sizesByStage = shape.Height
-    local progress = bed:GetAttribute("GrowthTarget") or 0
+    if not state.Positions then state.Positions, state.Clearance = positionsFor(bed) end
+    local stages = stagesFor(crop)
+    if #stages == 0 then return end
+    local progress = bed:GetAttribute("GrowthTarget")
+    if not progress then return end
     if not bed:GetAttribute("NeedsWater") and not bed:GetAttribute("ReadyToHarvest") then
         local remaining = math.max(0, (bed:GetAttribute("GrowthEndsAt") or 0) - workspace:GetServerTimeNow())
         progress -= remaining * (bed:GetAttribute("GrowthPerSecond") or 0)
     end
-    local phase = math.clamp(progress, 0, 1) * #sizesByStage
-    local stage = math.min(#sizesByStage, math.floor(phase) + 1)
-    if stage == 0 then return end
-    local target = shape.Target[stage]
-    local startHeight = shape.Target[stage - 1] or target * 0.25
+    local phase = math.clamp(progress, 0, 1) * #stages
+    local stage = math.min(#stages, math.floor(phase) + 1)
+    local template, mature = stages[stage], stages[#stages]
+    if state.Crop ~= crop or state.Stage ~= stage then build(state, crop, stage, template, now) end
+
     local fraction = phase - stage + 1
-    local encoded = bed:GetAttribute("CropFruits")
-    local key = tostring(crop) .. stage .. tostring(encoded)
-    if state.Key == key then
-        growVisual(state, fraction)
-        return
+    local matureHeight = mature.Height * math.min(setting.VisualScale, state.Clearance / mature.Width)
+    local shape = setting.GrowthShape
+    local first = stage == 1 and .065 or (shape and shape[stage - 1] or (stage - 1) / #stages)
+    local last = shape and shape[stage] or stage / #stages
+    local scale = math.min(matureHeight * (first + (last - first) * fraction) / template.Height,
+        state.Clearance / template.Width) * template.Scale
+    local lift = stage == #stages and (setting.MatureLift or 0) * fraction or 0
+    if not state.Scale or math.abs(scale - state.Scale) > .002 or math.abs(lift - state.Lift) > .002 or
+        progress >= 1 and (scale ~= state.Scale or lift ~= state.Lift) then
+        for index, plant in ipairs(state.Models) do
+            plant:ScaleTo(scale)
+            plant:PivotTo(state.Positions[index].CFrame + Vector3.yAxis * lift)
+        end
+        state.Scale, state.Lift = scale, lift
     end
-    clear(state)
-    if not config.Crops[crop] or stage < 1 or not encoded then return end
-    local ok, fruits = pcall(HttpService.JSONDecode, HttpService, encoded)
-    if not ok then return end
-    local data = templates(crop, stage)
-    if not data then return end
-    local positions = {}
-    for _, spot in ipairs(bed.PlantingSpots:GetChildren()) do table.insert(positions, spot.PlantPosition) end
-    table.sort(positions, function(a, b) return a.Parent.Name < b.Parent.Name end)
-    local visual = Instance.new("Model")
-    visual.Name = "CropVisuals"
-    state.Plants = {}
-    for index, position in ipairs(positions) do
-        local plant = Instance.new("Model")
-        plant.Name = "Plant" .. index
-        local sizes = fruits[index]
-        local radius = 1.01
-        for other, neighbor in ipairs(positions) do
-            if index ~= other then radius = math.min(radius, (position.Position - neighbor.Position).Magnitude * 0.46) end
+    if not state.Visual.Parent then state.Visual.Parent = bed end
+    if state.Previous then
+        local blend = math.clamp((now - state.Transition) / transitionTime, 0, 1)
+        opacity(state.Parts, 1 - blend)
+        if blend >= 1 then
+            state.Previous:Destroy()
+            state.Previous, state.PreviousParts = nil, nil
+        else
+            opacity(state.PreviousParts, blend)
         end
-        if not data.Whole then
-            local foliage = data.Base:Clone()
-            foliage.Name = "Foliage" .. index
-            foliage:PivotTo(position.CFrame)
-            foliage.Parent = plant
-        end
-        if data.Whole or data.Anchor then
-            local width = data.Fruit:GetExtentsSize()
-            local maxSize = config.Crops[crop].SizeMax / 100
-            local spread = #sizes > 1 and radius * 0.57 or 0
-            local clearance = config.Crops[crop].YieldMax > 1 and radius * 0.43 or radius
-            local widest = data.Whole and shape.Width or math.max(width.X, width.Z)
-            local fit = math.min(1, clearance * 2 / (widest * maxSize))
-            for number, size in ipairs(sizes) do
-                local model = data.Fruit:Clone()
-                model.Name = "Spot" .. index .. "Fruit" .. number
-                model:SetAttribute("Size", size)
-                model:ScaleTo(model:GetScale() * fit * size / 100)
-                local angle = (number - 1) * math.pi * 2 / #sizes
-                local offset = Vector3.new(math.cos(angle) * spread, 0, math.sin(angle) * spread)
-                if not data.Whole then
-                    if crop == "Potato" or crop == "Pumpkin" then
-                        local box, bounds = model:GetBoundingBox()
-                        local bottom = model:GetPivot():PointToObjectSpace(box.Position).Y - bounds.Y / 2
-                        offset += Vector3.new(0, 0.04 - bottom, 0)
-                    else
-                        local point = data.Points[(number - 1) % #data.Points + 1]
-                        offset = point
-                        if number > #data.Points then offset += Vector3.new(math.cos(angle) * 0.15, 0.15, math.sin(angle) * 0.15) end
-                        if crop == "Corn" then offset = Vector3.new(number % 2 == 0 and -0.2 or 0.2, point.Y + (number > #data.Points and 0.4 or 0), 0) end
-                        local box, bounds = model:GetBoundingBox()
-                        local bottom = model:GetPivot():PointToObjectSpace(box.Position).Y - bounds.Y / 2
-                        offset = Vector3.new(offset.X, math.max(offset.Y, 0.04 - bottom), offset.Z)
-                    end
-                end
-                model:PivotTo(position.CFrame * CFrame.new(offset))
-                model.Parent = plant
-            end
-        end
-        plant.WorldPivot = position.CFrame
-        local height = data.Whole and sizesByStage[stage] or plant:GetExtentsSize().Y
-        table.insert(state.Plants, {Model = plant, Start = startHeight / height,
-            Finish = stage == #sizesByStage and 1 or target / height})
-        plant.Parent = visual
     end
-    growVisual(state, fraction)
-    visual.Parent = bed
-    state.Visual, state.Key = visual, key
 end
 
 local function bind(bed)
@@ -201,7 +146,7 @@ plots.DescendantAdded:Connect(function(object) if object:IsA("Model") then task.
 local elapsed = 0
 RunService.Heartbeat:Connect(function(dt)
     elapsed += dt
-    if elapsed < 0.1 then return end
+    if elapsed < 0.05 then return end
     elapsed = 0
     local camera = workspace.CurrentCamera
     local now = os.clock()
@@ -211,7 +156,7 @@ RunService.Heartbeat:Connect(function(dt)
             if now >= (state.NextRender or 0) then
                 local distance = (bed:GetPivot().Position - camera.CFrame.Position).Magnitude
                 state.NextRender = now + (distance > 60 and 0.5 or 0)
-                render(bed, state)
+                render(bed, state, now)
             end
             if bed:GetAttribute("NeedsWater") and not state.Hint then
                 local gui = Instance.new("BillboardGui")

@@ -1,4 +1,3 @@
-local CropItems = require(game.ReplicatedStorage.CropItems)
 local ItemDefinitions = require(game:GetService("ReplicatedStorage").Configs.ItemDefinitions)
 local InventoryService = {}
 local SLOT_COUNT = 6
@@ -14,8 +13,7 @@ end
 
 function InventoryService.IsValidObjectRow(row)
     if typeof(row) ~= "table" or typeof(row.ItemName) ~= "string" or typeof(row.Amount) ~= "number" then return false end
-    if row.ItemName == "" then return row.Amount == 0 and row.ObjectData == nil and row.Variants == nil end
-    if not CropItems.Valid(row) then return false end
+    if row.ItemName == "" then return row.Amount == 0 and row.ObjectData == nil end
     local definition = ItemDefinitions[row.ItemName]
     if not definition or not isValidAmount(row.Amount) then return false end
     if row.ObjectData ~= nil then
@@ -31,7 +29,6 @@ local function writeInventory(player, data)
         slot.ItemName.Value = row.ItemName
         slot.Amount.Value = row.Amount
         slot:SetAttribute("ObjectData", row.ObjectData)
-        CropItems.Write(slot, row.Variants)
     end
 end
 
@@ -57,7 +54,7 @@ function InventoryService.CreateSlots(inventory, count)
     end
 end
 
-local function planExchange(player, inputs, outputs, variants)
+local function planExchange(player, inputs, outputs)
     if player:GetAttribute("DataLoaded") ~= true then return nil, "InventoryNotReady" end
     if typeof(inputs) ~= "table" or typeof(outputs) ~= "table" then
         return nil, "InvalidRecipeItems"
@@ -69,15 +66,22 @@ local function planExchange(player, inputs, outputs, variants)
         return nil, "InventoryNotReady"
     end
 
-    local removed = {}
     for itemName, amount in pairs(inputs) do
         if not isValidItemName(itemName) or not isValidAmount(amount) then
             return nil, "InvalidItemOrAmount"
         end
 
-        local groups, reason = CropItems.Take(data, itemName, amount)
-        if not groups then return nil, reason end
-        removed[itemName] = groups
+        local remaining = amount
+        for _, slot in ipairs(data) do
+            if slot.ItemName == itemName then
+                if slot.ObjectData then return nil, "UseSelectedBuilding" end
+                local taken = math.min(slot.Amount, remaining)
+                slot.Amount -= taken
+                remaining -= taken
+                if slot.Amount == 0 then slot.ItemName = "" end
+            end
+        end
+        if remaining > 0 then return nil, "NotEnoughItems: " .. itemName end
     end
 
     for itemName, amount in pairs(outputs) do
@@ -107,16 +111,11 @@ local function planExchange(player, inputs, outputs, variants)
         end
         if target.Amount > MAX_INTEGER - amount then return nil, "AmountTooLarge" end
 
-        local added = {ItemName = itemName, Amount = amount, Variants = variants and variants[itemName]}
-        if not CropItems.Valid(added) then return nil, "InvalidCropData" end
-        if target.Amount > 0 or added.Variants then
-            CropItems.SetGroups(target, CropItems.Merge(CropItems.Groups(target), CropItems.Groups(added)))
-        end
         target.ItemName = itemName
         target.Amount = target.Amount + amount
     end
 
-    return data, nil, removed
+    return data
 end
 
 function InventoryService.CanExchangeItems(player, inputs, outputs)
@@ -125,8 +124,8 @@ function InventoryService.CanExchangeItems(player, inputs, outputs)
     return data ~= nil, reason
 end
 
-function InventoryService.ExchangeItems(player, inputs, outputs, variants)
-    local data, reason, removed = planExchange(player, inputs, outputs, variants)
+function InventoryService.ExchangeItems(player, inputs, outputs)
+    local data, reason = planExchange(player, inputs, outputs)
 
     if not data then
         return false, reason
@@ -134,12 +133,7 @@ function InventoryService.ExchangeItems(player, inputs, outputs, variants)
 
     writeInventory(player, data)
 
-    return true, nil, removed
-end
-
-function InventoryService.GetRemoval(player, inputs)
-    local data, reason, removed = planExchange(player, inputs, {})
-    return data and removed, reason
+    return true
 end
 
 function InventoryService.Initialize(player)
@@ -203,8 +197,7 @@ function InventoryService.GetInventory(player)
         inventoryData[i] = {
             ItemName = nameValue.Value,
             Amount = amountValue.Value,
-            ObjectData = slot:GetAttribute("ObjectData"),
-            Variants = CropItems.Read(slot)
+            ObjectData = slot:GetAttribute("ObjectData")
         }
         if not InventoryService.IsValidObjectRow(inventoryData[i]) then return nil end
     end
@@ -245,8 +238,7 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
 
     if fromName.Value ~= expectedFrom.ItemName or fromAmount.Value ~= expectedFrom.Amount or toName.Value ~=
         expectedTo.ItemName or toAmount.Value ~= expectedTo.Amount or
-        from:GetAttribute("ObjectData") ~= expectedFrom.ObjectData or to:GetAttribute("ObjectData") ~= expectedTo.ObjectData or
-        from:GetAttribute("Variants") ~= expectedFrom.Variants or to:GetAttribute("Variants") ~= expectedTo.Variants then
+        from:GetAttribute("ObjectData") ~= expectedFrom.ObjectData or to:GetAttribute("ObjectData") ~= expectedTo.ObjectData then
         return false, "InventoryChanged"
     end
 
@@ -255,9 +247,9 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
     end
 
     if not InventoryService.IsValidObjectRow({ItemName = fromName.Value, Amount = fromAmount.Value,
-        ObjectData = from:GetAttribute("ObjectData"), Variants = CropItems.Read(from)}) or
+        ObjectData = from:GetAttribute("ObjectData")}) or
         not InventoryService.IsValidObjectRow({ItemName = toName.Value, Amount = toAmount.Value,
-            ObjectData = to:GetAttribute("ObjectData"), Variants = CropItems.Read(to)}) then
+            ObjectData = to:GetAttribute("ObjectData")}) then
         return false, "InvalidSlot"
     end
 
@@ -268,23 +260,15 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
     local aName, aAmount = fromName.Value, fromAmount.Value
     local bName, bAmount = toName.Value, toAmount.Value
     local aData, bData = from:GetAttribute("ObjectData"), to:GetAttribute("ObjectData")
-    local aVariants, bVariants = CropItems.Read(from), CropItems.Read(to)
 
     if aName == bName and not aData and not bData then
         if bAmount > MAX_INTEGER - aAmount then return false, "AmountTooLarge" end
-        local groups = CropItems.Merge(CropItems.Groups({Amount = aAmount, Variants = aVariants}), CropItems.Groups({Amount = bAmount, Variants = bVariants}))
-        local row = {}
-        CropItems.SetGroups(row, groups)
-        aVariants, bVariants = nil, row.Variants
         aName, aAmount, bAmount = "", 0, bAmount + aAmount
     else
         aName, aAmount, bName, bAmount = bName, bAmount, aName, aAmount
         aData, bData = bData, aData
-        aVariants, bVariants = bVariants, aVariants
     end
 
-    CropItems.Write(from, aVariants)
-    CropItems.Write(to, bVariants)
     fromName.Value = aName
     fromAmount.Value = aAmount
     toName.Value = bName
@@ -309,9 +293,8 @@ function InventoryService.DiscardSlot(player, slotIndex, expected)
     local data = InventoryService.GetInventory(player)
     if not data then return false, "InventoryNotReady" end
     local row = data[slotIndex]
-    local slot = player.Inventory["Slot" .. slotIndex]
     if row.ItemName ~= expected.ItemName or row.Amount ~= expected.Amount or
-        row.ObjectData ~= expected.ObjectData or slot:GetAttribute("Variants") ~= expected.Variants then
+        row.ObjectData ~= expected.ObjectData then
         return false, "InventoryChanged"
     end
     if row.Amount < 1 then return false, "SourceSlotEmpty" end

@@ -10,7 +10,7 @@ local money = player:WaitForChild("PlayerData"):WaitForChild("MoneyCents")
 local ink = Color3.fromRGB(91, 57, 34)
 local paper = Color3.fromRGB(255, 237, 195)
 local green = Color3.fromRGB(99, 145, 67)
-local selected, current, pending = "Genetics", nil, false
+local selected, current, pending = "Yield", nil, false
 local generation = 0
 local handled = 0
 local tabs = {}
@@ -158,7 +158,7 @@ local function layout()
     end
     rect(tabBar, 12, short and 40 or compact and 50 or 59, width - 24, 46)
     for index, track in ipairs(Config.Tracks) do
-        rect(tabs[track.Id], 4 + (index - 1) * (width - 32) / 3, 3, (width - 32) / 3 - 5, 40)
+        rect(tabs[track.Id], 4 + (index - 1) * (width - 32) / #Config.Tracks, 3, (width - 32) / #Config.Tracks - 5, 40)
         tabs[track.Id].TextSize = narrow and 14 or 16
     end
     local contentWidth = width - 36
@@ -326,7 +326,7 @@ remote.OnClientEvent:Connect(function(action, data)
     if action == "Open" then
         generation += 1
         current, pending, handled = data, false, 0
-        selected = "Genetics"
+        selected = "Yield"
         player:SetAttribute("LaboratoryOpen", true)
         status.Text = "Paid attempt. Failure keeps your level."
         status.TextColor3 = ink

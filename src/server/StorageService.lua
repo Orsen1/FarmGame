@@ -1,4 +1,3 @@
-local CropItems = require(game.ReplicatedStorage.CropItems)
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -85,8 +84,7 @@ function StorageService.getData(object)
         local row = {
             ItemName = name.Value,
             Amount = amount.Value,
-            ObjectData = slot:GetAttribute("ObjectData"),
-            Variants = CropItems.Read(slot)
+            ObjectData = slot:GetAttribute("ObjectData")
         }
 
         if not InventoryService.IsValidObjectRow(row) then
@@ -140,7 +138,6 @@ function StorageService.loadData(object, savedObject)
         slot.ItemName.Value = row.ItemName
         slot.Amount.Value = row.Amount
         slot:SetAttribute("ObjectData", row.ObjectData)
-        CropItems.Write(slot, row.Variants)
     end
 
     return true

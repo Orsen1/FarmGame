@@ -6,9 +6,12 @@ local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local tutorialConfig = require(ReplicatedStorage.Configs.FarmTutorialConfig)
 local InventoryService = require(script.Parent.InventoryService)
 local MoneyService = require(script.Parent.MoneyService)
-local Records = require(script.Parent.CropRecordService)
 local remote = ReplicatedStorage.RemoteEvents:WaitForChild("FarmJournal")
 local Journal = {}
+local legacyGoals = {
+    BigFruit = {Id = "WaterTwenty", Goal = 140},
+    RecordSide = {Id = "SellTwentyFive", Goal = 175},
+}
 local journals, objectives, chapters = {}, {}, {}
 
 for _, chapter in ipairs(config.Chapters) do
@@ -223,10 +226,6 @@ function Journal.Refresh(player)
         local house = plot:FindFirstChild("StarterHouse")
         updateFarm(data, counts, beds, buildings, animals, unlocked, house and (house:GetAttribute("HouseLevel") or -1) >= 0)
     end
-    local record = Records.GetData(player)
-    for id, objective in pairs(objectives) do
-        if objective.Kind == "Record" then raise(data, id, record and record.Size or 0) end
-    end
     for _, chapter in ipairs(config.Chapters) do
         local complete = true
         for _, objective in ipairs(chapter.Objectives) do
@@ -277,7 +276,9 @@ function Journal.Load(player, saved, playerData)
     end
     if saved and saved.Tracked ~= nil then
         if typeof(saved.Tracked) ~= "string" then return false end
-        if objectives[saved.Tracked] then data.Tracked = saved.Tracked end
+        local legacy = legacyGoals[saved.Tracked]
+        local tracked = legacy and legacy.Id or saved.Tracked
+        if objectives[tracked] then data.Tracked = tracked end
     end
     if not saved or saved.Version == nil then
         if saved then
@@ -322,7 +323,15 @@ function Journal.Load(player, saved, playerData)
             if integer(value, 0) then research += value end
         end
         raise(data, "Research", research)
-        if playerData.CropRecord and playerData.CropRecord.Size > 0 then raise(data, "Harvest", 1) end
+        local oldRecord = playerData.CropRecord
+        if typeof(oldRecord) == "table" and integer(oldRecord.Size, 1) then raise(data, "Harvest", 1) end
+    end
+    local oldRecord = playerData.CropRecord
+    local size = typeof(oldRecord) == "table" and integer(oldRecord.Size, 1) and oldRecord.Size or 0
+    for oldId, legacy in pairs(legacyGoals) do
+        local progress = math.clamp(math.max(data.Counts[oldId] or 0, size) / legacy.Goal, 0, 1)
+        raise(data, legacy.Id, math.floor(progress * objectives[legacy.Id].Goal))
+        data.Counts[oldId] = nil
     end
     for id, objective in pairs(objectives) do raise(data, id, data.Counts[objective.Event or id] or 0) end
     if saved and saved.Tutorial == nil then

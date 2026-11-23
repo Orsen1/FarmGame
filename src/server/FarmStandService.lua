@@ -4,7 +4,6 @@ local Players = game:GetService("Players")
 local Config = require(ReplicatedStorage.Configs.FarmStandConfig)
 local crops = require(ReplicatedStorage.Configs.CropConfig).Crops
 local items = require(ReplicatedStorage.Configs.ItemDefinitions)
-local CropItems = require(ReplicatedStorage.CropItems)
 local Inventory = require(script.Parent.InventoryService)
 local Money = require(script.Parent.MoneyService)
 local Journal = require(script.Parent.FarmJournalService)
@@ -36,7 +35,7 @@ function Stand.Load(player, saved)
         for item, row in pairs(saved) do
             if not crops[item] or not items[item].SellPriceCents or not Inventory.IsValidObjectRow(row) or
                 row.ItemName ~= item or row.Amount > Config.StockLimit then return false end
-            stock[item] = row
+            stock[item] = {ItemName = item, Amount = row.Amount}
         end
     end
     states[player] = {Stock = stock, Tickets = {}, Reserved = {}}
@@ -60,10 +59,10 @@ function Stand.Snapshot(player)
     return result
 end
 
-local function take(row, amount)
-    local copy = table.clone(row)
-    local groups = CropItems.Take({copy}, row.ItemName, amount)
-    return copy.Amount > 0 and copy or nil, groups
+local function debit(stock, item, amount)
+    local row = stock[item]
+    row.Amount -= amount
+    if row.Amount == 0 then stock[item] = nil end
 end
 
 function Stand.Transfer(player, model, action, item, amount)
@@ -79,19 +78,16 @@ function Stand.Transfer(player, model, action, item, amount)
         local total = (row and row.Amount or 0) + amount
         if total > Config.StockLimit then return false, "The stand is full for this crop." end
         if not Journal.CanSell(player, item, total) then return false, "Stock the rest of your first harvest." end
-        local ok, _, removed = Inventory.ExchangeItems(player, {[item] = amount}, {})
+        local ok = Inventory.ExchangeItems(player, {[item] = amount}, {})
         if not ok then return false, "You don't have that many crops." end
-        local added = {ItemName = item, Amount = total}
-        CropItems.SetGroups(added, CropItems.Merge(row and CropItems.Groups(row) or {}, removed[item]))
-        stock[item] = added
+        stock[item] = {ItemName = item, Amount = total}
         return true, "Stocked " .. amount .. "."
     end
     local reserved = state.Reserved[item] or 0
     if not row or amount > row.Amount - reserved then return false, "That amount is already reserved or sold." end
-    local remaining, groups = take(row, amount)
-    local ok = Inventory.ExchangeItems(player, {}, {[item] = amount}, {[item] = groups})
+    local ok = Inventory.ExchangeItems(player, {}, {[item] = amount})
     if not ok then return false, "Make room in your inventory first." end
-    stock[item] = remaining
+    debit(stock, item, amount)
     return true, "Returned " .. amount .. "."
 end
 
@@ -131,10 +127,9 @@ end
 function Stand.Finish(player, model, ticket)
     local state = Stand.Cancel(player, ticket)
     if not state or not Stand.IsOpen(player, model) or not Journal.CanSell(player, ticket.Item, ticket.Amount) then return end
-    local remaining, groups = take(state.Stock[ticket.Item], ticket.Amount)
-    local cents = Sell.Price(ticket.Item, groups)
+    local cents = Sell.Price(ticket.Item, ticket.Amount)
     if not Money.AddMoney(player, cents) then return end
-    state.Stock[ticket.Item] = remaining
+    debit(state.Stock, ticket.Item, ticket.Amount)
     Sell.RecordSale(player, ticket.Item, ticket.Amount, cents)
     return cents
 end

@@ -36,11 +36,8 @@ local function getPositions(gardenBed)
 end
 
 local RunService = game:GetService("RunService")
-local HttpService = game:GetService("HttpService")
-local CropItems = require(ReplicatedStorage.CropItems)
 local config = require(ReplicatedStorage.Configs.CropConfig)
 local tutorialConfig = require(ReplicatedStorage.Configs.FarmTutorialConfig)
-local Records = require(script.Parent.CropRecordService)
 local growing = {}
 local random = Random.new()
 local Laboratory = require(script.Parent.LaboratoryService)
@@ -64,14 +61,6 @@ local function growthIntervals(settings)
     local intervals = {}
     for index = 1, settings.Waterings + 1 do intervals[index] = total / (settings.Waterings + 1) end
     return intervals
-end
-
-local function rollSize(settings, weights)
-    local band = choose(weights or settings.SizeWeights)
-    local ranges = {{settings.SizeMin, 115}, {116, math.floor(115 + (settings.SizeMax - 115) * 0.45)},
-        {math.floor(115 + (settings.SizeMax - 115) * 0.45) + 1, math.floor(settings.SizeMax * 0.88)},
-        {math.floor(settings.SizeMax * 0.88) + 1, settings.SizeMax}}
-    return random:NextInteger(ranges[band][1], ranges[band][2])
 end
 
 local function publish(object, state, resetClock)
@@ -117,9 +106,9 @@ end
 function PlantService.GetData(object)
     local state = growing[object]
     if not state then return nil end
-    return {Version = 2, Type = state.Type, Segment = state.Segment, Remaining = state.Remaining,
+    return {Version = 3, Type = state.Type, Segment = state.Segment, Remaining = state.Remaining,
         NeedsWater = state.NeedsWater, Ready = state.Ready, Intervals = table.clone(state.Intervals),
-        Fruits = state.Fruits, Stage = object:GetAttribute("GrowthStage")}
+        Yields = table.clone(state.Yields), Stage = object:GetAttribute("GrowthStage")}
 end
 
 function PlantService.Restore(object, saved)
@@ -127,15 +116,17 @@ function PlantService.Restore(object, saved)
     local positions = getPositions(object)
     local folder = PlantsFolder:FindFirstChild(saved.Type)
     if not settings or not positions or not folder then return false, "Unknown crop" end
-    table.sort(positions, function(a, b) return a.Parent.Name < b.Parent.Name end)
     local stages = 0
     for _, model in ipairs(folder:GetChildren()) do if model:IsA("Model") and model.Name:match("^Stage%d+$") then stages += 1 end end
     local state = {Type = saved.Type, Stages = stages, Segment = saved.Segment or 1,
         Remaining = saved.Remaining, NeedsWater = saved.NeedsWater == true, Ready = saved.Ready == true,
-        Intervals = saved.Intervals or growthIntervals(settings), Fruits = saved.Fruits}
+        Intervals = saved.Intervals or growthIntervals(settings), Yields = saved.Yields}
+    if saved.Version == 2 then
+        state.Yields = {}
+        for index, fruits in ipairs(saved.Fruits) do state.Yields[index] = #fruits end
+    end
     if saved.Version == nil then
-        state.Fruits = {}
-        for index in ipairs(positions) do state.Fruits[index] = {100} end
+        state.Yields = table.create(#positions, 1)
         local stage = math.clamp(saved.Stage or 0, 1, stages)
         if stage == stages then state.Ready = true;state.Segment = #state.Intervals;state.Remaining = 0
         else
@@ -154,7 +145,6 @@ function PlantService.Restore(object, saved)
     growing[object] = state
     object:SetAttribute("Occupied", true)
     object:SetAttribute("PlantType", state.Type)
-    object:SetAttribute("CropFruits", HttpService:JSONEncode(state.Fruits))
     publish(object, state, true)
     return true
 end
@@ -167,21 +157,18 @@ function PlantService.Plant(player, gardenBed, seedType)
     if not settings or not positions or not PlantsFolder:FindFirstChild(seed.PlantId) then return false end
     local bonuses = Laboratory.GetBonuses(player)
     local yieldWeights = LaboratoryConfig.Weighted(settings.YieldWeights, bonuses.Yield)
-    local sizeWeights = LaboratoryConfig.Weighted(settings.SizeWeights, bonuses.Genetics)
     local intervals = growthIntervals(settings)
     if Journal.TutorialComplete(player) then
         for index, seconds in ipairs(intervals) do intervals[index] = seconds * (1 - bonuses.Growth / 100) end
     else
         intervals = table.clone(tutorialConfig.FirstCropIntervals)
     end
-    local fruits = {}
+    local yields = {}
     for index in ipairs(positions) do
-        fruits[index] = {}
-        local count = math.min(settings.YieldMax, settings.YieldMin + choose(yieldWeights) - 1)
-        for _ = 1, count do table.insert(fruits[index], rollSize(settings, sizeWeights)) end
+        yields[index] = math.min(settings.YieldMax, settings.YieldMin + choose(yieldWeights) - 1)
     end
     if not InventoryService.RemoveItem(player, seedType, #positions) then return false end
-    local planted = PlantService.Restore(gardenBed, {Version = 2, Type = seed.PlantId, Fruits = fruits, Intervals = intervals})
+    local planted = PlantService.Restore(gardenBed, {Version = 3, Type = seed.PlantId, Yields = yields, Intervals = intervals})
     if planted then Journal.Record(player, "Plant", 1, seedType, gardenBed) end
     return planted
 end
@@ -210,15 +197,12 @@ function PlantService.Harvest(player, gardenBed)
     if not canUse(player, gardenBed) or not gardenBed:GetAttribute("ReadyToHarvest") or not Journal.CanHarvest(player, gardenBed) then return false end
     local state = growing[gardenBed]
     if not state then return false end
-    local groups, sizes, count = {}, {}, 0
-    for _, fruits in ipairs(state.Fruits) do
-        for _, size in ipairs(fruits) do table.insert(sizes, size);count += 1;groups = CropItems.Merge(groups, {{Size = size, Amount = 1}}) end
-    end
-    if not InventoryService.ExchangeItems(player, {}, {[state.Type] = count}, {[state.Type] = groups}) then return false end
-    Records.Observe(player, state.Type, sizes)
+    local count = 0
+    for _, amount in ipairs(state.Yields) do count += amount end
+    if not InventoryService.AddItem(player, state.Type, count) then return false end
     Journal.Record(player, "Harvest", count, state.Type, gardenBed)
     growing[gardenBed] = nil
-    for _, name in ipairs({"CropFruits", "WateredAt", "GrowthTarget", "GrowthPerSecond", "GrowthEndsAt", "GrowthLastSegment"}) do gardenBed:SetAttribute(name, nil) end
+    for _, name in ipairs({"WateredAt", "GrowthTarget", "GrowthPerSecond", "GrowthEndsAt", "GrowthLastSegment"}) do gardenBed:SetAttribute(name, nil) end
     gardenBed:SetAttribute("Occupied", false)
     gardenBed:SetAttribute("PlantType", "")
     gardenBed:SetAttribute("GrowthStage", 0)

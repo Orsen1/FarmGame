@@ -1,4 +1,3 @@
-local CropItems = require(game.ReplicatedStorage.CropItems)
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -10,8 +9,8 @@ local SellService = {}
 local Journal = require(ServerScriptService.FarmJournalService)
 local MAX_INTEGER = 9007199254740991
 
-function SellService.Price(itemName, groups)
-    return CropItems.Value(itemName, groups, ItemDefinitions)
+function SellService.Price(itemName, amount)
+    return ItemDefinitions[itemName].SellPriceCents * amount
 end
 
 function SellService.RecordSale(player, itemName, amount, cents)
@@ -38,10 +37,7 @@ function SellService.SellItem(player, itemName, amount)
 	end
 
 	if not Journal.CanSell(player, itemName, amount) then return false, "FinishTutorialSale" end
-
-	local removedGroups, removalError = InventoryService.GetRemoval(player, {[itemName] = amount})
-    if not removedGroups then return false, removalError end
-    local totalPrice = SellService.Price(itemName, removedGroups[itemName])
+    local totalPrice = SellService.Price(itemName, amount)
 	if not MoneyService.CanAddMoney(player, totalPrice) then
 		return false, "InvalidBalanceOrAmountTooLarge"
 	end
@@ -55,7 +51,7 @@ function SellService.SellItem(player, itemName, amount)
 
 	local added = MoneyService.AddMoney(player, totalPrice)
 	if not added then
-		InventoryService.ExchangeItems(player, outputs, inputs, removedGroups)
+		InventoryService.ExchangeItems(player, outputs, inputs)
 		return false, "MoneyCouldNotBeAdded"
 	end
 

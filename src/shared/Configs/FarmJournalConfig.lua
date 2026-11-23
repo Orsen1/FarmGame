@@ -60,7 +60,7 @@ return {
             Objectives = {
                 {Id = "LaboratoryHome", Text = "Finish a crop laboratory", Goal = 1, Kind = "Building", Item = "Laboratory", Icon = "LaboratoryBlueprint", Hint = "Build the Crop Laboratory."},
                 {Id = "Research", Text = "Complete a successful research", Goal = 1, Kind = "Action", Icon = "LaboratoryBlueprint", Hint = "Upgrade any laboratory research once."},
-                {Id = "BigFruit", Text = "Harvest a fruit of 140%", Goal = 140, Kind = "Record", Format = "Percent", Icon = "Pumpkin", Hint = "Your all-time crop record counts."},
+                {Id = "WaterTwenty", Event = "Water", Text = "Water 20 garden beds", Goal = 20, Kind = "Action", Icon = "WateringCan", Hint = "Every time you water a thirsty bed counts."},
                 {Id = "HarvestHundred", Event = "Harvest", Text = "Harvest 100 crops", Goal = 100, Kind = "Action", Icon = "Carrot", Hint = "Keep growing. Every harvested fruit counts."},
             },
         },
@@ -89,7 +89,7 @@ return {
             Reward = {MoneyCents = 300, Items = {CornSeed = 5}},
             Objectives = {
                 {Id = "OrdersFive", Event = "Order", Text = "Complete 5 orders", Goal = 5, Kind = "Action", Icon = "Strawberry", Hint = "Any Town board counts."},
-                {Id = "RecordSide", Text = "Harvest a fruit of 175%", Goal = 175, Kind = "Record", Format = "Percent", Icon = "Pumpkin", Hint = "Your best crop record counts."},
+                {Id = "SellTwentyFive", Event = "Sell", Text = "Sell 25 crops", Goal = 25, Kind = "Action", Icon = "Carrot", Hint = "Stock crops at your farm stand for visiting buyers."},
             },
         },
     },

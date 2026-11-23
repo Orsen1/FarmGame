@@ -62,7 +62,8 @@ local function validateData(template, plant)
     end
 
     if plant.Version ~= nil then
-        if plant.Version ~= 2 or typeof(plant.Fruits) ~= "table" or #plant.Fruits ~= #spots or
+        local yields = plant.Version == 2 and plant.Fruits or plant.Yields
+        if plant.Version ~= 2 and plant.Version ~= 3 or typeof(yields) ~= "table" or #yields ~= #spots or
             typeof(plant.Intervals) ~= "table" or #plant.Intervals < 1 or #plant.Intervals > 10 or
             typeof(plant.Segment) ~= "number" or plant.Segment % 1 ~= 0 or plant.Segment < 1 or
             plant.Segment > #plant.Intervals or typeof(plant.Remaining) ~= "number" or plant.Remaining ~= plant.Remaining or
@@ -75,10 +76,11 @@ local function validateData(template, plant)
         if plant.Remaining > plant.Intervals[plant.Segment] or plant.NeedsWater and
             (plant.Segment == #plant.Intervals or plant.Remaining ~= 0) or plant.Ready and
             (plant.Segment ~= #plant.Intervals or plant.Remaining ~= 0 or plant.NeedsWater) then return false, "Invalid crop checkpoint" end
-        for _, fruits in ipairs(plant.Fruits) do
-            if typeof(fruits) ~= "table" or #fruits < 1 or #fruits > 20 then return false, "Invalid crop yield" end
-            for _, size in ipairs(fruits) do
-                if typeof(size) ~= "number" or size % 1 ~= 0 or size < 1 or size > 10000 then return false, "Invalid fruit size" end
+        for index = 1, #spots do
+            local count = yields[index]
+            if plant.Version == 2 then count = typeof(count) == "table" and #count end
+            if typeof(count) ~= "number" or count % 1 ~= 0 or count < 1 or count > 20 then
+                return false, "Invalid crop yield"
             end
         end
     end

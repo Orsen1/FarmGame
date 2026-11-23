@@ -1,4 +1,3 @@
-local CropItems = require(game.ReplicatedStorage.CropItems)
 local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
 
@@ -17,7 +16,6 @@ local OrderService = plotModule and require(ServerScriptService:WaitForChild("Or
 local FarmStandService = plotModule and require(ServerScriptService:WaitForChild("FarmStandService"))
 local Laboratory = plotModule and require(ServerScriptService:WaitForChild("LaboratoryService"))
 
-local CropRecords = require(ServerScriptService.CropRecordService)
 local Journal = require(ServerScriptService.FarmJournalService)
 local loadedData = {}
 local savingPlayers = {}
@@ -73,7 +71,6 @@ local function loadPlayerData(player)
             slot.ItemName.Value = savedSlot.ItemName
             slot.Amount.Value = savedSlot.Amount
             slot:SetAttribute("ObjectData", savedSlot.ObjectData)
-            CropItems.Write(slot, savedSlot.Variants)
         end
     end
 
@@ -114,7 +111,6 @@ local function loadPlayerData(player)
         return
     end
 
-    if not CropRecords.Load(player, data.CropRecord) then player:Kick("Failed to load crop record.");return end
     if not Journal.Load(player, data.FarmJournal, data) then player:Kick("Failed to load your farm journal.");return end
     if houseMigrated and not PlayerDataService.saveData(player.UserId, data) then
         player:Kick("Could not save the farmhouse update. Your previous farm is safe. Please rejoin.")
@@ -150,7 +146,7 @@ local function savePlayerData(player, preparingTeleport)
         data = table.clone(loadedData[player])
         data.Money = MoneyService.GetMoney(player)
         data.Inventory = inventoryData
-        data.CropRecord = CropRecords.GetData(player)
+        data.CropRecord = nil
         data.FarmJournal = Journal.GetData(player)
         if Laboratory then
             Laboratory.Close(player)
@@ -225,7 +221,6 @@ end)
 Players.PlayerRemoving:Connect(function(player)
     savePlayerData(player)
     loadedData[player] = nil
-    CropRecords.Clear(player)
     Journal.Clear(player)
     if Laboratory then Laboratory.Clear(player) end
     if OrderService then
