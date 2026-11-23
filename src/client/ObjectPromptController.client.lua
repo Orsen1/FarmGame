@@ -307,17 +307,24 @@ local function updatePrompt(prompt)
             prompt.ActionText = "Water crops"
             prompt:SetAttribute("Icon", ItemDefinitions.WateringCan.Icon)
             prompt:SetAttribute("Context", string.format("+%d%% growth speed", math.round((CropConfig.WateringGrowthMultiplier - 1) * 100)))
-            setEnabled(prompt, selectedAmount > 0 and object:GetAttribute("Occupied") == true and
-                object:GetAttribute("Watered") ~= true and object:GetAttribute("ReadyToHarvest") ~= true)
+            setEnabled(prompt, selectedAmount > 0 and object:GetAttribute("CanWater") == true)
             if not prompt.Enabled then hidePrompt(prompt)
             elseif promptViews[prompt] then promptViews[prompt].update() end
             return
         end
-        prompt.ActionText = "Plant"
+        local planted = object:GetAttribute("PlantedCount") or 0
+        local capacity = object:GetAttribute("PlantingCapacity") or definition.PlantingCapacity
+        local crop = ItemDefinitions[object:GetAttribute("PlantType")]
+        local amount = capacity and math.min(capacity - planted, selectedAmount) or 0
+        prompt.ActionText = amount > 0 and (planted > 0 and "Add " or "Plant ") .. amount or "Plant"
+        if capacity then
+            prompt.ObjectText = string.format("%s  %d/%d", crop and crop.DisplayName or definition.DisplayName, planted, capacity)
+        end
+        local step = player:GetAttribute("TutorialStep") or "Complete"
         setEnabled(prompt,
-            object:GetAttribute("Occupied") ~= true and selectedAmount > 0 and selectedDefinition ~= nil and
-                selectedDefinition.Type == "Seed" and ((player:GetAttribute("TutorialStep") or "Complete") == "Complete" or
-                    player:GetAttribute("TutorialStep") == "Plant" and selectedItemName == player:GetAttribute("TutorialSeedItem")))
+            amount > 0 and selectedDefinition ~= nil and selectedDefinition.Type == "Seed" and
+                (not crop or selectedDefinition.PlantId == object:GetAttribute("PlantType")) and (step == "Complete" or
+                    step ~= "Sell" and selectedItemName == player:GetAttribute("TutorialSeedItem")))
 
     elseif definition.Recipes then
         prompt.ActionText = "Work"

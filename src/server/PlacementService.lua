@@ -59,7 +59,8 @@ function PlacementService.placeItem(player, itemName, position, rotation)
         placedModel:SetAttribute("Occupied", false)
         placedModel:SetAttribute("ReadyToHarvest", false)
         placedModel:SetAttribute("PlantType", "")
-        placedModel:SetAttribute("GrowthStage", 0)
+        placedModel:SetAttribute("PlantedCount", 0)
+        placedModel:SetAttribute("PlantingCapacity", #placedModel.PlantingSpots:GetChildren())
     end
 
     for _, object in ipairs(placedModel:GetDescendants()) do

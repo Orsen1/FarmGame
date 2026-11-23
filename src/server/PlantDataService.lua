@@ -14,6 +14,26 @@ local function isPlantable(object)
     return definition ~= nil and definition.Plantable == true
 end
 
+local function validBatches(batches, spots)
+    if typeof(batches) ~= "table" or #batches < 1 or #batches > #spots then return false end
+    local available = {}
+    for _, spot in ipairs(spots) do available[spot.Name] = true end
+    for index = 1, #batches do
+        local batch = batches[index]
+        if typeof(batch) ~= "table" or typeof(batch.Duration) ~= "number" or
+            not (batch.Duration > 0 and batch.Duration <= 864000) or typeof(batch.Remaining) ~= "number" or
+            not (batch.Remaining >= 0 and batch.Remaining <= batch.Duration) or typeof(batch.Watered) ~= "boolean" or
+            typeof(batch.Slots) ~= "table" or #batch.Slots < 1 or #batch.Slots > #spots then return false end
+        for i = 1, #batch.Slots do
+            local slot = batch.Slots[i]
+            if typeof(slot) ~= "table" or typeof(slot.Spot) ~= "string" or not available[slot.Spot] or
+                typeof(slot.Yield) ~= "number" or slot.Yield % 1 ~= 0 or slot.Yield < 1 or slot.Yield > 20 then return false end
+            available[slot.Spot] = nil
+        end
+    end
+    return true
+end
+
 local function validateData(template, plant)
     if not isPlantable(template) then
         if plant ~= nil then
@@ -46,12 +66,8 @@ local function validateData(template, plant)
         return true
     end
 
-    if typeof(plant) ~= "table" or typeof(plant.Type) ~= "string" or typeof(plant.Stage) ~= "number" then
+    if typeof(plant) ~= "table" or typeof(plant.Type) ~= "string" then
         return false, "Invalid saved crop data"
-    end
-
-    if plant.Stage < 0 or plant.Stage % 1 ~= 0 then
-        return false, "Crop stage must be a non-negative integer"
     end
 
     local plantFolder = plants:FindFirstChild(plant.Type)
@@ -59,6 +75,11 @@ local function validateData(template, plant)
 
     if not firstStage or not firstStage:IsA("Model") then
         return false, "Missing growth models for " .. plant.Type
+    end
+
+    if plant.Version == 4 then return validBatches(plant.Batches, spots), "Invalid saved planting spots" end
+    if typeof(plant.Stage) ~= "number" or plant.Stage < 0 or plant.Stage % 1 ~= 0 then
+        return false, "Crop stage must be a non-negative integer"
     end
 
     if plant.Version ~= nil then
@@ -107,8 +128,9 @@ function PlantDataService.loadData(template, object, savedObject)
     if plant then return PlantService.Restore(object, plant) end
     object:SetAttribute("Occupied", false)
     object:SetAttribute("PlantType", "")
-    object:SetAttribute("GrowthStage", 0)
     object:SetAttribute("ReadyToHarvest", false)
+    object:SetAttribute("PlantedCount", 0)
+    object:SetAttribute("PlantingCapacity", #template.PlantingSpots:GetChildren())
     return true
 end
 

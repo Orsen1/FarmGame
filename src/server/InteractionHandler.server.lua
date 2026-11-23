@@ -191,12 +191,7 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     end
 
     if definition.Plantable == true then
-        local seedDefinition = ItemDefinitions[selectedItemName]
-
-        if selectedAmount > 0 and seedDefinition and seedDefinition.Type == "Seed" then
-            PlantService.Plant(player, object, selectedItemName)
-        end
-
+        PlantService.Plant(player, object)
     elseif definition.Recipes then
         local success, reason = ProductionService.Open(player, object)
 

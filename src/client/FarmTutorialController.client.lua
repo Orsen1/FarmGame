@@ -116,7 +116,7 @@ action.Activated:Connect(function()
     elseif step == "Plant" then selectItem(tutorial.SeedItem)
     elseif step == "Grow" then
         local bed = currentBed()
-        if bed and bed:GetAttribute("Watered") then invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
+        if bed and not bed:GetAttribute("CanWater") then invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
         elseif tutorial.CanBought then selectItem("WateringCan")
         else invoke("BuyGui", "OpenShop", "Equipment") end
     elseif step == "Farm" then invoke("MyFarmGui", "Open")
@@ -190,7 +190,7 @@ refresh = function()
         if endsAt then
             local seconds = math.max(0, math.ceil(endsAt - workspace:GetServerTimeNow()))
             title.Text = "Harvest in " .. seconds .. "s"
-            if bed:GetAttribute("Watered") then
+            if not bed:GetAttribute("CanWater") then
                 body.Text = "Your watered crop is growing faster."
                 action.Text = "Open journal"
             elseif tutorial.CanBought then

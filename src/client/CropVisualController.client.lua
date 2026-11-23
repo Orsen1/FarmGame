@@ -1,5 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
 local config = require(ReplicatedStorage.Configs.CropConfig)
 local plots = workspace:WaitForChild("Plots")
 local beds, cache = {}, {}
@@ -35,38 +36,29 @@ end
 
 local function clear(state)
     if state.Visual then state.Visual:Destroy() end
-    if state.Previous then state.Previous:Destroy() end
-    state.Visual, state.Previous, state.Stage, state.Crop = nil, nil, nil, nil
-    state.Models, state.Parts, state.PreviousParts = nil, nil, nil
+    state.Visual, state.Plants, state.Crop = nil, nil, nil
 end
 
 local function opacity(parts, transparency)
     for _, part in ipairs(parts) do part.LocalTransparencyModifier = transparency end
 end
 
-local function build(state, crop, stage, template, now)
-    local previous = state.Crop == crop and state.Stage and stage == state.Stage + 1 and state.Visual
-    local previousParts = state.Parts
-    if previous then state.Visual = nil end
-    clear(state)
-    local visual = Instance.new("Model")
-    visual.Name = "CropVisuals"
-    local models, parts = {}, {}
-    for index in ipairs(state.Positions) do
-        local model = template.Model:Clone()
-        model.Name = "Plant" .. index
-        model.Parent = visual
-        models[index] = model
-        for _, part in ipairs(model:GetDescendants()) do
-            if part:IsA("BasePart") and part.Transparency < 1 then table.insert(parts, part) end
-        end
+local function changeStage(state, stage, template, name, now)
+    local previous = state.Stage and stage == state.Stage + 1 and state.Model
+    if state.Previous then state.Previous:Destroy() end
+    if state.Model and not previous then state.Model:Destroy() end
+    local model, parts = template.Model:Clone(), {}
+    model.Name = name
+    for _, part in ipairs(model:GetDescendants()) do
+        if part:IsA("BasePart") and part.Transparency < 1 then table.insert(parts, part) end
     end
+    state.Previous, state.PreviousParts = previous, previous and state.Parts
     if previous then
-        previous.Name = "PreviousCropVisuals"
+        previous.Name = name .. "Previous"
         opacity(parts, 1)
-        state.Previous, state.PreviousParts, state.Transition = previous, previousParts, now
+        state.Transition = now
     end
-    state.Crop, state.Stage, state.Visual, state.Models, state.Parts = crop, stage, visual, models, parts
+    state.Model, state.Parts, state.Stage = model, parts, stage
     state.Scale, state.Lift = nil, nil
 end
 
@@ -87,42 +79,43 @@ local function positionsFor(bed)
     return positions, spacing * .9
 end
 
-local function render(bed, state, now)
-    local crop = bed:GetAttribute("PlantType")
-    local setting = config.Crops[crop]
-    if not setting then
-        if state.Visual then clear(state) end
-        return
+local function readClocks(bed, state)
+    local encoded = bed:GetAttribute("CropGrowth")
+    if encoded == state.ClockText then return state.Clocks end
+    state.ClockText, state.Clocks = encoded, {}
+    if encoded then
+        local ok, batches = pcall(HttpService.JSONDecode, HttpService, encoded)
+        if ok then
+            for _, batch in ipairs(batches) do
+                for _, spot in ipairs(batch.Spots) do state.Clocks[spot] = batch end
+            end
+        end
     end
-    if not state.Positions then state.Positions, state.Clearance = positionsFor(bed) end
-    local stages = stagesFor(crop)
-    if #stages == 0 then return end
-    local endsAt = bed:GetAttribute("GrowthEndsAt")
-    if not endsAt then return end
-    local remaining = math.max(0, endsAt - workspace:GetServerTimeNow())
-    local progress = 1 - remaining * (bed:GetAttribute("GrowthPerSecond") or 0)
+    return state.Clocks
+end
+
+local function renderPlant(state, clock, container, index, position, stages, setting, clearance, now, serverNow)
+    local progress = 1 - math.max(0, clock.EndsAt - serverNow) * clock.Rate
     local phase = math.clamp(progress, 0, 1) * #stages
     local stage = math.min(#stages, math.floor(phase) + 1)
     local template, mature = stages[stage], stages[#stages]
-    if state.Crop ~= crop or state.Stage ~= stage then build(state, crop, stage, template, now) end
+    if state.Stage ~= stage then changeStage(state, stage, template, "Plant" .. index, now) end
 
     local fraction = phase - stage + 1
-    local matureHeight = mature.Height * math.min(setting.VisualScale, state.Clearance / mature.Width)
+    local height = mature.Height * math.min(setting.VisualScale, clearance / mature.Width)
     local shape = setting.GrowthShape
     local first = stage == 1 and .065 or (shape and shape[stage - 1] or (stage - 1) / #stages)
     local last = shape and shape[stage] or stage / #stages
-    local scale = math.min(matureHeight * (first + (last - first) * fraction) / template.Height,
-        state.Clearance / template.Width) * template.Scale
+    local scale = math.min(height * (first + (last - first) * fraction) / template.Height,
+        clearance / template.Width) * template.Scale
     local lift = stage == #stages and (setting.MatureLift or 0) * fraction or 0
     if not state.Scale or math.abs(scale - state.Scale) > .002 or math.abs(lift - state.Lift) > .002 or
         progress >= 1 and (scale ~= state.Scale or lift ~= state.Lift) then
-        for index, plant in ipairs(state.Models) do
-            plant:ScaleTo(scale)
-            plant:PivotTo(state.Positions[index].CFrame + Vector3.yAxis * lift)
-        end
+        state.Model:ScaleTo(scale)
+        state.Model:PivotTo(position.CFrame + Vector3.yAxis * lift)
         state.Scale, state.Lift = scale, lift
     end
-    if not state.Visual.Parent then state.Visual.Parent = bed end
+    if not state.Model.Parent then state.Model.Parent = container end
     if state.Previous then
         local blend = math.clamp((now - state.Transition) / transitionTime, 0, 1)
         opacity(state.Parts, 1 - blend)
@@ -131,6 +124,39 @@ local function render(bed, state, now)
             state.Previous, state.PreviousParts = nil, nil
         else
             opacity(state.PreviousParts, blend)
+        end
+    end
+end
+
+local function render(bed, state, now)
+    local crop = bed:GetAttribute("PlantType")
+    local setting = config.Crops[crop]
+    local clocks = readClocks(bed, state)
+    if not setting or not clocks or not next(clocks) then
+        if state.Visual then clear(state) end
+        return
+    end
+    if state.Crop ~= crop then
+        clear(state)
+        state.Crop, state.Plants = crop, {}
+        local container = Instance.new("Model")
+        container.Name, container.Parent = "CropVisuals", bed
+        state.Visual = container
+    end
+    if not state.Positions then state.Positions, state.Clearance = positionsFor(bed) end
+    local stages = stagesFor(crop)
+    if #stages == 0 then return end
+    local serverNow = workspace:GetServerTimeNow()
+    for index, position in ipairs(state.Positions) do
+        local clock = clocks[position.Parent.Name]
+        local plant = state.Plants[index]
+        if clock then
+            if not plant then plant = {};state.Plants[index] = plant end
+            renderPlant(plant, clock, state.Visual, index, position, stages, setting, state.Clearance, now, serverNow)
+        elseif plant then
+            plant.Model:Destroy()
+            if plant.Previous then plant.Previous:Destroy() end
+            state.Plants[index] = nil
         end
     end
 end

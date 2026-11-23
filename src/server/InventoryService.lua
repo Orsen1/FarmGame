@@ -172,6 +172,18 @@ function InventoryService.RemoveItem(player, itemName, amount)
     }, {})
 end
 
+function InventoryService.RemoveFromSlot(player, slotIndex, itemName, amount)
+    if player:GetAttribute("DataLoaded") ~= true or not isValidAmount(amount) then return false end
+    local data = InventoryService.GetInventory(player)
+    local row = data and data[slotIndex]
+    if not row or row.ItemName ~= itemName or row.ObjectData or row.Amount < amount then return false end
+
+    row.Amount -= amount
+    if row.Amount == 0 then row.ItemName = "" end
+    writeInventory(player, data)
+    return true
+end
+
 function InventoryService.GetInventory(player)
     local inventory = player:FindFirstChild("Inventory")
     if not inventory then

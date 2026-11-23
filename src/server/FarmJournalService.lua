@@ -188,7 +188,7 @@ end
 function Journal.CanPlant(player, object, seed)
     local data = journals[player]
     if not data then return false end
-    return data.Tutorial.Completed or not data.Tutorial.Planted and
+    return data.Tutorial.Completed or data.Tutorial.Harvested == 0 and
         seed == data.Tutorial.SeedItem and object == tutorialBed(player, data.Tutorial)
 end
 
