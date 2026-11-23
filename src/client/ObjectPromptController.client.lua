@@ -10,6 +10,7 @@ local ConstructionDefinitions = require(ReplicatedStorage:WaitForChild("Configs"
 local ConstructionPromptView = require(script.Parent:WaitForChild("ConstructionPromptView"))
 local AnimalShopPromptView = require(script.Parent:WaitForChild("AnimalShopPromptView"))
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
+local CropConfig = require(ReplicatedStorage.Configs.CropConfig)
 local InteractionConfig = require(ReplicatedStorage.Configs.InteractionConfig)
 
 local player = Players.LocalPlayer
@@ -303,11 +304,11 @@ local function updatePrompt(prompt)
         local selectedDefinition = ItemDefinitions[selectedItemName]
 
         if selectedItemName == "WateringCan" then
-            local crop = ItemDefinitions[object:GetAttribute("PlantType")]
             prompt.ActionText = "Water crops"
             prompt:SetAttribute("Icon", ItemDefinitions.WateringCan.Icon)
-            prompt:SetAttribute("Context", crop and crop.DisplayName or "Garden bed")
-            setEnabled(prompt, selectedAmount > 0 and object:GetAttribute("NeedsWater") == true)
+            prompt:SetAttribute("Context", string.format("+%d%% growth speed", math.round((CropConfig.WateringGrowthMultiplier - 1) * 100)))
+            setEnabled(prompt, selectedAmount > 0 and object:GetAttribute("Occupied") == true and
+                object:GetAttribute("Watered") ~= true and object:GetAttribute("ReadyToHarvest") ~= true)
             if not prompt.Enabled then hidePrompt(prompt)
             elseif promptViews[prompt] then promptViews[prompt].update() end
             return

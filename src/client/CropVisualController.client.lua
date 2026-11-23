@@ -97,12 +97,10 @@ local function render(bed, state, now)
     if not state.Positions then state.Positions, state.Clearance = positionsFor(bed) end
     local stages = stagesFor(crop)
     if #stages == 0 then return end
-    local progress = bed:GetAttribute("GrowthTarget")
-    if not progress then return end
-    if not bed:GetAttribute("NeedsWater") and not bed:GetAttribute("ReadyToHarvest") then
-        local remaining = math.max(0, (bed:GetAttribute("GrowthEndsAt") or 0) - workspace:GetServerTimeNow())
-        progress -= remaining * (bed:GetAttribute("GrowthPerSecond") or 0)
-    end
+    local endsAt = bed:GetAttribute("GrowthEndsAt")
+    if not endsAt then return end
+    local remaining = math.max(0, endsAt - workspace:GetServerTimeNow())
+    local progress = 1 - remaining * (bed:GetAttribute("GrowthPerSecond") or 0)
     local phase = math.clamp(progress, 0, 1) * #stages
     local stage = math.min(#stages, math.floor(phase) + 1)
     local template, mature = stages[stage], stages[#stages]
@@ -158,25 +156,6 @@ RunService.Heartbeat:Connect(function(dt)
                 state.NextRender = now + (distance > 60 and 0.5 or 0)
                 render(bed, state, now)
             end
-            if bed:GetAttribute("NeedsWater") and not state.Hint then
-                local gui = Instance.new("BillboardGui")
-                gui.Name = "WaterHint"
-                gui.Size = UDim2.fromOffset(114, 34)
-                gui.StudsOffsetWorldSpace = Vector3.new(0, 2, 0)
-                gui.MaxDistance = 32
-                gui.Adornee = bed.PrimaryPart or bed:FindFirstChildWhichIsA("BasePart", true)
-                local label = Instance.new("TextLabel")
-                label.Size = UDim2.fromScale(1, 1)
-                label.BackgroundColor3 = Color3.fromRGB(255, 225, 166)
-                label.TextColor3 = Color3.fromRGB(44, 110, 151)
-                label.Font = Enum.Font.FredokaOne
-                label.TextSize = 19
-                label.Text = "Needs water"
-                local corner = Instance.new("UICorner");corner.CornerRadius = UDim.new(0, 10);corner.Parent = label
-                label.Parent = gui
-                gui.Parent = bed
-                state.Hint = gui
-            elseif not bed:GetAttribute("NeedsWater") and state.Hint then state.Hint:Destroy();state.Hint = nil end
-        else clear(state);if state.Hint then state.Hint:Destroy();state.Hint = nil end end
+        else clear(state) end
     end
 end)

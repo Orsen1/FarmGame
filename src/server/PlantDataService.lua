@@ -67,7 +67,8 @@ local function validateData(template, plant)
             typeof(plant.Intervals) ~= "table" or #plant.Intervals < 1 or #plant.Intervals > 10 or
             typeof(plant.Segment) ~= "number" or plant.Segment % 1 ~= 0 or plant.Segment < 1 or
             plant.Segment > #plant.Intervals or typeof(plant.Remaining) ~= "number" or plant.Remaining ~= plant.Remaining or
-            plant.Remaining < 0 or typeof(plant.NeedsWater) ~= "boolean" or typeof(plant.Ready) ~= "boolean" then
+            plant.Remaining < 0 or typeof(plant.NeedsWater) ~= "boolean" or typeof(plant.Ready) ~= "boolean" or
+            (plant.Watered ~= nil and typeof(plant.Watered) ~= "boolean") then
             return false, "Invalid growth state"
         end
         for _, seconds in ipairs(plant.Intervals) do
@@ -108,7 +109,6 @@ function PlantDataService.loadData(template, object, savedObject)
     object:SetAttribute("PlantType", "")
     object:SetAttribute("GrowthStage", 0)
     object:SetAttribute("ReadyToHarvest", false)
-    object:SetAttribute("NeedsWater", false)
     return true
 end
 

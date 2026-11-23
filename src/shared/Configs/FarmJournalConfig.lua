@@ -10,7 +10,7 @@ return {
             Reward = levels.Levels[1].Reward,
             Objectives = {
                 {Id = "Plant", Text = "Plant your first seeds", Goal = 1, Kind = "Action", Icon = "CarrotSeed", Hint = "Select seeds and use a garden bed."},
-                {Id = "Water", Text = "Water a thirsty bed", Goal = 1, Kind = "Action", Icon = "WateringCan", Hint = "Use a Watering Can when a bed needs water."},
+                {Id = "Ripen", Text = "Grow a garden bed", Goal = 1, Kind = "Action", Icon = "WateringCan", Hint = "Let your crops ripen. Watering speeds up growth."},
                 {Id = "Harvest", Text = "Harvest 10 crops", Goal = 10, Kind = "Action", Icon = "Carrot", Hint = "Collect ripe crops. Every fruit counts."},
                 {Id = "Sell", Text = "Make your first sale", Goal = 1, Kind = "Action", Icon = "Carrot", Hint = "Stock crops at the stand by your farm gate."},
                 {Id = "FirstBed", Text = "Place a garden bed", Goal = 1, Kind = "GardenBeds", Icon = "GardenBed", Hint = "Buy a five-spot Garden Bed and place it on your farm."},
@@ -60,7 +60,7 @@ return {
             Objectives = {
                 {Id = "LaboratoryHome", Text = "Finish a crop laboratory", Goal = 1, Kind = "Building", Item = "Laboratory", Icon = "LaboratoryBlueprint", Hint = "Build the Crop Laboratory."},
                 {Id = "Research", Text = "Complete a successful research", Goal = 1, Kind = "Action", Icon = "LaboratoryBlueprint", Hint = "Upgrade any laboratory research once."},
-                {Id = "WaterTwenty", Event = "Water", Text = "Water 20 garden beds", Goal = 20, Kind = "Action", Icon = "WateringCan", Hint = "Every time you water a thirsty bed counts."},
+                {Id = "PlantTwenty", Event = "Plant", Text = "Sow 20 garden beds", Goal = 20, Kind = "Action", Icon = "CarrotSeed", Hint = "Every planted garden bed counts."},
                 {Id = "HarvestHundred", Event = "Harvest", Text = "Harvest 100 crops", Goal = 100, Kind = "Action", Icon = "Carrot", Hint = "Keep growing. Every harvested fruit counts."},
             },
         },

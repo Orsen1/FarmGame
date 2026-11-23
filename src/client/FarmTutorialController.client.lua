@@ -112,12 +112,13 @@ action.Activated:Connect(function()
     local step = tutorial.Step
     if step == "BuyBed" then invoke("BuyGui", "OpenShop", "Buildings")
     elseif step == "BuySeeds" then invoke("BuyGui", "OpenShop", "Seeds")
-    elseif step == "BuyCan" then invoke("BuyGui", "OpenShop", "Equipment")
     elseif step == "Place" then selectItem(tutorial.BedItem)
     elseif step == "Plant" then selectItem(tutorial.SeedItem)
-    elseif step == "Grow" and currentBed() and currentBed():GetAttribute("GrowthLastSegment") then
-        invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
-    elseif step == "Water" or step == "Grow" then selectItem("WateringCan")
+    elseif step == "Grow" then
+        local bed = currentBed()
+        if bed and bed:GetAttribute("Watered") then invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
+        elseif tutorial.CanBought then selectItem("WateringCan")
+        else invoke("BuyGui", "OpenShop", "Equipment") end
     elseif step == "Farm" then invoke("MyFarmGui", "Open")
     elseif step == "Journal" or step == "Complete" then invoke("FarmJournalGui", "OpenChapter", "NewBeginning")
     elseif step == "Sell" then
@@ -168,7 +169,8 @@ refresh = function()
     local folded = minimized or placing
     card.Position = UDim2.new(.5, 0, 0, placing and 50 or not compact and size.X < 700 and 64 or 8)
     card.Size = UDim2.fromOffset(width, folded and 44 or compact and 152 or 186)
-    category.Text = tutorial.Completed and "FIRST HARVEST COMPLETE" or "FIRST HARVEST  /  " .. info.Order .. " OF 10"
+    local lastStep = config.Steps.Sell.Order
+    category.Text = tutorial.Completed and "FIRST HARVEST COMPLETE" or "FIRST HARVEST  /  " .. info.Order .. " OF " .. lastStep
     title.Text = tutorial.Completed and "A great start!" or info.Title
     local iconName = tutorial.Completed and (tutorial.CropItem or "Carrot") or info.Icon
     if step == "Plant" then iconName = tutorial.SeedItem
@@ -187,10 +189,13 @@ refresh = function()
         local endsAt = bed:GetAttribute("GrowthEndsAt")
         if endsAt then
             local seconds = math.max(0, math.ceil(endsAt - workspace:GetServerTimeNow()))
-            local last = bed:GetAttribute("GrowthLastSegment")
-            title.Text = (last and "Harvest in " or "Water in ") .. seconds .. "s"
-            body.Text = last and "Your crop is ripening. Explore the journal while it grows." or "Equip the watering can and watch for the blue drop."
-            action.Text = last and "Open journal" or "Select watering can"
+            title.Text = "Harvest in " .. seconds .. "s"
+            if bed:GetAttribute("Watered") then
+                body.Text = "Your watered crop is growing faster."
+                action.Text = "Open journal"
+            elseif tutorial.CanBought then
+                action.Text = "Select watering can"
+            end
         end
     end
     minimize.Text = folded and "+" or "-"
@@ -207,7 +212,7 @@ refresh = function()
     action.TextSize = compact and 16 or 18
     if shownStep ~= step then
         shownStep = step
-        TweenService:Create(fill, TweenInfo.new(.3), {Size = UDim2.fromScale(tutorial.Completed and 1 or (info.Order - 1) / 10, 1)}):Play()
+        TweenService:Create(fill, TweenInfo.new(.3), {Size = UDim2.fromScale(tutorial.Completed and 1 or (info.Order - 1) / lastStep, 1)}):Play()
         card.BackgroundColor3 = Color3.fromRGB(255, 223, 150)
         TweenService:Create(card, TweenInfo.new(.4), {BackgroundColor3 = paper}):Play()
     end
@@ -225,10 +230,10 @@ refresh = function()
             marker.Enabled = true
         end
     end
-    if visible and bed and (step == "Plant" or step == "Grow" or step == "Water" or step == "Harvest") then
+    if visible and bed and (step == "Plant" or step == "Grow" or step == "Harvest") then
         marker.Adornee = bed:FindFirstChild("PlacementRoot") or bed.PrimaryPart
-        markerText.Text = step == "Water" and "Water crops" or step == "Harvest" and "Harvest ready" or step == "Plant" and "Plant here" or "Your first crop"
-        markerText.BackgroundColor3 = step == "Water" and Color3.fromRGB(72, 135, 158) or green
+        markerText.Text = step == "Harvest" and "Harvest ready" or step == "Plant" and "Plant here" or "Your first crop"
+        markerText.BackgroundColor3 = green
         marker.Enabled = marker.Adornee ~= nil
         outline.Adornee, outline.Enabled = bed, true
     end

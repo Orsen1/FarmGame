@@ -8176,6 +8176,7 @@ end
 local function refresh()
     local tutorialStep = player:GetAttribute("TutorialStep")
     local capacity = player:GetAttribute("TutorialCapacity") or 1
+    local canBought = player:GetAttribute("TutorialCanBought")
     local tutorialInfo = tutorialConfig.Steps[tutorialStep]
     if tutorialInfo then catalogue.IntroLabel.Text = "Tutorial: " .. tutorialInfo.Title end
     main.FooterFrame.MoneyLabel.Text = "Balance: " .. formatMoney(money.Value)
@@ -8183,7 +8184,7 @@ local function refresh()
         local owned, room = inventoryInfo(id)
         local required = levels.RequiredLevel(id)
         local locked = (player:GetAttribute("FarmLevel") or 1) &lt; required
-        local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, id, definitions[id], capacity)
+        local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, id, definitions[id], capacity, canBought)
         if card:GetAttribute("CatalogueOrder") == nil then card:SetAttribute("CatalogueOrder", card.LayoutOrder) end
         local originalOrder = card:GetAttribute("CatalogueOrder")
         card.LayoutOrder = tutorialLimit and tutorialLimit &gt; 0 and originalOrder - 100 or originalOrder
@@ -8193,6 +8194,8 @@ local function refresh()
         elseif tutorialLimit == 0 then
             if id == "WateringCan" and (tutorialStep == "BuyBed" or tutorialStep == "BuySeeds") then
                 reason = "Buy seeds first"
+            elseif id == "WateringCan" and canBought then
+                reason = "Already bought"
             elseif definitions[id].Type == "Seed" and tutorialStep == "BuyBed" then
                 reason = "Buy a bed first"
             else
@@ -8212,7 +8215,7 @@ local function refresh()
     local item = definitions[selectedId]
     local price = item.BuyPriceCents
     local required = levels.RequiredLevel(selectedId)
-    local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, selectedId, item, capacity)
+    local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, selectedId, item, capacity, canBought)
     local unlocked = (player:GetAttribute("FarmLevel") or 1) &gt;= required and tutorialLimit ~= 0
     local maximum = maximumAmount(price)
     if tutorialLimit ~= nil then maximum = math.min(maximum, tutorialLimit);selectedAmount = maximum end
@@ -8487,12 +8490,12 @@ player:GetAttributeChangedSignal("TutorialStep"):Connect(function()
     local step = player:GetAttribute("TutorialStep")
     if main.Visible then
         if step == "BuySeeds" then showCatalogue("Seeds")
-        elseif step == "BuyCan" then showCatalogue("Equipment")
         elseif step ~= "BuyBed" then closeShop() end
     end
     refresh()
 end)
 player:GetAttributeChangedSignal("TutorialCapacity"):Connect(refresh)
+player:GetAttributeChangedSignal("TutorialCanBought"):Connect(refresh)
 </ProtectedString>
 				<bool name="Disabled">false</bool>
 				<Content name="LinkedSource"><null /></Content>

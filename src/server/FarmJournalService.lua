@@ -9,7 +9,9 @@ local MoneyService = require(script.Parent.MoneyService)
 local remote = ReplicatedStorage.RemoteEvents:WaitForChild("FarmJournal")
 local Journal = {}
 local legacyGoals = {
-    BigFruit = {Id = "WaterTwenty", Goal = 140},
+    Water = {Id = "Ripen"},
+    WaterTwenty = {Id = "PlantTwenty"},
+    BigFruit = {Id = "PlantTwenty", Goal = 140},
     RecordSide = {Id = "SellTwentyFive", Goal = 175},
 }
 local journals, objectives, chapters = {}, {}, {}
@@ -35,7 +37,7 @@ end
 local function tutorialView(player, data)
     local tutorial = table.clone(data.Tutorial)
     local bed = tutorialBed(player, tutorial)
-    tutorial.Step = tutorialConfig.Step(tutorial, bed and {NeedsWater = bed:GetAttribute("NeedsWater"), Ready = bed:GetAttribute("ReadyToHarvest")})
+    tutorial.Step = tutorialConfig.Step(tutorial, bed and {Ready = bed:GetAttribute("ReadyToHarvest")})
     tutorial.Capacity = tutorial.BedItem and definitions[tutorial.BedItem].PlantingCapacity or 1
     tutorial.Bed = bed
     return tutorial
@@ -75,7 +77,7 @@ local function loadTutorial(saved, data, playerData)
         if not result.BedItem or not definition or definition.Type ~= "Seed" then return end
         result.SeedItem, result.CropItem = saved.SeedItem, definition.PlantId
     end
-    if result.CanBought and not result.SeedItem or result.Planted and not result.CanBought or
+    if (result.CanBought or result.Planted) and not result.SeedItem or
         result.Harvested > 0 and not result.Planted then return end
     return result
 end
@@ -158,7 +160,7 @@ function Journal.CheckPurchase(player, item, amount)
     local data = journals[player]
     if not data then return false, "DataNotReady" end
     local tutorial = tutorialView(player, data)
-    local required = tutorialConfig.PurchaseAmount(tutorial.Step, item, definitions[item], tutorial.Capacity)
+    local required = tutorialConfig.PurchaseAmount(tutorial.Step, item, definitions[item], tutorial.Capacity, tutorial.CanBought)
     if required ~= nil and (required == 0 or amount ~= required) then return false, "TutorialPurchaseRequired" end
     return true
 end
@@ -186,7 +188,7 @@ end
 function Journal.CanPlant(player, object, seed)
     local data = journals[player]
     if not data then return false end
-    return data.Tutorial.Completed or not data.Tutorial.Planted and data.Tutorial.CanBought and
+    return data.Tutorial.Completed or not data.Tutorial.Planted and
         seed == data.Tutorial.SeedItem and object == tutorialBed(player, data.Tutorial)
 end
 
@@ -217,7 +219,7 @@ function Journal.Refresh(player)
             elseif definition and definition.Placeable and not definition.BuildsInto then buildings += 1 end
             animals += object:GetAttribute("AnimalCount") or 0
             if object:GetAttribute("Occupied") then raise(data, "Plant", 1) end
-            if object:GetAttribute("WateredAt") then raise(data, "Water", 1) end
+            if object:GetAttribute("ReadyToHarvest") then raise(data, "Ripen", 1) end
         end
         local unlocked = 0
         for _, section in ipairs(plot.Sections:GetChildren()) do
@@ -241,6 +243,7 @@ function Journal.Refresh(player)
     local tutorial = tutorialView(player, data)
     player:SetAttribute("TutorialStep", tutorial.Step)
     player:SetAttribute("TutorialCapacity", tutorial.Capacity)
+    player:SetAttribute("TutorialCanBought", tutorial.CanBought == true)
     player:SetAttribute("TutorialBedItem", tutorial.BedItem)
     player:SetAttribute("TutorialSeedItem", tutorial.SeedItem)
     player:SetAttribute("TutorialCropItem", tutorial.CropItem)
@@ -329,8 +332,12 @@ function Journal.Load(player, saved, playerData)
     local oldRecord = playerData.CropRecord
     local size = typeof(oldRecord) == "table" and integer(oldRecord.Size, 1) and oldRecord.Size or 0
     for oldId, legacy in pairs(legacyGoals) do
-        local progress = math.clamp(math.max(data.Counts[oldId] or 0, size) / legacy.Goal, 0, 1)
-        raise(data, legacy.Id, math.floor(progress * objectives[legacy.Id].Goal))
+        local count = data.Counts[oldId] or 0
+        if legacy.Goal then
+            local progress = math.clamp(math.max(count, size) / legacy.Goal, 0, 1)
+            count = math.floor(progress * objectives[legacy.Id].Goal)
+        end
+        raise(data, legacy.Id, count)
         data.Counts[oldId] = nil
     end
     for id, objective in pairs(objectives) do raise(data, id, data.Counts[objective.Event or id] or 0) end
@@ -389,13 +396,13 @@ function Journal.Record(player, event, amount, item, object)
         if event == "Buy" then
             if view.Step == "BuyBed" then tutorial.BedItem = item;changed = true
             elseif view.Step == "BuySeeds" then tutorial.SeedItem = item;tutorial.CropItem = definitions[item].PlantId;changed = true
-            elseif view.Step == "BuyCan" then tutorial.CanBought = true;changed = true end
+            elseif item == "WateringCan" then tutorial.CanBought = true;changed = true end
         elseif object == view.Bed and object ~= nil then
             if event == "Plant" then
                 tutorial.Planted = true
                 player:SetAttribute("GrowthBoostEndsAt", workspace:GetServerTimeNow() + tutorialConfig.GrowthBoostSeconds)
                 changed = true
-            elseif event == "Water" then tutorial.Watered = true;changed = true
+            elseif event == "Ripen" then changed = true
             elseif event == "Harvest" then tutorial.Harvested = amount;changed = true end
         elseif event == "Sell" and item == tutorial.CropItem and tutorial.Harvested > tutorial.Sold then
             tutorial.Sold += amount
@@ -425,7 +432,7 @@ function Journal.TutorialViewed(player, menu)
     local tutorial = data.Tutorial
     if tutorial.Completed or not tutorial.Planted then return false end
     if menu == "Farm" and not tutorial.FarmSeen then tutorial.FarmSeen = true
-    elseif menu == "Journal" and tutorial.Watered and tutorial.FarmSeen and not tutorial.JournalSeen then tutorial.JournalSeen = true
+    elseif menu == "Journal" and tutorial.FarmSeen and not tutorial.JournalSeen then tutorial.JournalSeen = true
     else return false end
     Journal.Update(player)
     return true

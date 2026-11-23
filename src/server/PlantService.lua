@@ -54,60 +54,42 @@ local function choose(weights)
     return #weights
 end
 
-local function growthIntervals(settings)
-    if #settings.GrowthIntervals == settings.Waterings + 1 then return table.clone(settings.GrowthIntervals) end
-    local total = 0
-    for _, seconds in ipairs(settings.GrowthIntervals) do total += seconds end
-    local intervals = {}
-    for index = 1, settings.Waterings + 1 do intervals[index] = total / (settings.Waterings + 1) end
-    return intervals
+local function growthRate(state)
+    return state.BaseRate * (state.Watered and config.WateringGrowthMultiplier or 1)
 end
 
 local function publish(object, state, resetClock)
-    local elapsed, total = 0, 0
-    for index, seconds in ipairs(state.Intervals) do
-        total += seconds
-        if index < state.Segment then elapsed += seconds end
-    end
-    elapsed += state.Intervals[state.Segment] - state.Remaining
     if resetClock then
-        local rate = state.Rate or 1
-        object:SetAttribute("GrowthTarget", (elapsed + state.Remaining) / total)
-        object:SetAttribute("GrowthPerSecond", rate / total)
+        local rate = growthRate(state)
+        object:SetAttribute("GrowthPerSecond", rate / state.Duration)
         object:SetAttribute("GrowthEndsAt", workspace:GetServerTimeNow() + state.Remaining / rate)
-        object:SetAttribute("GrowthLastSegment", state.Segment == #state.Intervals)
     end
-    local stage = math.min(state.Stages, 1 + math.floor(elapsed / total * (state.Stages - 1)))
-    if state.Ready then stage = state.Stages end
+    local progress = 1 - state.Remaining / state.Duration
+    local stage = 1 + math.floor(progress * (state.Stages - 1))
     object:SetAttribute("GrowthStage", stage)
-    object:SetAttribute("NeedsWater", state.NeedsWater)
-    object:SetAttribute("ReadyToHarvest", state.Ready)
+    object:SetAttribute("Watered", state.Watered)
+    object:SetAttribute("ReadyToHarvest", state.Remaining == 0)
 end
 
 function PlantService.Advance(object, dt, rate)
     local state = growing[object]
-    if not state or state.Ready or state.NeedsWater then return end
+    if not state or state.Remaining == 0 then return end
     rate = rate or 1
-    local rateChanged = rate ~= state.Rate
-    state.Rate = rate
-    state.Remaining = math.max(0, state.Remaining - dt * rate)
+    local rateChanged = rate ~= state.BaseRate
+    state.BaseRate = rate
+    state.Remaining = math.max(0, state.Remaining - dt * growthRate(state))
+    publish(object, state, state.Remaining == 0 or rateChanged)
     if state.Remaining == 0 then
-        if state.Segment < #state.Intervals then state.NeedsWater = true
-        else state.Ready = true end
-    end
-    local checkpoint = state.NeedsWater or state.Ready
-    publish(object, state, checkpoint or rateChanged)
-    if checkpoint then
         local player = game.Players:GetPlayerByUserId(object:GetAttribute("OwnerUserId") or 0)
-        if player and not Journal.TutorialComplete(player) then Journal.Update(player) end
+        if player then Journal.Record(player, "Ripen", 1, state.Type, object) end
     end
 end
 
 function PlantService.GetData(object)
     local state = growing[object]
     if not state then return nil end
-    return {Version = 3, Type = state.Type, Segment = state.Segment, Remaining = state.Remaining,
-        NeedsWater = state.NeedsWater, Ready = state.Ready, Intervals = table.clone(state.Intervals),
+    return {Version = 3, Type = state.Type, Segment = 1, Remaining = state.Remaining,
+        NeedsWater = false, Ready = state.Remaining == 0, Intervals = {state.Duration}, Watered = state.Watered,
         Yields = table.clone(state.Yields), Stage = object:GetAttribute("GrowthStage")}
 end
 
@@ -118,9 +100,15 @@ function PlantService.Restore(object, saved)
     if not settings or not positions or not folder then return false, "Unknown crop" end
     local stages = 0
     for _, model in ipairs(folder:GetChildren()) do if model:IsA("Model") and model.Name:match("^Stage%d+$") then stages += 1 end end
-    local state = {Type = saved.Type, Stages = stages, Segment = saved.Segment or 1,
-        Remaining = saved.Remaining, NeedsWater = saved.NeedsWater == true, Ready = saved.Ready == true,
-        Intervals = saved.Intervals or growthIntervals(settings), Yields = saved.Yields}
+    local duration = 0
+    local segment = saved.Segment or 1
+    local remaining = saved.Remaining
+    for index, seconds in ipairs(saved.Intervals or {settings.GrowthSeconds}) do
+        duration += seconds
+        if remaining and index > segment then remaining += seconds end
+    end
+    local state = {Type = saved.Type, Stages = stages, Duration = duration, BaseRate = 1,
+        Remaining = remaining or duration, Watered = saved.Watered == true or segment > 1, Yields = saved.Yields}
     if saved.Version == 2 then
         state.Yields = {}
         for index, fruits in ipairs(saved.Fruits) do state.Yields[index] = #fruits end
@@ -128,20 +116,8 @@ function PlantService.Restore(object, saved)
     if saved.Version == nil then
         state.Yields = table.create(#positions, 1)
         local stage = math.clamp(saved.Stage or 0, 1, stages)
-        if stage == stages then state.Ready = true;state.Segment = #state.Intervals;state.Remaining = 0
-        else
-            local elapsed = (stage - 1) / math.max(1, stages - 1)
-            local total = 0
-            for _, seconds in ipairs(state.Intervals) do total += seconds end
-            elapsed *= total
-            for index, seconds in ipairs(state.Intervals) do
-                state.Segment = index
-                if elapsed < seconds then state.Remaining = seconds - elapsed;break end
-                elapsed -= seconds
-            end
-        end
+        state.Remaining = stage == stages and 0 or duration * (1 - (stage - 1) / math.max(1, stages - 1))
     end
-    if state.Remaining == nil then state.Remaining = state.Intervals[state.Segment] end
     growing[object] = state
     object:SetAttribute("Occupied", true)
     object:SetAttribute("PlantType", state.Type)
@@ -157,18 +133,14 @@ function PlantService.Plant(player, gardenBed, seedType)
     if not settings or not positions or not PlantsFolder:FindFirstChild(seed.PlantId) then return false end
     local bonuses = Laboratory.GetBonuses(player)
     local yieldWeights = LaboratoryConfig.Weighted(settings.YieldWeights, bonuses.Yield)
-    local intervals = growthIntervals(settings)
-    if Journal.TutorialComplete(player) then
-        for index, seconds in ipairs(intervals) do intervals[index] = seconds * (1 - bonuses.Growth / 100) end
-    else
-        intervals = table.clone(tutorialConfig.FirstCropIntervals)
-    end
+    local duration = Journal.TutorialComplete(player) and settings.GrowthSeconds * (1 - bonuses.Growth / 100) or
+        tutorialConfig.FirstCropSeconds
     local yields = {}
     for index in ipairs(positions) do
         yields[index] = math.min(settings.YieldMax, settings.YieldMin + choose(yieldWeights) - 1)
     end
     if not InventoryService.RemoveItem(player, seedType, #positions) then return false end
-    local planted = PlantService.Restore(gardenBed, {Version = 3, Type = seed.PlantId, Yields = yields, Intervals = intervals})
+    local planted = PlantService.Restore(gardenBed, {Version = 3, Type = seed.PlantId, Yields = yields, Intervals = {duration}})
     if planted then Journal.Record(player, "Plant", 1, seedType, gardenBed) end
     return planted
 end
@@ -177,18 +149,13 @@ function PlantService.Water(player, gardenBed)
     if not canUse(player, gardenBed) then return false end
     local slot = player.Inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
     if not slot or slot.ItemName.Value ~= "WateringCan" or slot.Amount.Value < 1 then return false end
-    local watered = PlantService.ApplyWater(gardenBed)
-    if watered then Journal.Record(player, "Water", 1, nil, gardenBed) end
-    return watered
+    return PlantService.ApplyWater(gardenBed)
 end
 
 function PlantService.ApplyWater(gardenBed)
     local state = growing[gardenBed]
-    if not state or not state.NeedsWater or state.Ready then return false end
-    state.Segment += 1
-    state.Remaining = state.Intervals[state.Segment]
-    state.NeedsWater = false
-    gardenBed:SetAttribute("WateredAt", workspace:GetServerTimeNow())
+    if not state or state.Watered or state.Remaining == 0 then return false end
+    state.Watered = true
     publish(gardenBed, state, true)
     return true
 end
@@ -202,12 +169,11 @@ function PlantService.Harvest(player, gardenBed)
     if not InventoryService.AddItem(player, state.Type, count) then return false end
     Journal.Record(player, "Harvest", count, state.Type, gardenBed)
     growing[gardenBed] = nil
-    for _, name in ipairs({"WateredAt", "GrowthTarget", "GrowthPerSecond", "GrowthEndsAt", "GrowthLastSegment"}) do gardenBed:SetAttribute(name, nil) end
+    for _, name in ipairs({"Watered", "GrowthPerSecond", "GrowthEndsAt"}) do gardenBed:SetAttribute(name, nil) end
     gardenBed:SetAttribute("Occupied", false)
     gardenBed:SetAttribute("PlantType", "")
     gardenBed:SetAttribute("GrowthStage", 0)
     gardenBed:SetAttribute("ReadyToHarvest", false)
-    gardenBed:SetAttribute("NeedsWater", false)
     return true
 end
 
