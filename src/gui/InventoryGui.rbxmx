@@ -40,6 +40,7 @@ local placementScripts = replicatedStorage:FindFirstChild("PlacementScripts")
 local PlacementController = placementScripts and require(placementScripts:WaitForChild("PlacementController"))
 
 local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 local inventory = player:WaitForChild("Inventory")
 local hotbarFrame = script.Parent:WaitForChild("HotbarFrame")
 local UserInputService = game:GetService("UserInputService")
@@ -595,6 +596,7 @@ confirm.Position, confirm.Size = UDim2.new(.5, 6, 0, 196), UDim2.new(.5, -22, 0,
 local blockedAttributes = {"ProductionMode", "Milking", "Teleporting", "StorageOpen", "FeederOpen", "AnimalMenuOpen"}
 local function discardAvailable()
     if player:GetAttribute("DataLoaded") ~= true or not script.Parent.Enabled or not hotbarFrame.Visible then return false end
+    if UserInputService.PreferredInput == Enum.PreferredInput.Touch and playerGui:FindFirstChild("PlacementControls") then return false end
     for _, name in ipairs(blockedAttributes) do if player:GetAttribute(name) == true then return false end end
     return true
 end
@@ -663,6 +665,12 @@ hotbarFrame:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateDiscard)
 hotbarFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateDiscard)
 hotbarFrame:GetPropertyChangedSignal("Visible"):Connect(updateDiscard)
 script.Parent:GetPropertyChangedSignal("Enabled"):Connect(updateDiscard)
+local function placementChanged(gui)
+    if gui.Name == "PlacementControls" then updateDiscard() end
+end
+playerGui.ChildAdded:Connect(placementChanged)
+playerGui.ChildRemoved:Connect(placementChanged)
+UserInputService:GetPropertyChangedSignal("PreferredInput"):Connect(updateDiscard)
 for _, slot in ipairs(inventory:GetChildren()) do
     slot.ItemName.Changed:Connect(updateDiscard)
     slot.Amount.Changed:Connect(updateDiscard)
