@@ -35,6 +35,7 @@ StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 
 local setSelectedSlotEvent = replicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("SetSelectedSlotEvent")
 local ItemDefinitions = require(replicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local CropConfig = require(replicatedStorage.Configs.CropConfig)
 local placementScripts = replicatedStorage:FindFirstChild("PlacementScripts")
 local PlacementController = placementScripts and require(placementScripts:WaitForChild("PlacementController"))
 
@@ -568,6 +569,11 @@ local function discardText(parent, name, caption, position, size, textSize)
 end
 local trash = discardButton(script.Parent, "DiscardButton", "Discard")
 trash.Size = UDim2.fromOffset(84, 44)
+local seedPrice = discardText(script.Parent, "NextSeedPrice", "", UDim2.new(), UDim2.fromOffset(142, 36), 15)
+seedPrice.BackgroundTransparency = 0
+seedPrice.BackgroundColor3 = normalColor
+seedPrice.BorderSizePixel = 0
+discardRound(seedPrice)
 local blocker = discardMake("TextButton", discardGui, {Name = "BlockInput", Text = "", Size = UDim2.fromScale(1, 1),
     BackgroundTransparency = 1, AutoButtonColor = false})
 local discardPanel = discardMake("Frame", discardGui, {Name = "Panel", AnchorPoint = Vector2.new(.5, .5),
@@ -599,10 +605,20 @@ closeDiscard = function()
 end
 local function updateDiscard()
     local selected = readSlot(selectedSlotNumber, "Player")
-    trash.Visible = discardAvailable() and selected ~= nil and selected.Amount &gt; 0
+    local definition = selected and ItemDefinitions[selected.ItemName]
+    local seed = definition and definition.Type == "Seed"
+    local available = discardAvailable() and selected ~= nil and selected.Amount &gt; 0
+    trash.Visible = available and not seed
     trash.Interactable = not discardPending
+    seedPrice.Visible = available and seed == true
+    if seedPrice.Visible then
+        local bought = player:GetAttribute(CropConfig.SeedPurchaseAttribute(definition.PlantId)) or 0
+        local price = CropConfig.SeedPrice(definition.BuyPriceCents, bought)
+        seedPrice.Text = string.format("Next seed: $%.2f", price / 100)
+    end
     local origin = hotbarFrame.AbsolutePosition - script.Parent.AbsolutePosition
     trash.Position = UDim2.fromOffset(origin.X + 4, math.max(8, origin.Y - 50))
+    seedPrice.Position = UDim2.fromOffset(origin.X + 4, math.max(8, origin.Y - 42))
     if discardSnapshot and (not discardAvailable() or discardIndex ~= selectedSlotNumber or not selected or
         selected.ItemName ~= discardSnapshot.ItemName or selected.Amount ~= discardSnapshot.Amount or
         selected.ObjectData ~= discardSnapshot.ObjectData or selected.PaidLots ~= discardSnapshot.PaidLots) then closeDiscard() end
@@ -610,7 +626,7 @@ end
 trash.Activated:Connect(function()
     if not discardAvailable() or discardPending or dragging or pendingMove then return end
     local data = readSlot(selectedSlotNumber, "Player")
-    if not data or data.Amount &lt; 1 then return end
+    if not data or data.Amount &lt; 1 or ItemDefinitions[data.ItemName].Type == "Seed" then return end
     cancelDrag()
     if PlacementController then PlacementController.cancelPlacement() end
     discardSnapshot, discardIndex = data, selectedSlotNumber
@@ -653,8 +669,11 @@ for _, slot in ipairs(inventory:GetChildren()) do
     slot:GetAttributeChangedSignal("ObjectData"):Connect(updateDiscard)
     slot:GetAttributeChangedSignal("PaidLots"):Connect(updateDiscard)
 end
+for crop in pairs(CropConfig.Crops) do
+    player:GetAttributeChangedSignal(CropConfig.SeedPurchaseAttribute(crop)):Connect(updateDiscard)
+end
 player.CharacterRemoving:Connect(closeDiscard)
-script.Destroying:Connect(function() closeDiscard();discardGui:Destroy();trash:Destroy() end)
+script.Destroying:Connect(function() closeDiscard();discardGui:Destroy();trash:Destroy();seedPrice:Destroy() end)
 updateDiscard()
 </ProtectedString>
 				<bool name="Disabled">false</bool>

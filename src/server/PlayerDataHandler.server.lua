@@ -1,4 +1,5 @@
 local Players = game:GetService("Players")
+local CropConfig = require(game:GetService("ReplicatedStorage").Configs.CropConfig)
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
@@ -23,6 +24,19 @@ local Journal = require(ServerScriptService.FarmJournalService)
 local loadedData = {}
 local savingPlayers = {}
 
+local function loadSeedPurchases(player, purchases)
+    if purchases == nil then return true end
+    if typeof(purchases) ~= "table" then return false end
+    for crop in pairs(CropConfig.Crops) do
+        local count = purchases[crop]
+        if count ~= nil then
+            if typeof(count) ~= "number" or count % 1 ~= 0 or count < 0 or count > 9007199254740991 then return false end
+            player:SetAttribute(CropConfig.SeedPurchaseAttribute(crop), count)
+        end
+    end
+    return true
+end
+
 local function loadPlayerData(player)
     if player:GetAttribute("DataLoaded") ~= nil then
         return
@@ -38,6 +52,11 @@ local function loadPlayerData(player)
     end
 
     if player.Parent ~= Players then
+        return
+    end
+
+    if not loadSeedPurchases(player, data.SeedPurchases) then
+        player:Kick("Failed to load your seed purchase history. Please try again.")
         return
     end
 
@@ -165,6 +184,11 @@ local function savePlayerData(player, preparingTeleport)
         data = table.clone(loadedData[player])
         data.Money = MoneyService.GetMoney(player)
         data.Inventory = inventoryData
+        local purchases = table.clone(data.SeedPurchases or {})
+        for crop in pairs(CropConfig.Crops) do
+            purchases[crop] = player:GetAttribute(CropConfig.SeedPurchaseAttribute(crop))
+        end
+        data.SeedPurchases = next(purchases) and purchases or nil
         data.CropRecord = nil
         data.FarmJournal = Journal.GetData(player)
         if Laboratory then

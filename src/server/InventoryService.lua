@@ -416,6 +416,8 @@ function InventoryService.DiscardSlot(player, slotIndex, expected)
         return false, "InventoryChanged"
     end
     if row.Amount < 1 then return false, "SourceSlotEmpty" end
+    local definition = ItemDefinitions[row.ItemName]
+    if definition and definition.Type == "Seed" then return false, "PermanentSeed" end
     data[slotIndex] = {ItemName = "", Amount = 0}
     InventoryService.WriteSlots(player.Inventory, data)
     return true

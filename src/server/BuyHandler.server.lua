@@ -7,7 +7,7 @@ local buyEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Bu
 local REQUEST_INTERVAL = 0.15
 local lastRequest = {}
 
-buyEvent.OnServerEvent:Connect(function(player, itemName, amount, requestId)
+buyEvent.OnServerEvent:Connect(function(player, itemName, amount, requestId, quotedPurchases)
     if requestId ~= nil and (typeof(requestId) ~= "string" or #requestId > 64) then
         return
     end
@@ -34,7 +34,7 @@ buyEvent.OnServerEvent:Connect(function(player, itemName, amount, requestId)
         reply(false, "InvalidItem")
         return
     end
-    local ok, success, reason = pcall(BuyService.BuyItem, player, itemName, amount)
+    local ok, success, reason = pcall(BuyService.BuyItem, player, itemName, amount, quotedPurchases or false)
     if not ok then
         warn("BuyService error for " .. player.Name .. ": " .. tostring(success))
         reply(false, "InternalError")

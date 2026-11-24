@@ -42,6 +42,7 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
     else
         key.Text = prompt.KeyboardKeyCode.Name
     end
+    local keyCaption = key.Text
     local context = make("TextLabel", button, {Name = "Context", Position = UDim2.fromOffset(62, 10),
         Size = UDim2.fromOffset(192, 20), BackgroundTransparency = 1, Text = "Empty coop",
         TextColor3 = Color3.fromRGB(130, 83, 44), Font = Enum.Font.FredokaOne, TextSize = 14,
@@ -73,13 +74,16 @@ function AnimalShopPromptView.show(playerGui, prompt, inputType)
             context.Text = prompt:GetAttribute("Context") or "Empty coop"
             context.TextColor3 = Color3.fromRGB(130, 83, 44)
         end
+        local badge = prompt:GetAttribute("StatusBadge")
+        key.Text = badge or keyCaption
+        button.Interactable = badge == nil
         action.Text = prompt.ActionText
     end
     update()
     TweenService:Create(group, TweenInfo.new(0.18), {GroupTransparency = 0}):Play()
     local pressed
     button.InputBegan:Connect(function(input)
-        if not pressed and prompt.Enabled and (input.UserInputType == Enum.UserInputType.Touch or
+        if not pressed and button.Interactable and prompt.Enabled and (input.UserInputType == Enum.UserInputType.Touch or
             input.UserInputType == Enum.UserInputType.MouseButton1) then
             pressed = input
             group.BackgroundColor3 = Color3.fromRGB(255, 244, 209)

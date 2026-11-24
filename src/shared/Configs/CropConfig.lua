@@ -1,4 +1,7 @@
-return {
+local Config = {
+    WateringCycles = 3,
+    SeedPriceStepCents = 1,
+    SeedPriceCapCents = 500,
     WateringCanPriceCents = 100,
     WateringGrowthMultiplier = 1.5,
     VisualDistance = 140,
@@ -21,3 +24,33 @@ return {
             VisualScale = 1.7},
     },
 }
+
+function Config.SeedPurchaseAttribute(crop)
+    return "SeedPurchases_" .. crop
+end
+
+function Config.SeedPrice(basePrice, purchased)
+    return math.min(Config.SeedPriceCapCents, basePrice + Config.SeedPriceStepCents * purchased)
+end
+
+function Config.SeedTotal(basePrice, purchased, amount)
+    local price = Config.SeedPrice(basePrice, purchased)
+    local step = Config.SeedPriceStepCents
+    local rising = math.min(amount, math.ceil((Config.SeedPriceCapCents - price) / step))
+    return rising * price + step * rising * (rising - 1) / 2 + (amount - rising) * Config.SeedPriceCapCents
+end
+
+function Config.AffordableSeeds(basePrice, purchased, funds)
+    local low, high = 0, math.floor(funds / Config.SeedPrice(basePrice, purchased))
+    while low < high do
+        local size = low + math.ceil((high - low) / 2)
+        if Config.SeedTotal(basePrice, purchased, size) <= funds then
+            low = size
+        else
+            high = size - 1
+        end
+    end
+    return low
+end
+
+return Config

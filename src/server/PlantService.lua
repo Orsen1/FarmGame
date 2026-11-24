@@ -63,12 +63,41 @@ local function choose(weights)
 end
 
 local function growthRate(batch, baseRate)
-    return baseRate * (batch.Watered and config.WateringGrowthMultiplier or 1)
+    return baseRate * (batch.WaterCycles > 0 and config.WateringGrowthMultiplier or 1)
+end
+
+local function waterCycles(state)
+    local remaining = 0
+    for _, batch in ipairs(state.Batches) do remaining = math.max(remaining, batch.WaterCycles) end
+    return remaining
+end
+
+local function cycleSettings(player, crop, firstHarvest)
+    local settings = config.Crops[crop]
+    local bonuses = Laboratory.GetBonuses(player)
+    local weights = LaboratoryConfig.Weighted(settings.YieldWeights, bonuses.Yield)
+    local duration = firstHarvest and tutorialConfig.FirstCropSeconds or
+        settings.GrowthSeconds * (1 - bonuses.Growth / 100)
+    return settings, weights, duration
+end
+
+local function startCycle(batch, settings, weights, duration)
+    batch.Duration, batch.Remaining = duration, duration
+    for _, slot in ipairs(batch.Slots) do
+        slot.Yield = math.min(settings.YieldMax, settings.YieldMin + choose(weights) - 1)
+    end
+end
+
+local function cloneSlots(source)
+    local slots = {}
+    for index, slot in ipairs(source) do slots[index] = table.clone(slot) end
+    return slots
 end
 
 local function publish(object, state)
     local now = workspace:GetServerTimeNow()
-    local clocks, count, ready, canWater, nextHarvest = {}, 0, false, false, nil
+    local clocks, count, ready, growingNow, nextHarvest = {}, 0, false, false, nil
+    local cycles = waterCycles(state)
     for index, batch in ipairs(state.Batches) do
         local rate = growthRate(batch, state.BaseRate)
         local endsAt = now + batch.Remaining / rate
@@ -77,14 +106,15 @@ local function publish(object, state)
         clocks[index] = {Spots = spots, EndsAt = endsAt, Rate = rate / batch.Duration}
         count += #spots
         ready = ready or batch.Remaining == 0
-        canWater = canWater or batch.Remaining > 0 and not batch.Watered
+        growingNow = growingNow or batch.Remaining > 0
         nextHarvest = math.min(nextHarvest or endsAt, endsAt)
     end
     object:SetAttribute("PlantType", count > 0 and state.Type or "")
     object:SetAttribute("PlantedCount", count)
     object:SetAttribute("Occupied", count > 0)
     object:SetAttribute("ReadyToHarvest", ready)
-    object:SetAttribute("CanWater", canWater)
+    object:SetAttribute("WaterCycles", cycles)
+    object:SetAttribute("CanWater", growingNow and cycles == 0)
     object:SetAttribute("GrowthEndsAt", nextHarvest)
     object:SetAttribute("CropGrowth", count > 0 and HttpService:JSONEncode(clocks) or nil)
 end
@@ -99,7 +129,10 @@ function PlantService.Advance(object, dt, rate)
     for _, batch in ipairs(state.Batches) do
         if batch.Remaining > 0 then
             batch.Remaining = math.max(0, batch.Remaining - dt * growthRate(batch, rate))
-            ripened = ripened or batch.Remaining == 0
+            if batch.Remaining == 0 then
+                batch.WaterCycles = math.max(0, batch.WaterCycles - 1)
+                ripened = true
+            end
         end
     end
     if ripened or rateChanged then publish(object, state) end
@@ -114,11 +147,10 @@ function PlantService.GetData(object)
     if not state then return nil end
     local batches = {}
     for index, batch in ipairs(state.Batches) do
-        local slots = {}
-        for _, slot in ipairs(batch.Slots) do table.insert(slots, table.clone(slot)) end
-        batches[index] = {Duration = batch.Duration, Remaining = batch.Remaining, Watered = batch.Watered, Slots = slots}
+        batches[index] = {Duration = batch.Duration, Remaining = batch.Remaining, WaterCycles = batch.WaterCycles,
+            Slots = cloneSlots(batch.Slots)}
     end
-    return {Version = 4, Type = state.Type, Batches = batches}
+    return {Version = 5, Type = state.Type, Batches = batches}
 end
 
 function PlantService.GetReturns(object)
@@ -127,10 +159,9 @@ function PlantService.GetReturns(object)
     if not state then return rows end
     local grown, seeds = 0, 0
     for _, batch in ipairs(state.Batches) do
+        seeds += #batch.Slots
         if batch.Remaining == 0 then
             for _, slot in ipairs(batch.Slots) do grown += slot.Yield end
-        else
-            seeds += #batch.Slots
         end
     end
     if grown > 0 then table.insert(rows, {ItemName = state.Type, Amount = grown}) end
@@ -177,8 +208,16 @@ function PlantService.Restore(object, saved, legacyTemplate)
     local folder = PlantsFolder:FindFirstChild(saved.Type)
     if not settings or not positions or not folder then return false, "Unknown crop" end
     object:SetAttribute("PlantingCapacity", #positions)
-    local state = {Type = saved.Type, BaseRate = 1,
-        Batches = saved.Version == 4 and saved.Batches or {legacyBatch(saved, getPositions(legacyTemplate or object), settings, folder)}}
+    local source = (saved.Version == 4 or saved.Version == 5) and saved.Batches or
+        {legacyBatch(saved, getPositions(legacyTemplate or object), settings, folder)}
+    local batches = {}
+    for index, batch in ipairs(source) do
+        local cycles = batch.WaterCycles
+        if cycles == nil then cycles = batch.Watered and batch.Remaining > 0 and 1 or 0 end
+        batches[index] = {Duration = batch.Duration, Remaining = batch.Remaining, WaterCycles = cycles,
+            Slots = cloneSlots(batch.Slots)}
+    end
+    local state = {Type = saved.Type, BaseRate = 1, Batches = batches}
     growing[object] = state
     publish(object, state)
     return true
@@ -191,8 +230,8 @@ function PlantService.Plant(player, gardenBed)
     if not chosen or chosen.Amount.Value < 1 then return false end
     local seedType = chosen.ItemName.Value
     local seed = ItemDefinitions[seedType]
-    local settings = seed and seed.Type == "Seed" and config.Crops[seed.PlantId]
-    if not settings or not Journal.CanPlant(player, gardenBed, seedType) then return false end
+    if not seed or seed.Type ~= "Seed" or not config.Crops[seed.PlantId] or
+        not Journal.CanPlant(player, gardenBed, seedType) then return false end
 
     local state = growing[gardenBed]
     if state and state.Type ~= seed.PlantId then return false end
@@ -210,25 +249,19 @@ function PlantService.Plant(player, gardenBed)
     local amount = math.min(chosen.Amount.Value, #free)
     if amount == 0 then return false end
 
-    local bonuses = Laboratory.GetBonuses(player)
-    local weights = LaboratoryConfig.Weighted(settings.YieldWeights, bonuses.Yield)
-    local duration = Journal.TutorialComplete(player) and settings.GrowthSeconds * (1 - bonuses.Growth / 100) or
-        tutorialConfig.FirstCropSeconds
-    local slots = {}
-    for index = 1, amount do
-        slots[index] = {Spot = free[index], Yield = math.min(settings.YieldMax, settings.YieldMin + choose(weights) - 1)}
-    end
     if not InventoryService.RemoveFromSlot(player, slotIndex, seedType, amount) then return false end
-
-    local first = not state
-    if first then
+    if not state then
         state = {Type = seed.PlantId, BaseRate = 1, Batches = {}}
         growing[gardenBed] = state
     end
-    table.insert(state.Batches, {Duration = duration, Remaining = duration, Watered = false, Slots = slots})
+    local slots = {}
+    for index = 1, amount do slots[index] = {Spot = free[index]} end
+    local batch = {WaterCycles = waterCycles(state), Slots = slots}
+    startCycle(batch, cycleSettings(player, state.Type, not Journal.TutorialComplete(player)))
+    table.insert(state.Batches, batch)
     gardenBed:SetAttribute("PlantingCapacity", #positions)
     publish(gardenBed, state)
-    if first then Journal.Record(player, "Plant", 1, seedType, gardenBed) end
+    Journal.Record(player, "Plant", amount, seedType, gardenBed)
     return true
 end
 
@@ -238,9 +271,7 @@ function PlantService.Water(player, gardenBed)
     if not chosen or chosen.ItemName.Value ~= "WateringCan" or chosen.Amount.Value < 1 then return false end
     local state = growing[gardenBed]
     if not state or gardenBed:GetAttribute("CanWater") ~= true then return false end
-    for _, batch in ipairs(state.Batches) do
-        if batch.Remaining > 0 then batch.Watered = true end
-    end
+    for _, batch in ipairs(state.Batches) do batch.WaterCycles = config.WateringCycles end
     publish(gardenBed, state)
     return true
 end
@@ -249,17 +280,16 @@ function PlantService.Harvest(player, gardenBed)
     if not PlantService.CanUse(player, gardenBed) or not gardenBed:GetAttribute("ReadyToHarvest") or not Journal.CanHarvest(player, gardenBed) then return false end
     local state = growing[gardenBed]
     if not state then return false end
-    local count, remaining = 0, {}
+    local count, ripe = 0, {}
     for _, batch in ipairs(state.Batches) do
         if batch.Remaining == 0 then
             for _, slot in ipairs(batch.Slots) do count += slot.Yield end
-        else
-            table.insert(remaining, batch)
+            table.insert(ripe, batch)
         end
     end
     if count == 0 or not InventoryService.AddItem(player, state.Type, count) then return false end
-    state.Batches = remaining
-    if #remaining == 0 then growing[gardenBed] = nil end
+    local settings, weights, duration = cycleSettings(player, state.Type, false)
+    for _, batch in ipairs(ripe) do startCycle(batch, settings, weights, duration) end
     publish(gardenBed, state)
     Journal.Record(player, "Harvest", count, state.Type, gardenBed)
     return true

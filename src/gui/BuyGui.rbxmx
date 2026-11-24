@@ -7978,6 +7978,7 @@ local buyEvent = remotes:WaitForChild("BuyItemEvent")
 local definitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local levels = require(ReplicatedStorage.Configs.FarmLevelConfig)
 local bedConfig = require(ReplicatedStorage.Configs.GardenBedConfig)
+local cropConfig = require(ReplicatedStorage.Configs.CropConfig)
 local tutorialConfig = require(ReplicatedStorage.Configs.FarmTutorialConfig)
 local HudMenu = require(ReplicatedStorage.HudMenu)
 local QuantityControls = require(ReplicatedStorage:WaitForChild("ShopQuantityControls"))
@@ -8088,9 +8089,23 @@ local function validPrice(price)
         and price &lt;= MAX_INTEGER and price % 1 == 0
 end
 
-local function maximumAmount(price)
+local function seedPurchases(item)
+    if item.Type == "Seed" then
+        return player:GetAttribute(cropConfig.SeedPurchaseAttribute(item.PlantId)) or 0
+    end
+end
+
+local function totalCost(item, amount, purchased)
+    if purchased then return cropConfig.SeedTotal(item.BuyPriceCents, purchased, amount) end
+    return item.BuyPriceCents * amount
+end
+
+local function maximumAmount(item)
+    local price, funds = item.BuyPriceCents, math.max(0, money.Value)
+    local purchased = seedPurchases(item)
+    if purchased then return cropConfig.AffordableSeeds(price, purchased, funds) end
     if price == 0 then return MAX_INTEGER end
-    return math.min(MAX_INTEGER, math.floor(math.max(0, money.Value) / price))
+    return math.min(MAX_INTEGER, math.floor(funds / price))
 end
 
 local function inventoryInfo(id)
@@ -8193,6 +8208,11 @@ local function refresh()
     main.FooterFrame.MoneyLabel.Text = "Balance: " .. formatMoney(money.Value)
     for id, card in pairs(cards) do
         local owned, room = inventoryInfo(id)
+        local item = definitions[id]
+        local purchased = seedPurchases(item)
+        local price = totalCost(item, 1, purchased)
+        local minimumCost = totalCost(item, tutorialConfig.PurchaseAmount(tutorialStep, id, item, capacity, canBought) or 1, purchased)
+        card.PriceLabel.Text = (purchased and "Next " or "") .. formatMoney(price)
         local required = levels.RequiredLevel(id)
         local locked = (player:GetAttribute("FarmLevel") or 1) &lt; required
         local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, id, definitions[id], capacity, canBought)
@@ -8216,8 +8236,8 @@ local function refresh()
             reason = bedLabel
         elseif not room then
             reason = "Inventory full"
-        elseif money.Value &lt; definitions[id].BuyPriceCents * (tutorialLimit or 1) then
-            reason = "Need " .. formatMoney(definitions[id].BuyPriceCents * (tutorialLimit or 1))
+        elseif money.Value &lt; minimumCost then
+            reason = "Need " .. formatMoney(minimumCost)
         end
         setCardLock(card, reason)
         card.OwnedLabel.Text = "Owned: " .. tostring(owned)
@@ -8226,11 +8246,12 @@ local function refresh()
     if not selectedId then return end
 
     local item = definitions[selectedId]
-    local price = item.BuyPriceCents
+    local purchased = seedPurchases(item)
+    local price = totalCost(item, 1, purchased)
     local required = levels.RequiredLevel(selectedId)
     local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, selectedId, item, capacity, canBought)
     local unlocked = (player:GetAttribute("FarmLevel") or 1) &gt;= required and tutorialLimit ~= 0
-    local maximum = maximumAmount(price)
+    local maximum = maximumAmount(item)
     local isBed = bedConfig.Types[selectedId] ~= nil
     if isBed then maximum = math.min(maximum, bedsLeft) end
     if tutorialLimit ~= nil then maximum = math.min(maximum, tutorialLimit);selectedAmount = maximum end
@@ -8243,9 +8264,10 @@ local function refresh()
     nameLabel.Position = UDim2.fromOffset(inset, 3)
     nameLabel.Size = UDim2.new(1, -inset - 8, 1, -6)
     details.PriceFrame.OwnedAmountLabel.Text = tostring(owned)
+    details.PriceFrame.PriceTextLabel.Text = purchased and "Next seed:" or "Price for each:"
     details.PriceFrame.PriceLabel.Text = formatMoney(price)
     quantity.SelectedAmountFrame.ItemAmountToBuyLabel.Text = tostring(selectedAmount)
-    action.TotalPriceLabel.Text = formatMoney(price * selectedAmount)
+    action.TotalPriceLabel.Text = formatMoney(totalCost(item, selectedAmount, purchased))
     details.QuantityHintLabel.Text = "Can buy: " .. tostring(maximum)
     QuantityControls.update(quantity, tutorialLimit == nil and unlocked and not pending and selectedAmount &gt; 0, tutorialLimit == nil and unlocked and not pending and room and selectedAmount &lt; maximum)
     enableButton(details.MaxButton, tutorialLimit == nil and unlocked and not pending and room and maximum &gt; 0, GREEN)
@@ -8294,7 +8316,7 @@ end
 local function selectItem(id)
     selectedId = id
     purchase:SetAttribute("ItemName", id)
-    selectedAmount = maximumAmount(definitions[id].BuyPriceCents) &gt; 0 and 1 or 0
+    selectedAmount = maximumAmount(definitions[id]) &gt; 0 and 1 or 0
     message = ""
     catalogue.Visible = false
     purchase.Visible = true
@@ -8406,7 +8428,7 @@ main:GetPropertyChangedSignal("Visible"):Connect(stopQuantity)
 purchase:GetPropertyChangedSignal("Visible"):Connect(stopQuantity)
 purchase:GetAttributeChangedSignal("ItemName"):Connect(stopQuantity)
 details.MaxButton.Activated:Connect(function()
-    if selectedId then changeAmount(maximumAmount(definitions[selectedId].BuyPriceCents)) end
+    if selectedId then changeAmount(maximumAmount(definitions[selectedId])) end
 end)
 
 action.BuyButton.Activated:Connect(function()
@@ -8417,7 +8439,7 @@ action.BuyButton.Activated:Connect(function()
     pending = request
     message = ""
     refresh()
-    buyEvent:FireServer(request.ItemName, request.Amount, request.Id)
+    buyEvent:FireServer(request.ItemName, request.Amount, request.Id, seedPurchases(definitions[request.ItemName]))
     task.delay(8, function()
         if pending ~= request then return end
         pending = nil
@@ -8432,6 +8454,7 @@ local errors = {
     TutorialPurchaseRequired = "Follow the tutorial and buy the highlighted item in the shown amount.",
     InventoryFull = "Inventory full. Free a slot first.",
     GardenBedLimit = "Garden bed limit reached. Check Buildings for your limit.",
+    SeedPriceChanged = "Seed price updated. Check the new total.",
     InventoryNotReady = "Inventory is loading. Try again shortly.",
     NotEnoughMoneyOrDataNotReady = "Not enough money, or data is still loading.",
     NotEnoughMoney = "Not enough money.",
@@ -8475,6 +8498,9 @@ end)
 money.Changed:Connect(refresh)
 player:GetAttributeChangedSignal("FarmLevel"):Connect(refresh)
 player:GetAttributeChangedSignal("OwnedGardenBeds"):Connect(refresh)
+for crop in pairs(cropConfig.Crops) do
+    player:GetAttributeChangedSignal(cropConfig.SeedPurchaseAttribute(crop)):Connect(refresh)
+end
 
 local shopButton = HudMenu.Add("ShopButton", "Shop", 1)
 local function openShop(category)

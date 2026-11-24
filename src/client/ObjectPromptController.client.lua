@@ -228,6 +228,8 @@ local function updatePrompt(prompt)
     if prompt.Name == "CollectPrompt" then
         if definition.Plantable == true then
             prompt.ActionText = "Harvest"
+            local cycles = object:GetAttribute("WaterCycles") or 0
+            if cycles > 0 then prompt.ObjectText = string.format("Water: %d/%d cycles", cycles, CropConfig.WateringCycles) end
             local step = player:GetAttribute("TutorialStep")
             setEnabled(prompt, object:GetAttribute("ReadyToHarvest") == true and (step == nil or step == "Complete" or step == "Harvest"))
         elseif definition.Recipes then
@@ -320,14 +322,19 @@ local function updatePrompt(prompt)
         local selectedDefinition = ItemDefinitions[selectedItemName]
 
         if selectedItemName == "WateringCan" then
-            prompt.ActionText = "Water crops"
+            local cycles = object:GetAttribute("WaterCycles") or 0
+            local boost = math.round((CropConfig.WateringGrowthMultiplier - 1) * 100)
+            prompt.ActionText = cycles > 0 and "Water boost" or "Water crops"
             prompt:SetAttribute("Icon", ItemDefinitions.WateringCan.Icon)
-            prompt:SetAttribute("Context", string.format("+%d%% growth speed", math.round((CropConfig.WateringGrowthMultiplier - 1) * 100)))
-            setEnabled(prompt, selectedAmount > 0 and object:GetAttribute("CanWater") == true)
+            prompt:SetAttribute("Context", cycles > 0 and string.format("+%d%% growth", boost) or
+                string.format("+%d%% for %d cycles", boost, CropConfig.WateringCycles))
+            prompt:SetAttribute("StatusBadge", cycles > 0 and string.format("%d/%d", cycles, CropConfig.WateringCycles) or nil)
+            setEnabled(prompt, selectedAmount > 0 and (cycles > 0 or object:GetAttribute("CanWater") == true))
             if not prompt.Enabled then hidePrompt(prompt)
             elseif promptViews[prompt] then promptViews[prompt].update() end
             return
         end
+        prompt:SetAttribute("StatusBadge", nil)
         local planted = object:GetAttribute("PlantedCount") or 0
         local capacity = object:GetAttribute("PlantingCapacity") or definition.PlantingCapacity
         local crop = ItemDefinitions[object:GetAttribute("PlantType")]

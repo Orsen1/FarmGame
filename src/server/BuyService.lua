@@ -8,10 +8,11 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitFo
 local Journal = require(ServerScriptService.FarmJournalService)
 local GardenBeds = require(ServerScriptService.GardenBedService)
 local BedConfig = require(ReplicatedStorage.Configs.GardenBedConfig)
+local CropConfig = require(ReplicatedStorage.Configs.CropConfig)
 local BuyService = {}
 local MAX_INTEGER = 9007199254740991
 
-function BuyService.BuyItem(player, itemName, amount)
+function BuyService.BuyItem(player, itemName, amount, quotedPurchases)
 	if typeof(itemName) ~= "string" then
 		return false, "InvalidItem"
 	end
@@ -39,6 +40,13 @@ function BuyService.BuyItem(player, itemName, amount)
 	end
 
 	local totalPrice = price * amount
+	local counter, purchased
+	if item.Type == "Seed" then
+		counter = CropConfig.SeedPurchaseAttribute(item.PlantId)
+		purchased = player:GetAttribute(counter) or 0
+		if quotedPurchases ~= nil and quotedPurchases ~= purchased then return false, "SeedPriceChanged" end
+		totalPrice = CropConfig.SeedTotal(price, purchased, amount)
+	end
 	if totalPrice > MAX_INTEGER then
 		return false, "AmountTooLarge"
 	end
@@ -59,6 +67,7 @@ function BuyService.BuyItem(player, itemName, amount)
 		return false, addReason
 	end
 
+	if counter then player:SetAttribute(counter, math.min(MAX_INTEGER, purchased + amount)) end
 	Journal.Record(player, "Buy", amount, itemName)
 	print(player.Name .. " bought " .. amount .. "x " .. itemName
 		.. " for " .. totalPrice .. " cents")

@@ -14,7 +14,7 @@ local function isPlantable(object)
     return definition ~= nil and definition.Plantable == true
 end
 
-local function validBatches(batches, spots)
+local function validBatches(batches, spots, version)
     if typeof(batches) ~= "table" or #batches < 1 or #batches > #spots then return false end
     local available = {}
     for _, spot in ipairs(spots) do available[spot.Name] = true end
@@ -22,8 +22,12 @@ local function validBatches(batches, spots)
         local batch = batches[index]
         if typeof(batch) ~= "table" or typeof(batch.Duration) ~= "number" or
             not (batch.Duration > 0 and batch.Duration <= 864000) or typeof(batch.Remaining) ~= "number" or
-            not (batch.Remaining >= 0 and batch.Remaining <= batch.Duration) or typeof(batch.Watered) ~= "boolean" or
+            not (batch.Remaining >= 0 and batch.Remaining <= batch.Duration) or
             typeof(batch.Slots) ~= "table" or #batch.Slots < 1 or #batch.Slots > #spots then return false end
+        if version == 5 then
+            local cycles = batch.WaterCycles
+            if typeof(cycles) ~= "number" or cycles % 1 ~= 0 or cycles < 0 then return false end
+        elseif typeof(batch.Watered) ~= "boolean" then return false end
         for i = 1, #batch.Slots do
             local slot = batch.Slots[i]
             if typeof(slot) ~= "table" or typeof(slot.Spot) ~= "string" or not available[slot.Spot] or
@@ -77,7 +81,9 @@ local function validateData(template, plant)
         return false, "Missing growth models for " .. plant.Type
     end
 
-    if plant.Version == 4 then return validBatches(plant.Batches, spots), "Invalid saved planting spots" end
+    if plant.Version == 4 or plant.Version == 5 then
+        return validBatches(plant.Batches, spots, plant.Version), "Invalid saved planting spots"
+    end
     if typeof(plant.Stage) ~= "number" or plant.Stage < 0 or plant.Stage % 1 ~= 0 then
         return false, "Crop stage must be a non-negative integer"
     end
@@ -119,7 +125,7 @@ end
 
 function PlantDataService.loadData(template, object, savedObject)
     local plant = savedObject.Plant
-    local source = typeof(plant) == "table" and plant.Version ~= 4 and template or object
+    local source = typeof(plant) == "table" and plant.Version ~= 4 and plant.Version ~= 5 and template or object
     local isValid, errorMessage = validateData(source, plant)
 
     if not isValid then

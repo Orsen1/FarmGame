@@ -60,7 +60,7 @@ return {
             Objectives = {
                 {Id = "LaboratoryHome", Text = "Finish a crop laboratory", Goal = 1, Kind = "Building", Item = "Laboratory", Icon = "LaboratoryBlueprint", Hint = "Build the Crop Laboratory."},
                 {Id = "Research", Text = "Complete a successful research", Goal = 1, Kind = "Action", Icon = "LaboratoryBlueprint", Hint = "Upgrade any laboratory research once."},
-                {Id = "PlantTwenty", Event = "Plant", Text = "Sow 20 garden beds", Goal = 20, Kind = "Action", Icon = "CarrotSeed", Hint = "Every planted garden bed counts."},
+                {Id = "PlantTwenty", Event = "Plant", Text = "Plant 20 seeds", Goal = 20, Kind = "Action", Icon = "CarrotSeed", Hint = "Each new planting spot counts."},
                 {Id = "HarvestHundred", Event = "Harvest", Text = "Harvest 100 crops", Goal = 100, Kind = "Action", Icon = "Carrot", Hint = "Keep growing. Every harvested fruit counts."},
             },
         },
