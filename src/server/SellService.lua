@@ -14,8 +14,7 @@ function SellService.Price(itemName, amount)
 end
 
 function SellService.RecordSale(player, itemName, amount, cents)
-    Journal.Record(player, "Sell", amount, itemName)
-    Journal.Record(player, "Sales", cents)
+    Journal.RecordSale(player, itemName, amount, cents)
 end
 
 function SellService.SellItem(player, itemName, amount)

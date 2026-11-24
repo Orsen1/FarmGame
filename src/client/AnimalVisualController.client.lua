@@ -12,6 +12,7 @@ local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local plots = workspace:WaitForChild("Plots")
 local visuals = {}
 local coops = {}
+local pendingCoops = {}
 local container = Instance.new("Folder")
 container.Name = "AnimalVisuals"
 container.Parent = workspace
@@ -23,7 +24,7 @@ local function bindCoop(object)
     local output = object:FindFirstChild("OutputInventory")
     local egg = output and settings.EggItem and output:FindFirstChild(settings.EggItem)
     local slots = basket and basket:FindFirstChild("EggSlots")
-    if not feeder or (settings.EggItem and not egg) then return end
+    if not feeder or (settings.EggItem and (not egg or not slots)) then return end
     local function update()
         for _, shell in ipairs(egg and slots and slots:GetChildren() or {}) do
             if shell:IsA("BasePart") then
@@ -174,11 +175,28 @@ local function bind(folder)
     model.Parent = container
 end
 
+local function queueCoop(coop)
+    if not coop or not coop:IsA("Model") or coops[coop] or pendingCoops[coop] or
+        not Config.Coops[coop:GetAttribute("ItemName") or coop.Name] then return end
+    pendingCoops[coop] = true
+    task.defer(function()
+        pendingCoops[coop] = nil
+        if coop:IsDescendantOf(plots) then bindCoop(coop) end
+    end)
+end
+
 plots.DescendantAdded:Connect(function(object)
-    if object:IsA("Folder") then task.defer(bind, object) end
-    if object:IsA("Model") then task.defer(bindCoop, object) end
-    local coop = object:FindFirstAncestorOfClass("Model")
-    if coop then task.defer(bindCoop, coop) end
+    local parent = object.Parent
+    if not parent then return end
+    if object:IsA("Folder") and parent.Name == "Animals" then task.defer(bind, object) end
+    if object.Name == "Feeder" or object.Name == "EggBasket" then
+        queueCoop(parent)
+    elseif (object.Name == "EggSlots" and parent.Name == "EggBasket") or
+        (object:IsA("IntValue") and parent.Name == "OutputInventory") then
+        queueCoop(parent.Parent)
+    elseif object:IsA("Model") then
+        queueCoop(object)
+    end
 end)
 for _, object in ipairs(plots:GetDescendants()) do
     if object:IsA("Folder") then bind(object)

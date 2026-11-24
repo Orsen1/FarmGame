@@ -3,8 +3,11 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local config = require(ReplicatedStorage.Configs.CropConfig)
 local plots = workspace:WaitForChild("Plots")
-local beds, cache = {}, {}
-local transitionTime = 0.42
+local visuals = Instance.new("Folder")
+visuals.Name, visuals.Parent = "CropVisuals", workspace
+local beds, order, cache = {}, {}, {}
+local partsPerFrame = 480
+local nearUpdateInterval, farUpdateInterval = 0.12, 0.5
 
 local function stagesFor(crop)
     if cache[crop] then return cache[crop] end
@@ -14,6 +17,7 @@ local function stagesFor(crop)
         if not index or not source:IsA("Model") then continue end
 
         local model = source:Clone()
+        local parts = 0
         for _, part in ipairs(model:GetDescendants()) do
             if not part:IsA("BasePart") then continue end
             local stalk = crop == "Wheat" and part.Name:match("^%a+(%d+)_")
@@ -21,45 +25,39 @@ local function stagesFor(crop)
                 part:Destroy()
             else
                 part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery = true, false, false, false
+                part.CastShadow = false
+                parts += 1
             end
         end
 
         model:PivotTo(CFrame.identity)
         local center, size = model:GetBoundingBox()
         local outer = center.Position:Abs() + size * 0.5
-        stages[index] = {Model = model, Scale = model:GetScale(), Height = center.Position.Y + size.Y * 0.5,
+        stages[index] = {Model = model, Parts = parts, Scale = model:GetScale(), Height = center.Position.Y + size.Y * 0.5,
             Width = math.max(outer.X, outer.Z) * 2}
     end
     cache[crop] = stages
     return stages
 end
 
-local function clear(state)
-    if state.Visual then state.Visual:Destroy() end
+local function clear(state, budget)
+    state.Cursor, state.NextRender = nil, 0
+    local parts = 0
+    if state.Visual then
+        if budget then
+            for spot, plant in pairs(state.Plants) do
+                plant.Model:Destroy()
+                state.Plants[spot] = nil
+                parts += plant.Parts
+                if parts >= budget then return parts end
+            end
+        else
+            for _, plant in pairs(state.Plants) do parts += plant.Parts end
+        end
+        state.Visual:Destroy()
+    end
     state.Visual, state.Plants, state.Crop = nil, nil, nil
-end
-
-local function opacity(parts, transparency)
-    for _, part in ipairs(parts) do part.LocalTransparencyModifier = transparency end
-end
-
-local function changeStage(state, stage, template, name, now)
-    local previous = state.Stage and stage == state.Stage + 1 and state.Model
-    if state.Previous then state.Previous:Destroy() end
-    if state.Model and not previous then state.Model:Destroy() end
-    local model, parts = template.Model:Clone(), {}
-    model.Name = name
-    for _, part in ipairs(model:GetDescendants()) do
-        if part:IsA("BasePart") and part.Transparency < 1 then table.insert(parts, part) end
-    end
-    state.Previous, state.PreviousParts = previous, previous and state.Parts
-    if previous then
-        previous.Name = name .. "Previous"
-        opacity(parts, 1)
-        state.Transition = now
-    end
-    state.Model, state.Parts, state.Stage = model, parts, stage
-    state.Scale, state.Lift = nil, nil
+    return parts
 end
 
 local function positionsFor(spots)
@@ -82,11 +80,12 @@ end
 local function readClocks(bed, state)
     local encoded = bed:GetAttribute("CropGrowth")
     if encoded == state.ClockText then return state.Clocks end
-    state.ClockText, state.Clocks = encoded, {}
+    state.ClockText, state.Clocks, state.EndsAt = encoded, {}, 0
     if encoded then
         local ok, batches = pcall(HttpService.JSONDecode, HttpService, encoded)
         if ok then
             for _, batch in ipairs(batches) do
+                state.EndsAt = math.max(state.EndsAt, batch.EndsAt)
                 for _, spot in ipairs(batch.Spots) do state.Clocks[spot] = batch end
             end
         end
@@ -94,13 +93,11 @@ local function readClocks(bed, state)
     return state.Clocks
 end
 
-local function renderPlant(state, clock, container, index, position, stages, setting, clearance, now, serverNow)
+local function renderPlant(state, clock, container, index, position, stages, setting, clearance, serverNow)
     local progress = 1 - math.max(0, clock.EndsAt - serverNow) * clock.Rate
     local phase = math.clamp(progress, 0, 1) * #stages
     local stage = math.min(#stages, math.floor(phase) + 1)
     local template, mature = stages[stage], stages[#stages]
-    if state.Stage ~= stage then changeStage(state, stage, template, "Plant" .. index, now) end
-
     local fraction = phase - stage + 1
     local height = mature.Height * math.min(setting.VisualScale, clearance / mature.Width)
     local shape = setting.GrowthShape
@@ -109,71 +106,98 @@ local function renderPlant(state, clock, container, index, position, stages, set
     local scale = math.min(height * (first + (last - first) * fraction) / template.Height,
         clearance / template.Width) * template.Scale
     local lift = stage == #stages and (setting.MatureLift or 0) * fraction or 0
-    if not state.Scale or math.abs(scale - state.Scale) > .002 or math.abs(lift - state.Lift) > .002 or
-        progress >= 1 and (scale ~= state.Scale or lift ~= state.Lift) then
+    local anchor = position.CFrame
+    local previous = state.Model
+    if state.Stage ~= stage then
+        local model = template.Model:Clone()
+        model.Name = "Plant" .. index
+        model:ScaleTo(scale)
+        model:PivotTo(anchor + Vector3.yAxis * lift)
+        model.Parent = container
+        local work = 3 * template.Parts + (state.Parts or 0)
+        if previous then previous:Destroy() end
+        state.Model, state.Parts, state.Stage = model, template.Parts, stage
+        state.Scale, state.Lift, state.Anchor = scale, lift, anchor
+        return work
+    end
+
+    local work = 0
+    if math.abs(scale - state.Scale) > scale * .008 or progress >= 1 and scale ~= state.Scale then
         state.Model:ScaleTo(scale)
-        state.Model:PivotTo(position.CFrame + Vector3.yAxis * lift)
-        state.Scale, state.Lift = scale, lift
+        state.Scale = scale
+        work += template.Parts
     end
-    if not state.Model.Parent then state.Model.Parent = container end
-    if state.Previous then
-        local blend = math.clamp((now - state.Transition) / transitionTime, 0, 1)
-        opacity(state.Parts, 1 - blend)
-        if blend >= 1 then
-            state.Previous:Destroy()
-            state.Previous, state.PreviousParts = nil, nil
-        else
-            opacity(state.PreviousParts, blend)
-        end
+    if anchor ~= state.Anchor or math.abs(lift - state.Lift) > .008 or progress >= 1 and lift ~= state.Lift then
+        state.Model:PivotTo(anchor + Vector3.yAxis * lift)
+        state.Anchor, state.Lift = anchor, lift
+        work += template.Parts
     end
+    return work
 end
 
-local function render(bed, state, now)
+local function render(bed, state, now, serverNow, interval, budget)
     local crop = bed:GetAttribute("PlantType")
     local setting = config.Crops[crop]
     local clocks = readClocks(bed, state)
     if not setting or not clocks or not next(clocks) then
-        if state.Visual then clear(state) end
-        return
+        if state.Visual then budget -= clear(state, budget) end
+        if not state.Visual then state.NextRender = math.huge end
+        return budget
     end
     if not state.Positions then
         state.Positions, state.Clearance = positionsFor(state.Spots)
         state.PositionNames = {}
         for _, position in ipairs(state.Positions) do state.PositionNames[position.Parent.Name] = true end
     end
-    if #state.Positions == 0 then return end
-    if state.Crop ~= crop or state.Visual.Parent ~= bed then
-        clear(state)
-        state.Crop, state.Plants = crop, {}
-        local container = Instance.new("Model")
-        container.Name, container.Parent = "CropVisuals", bed
-        state.Visual = container
+    if #state.Positions == 0 then
+        state.NextRender = math.huge
+        return budget
     end
     local stages = stagesFor(crop)
-    if #stages == 0 then return end
-    local serverNow = workspace:GetServerTimeNow()
-    for spot, plant in pairs(state.Plants) do
-        if not clocks[spot] or not state.PositionNames[spot] then
-            plant.Model:Destroy()
-            if plant.Previous then plant.Previous:Destroy() end
-            state.Plants[spot] = nil
+    if #stages == 0 then return budget end
+    if state.Crop ~= crop then
+        budget -= clear(state, budget)
+        if budget <= 0 then return budget end
+        state.Crop, state.Plants = crop, {}
+        local container = Instance.new("Model")
+        container.Name, container.Parent = bed.Name, visuals
+        state.Visual = container
+    end
+    if not state.Cursor then
+        state.Cursor, state.SampleTime = 1, serverNow
+        for spot, plant in pairs(state.Plants) do
+            if not clocks[spot] or not state.PositionNames[spot] then
+                plant.Model:Destroy()
+                budget -= plant.Parts
+                state.Plants[spot] = nil
+            end
         end
     end
-    for index, position in ipairs(state.Positions) do
+    while state.Cursor <= #state.Positions and budget > 0 do
+        local index = state.Cursor
+        local position = state.Positions[index]
         local spot = position.Parent.Name
         local clock = clocks[spot]
         if clock then
             local plant = state.Plants[spot]
             if not plant then plant = {};state.Plants[spot] = plant end
-            renderPlant(plant, clock, state.Visual, index, position, stages, setting, state.Clearance, now, serverNow)
+            budget -= renderPlant(plant, clock, state.Visual, index, position, stages, setting, state.Clearance, state.SampleTime)
         end
+        state.Cursor += 1
     end
+    if state.Cursor > #state.Positions then
+        state.Cursor = nil
+        state.NextRender = state.SampleTime >= state.EndsAt and math.huge or now + interval
+    end
+    return budget
 end
 
 local function unbind(state)
-    clear(state)
     state.Added:Disconnect()
     state.Removing:Disconnect()
+    state.ClockChanged:Disconnect()
+    state.CropChanged:Disconnect()
+    return clear(state)
 end
 
 local function bind(spots)
@@ -181,38 +205,56 @@ local function bind(spots)
     local bed = spots.Parent
     if not bed or not bed:IsA("Model") then return end
     local existing = beds[bed]
-    if existing and existing.Spots == spots then
-        existing.Positions, existing.NextRender = nil, nil
-        return
+    if existing and existing.Spots == spots then return end
+    if existing then unbind(existing) else table.insert(order, bed) end
+    local state = {Spots = spots, NextRender = 0}
+    local function invalidateGrowth()
+        state.HasGrowth = bed:GetAttribute("CropGrowth") ~= nil
+        state.Cursor, state.NextRender = nil, 0
     end
-    if existing then unbind(existing) end
-    local state = {Spots = spots}
-    local function invalidate()
-        state.Positions, state.NextRender = nil, nil
+    local function invalidatePositions()
+        state.Positions = nil
+        invalidateGrowth()
     end
-    state.Added = spots.DescendantAdded:Connect(invalidate)
-    state.Removing = spots.DescendantRemoving:Connect(invalidate)
+    state.Added = spots.DescendantAdded:Connect(invalidatePositions)
+    state.Removing = spots.DescendantRemoving:Connect(invalidatePositions)
+    state.ClockChanged = bed:GetAttributeChangedSignal("CropGrowth"):Connect(invalidateGrowth)
+    state.CropChanged = bed:GetAttributeChangedSignal("PlantType"):Connect(invalidateGrowth)
+    invalidateGrowth()
     beds[bed] = state
 end
 plots.DescendantAdded:Connect(bind)
 for _, object in ipairs(plots:GetDescendants()) do bind(object) end
-local elapsed = 0
-RunService.Heartbeat:Connect(function(dt)
-    elapsed += dt
-    if elapsed < 0.05 then return end
-    elapsed = 0
+local nextBed = 1
+RunService.Heartbeat:Connect(function()
     local camera = workspace.CurrentCamera
+    if not camera or #order == 0 then return end
+    local eye = camera.CFrame.Position
     local now = os.clock()
-    for bed, state in pairs(beds) do
+    local serverNow = workspace:GetServerTimeNow()
+    local budget = partsPerFrame
+    for _ = 1, #order do
+        if budget <= 0 then break end
+        if nextBed > #order then nextBed = 1 end
+        local bed = order[nextBed]
+        local state = beds[bed]
         if not bed:IsDescendantOf(plots) or state.Spots.Parent ~= bed then
-            unbind(state)
+            budget -= unbind(state)
+            table.remove(order, nextBed)
             beds[bed] = nil
-        elseif camera and (bed:GetPivot().Position - camera.CFrame.Position).Magnitude < config.VisualDistance then
-            if now >= (state.NextRender or 0) then
-                local distance = (bed:GetPivot().Position - camera.CFrame.Position).Magnitude
-                state.NextRender = now + (distance > 60 and 0.5 or 0)
-                render(bed, state, now)
+            if #order == 0 then break end
+            continue
+        end
+        nextBed += 1
+        if not state.HasGrowth and not state.Visual then continue end
+        local distance = (bed:GetPivot().Position - eye).Magnitude
+        if distance <= config.VisualDistance + (state.Visual and 10 or 0) then
+            if now >= state.NextRender then
+                local interval = distance <= 60 and nearUpdateInterval or farUpdateInterval
+                budget = render(bed, state, now, serverNow, interval, budget)
             end
-        else clear(state) end
+        elseif state.Visual then
+            budget -= clear(state, budget)
+        end
     end
 end)

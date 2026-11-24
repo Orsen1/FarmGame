@@ -253,7 +253,6 @@ function Journal.Refresh(player)
     player:SetAttribute("TutorialSeedItem", tutorial.SeedItem)
     player:SetAttribute("TutorialCropItem", tutorial.CropItem)
     player:SetAttribute("TutorialRemaining", tutorial.Harvested - tutorial.Sold)
-    player:SetAttribute("FarmLevelReady", ready(data))
 end
 
 local function readFlags(saved)
@@ -395,9 +394,7 @@ function Journal.Update(player)
     send(player)
 end
 
-function Journal.Record(player, event, amount, item, object)
-    local data = journals[player]
-    if not data or player:GetAttribute("DataLoaded") ~= true then return end
+local function record(player, data, event, amount, item, object)
     local changed = false
     local tutorial = data.Tutorial
     if not tutorial.Completed then
@@ -426,7 +423,21 @@ function Journal.Record(player, event, amount, item, object)
             if data.Counts[id] ~= previous then changed = true end
         end
     end
-    if changed or event == "Harvest" then Journal.Update(player) end
+    return changed
+end
+
+function Journal.Record(player, event, amount, item, object)
+    local data = journals[player]
+    if not data or player:GetAttribute("DataLoaded") ~= true then return end
+    if record(player, data, event, amount, item, object) or event == "Harvest" then Journal.Update(player) end
+end
+
+function Journal.RecordSale(player, item, amount, cents)
+    local data = journals[player]
+    if not data or player:GetAttribute("DataLoaded") ~= true then return end
+    local sold = record(player, data, "Sell", amount, item)
+    local earned = record(player, data, "Sales", cents)
+    if sold or earned then Journal.Update(player) end
 end
 
 function Journal.GetState(player)
