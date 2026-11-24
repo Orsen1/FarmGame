@@ -7,7 +7,6 @@ local PlantDataService = require(ServerScriptService:WaitForChild("PlantDataServ
 local ProductionDataService = require(ServerScriptService:WaitForChild("ProductionDataService"))
 local PlantService = require(ServerScriptService:WaitForChild("PlantService"))
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
-local StorageService = require(ServerScriptService:WaitForChild("StorageService"))
 local ConstructionService = require(ServerScriptService:WaitForChild("ConstructionService"))
 local AnimalService = require(ServerScriptService:WaitForChild("AnimalService"))
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
@@ -152,16 +151,6 @@ function PlotDataService.getData(player)
             end
         end
 
-        if definition.StorageSlots then
-            local data, reason = StorageService.getData(object)
-
-            if not data then
-                return nil, reason
-            end
-
-            savedObject.StorageInventory = data
-        end
-
         if AnimalConfig.Coops[itemName] then
             local contents, reason = AnimalService.Snapshot(object)
             if not contents then return nil, reason end
@@ -220,14 +209,6 @@ function PlotDataService.loadData(player, savedObjects)
             if not success then
                 object:Destroy()
                 return false, errorMessage
-            end
-        end
-
-        if definition.StorageSlots then
-            local success, reason = StorageService.loadData(object, savedObject)
-            if not success then
-                object:Destroy()
-                return false, reason
             end
         end
 

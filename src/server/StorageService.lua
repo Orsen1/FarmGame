@@ -17,6 +17,7 @@ local StorageService = {}
 local returns = {}
 local sessions = {}
 local revisions = {}
+local lastSessionId = 0
 local pageSize = ItemDefinitions.Warehouse.StorageSlots
 local blueprintPrice = ItemDefinitions.WarehouseBlueprint.SitePriceCents
 
@@ -32,80 +33,8 @@ local function isInteger(value, minimum, maximum)
     return typeof(value) == "number" and value % 1 == 0 and value >= minimum and value <= maximum
 end
 
-local function getCapacity(object)
-    local itemName = object:GetAttribute("ItemName") or object.Name
-    local definition = ItemDefinitions[itemName]
-    local count = definition and definition.StorageSlots
-
-    if isInteger(count, 1, 120) then
-        return count
-    end
-end
-
-local function getInventory(object)
-    local count = getCapacity(object)
-
-    if not count then
-        return nil, "This object has no storage"
-    end
-
-    local folder = object:FindFirstChild("StorageInventory")
-
-    if folder then
-        if not folder:IsA("Folder") then
-            return nil, "Invalid StorageInventory"
-        end
-
-        return folder, count
-    end
-
-    folder = Instance.new("Folder")
-    folder.Name = "StorageInventory"
-
-    InventoryService.CreateSlots(folder, count)
-
-    folder.Parent = object
-
-    return folder, count
-end
-
-function StorageService.getData(object)
-    local folder, count = getInventory(object)
-
-    if not folder then
-        return nil, count
-    end
-
-    if #folder:GetChildren() ~= count then
-        return nil, "Invalid storage slot count"
-    end
-
-    local data = {}
-
-    for index = 1, count do
-        local slot = folder:FindFirstChild("Slot" .. index)
-        local name = slot and slot:FindFirstChild("ItemName")
-        local amount = slot and slot:FindFirstChild("Amount")
-
-        if not slot or not slot:IsA("Folder") or not name or not name:IsA("StringValue") or not amount or
-            not amount:IsA("IntValue") then
-            return nil, "Invalid storage slot"
-        end
-
-        local row = {
-            ItemName = name.Value,
-            Amount = amount.Value,
-            ObjectData = slot:GetAttribute("ObjectData")
-        }
-
-        if not InventoryService.IsValidObjectRow(row) then
-            return nil, "Invalid stored item"
-        end
-
-        data[index] = row
-    end
-
-    return data
+local function warehouseReady(object)
+    return object:GetAttribute("ItemName") == "Warehouse"
 end
 
 function StorageService.ValidRows(data, count)
@@ -121,36 +50,6 @@ function StorageService.ValidRows(data, count)
     return true
 end
 
-function StorageService.loadData(object, savedObject)
-    local data = savedObject.StorageInventory
-    if data == nil then data = {} end
-    if not StorageService.ValidRows(data, getCapacity(object)) then
-        return false, "Invalid saved storage"
-    end
-
-    local rows, reason = StorageService.getData(object)
-
-    if not rows then
-        return false, reason
-    end
-
-    local folder = object.StorageInventory
-
-    for index = 1, #rows do
-        local row = data[index] or {
-            ItemName = "",
-            Amount = 0
-        }
-
-        local slot = folder:FindFirstChild("Slot" .. index)
-        slot.ItemName.Value = row.ItemName
-        slot.Amount.Value = row.Amount
-        slot:SetAttribute("ObjectData", row.ObjectData)
-    end
-
-    return true
-end
-
 local function prepareBuilding(player, plot, saved)
     local ready = saved.Stage == #stages
     local itemName = ready and "Warehouse" or "WarehouseBlueprint"
@@ -158,14 +57,11 @@ local function prepareBuilding(player, plot, saved)
     building.Name = itemName
     building:SetAttribute("ItemName", itemName)
     building:SetAttribute("OwnerUserId", player.UserId)
-    local valid, reason
-    if ready then
-        valid, reason = StorageService.loadData(building, saved)
-    else
+    if not ready then
         building:SetAttribute("ConstructionStage", saved.Stage)
-        valid, reason = ConstructionService.loadData(building, saved.ConstructionDeposits)
+        local valid, reason = ConstructionService.loadData(building, saved.ConstructionDeposits)
+        if not valid then building:Destroy();return nil, reason end
     end
-    if not valid then building:Destroy();return nil, reason end
 
     WarehouseSite.PrepareBuilding(building, ready)
     building:PivotTo(WarehouseSite.GetPivot(plot))
@@ -189,6 +85,11 @@ function StorageService.Load(player, plot, saved, savedReturns)
     end
 
     local stage = saved.Stage
+    local stock = saved.StorageInventory
+    if stock == nil then stock = {} end
+    if not StorageService.ValidRows(stock, pageSize) or (stage ~= #stages and next(stock)) then
+        return false, "Invalid saved storage"
+    end
     local deposits = saved.ConstructionDeposits
     local emptyStage = stage == 0 and saved.Purchased ~= true and
         (deposits == nil or (typeof(deposits) == "table" and next(deposits) == nil))
@@ -198,8 +99,21 @@ function StorageService.Load(player, plot, saved, savedReturns)
         if not building then return false, reason end
         building.Parent = site
     end
+    local folder = player:FindFirstChild("StorageInventory")
+    if not folder then
+        folder = Instance.new("Folder")
+        folder.Name = "StorageInventory"
+        InventoryService.CreateSlots(folder, pageSize)
+    end
+    local rows = {}
+    for index = 1, pageSize do
+        rows[index] = stock[index] or {ItemName = "", Amount = 0}
+    end
+    InventoryService.WriteSlots(folder, rows)
+    folder.Parent = player
     returns[player] = table.clone(savedReturns)
     revisions[player] = 0
+    player:SetAttribute("WarehouseReady", stage == #stages)
     player:SetAttribute("StorageReturnCount", #savedReturns)
     WarehouseSite.SetMarkerOwner(plot, WarehouseSite.GetBuilding(plot) and 0 or player.UserId)
     return true
@@ -214,9 +128,9 @@ function StorageService.Snapshot(player, plot)
     if not object then
         return {Stage = -1}, table.clone(returns[player])
     end
-    if getCapacity(object) then
-        local data, reason = StorageService.getData(object)
-        if not data then return nil, reason end
+    if warehouseReady(object) then
+        local data = InventoryService.ReadSlots(player:FindFirstChild("StorageInventory"), pageSize)
+        if not data then return nil, "Invalid warehouse inventory" end
         return {Stage = #stages, StorageInventory = data}, table.clone(returns[player])
     end
     local deposits, reason = ConstructionService.getData(object)
@@ -229,22 +143,24 @@ function StorageService.Clear(player)
     sessions[player], returns[player], revisions[player] = nil, nil, nil
 end
 
+local function ownedPlot(player)
+    local plot = plots:FindFirstChild(player:GetAttribute("PlotName") or "")
+    if plot and plot:GetAttribute("OwnerUserId") == player.UserId then return plot end
+end
+
+local function currentObject(plot)
+    local site = plot and plot:FindFirstChild("WarehouseSite")
+    return site and (WarehouseSite.GetBuilding(plot) or site:FindFirstChild("WarehouseMarker"))
+end
+
 local function canAccess(player, object, prompt)
     if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true or player:GetAttribute("ProductionMode") or
         player:GetAttribute("Milking") or player:GetAttribute("Teleporting") or not returns[player] then
         return false
     end
 
-    local plotName = player:GetAttribute("PlotName")
-    local plot = plotName and plots:FindFirstChild(plotName)
-
-    local site = plot and plot:FindFirstChild("WarehouseSite")
-    if not site or not object or plot:GetAttribute("OwnerUserId") ~= player.UserId or
-        object:GetAttribute("OwnerUserId") ~= player.UserId then
-        return false
-    end
-    local building = WarehouseSite.GetBuilding(plot)
-    if object ~= (building or site.WarehouseMarker) then
+    local plot = ownedPlot(player)
+    if not object or object ~= currentObject(plot) or object:GetAttribute("OwnerUserId") ~= player.UserId then
         return false
     end
 
@@ -264,7 +180,7 @@ local function canAccess(player, object, prompt)
         end
         return false
     end
-    return getCapacity(object) ~= nil
+    return true, plot
 end
 
 function StorageService.BuyBlueprint(player, prompt)
@@ -284,25 +200,21 @@ function StorageService.BuyBlueprint(player, prompt)
     return true
 end
 
-function StorageService.MoveSlot(player, object, fromArea, toArea, fromIndex, toIndex, expectedFrom, expectedTo)
+function StorageService.MoveSlot(player, sessionId, fromArea, toArea, fromIndex, toIndex, expectedFrom, expectedTo)
     local session = sessions[player]
     if (fromArea ~= "Player" and fromArea ~= "Storage") or (toArea ~= "Player" and toArea ~= "Storage") or not session or
-        session.Object ~= object or not session.Ready or not canAccess(player, object, session.Prompt) then
+        session.Id ~= sessionId or not session.Ready or not canAccess(player, session.Object, session.Prompt) then
         return false, "Storage is not available"
     end
 
-    local folder, count = getInventory(object)
-
-    if not folder then
-        return false, count
-    end
+    local folder = player:FindFirstChild("StorageInventory")
 
     local fromFolder = fromArea == "Storage" and folder or player:FindFirstChild("Inventory")
 
     local toFolder = toArea == "Storage" and folder or player:FindFirstChild("Inventory")
 
-    return InventoryService.MoveBetweenSlots(fromFolder, fromArea == "Storage" and count or 6, toFolder,
-        toArea == "Storage" and count or 6, fromIndex, toIndex, expectedFrom, expectedTo)
+    return InventoryService.MoveBetweenSlots(fromFolder, fromArea == "Storage" and pageSize or 6, toFolder,
+        toArea == "Storage" and pageSize or 6, fromIndex, toIndex, expectedFrom, expectedTo)
 end
 
 local function returnPage(player, page)
@@ -317,18 +229,20 @@ local function returnPage(player, page)
     return {Page = page, Pages = pages, Rows = rows, Revision = revisions[player]}
 end
 
-function StorageService.Open(player, object, prompt)
+function StorageService.Open(player, prompt)
+    local object = currentObject(ownedPlot(player))
     if not canAccess(player, object, prompt) then return end
-    local ready = getCapacity(object) ~= nil
+    local ready = warehouseReady(object)
     if not ready and #returns[player] == 0 then return end
-    if ready and not StorageService.getData(object) then return end
-    sessions[player] = {Object = object, Prompt = prompt, Ready = ready}
-    storageEvent:FireClient(player, "Open", object, prompt, ready, returnPage(player, 1))
+    lastSessionId += 1
+    sessions[player] = {Id = lastSessionId, Object = object, Prompt = prompt, Ready = ready}
+    storageEvent:FireClient(player, "Open", lastSessionId, prompt, ready, returnPage(player, 1),
+        object.Name == "WarehouseMarker")
 end
 
 ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     if prompt.Name == "StoragePrompt" or prompt.Name == "ReturnsPrompt" then
-        StorageService.Open(player, prompt:FindFirstAncestorOfClass("Model"), prompt)
+        StorageService.Open(player, prompt)
     elseif prompt.Name == "WarehouseBuyPrompt" then
         local success, message = StorageService.BuyBlueprint(player, prompt)
         if not success and message then
@@ -337,37 +251,51 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     end
 end)
 
-storageEvent.OnServerEvent:Connect(function(player, action, page, slot, revision)
-    local session = sessions[player]
-    if action == "Close" then sessions[player] = nil;return end
-    if not session or not canAccess(player, session.Object, session.Prompt) or
-        not isInteger(page, 1, math.max(1, math.ceil(#returns[player] / pageSize))) then
-        return
-    end
+local function takeReturn(player, session, index, revision, amount, destination)
+    local items = returns[player]
+    local row = items[index]
+    if revision ~= revisions[player] or not row then return 0, "Returns changed. Choose the item again." end
+    if not isInteger(amount, 1, row.Amount) then return 0, "Choose a valid amount." end
+    local toStorage = destination == "Storage"
+    if toStorage and not session.Ready then return 0, "Finish building your warehouse first." end
+    if not toStorage and destination ~= "Player" then return 0, "Choose a destination." end
 
-    local message
-    if action == "Take" then
-        if revision ~= revisions[player] or not isInteger(slot, 1, pageSize) then return end
-        local index = (page - 1) * pageSize + slot
-        local row = returns[player][index]
-        if not row then return end
-        local added
-        if row.ObjectData then
-            added = InventoryService.ExchangeForObject(player, {}, row.ItemName, row.ObjectData)
-        else
-            added = InventoryService.AddItem(player, row.ItemName, row.Amount)
-        end
-        if added then
-            table.remove(returns[player], index)
-            revisions[player] += 1
-            player:SetAttribute("StorageReturnCount", #returns[player])
-        else
-            message = "Make room in your inventory to take this item."
-        end
-    elseif action ~= "Page" then
+    local folder = player:FindFirstChild(toStorage and "StorageInventory" or "Inventory")
+    local moved = InventoryService.ReceiveRow(folder, toStorage and pageSize or 6, row, amount)
+    local name = toStorage and "storage" or "inventory"
+    if moved == 0 then return 0, "Make room in your " .. name .. "." end
+
+    if moved == row.Amount then
+        table.remove(items, index)
+    else
+        local remaining = table.clone(row)
+        remaining.Amount -= moved
+        items[index] = remaining
+    end
+    revisions[player] += 1
+    player:SetAttribute("StorageReturnCount", #items)
+    return moved, string.format("Moved %d to %s.", moved, name)
+end
+
+storageEvent.OnServerEvent:Connect(function(player, action, sessionId, page, slot, revision, amount, destination)
+    if action == "OpenHud" then StorageService.Open(player);return end
+    local session = sessions[player]
+    if not session or session.Id ~= sessionId then return end
+    if action == "Close" then sessions[player] = nil;return end
+    if not canAccess(player, session.Object, session.Prompt) then
+        sessions[player] = nil
+        storageEvent:FireClient(player, "Closed", sessionId)
         return
     end
-    storageEvent:FireClient(player, "Page", session.Object, returnPage(player, page), message)
+    if action ~= "Page" and action ~= "Take" then return end
+
+    local moved, message
+    if not isInteger(page, 1, math.max(1, math.ceil(#returns[player] / pageSize))) then
+        page, moved, message = 1, 0, "Returns changed. Choose the item again."
+    elseif action == "Take" and isInteger(slot, 1, pageSize) then
+        moved, message = takeReturn(player, session, (page - 1) * pageSize + slot, revision, amount, destination)
+    end
+    storageEvent:FireClient(player, "Page", sessionId, returnPage(player, page), message, moved)
 end)
 
 return StorageService

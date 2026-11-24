@@ -298,10 +298,9 @@ dragAmount.Parent = dragIcon
 local function getStorage()
     local gui = player.PlayerGui:FindFirstChild("StorageGui")
     local panel = gui and gui:FindFirstChild("Panel")
-    local value = gui and gui:FindFirstChild("StorageObject")
-    local object = value and value.Value
-    if gui and gui.Enabled and panel and panel.Visible and object then
-        return object:FindFirstChild("StorageInventory"), panel.Grid, object
+    local session = gui and gui:GetAttribute("StorageSession")
+    if gui and gui.Enabled and panel and panel.Visible and session then
+        return player:FindFirstChild("StorageInventory"), panel.Grid, session
     end
 end
 
@@ -391,12 +390,12 @@ local function bindButton(button, index, area)
         if not data then
             return
         end
-        local _, storageGrid, storageObject = getStorage()
+        local _, storageGrid, storageSession = getStorage()
         local point = Vector2.new(input.Position.X, input.Position.Y)
         local state = {
             Input = input, Index = index, Area = area, Data = data,
             Start = point, Point = point, Moved = false,
-            StorageObject = storageObject,
+            StorageSession = storageSession,
             Grid = area == "Storage" and storageGrid or nil,
             TouchStorage = isTouch and area == "Storage",
         }
@@ -497,9 +496,9 @@ UserInputService.InputEnded:Connect(function(input)
         if targetIndex == finished.Index and targetArea == finished.Area then
             return
         end
-        local _, _, storageObject = getStorage()
+        local _, _, storageSession = getStorage()
         if (finished.Area == "Storage" or targetArea == "Storage")
-            and (not storageObject or storageObject ~= finished.StorageObject) then
+            and (not storageSession or storageSession ~= finished.StorageSession) then
             return
         end
         local targetData = readSlot(targetIndex, targetArea)
@@ -507,7 +506,7 @@ UserInputService.InputEnded:Connect(function(input)
             pendingMove = true
             moveInventorySlotEvent:FireServer(
                 finished.Index, targetIndex, finished.Data, targetData,
-                finished.Area, targetArea, storageObject
+                finished.Area, targetArea, storageSession
             )
         end
     elseif not finished.Moved and finished.Area == "Player"

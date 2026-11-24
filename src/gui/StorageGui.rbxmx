@@ -11034,46 +11034,49 @@ local layout = grid:WaitForChild("UIGridLayout")
 local title = panel:WaitForChild("Title")
 local message = panel:WaitForChild("MessageLabel")
 local closeButton = panel:WaitForChild("CloseButton")
-local hotbar = player.PlayerGui:WaitForChild("InventoryGui"):WaitForChild("HotbarFrame")
+local inventoryGui = player.PlayerGui:WaitForChild("InventoryGui")
+local hotbar = inventoryGui:WaitForChild("HotbarFrame")
 local referenceSlot = hotbar:WaitForChild("Slot1")
-local plots = workspace:WaitForChild("Plots")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local PlacementController = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementController"))
 
 local HudMenu = require(ReplicatedStorage.HudMenu)
 local moneyGui, moneyEnabled
-local activeObject, activePrompt
+local activeSession, activePrompt
 local opening = 0
 local ready = false
+local vacant = false
 local tab = "Storage"
 local returnPage
 local storageRows = {}
 local status
+local selectedIndex
+local taking = false
 local slotConnections = {}
 local elapsed = 0
 local storageEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("StorageEvent")
-local storageObject = gui:FindFirstChild("StorageObject") or Instance.new("ObjectValue")
-storageObject.Name = "StorageObject"
-storageObject.Parent = gui
-
 local cream = Color3.fromRGB(255, 236, 189)
 local ink = Color3.fromRGB(93, 56, 27)
 local green = Color3.fromRGB(83, 124, 57)
 
-local function button(name, caption)
-    local control = Instance.new("TextButton")
-    control.Name, control.Text = name, caption
-    control.Font, control.TextSize = Enum.Font.FredokaOne, 17
+local function style(control)
     control.TextColor3, control.BackgroundColor3 = ink, cream
+    control.Font, control.TextSize = Enum.Font.FredokaOne, 17
     control.BorderSizePixel = 0
-    control.Parent = panel
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 8)
     corner.Parent = control
     local edge = Instance.new("UIStroke")
     edge.ApplyStrokeMode, edge.Color = Enum.ApplyStrokeMode.Border, Color3.fromRGB(182, 130, 68)
     edge.Parent = control
+end
+
+local function button(name, caption, parent)
+    local control = Instance.new("TextButton")
+    control.Name, control.Text = name, caption
+    style(control)
+    control.Parent = parent or panel
     return control
 end
 
@@ -11087,6 +11090,56 @@ notice.BackgroundTransparency = 1
 notice.Font, notice.TextSize = Enum.Font.GothamBold, 16
 notice.TextColor3, notice.TextWrapped = ink, true
 notice.Visible, notice.Parent = false, panel
+
+local warehouseButton = button("WarehouseButton", "", inventoryGui)
+warehouseButton.Size = UDim2.fromOffset(124, 44)
+warehouseButton.Visible = false
+local icon = Instance.new("ImageLabel")
+icon.BackgroundTransparency = 1
+icon.Size, icon.Position = UDim2.fromOffset(32, 32), UDim2.fromOffset(6, 6)
+icon.Image, icon.Parent = ItemDefinitions.Warehouse.Icon, warehouseButton
+local caption = Instance.new("TextLabel")
+caption.BackgroundTransparency = 1
+caption.Size, caption.Position = UDim2.new(1, -40, 1, 0), UDim2.fromOffset(38, 0)
+caption.Font, caption.TextColor3, caption.TextSize = Enum.Font.FredokaOne, ink, 15
+caption.Text, caption.Parent = "Warehouse", warehouseButton
+
+local detail = Instance.new("ScrollingFrame")
+detail.Name = "ReturnDetail"
+detail.BackgroundTransparency, detail.BorderSizePixel = 1, 0
+detail.ScrollingDirection = Enum.ScrollingDirection.Y
+detail.ScrollBarThickness = 4
+detail.CanvasSize = UDim2.fromOffset(0, 84)
+detail.Visible, detail.Parent = false, panel
+local back = button("Back", "&lt;", detail)
+back.Size = UDim2.fromOffset(44, 34)
+local returnName = Instance.new("TextLabel")
+returnName.Name = "Item"
+returnName.BackgroundTransparency = 1
+returnName.Position, returnName.Size = UDim2.fromOffset(52, 0), UDim2.new(1, -60, 0, 34)
+returnName.Font, returnName.TextColor3 = Enum.Font.FredokaOne, ink
+returnName.TextScaled, returnName.Parent = true, detail
+local nameSize = Instance.new("UITextSizeConstraint")
+nameSize.MaxTextSize, nameSize.Parent = 17, returnName
+
+local minus = button("Decrease", "-", detail)
+local plus = button("Increase", "+", detail)
+local maxButton = button("Max", "Max", detail)
+minus.Size, minus.Position = UDim2.fromOffset(44, 44), UDim2.fromOffset(0, 38)
+plus.Size, plus.Position = UDim2.fromOffset(44, 44), UDim2.new(1, -104, 0, 38)
+maxButton.Size, maxButton.Position = UDim2.fromOffset(50, 44), UDim2.new(1, -54, 0, 38)
+local amountBox = Instance.new("TextBox")
+amountBox.Name, amountBox.PlaceholderText = "Amount", "Amount"
+amountBox.Size, amountBox.Position = UDim2.new(1, -160, 0, 44), UDim2.fromOffset(50, 38)
+amountBox.ClearTextOnFocus, amountBox.ShowNativeInput = true, true
+style(amountBox)
+amountBox.Parent = detail
+local toInventory = button("ToInventory", "To inventory")
+local toStorage = button("ToStorage", "To storage")
+for _, control in ipairs({toInventory, toStorage}) do
+    control.TextSize, control.TextColor3, control.BackgroundColor3 = 15, cream, green
+    control.Visible = false
+end
 
 local function updateLayout()
     local viewport = gui.AbsoluteSize
@@ -11115,7 +11168,7 @@ local function updateLayout()
     local tabTop = compact and 48 or 61
     local tabHeight = UserInputService.TouchEnabled and 44 or compact and 34 or 41
     local header = tabTop + tabHeight + 9
-    local footer = UserInputService.TouchEnabled and 50 or compact and 38 or 46
+    local footer = selectedIndex and 52 or UserInputService.TouchEnabled and 50 or compact and 38 or 46
     local maxWidth = math.min(1040, availableWidth)
     local bottom = math.min(viewport.Y - 14, hotbar.AbsolutePosition.Y - 16)
     if portrait then
@@ -11137,7 +11190,7 @@ local function updateLayout()
     local cell = math.max(1, math.floor(math.min(targetCell, cellWidth) + 0.001))
     local gridWidth = cell * columns + gap * (columns - 1)
     local gridHeight = cell * rows + gap * (rows - 1)
-    local canvasHeight = gridHeight + 8
+    local canvasHeight = selectedIndex and 84 or gridHeight + 8
     local availableHeight = math.max(1, bottom - minimumTop - header - footer)
     local visibleHeight = math.min(canvasHeight, availableHeight)
     local height = header + visibleHeight + footer
@@ -11147,6 +11200,12 @@ local function updateLayout()
     panel.Position = UDim2.fromOffset(left + availableWidth / 2, panelBottom)
     grid.Size = UDim2.fromOffset(gridWidth + 16, visibleHeight)
     grid.Position = UDim2.fromOffset(padding, header)
+    detail.Size, detail.Position = grid.Size, grid.Position
+    detail.ScrollBarThickness = canvasHeight &gt; visibleHeight and 5 or 0
+    toInventory.Position = UDim2.new(0, padding, 1, -48)
+    toStorage.Position = UDim2.new(0.5, 3, 1, -48)
+    toInventory.Size = ready and UDim2.new(0.5, -padding - 3, 0, 44) or UDim2.new(1, -2 * padding, 0, 44)
+    toStorage.Size = UDim2.new(0.5, -padding - 3, 0, 44)
     grid.CanvasSize = UDim2.fromOffset(0, canvasHeight)
     grid.ScrollingDirection = Enum.ScrollingDirection.Y
     grid.ScrollBarThickness = canvasHeight &gt; visibleHeight and 6 or 0
@@ -11164,8 +11223,9 @@ local function updateLayout()
     nextPage.Size = previousPage.Size
     previousPage.Position = UDim2.new(0, padding, 1, -footer + 3)
     nextPage.Position = UDim2.new(1, -padding - 44, 1, -footer + 3)
-    message.Position = UDim2.new(0, padding + 49, 1, -footer)
-    message.Size = UDim2.new(1, -padding * 2 - 98, 0, footer)
+    local pagerMargin = not selectedIndex and (previousPage.Visible or nextPage.Visible) and 49 or 4
+    message.Position = UDim2.new(0, padding + pagerMargin, 1, -footer)
+    message.Size = UDim2.new(1, -2 * (padding + pagerMargin), 0, footer)
     message.TextSize = compact and 12 or 14
     message.TextWrapped = true
     notice.Position, notice.Size = grid.Position, grid.Size
@@ -11174,12 +11234,8 @@ local function updateLayout()
     layout.CellPadding = UDim2.fromOffset(gap, gap)
 end
 
-local function canUse(object, prompt)
-    local plotName = player:GetAttribute("PlotName")
-    local plot = plotName and plots:FindFirstChild(plotName)
-    local site = plot and plot:FindFirstChild("WarehouseSite")
-    if not site or not object or object.Parent ~= site or plot:GetAttribute("OwnerUserId") ~= player.UserId or
-        object:GetAttribute("OwnerUserId") ~= player.UserId or player:GetAttribute("DataLoaded") ~= true or
+local function canUse(prompt)
+    if not player:GetAttribute("PlotName") or player:GetAttribute("DataLoaded") ~= true or
         player:GetAttribute("ProductionMode") or player:GetAttribute("Milking") or player:GetAttribute("Teleporting") then
         return false
     end
@@ -11188,8 +11244,28 @@ local function canUse(object, prompt)
     local humanoid = character and character:FindFirstChildOfClass("Humanoid")
     local root = character and character:FindFirstChild("HumanoidRootPart")
     if not root or not humanoid or humanoid.Health &lt;= 0 then return false end
-    return not prompt or (prompt:IsDescendantOf(object) and
-        (root.Position - prompt.Parent.WorldPosition).Magnitude &lt;= prompt.MaxActivationDistance + 0.5)
+    if not prompt then return true end
+    local attachment = prompt.Parent
+    return attachment and prompt:IsDescendantOf(workspace) and
+        (root.Position - attachment.WorldPosition).Magnitude &lt;= prompt.MaxActivationDistance + 0.5
+end
+
+local function updateWarehouseButton()
+    local origin = hotbar.AbsolutePosition - inventoryGui.AbsolutePosition
+    warehouseButton.Position = UDim2.fromOffset(origin.X + hotbar.AbsoluteSize.X - 128, math.max(8, origin.Y - 50))
+    local visible = not panel.Visible and inventoryGui.Enabled and hotbar.Visible and canUse() and
+        (player:GetAttribute("WarehouseReady") == true or (player:GetAttribute("StorageReturnCount") or 0) &gt; 0)
+    for _, name in ipairs({"AnimalMenuOpen", "FeederOpen", "LaboratoryOpen", "FarmJournalOpen", "FarmOverviewOpen", "WorldMapOpen"}) do
+        if player:GetAttribute(name) then visible = false;break end
+    end
+    if visible then
+        for _, name in ipairs({"BuyGui", "FarmStandGui", "InventoryDiscardGui", "OrderGui"}) do
+            local other = player.PlayerGui:FindFirstChild(name)
+            local window = other and (other:FindFirstChild("MainFrame") or other:FindFirstChild("Panel"))
+            if other and other.Enabled and (not window or window.Visible) then visible = false;break end
+        end
+    end
+    warehouseButton.Visible = visible == true
 end
 
 local function disconnectRows()
@@ -11198,14 +11274,17 @@ local function disconnectRows()
 end
 
 local function closeStorage()
-    if activeObject then storageEvent:FireServer("Close") end
+    if activeSession then storageEvent:FireServer("Close", activeSession) end
     opening += 1
     if moneyGui and moneyGui.Parent then moneyGui.Enabled = moneyEnabled end
-    moneyGui, activeObject, activePrompt = nil, nil, nil
-    storageObject.Value = nil
+    moneyGui, activeSession, activePrompt = nil, nil, nil
+    selectedIndex, taking = nil, false
+    if amountBox:IsFocused() then amountBox:ReleaseFocus() end
+    gui:SetAttribute("StorageSession", nil)
     disconnectRows()
     panel.Visible = false
     player:SetAttribute("StorageOpen", false)
+    updateWarehouseButton()
 end
 
 local closeMenu = Instance.new("BindableFunction")
@@ -11228,16 +11307,26 @@ local function render()
     returnsTab.BackgroundColor3 = storage and cream or green
     returnsTab.TextColor3 = storage and ink or cream
     local page = returnPage
-    grid.Visible = storage and ready or not storage and #page.Rows > 0
-    notice.Visible = not grid.Visible
-    local locked = activeObject.Name == "WarehouseMarker" and "Buy the blueprint at the warehouse sign to start." or
+    local row = selectedIndex and page.Rows[selectedIndex]
+    local selecting = not storage and row ~= nil
+    detail.Visible = selecting
+    toInventory.Visible, toStorage.Visible = selecting, selecting and ready
+    grid.Visible = not selecting and (storage and ready or not storage and #page.Rows &gt; 0)
+    notice.Visible = not selecting and not grid.Visible
+    local locked = vacant and "Buy the blueprint at the warehouse sign to start." or
         "Finish building your warehouse to store items."
     notice.Text = storage and locked or "No items to collect."
-    previousPage.Visible = not storage and page.Page > 1
-    nextPage.Visible = not storage and page.Page &lt; page.Pages
-    message.Text = status or (storage and ready and "24 slots" or not storage and #page.Rows > 0 and
-        (page.Pages > 1 and string.format("Tap an item to take it · %d/%d", page.Page, page.Pages) or "Tap an item to take it") or "")
-    storageObject.Value = storage and ready and activeObject or nil
+    previousPage.Visible = not storage and not selecting and page.Page &gt; 1
+    nextPage.Visible = not storage and not selecting and page.Page &lt; page.Pages
+    if selecting then
+        returnName.Text = status or string.format("%s  ·  %d available",
+            ItemDefinitions[row.ItemName].DisplayName or row.ItemName, row.Amount)
+    end
+    toInventory.Interactable, toStorage.Interactable = not taking, not taking
+    message.Visible = not selecting
+    message.Text = status or (storage and ready and "24 slots" or not storage and not selecting and #page.Rows &gt; 0 and
+        (page.Pages &gt; 1 and string.format("Select an item · %d/%d", page.Page, page.Pages) or "Select an item to transfer") or "")
+    gui:SetAttribute("StorageSession", storage and ready and activeSession or nil)
     for index = 1, 24 do drawSlot(index) end
     updateLayout()
 end
@@ -11257,14 +11346,18 @@ local function bindRows(folder)
     return true
 end
 
-local function openStorage(object, prompt, built, page)
+local function openStorage(session, prompt, built, page, emptySite)
     opening += 1
     local request = opening
-    local folder = built and object:WaitForChild("StorageInventory", 5)
-    if request ~= opening or not canUse(object, prompt) or built and not folder then return end
+    local folder = built and player:WaitForChild("StorageInventory", 5)
+    if request ~= opening or not canUse(prompt) or built and not folder then
+        storageEvent:FireServer("Close", session)
+        return
+    end
     disconnectRows()
     table.clear(storageRows)
-    activeObject, activePrompt, ready, returnPage = object, prompt, built, page
+    activeSession, activePrompt, ready, returnPage, vacant = session, prompt, built, page, emptySite
+    selectedIndex, taking = nil, false
     tab, status = built and "Storage" or "Returns", nil
     if built and not bindRows(folder) then closeStorage();return end
     PlacementController.cancelPlacement()
@@ -11277,36 +11370,79 @@ local function openStorage(object, prompt, built, page)
     panel.Visible = true
     player:SetAttribute("StorageOpen", true)
     render()
+    updateWarehouseButton()
 end
 
-storageEvent.OnClientEvent:Connect(function(action, object, first, second, third)
-    if action == "Open" then openStorage(object, first, second, third)
-    elseif action == "Page" and activeObject == object and first.Revision &gt;= returnPage.Revision then
+storageEvent.OnClientEvent:Connect(function(action, session, first, second, third, fourth)
+    if action == "Open" then openStorage(session, first, second, third, fourth)
+    elseif action == "Closed" and activeSession == session then closeStorage()
+    elseif action == "Page" and activeSession == session and first.Revision &gt;= returnPage.Revision then
         if first.Page ~= returnPage.Page then grid.CanvasPosition = Vector2.zero end
+        if first.Revision ~= returnPage.Revision or first.Page ~= returnPage.Page then selectedIndex = nil end
+        taking = false
         returnPage, status = first, second
         render()
     end
 end)
 
 local function selectTab(nextTab)
-    if not activeObject or tab == nextTab then return end
-    tab, status = nextTab, nil
+    if not activeSession or tab == nextTab or taking then return end
+    tab, status, selectedIndex = nextTab, nil, nil
     grid.CanvasPosition = Vector2.zero
     render()
 end
 
+local function setAmount(amount)
+    local row = selectedIndex and returnPage.Rows[selectedIndex]
+    if row then amountBox.Text = string.format("%d", math.clamp(amount, 1, row.Amount)) end
+end
+
+local function readAmount()
+    return tonumber(amountBox.Text:match("^%d+$")) or 1
+end
+
+local function transfer(destination)
+    local row = selectedIndex and returnPage.Rows[selectedIndex]
+    if not activeSession or not row or taking or (destination == "Storage" and not ready) then return end
+    local amount = math.clamp(readAmount(), 1, row.Amount)
+    taking = true
+    toInventory.Interactable, toStorage.Interactable = false, false
+    returnName.Text = "Transferring…"
+    storageEvent:FireServer("Take", activeSession, returnPage.Page, selectedIndex, returnPage.Revision, amount, destination)
+end
+
+warehouseButton.Activated:Connect(function()
+    if warehouseButton.Visible then storageEvent:FireServer("OpenHud") end
+end)
 storageTab.Activated:Connect(function() selectTab("Storage") end)
 returnsTab.Activated:Connect(function() selectTab("Returns") end)
 previousPage.Activated:Connect(function()
-    if activeObject and returnPage.Page &gt; 1 then storageEvent:FireServer("Page", returnPage.Page - 1) end
+    if activeSession and returnPage.Page &gt; 1 then storageEvent:FireServer("Page", activeSession, returnPage.Page - 1) end
 end)
 nextPage.Activated:Connect(function()
-    if activeObject and returnPage.Page &lt; returnPage.Pages then storageEvent:FireServer("Page", returnPage.Page + 1) end
+    if activeSession and returnPage.Page &lt; returnPage.Pages then storageEvent:FireServer("Page", activeSession, returnPage.Page + 1) end
 end)
+back.Activated:Connect(function()
+    if taking then return end
+    selectedIndex, status = nil, nil
+    render()
+end)
+minus.Activated:Connect(function() setAmount(readAmount() - 1) end)
+plus.Activated:Connect(function() setAmount(readAmount() + 1) end)
+maxButton.Activated:Connect(function()
+    if selectedIndex then setAmount(returnPage.Rows[selectedIndex].Amount) end
+end)
+amountBox.FocusLost:Connect(function() setAmount(readAmount()) end)
+toInventory.Activated:Connect(function() transfer("Player") end)
+toStorage.Activated:Connect(function() transfer("Storage") end)
 for index = 1, 24 do
     grid["Slot" .. index].TextButton.Activated:Connect(function()
-        if activeObject and tab == "Returns" and returnPage.Rows[index] then
-            storageEvent:FireServer("Take", returnPage.Page, index, returnPage.Revision)
+        local row = activeSession and tab == "Returns" and returnPage.Rows[index]
+        if row and not taking then
+            selectedIndex, status = index, nil
+            setAmount(row.Amount)
+            detail.CanvasPosition = Vector2.zero
+            render()
         end
     end)
 end
@@ -11314,7 +11450,7 @@ end
 closeButton.Activated:Connect(closeStorage)
 
 UserInputService.InputBegan:Connect(function(input)
-    if activeObject and not UserInputService:GetFocusedTextBox()
+    if activeSession and not UserInputService:GetFocusedTextBox()
         and (input.KeyCode == Enum.KeyCode.Q or input.KeyCode == Enum.KeyCode.Escape) then
         closeStorage()
     end
@@ -11327,7 +11463,8 @@ RunService.Heartbeat:Connect(function(deltaTime)
     end
     elapsed = 0
 
-    if activeObject and not canUse(activeObject, activePrompt) then
+    updateWarehouseButton()
+    if activeSession and (not canUse(activePrompt) or ready ~= (player:GetAttribute("WarehouseReady") == true)) then
         closeStorage()
     end
 end)
@@ -11337,6 +11474,12 @@ HudMenu.Panel:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateLayout)
 gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateLayout)
 hotbar:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateLayout)
 hotbar:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateLayout)
+hotbar:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateWarehouseButton)
+hotbar:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateWarehouseButton)
+hotbar:GetPropertyChangedSignal("Visible"):Connect(updateWarehouseButton)
+inventoryGui:GetPropertyChangedSignal("Enabled"):Connect(updateWarehouseButton)
+player:GetAttributeChangedSignal("WarehouseReady"):Connect(updateWarehouseButton)
+player:GetAttributeChangedSignal("StorageReturnCount"):Connect(updateWarehouseButton)
 referenceSlot:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateLayout)
 UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(updateLayout)
 player.CharacterRemoving:Connect(closeStorage)

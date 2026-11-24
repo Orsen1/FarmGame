@@ -106,6 +106,7 @@ function PlayerPlotService.releasePlot(player)
     local warehouse = WarehouseSite.GetBuilding(plot)
     if warehouse then warehouse:Destroy() end
     WarehouseSite.SetMarkerOwner(plot, 0)
+    player:SetAttribute("WarehouseReady", false)
 
     local ownerSign = plot:FindFirstChild("OwnerSign")
 

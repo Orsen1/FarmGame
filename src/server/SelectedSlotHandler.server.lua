@@ -27,7 +27,7 @@ setSelectedSlotEvent.OnServerEvent:Connect(function(player, slotNumber)
 end)
 
 moveInventorySlotEvent.OnServerEvent:Connect(function(player, fromIndex, toIndex, expectedFrom, expectedTo, fromArea,
-    toArea, storageObject)
+    toArea, storageSession)
     if player:GetAttribute("DataLoaded") ~= true or player:GetAttribute("ProductionMode") == true then
         moveInventorySlotEvent:FireClient(player, false, "Inventory is not available")
         return
@@ -41,7 +41,7 @@ moveInventorySlotEvent.OnServerEvent:Connect(function(player, fromIndex, toIndex
     if fromArea == "Player" and toArea == "Player" then
         success, reason = InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, expectedTo)
     elseif StorageService then
-        success, reason = StorageService.MoveSlot(player, storageObject, fromArea, toArea, fromIndex, toIndex,
+        success, reason = StorageService.MoveSlot(player, storageSession, fromArea, toArea, fromIndex, toIndex,
             expectedFrom, expectedTo)
     else
         success, reason = false, "Storage is not available"

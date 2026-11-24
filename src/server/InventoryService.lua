@@ -23,9 +23,9 @@ function InventoryService.IsValidObjectRow(row)
     return definition.InstanceItem ~= true
 end
 
-local function writeInventory(player, data)
+function InventoryService.WriteSlots(folder, data)
     for index, row in ipairs(data) do
-        local slot = player.Inventory["Slot" .. index]
+        local slot = folder["Slot" .. index]
         slot.ItemName.Value = row.ItemName
         slot.Amount.Value = row.Amount
         slot:SetAttribute("ObjectData", row.ObjectData)
@@ -131,7 +131,7 @@ function InventoryService.ExchangeItems(player, inputs, outputs)
         return false, reason
     end
 
-    writeInventory(player, data)
+    InventoryService.WriteSlots(player.Inventory, data)
 
     return true
 end
@@ -180,20 +180,19 @@ function InventoryService.RemoveFromSlot(player, slotIndex, itemName, amount)
 
     row.Amount -= amount
     if row.Amount == 0 then row.ItemName = "" end
-    writeInventory(player, data)
+    InventoryService.WriteSlots(player.Inventory, data)
     return true
 end
 
-function InventoryService.GetInventory(player)
-    local inventory = player:FindFirstChild("Inventory")
-    if not inventory then
+function InventoryService.ReadSlots(folder, count)
+    if not folder then
         return nil
     end
 
     local inventoryData = {}
 
-    for i = 1, SLOT_COUNT do
-        local slot = inventory:FindFirstChild("Slot" .. i)
+    for i = 1, count do
+        local slot = folder:FindFirstChild("Slot" .. i)
 
         if not slot then
             return nil
@@ -202,7 +201,7 @@ function InventoryService.GetInventory(player)
         local nameValue = slot:FindFirstChild("ItemName")
         local amountValue = slot:FindFirstChild("Amount")
 
-        if not nameValue or not amountValue then
+        if not nameValue or not nameValue:IsA("StringValue") or not amountValue or not amountValue:IsA("IntValue") then
             return nil
         end
 
@@ -215,6 +214,36 @@ function InventoryService.GetInventory(player)
     end
 
     return inventoryData
+end
+
+function InventoryService.GetInventory(player)
+    return InventoryService.ReadSlots(player:FindFirstChild("Inventory"), SLOT_COUNT)
+end
+
+function InventoryService.ReceiveRow(folder, count, row, amount)
+    local data = InventoryService.ReadSlots(folder, count)
+    if not data or not InventoryService.IsValidObjectRow(row) or not isValidAmount(amount) or amount > row.Amount then
+        return 0
+    end
+
+    local remaining = amount
+    local empty
+    for index, slot in ipairs(data) do
+        if slot.ItemName == "" then
+            empty = empty or index
+        elseif not row.ObjectData and slot.ItemName == row.ItemName then
+            local added = math.min(remaining, MAX_INTEGER - slot.Amount)
+            slot.Amount += added
+            remaining -= added
+            if remaining == 0 then break end
+        end
+    end
+    if remaining > 0 and empty then
+        data[empty] = {ItemName = row.ItemName, Amount = remaining, ObjectData = row.ObjectData}
+        remaining = 0
+    end
+    if remaining < amount then InventoryService.WriteSlots(folder, data) end
+    return amount - remaining
 end
 
 function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCount, fromIndex, toIndex, expectedFrom,
@@ -311,7 +340,7 @@ function InventoryService.DiscardSlot(player, slotIndex, expected)
     end
     if row.Amount < 1 then return false, "SourceSlotEmpty" end
     data[slotIndex] = {ItemName = "", Amount = 0}
-    writeInventory(player, data)
+    InventoryService.WriteSlots(player.Inventory, data)
     return true
 end
 
@@ -323,7 +352,7 @@ function InventoryService.ExchangeForObject(player, inputs, itemName, objectData
     for index, slot in ipairs(data) do
         if slot.ItemName == "" then
             data[index] = row
-            writeInventory(player, data)
+            InventoryService.WriteSlots(player.Inventory, data)
             return true
         end
     end

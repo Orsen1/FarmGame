@@ -208,6 +208,7 @@ function ConstructionService.Build(player, object)
 
     nextObject.Parent = object.Parent
     object:Destroy()
+    if nextItemName == "Warehouse" then player:SetAttribute("WarehouseReady", true) end
     Journal.Update(player)
     return true, final and "Construction completed" or step.DisplayName
 end
