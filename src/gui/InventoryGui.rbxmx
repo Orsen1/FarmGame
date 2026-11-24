@@ -266,7 +266,10 @@ end)
 
 local press = nil
 local pendingMove = false
+local lastTap
 local DRAG_DISTANCE = 8
+local HOLD_TO_DRAG = 0.25
+local DOUBLE_TAP_WINDOW = 0.4
 
 -- Отдельный слой позволяет видеть перетаскиваемую иконку над окном склада.
 local dragGui = Instance.new("ScreenGui")
@@ -364,6 +367,7 @@ local function startDrag()
         return
     end
     press.Moved = true
+    lastTap = nil
     dragging = true
     if press.Grid then
         press.Grid.ScrollingEnabled = false
@@ -397,8 +401,10 @@ local function bindButton(button, index, area)
         local point = Vector2.new(input.Position.X, input.Position.Y)
         local state = {
             Input = input, Index = index, Area = area, Data = data,
-            Start = point, Point = point, Moved = false,
+            Start = point, Point = point, Moved = false, StartedAt = os.clock(),
             StorageSession = storageSession,
+            QuickTransfer = storageSession and isMouse and (UserInputService:IsKeyDown(Enum.KeyCode.LeftShift)
+                or UserInputService:IsKeyDown(Enum.KeyCode.RightShift)),
             Grid = area == "Storage" and storageGrid or nil,
             TouchStorage = isTouch and area == "Storage",
         }
@@ -406,7 +412,7 @@ local function bindButton(button, index, area)
 
         -- Короткое движение пальцем прокручивает склад; удержание берёт предмет.
         if state.TouchStorage then
-            task.delay(0.25, function()
+            task.delay(HOLD_TO_DRAG, function()
                 if press == state then
                     startDrag()
                 end
@@ -426,6 +432,9 @@ local function bindStorageGui(gui)
     end
     boundStorageGuis[gui] = true
     local grid = gui:WaitForChild("Panel"):WaitForChild("Grid")
+    local function resetTap() lastTap = nil end
+    grid:GetPropertyChangedSignal("CanvasPosition"):Connect(resetTap)
+    gui:GetAttributeChangedSignal("StorageSession"):Connect(resetTap)
     for index = 1, 24 do
         bindButton(grid:WaitForChild("Slot" .. index):WaitForChild("TextButton"), index, "Storage")
     end
@@ -455,6 +464,7 @@ UserInputService.InputChanged:Connect(function(input)
     press.Point = point
     if not dragging and (point - press.Start).Magnitude &gt;= DRAG_DISTANCE then
         press.Moved = true
+        lastTap = nil
         if press.TouchStorage then
             cancelDrag()
             return
@@ -465,6 +475,35 @@ UserInputService.InputChanged:Connect(function(input)
         dragIcon.Position = UDim2.fromOffset(point.X, point.Y)
     end
 end)
+
+local function requestMove(source, targetIndex, targetData, targetArea, storageSession)
+    pendingMove = true
+    moveInventorySlotEvent:FireServer(source.Index, targetIndex, source.Data, targetData,
+        source.Area, targetArea, storageSession)
+end
+
+local function quickTransfer(source)
+    local _, _, storageSession = getStorage()
+    if not storageSession or storageSession ~= source.StorageSession or source.Data.Amount &lt;= 0 then return end
+    local destination = source.Area == "Player" and "Storage" or "Player"
+    requestMove(source, "FirstFree", nil, destination, storageSession)
+end
+
+local function isDoubleTap(source)
+    local previous = lastTap
+    lastTap = nil
+    local now = os.clock()
+    local data = source.Data
+    if not source.StorageSession or data.Amount &lt;= 0 or now - source.StartedAt &gt;= HOLD_TO_DRAG then return false end
+    if previous and now - previous.TappedAt &lt;= DOUBLE_TAP_WINDOW and previous.StorageSession == source.StorageSession and
+        previous.Area == source.Area and previous.Index == source.Index and previous.Data.ItemName == data.ItemName and
+        previous.Data.Amount == data.Amount and previous.Data.ObjectData == data.ObjectData and previous.Data.PaidLots == data.PaidLots then
+        return true
+    end
+    source.TappedAt = now
+    lastTap = source
+    return false
+end
 
 UserInputService.InputEnded:Connect(function(input)
     if not press then
@@ -489,14 +528,17 @@ UserInputService.InputEnded:Connect(function(input)
 
     if player:GetAttribute("ProductionMode") == true
         or not hotbarFrame.Visible or not script.Parent.Enabled then
+        lastTap = nil
         return
     end
     local targetIndex, targetArea = findSlotAt(point)
     if not targetIndex then
+        lastTap = nil
         return
     end
+    local sameSlot = targetIndex == finished.Index and targetArea == finished.Area
     if wasDragging then
-        if targetIndex == finished.Index and targetArea == finished.Area then
+        if sameSlot then
             return
         end
         local _, _, storageSession = getStorage()
@@ -506,25 +548,32 @@ UserInputService.InputEnded:Connect(function(input)
         end
         local targetData = readSlot(targetIndex, targetArea)
         if targetData then
-            pendingMove = true
-            moveInventorySlotEvent:FireServer(
-                finished.Index, targetIndex, finished.Data, targetData,
-                finished.Area, targetArea, storageSession
-            )
+            requestMove(finished, targetIndex, targetData, targetArea, storageSession)
         end
-    elseif not finished.Moved and finished.Area == "Player"
-        and targetArea == "Player" and targetIndex == finished.Index then
-        selectSlot(finished.Index)
+    elseif not finished.Moved and sameSlot then
+        if mouse then lastTap = nil end
+        if finished.QuickTransfer or (not mouse and isDoubleTap(finished)) then
+            quickTransfer(finished)
+        elseif finished.Area == "Player" then
+            selectSlot(finished.Index)
+        end
+    else
+        lastTap = nil
     end
 end)
 
+local function cancelGesture()
+    lastTap = nil
+    cancelDrag()
+end
+
 player:GetAttributeChangedSignal("StorageOpen"):Connect(function()
     if player:GetAttribute("StorageOpen") ~= true then
-        cancelDrag()
+        cancelGesture()
     end
 end)
-UserInputService.WindowFocusReleased:Connect(cancelDrag)
-player.CharacterRemoving:Connect(cancelDrag)
+UserInputService.WindowFocusReleased:Connect(cancelGesture)
+player.CharacterRemoving:Connect(cancelGesture)
 
 moveInventorySlotEvent.OnClientEvent:Connect(function(success, reason)
     pendingMove = false

@@ -404,6 +404,20 @@ function InventoryService.MoveSlot(player, fromIndex, toIndex, expectedFrom, exp
         expectedFrom, expectedTo)
 end
 
+function InventoryService.MoveToFirstFreeSlot(fromFolder, fromCount, toFolder, toCount, fromIndex, expectedFrom)
+    local destination = InventoryService.ReadSlots(toFolder, toCount)
+    if not destination then return false, "InventoryNotReady" end
+
+    for index, row in ipairs(destination) do
+        if row.Amount == 0 then
+            return InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCount, fromIndex,
+                index, expectedFrom, row)
+        end
+    end
+
+    return false, "DestinationFull"
+end
+
 function InventoryService.DiscardSlot(player, slotIndex, expected)
     if player:GetAttribute("DataLoaded") ~= true then return false, "InventoryNotReady" end
     if typeof(slotIndex) ~= "number" or slotIndex % 1 ~= 0 or slotIndex < 1 or slotIndex > SLOT_COUNT or

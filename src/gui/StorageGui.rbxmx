@@ -11300,6 +11300,12 @@ local function drawSlot(index)
     slot.AmountText.Text = definition and tostring(row.Amount) or ""
 end
 
+local function storageHint()
+    local input = UserInputService.PreferredInput
+    if input == Enum.PreferredInput.Touch then return "Double-tap to move" end
+    return input == Enum.PreferredInput.KeyboardAndMouse and "Shift + click to move" or "24 slots"
+end
+
 local function render()
     local storage = tab == "Storage"
     storageTab.BackgroundColor3 = storage and green or cream
@@ -11324,7 +11330,7 @@ local function render()
     end
     toInventory.Interactable, toStorage.Interactable = not taking, not taking
     message.Visible = not selecting
-    message.Text = status or (storage and ready and "24 slots" or not storage and not selecting and #page.Rows &gt; 0 and
+    message.Text = status or (storage and ready and storageHint() or not storage and not selecting and #page.Rows &gt; 0 and
         (page.Pages &gt; 1 and string.format("Select an item · %d/%d", page.Page, page.Pages) or "Select an item to transfer") or "")
     gui:SetAttribute("StorageSession", storage and ready and activeSession or nil)
     for index = 1, 24 do drawSlot(index) end
@@ -11376,6 +11382,13 @@ end
 storageEvent.OnClientEvent:Connect(function(action, session, first, second, third, fourth)
     if action == "Open" then openStorage(session, first, second, third, fourth)
     elseif action == "Closed" and activeSession == session then closeStorage()
+    elseif action == "MoveNotice" and activeSession == session and tab == "Storage" then
+        message.Text = first
+        task.delay(2.5, function()
+            if activeSession == session and tab == "Storage" and message.Text == first then
+                message.Text = storageHint()
+            end
+        end)
     elseif action == "Page" and activeSession == session and first.Revision &gt;= returnPage.Revision then
         if first.Page ~= returnPage.Page then grid.CanvasPosition = Vector2.zero end
         if first.Revision ~= returnPage.Revision or first.Page ~= returnPage.Page then selectedIndex = nil end

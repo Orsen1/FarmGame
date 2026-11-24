@@ -212,9 +212,20 @@ function StorageService.MoveSlot(player, sessionId, fromArea, toArea, fromIndex,
     local fromFolder = fromArea == "Storage" and folder or player:FindFirstChild("Inventory")
 
     local toFolder = toArea == "Storage" and folder or player:FindFirstChild("Inventory")
+    local fromCount = fromArea == "Storage" and pageSize or 6
+    local toCount = toArea == "Storage" and pageSize or 6
+    if toIndex == "FirstFree" and fromArea ~= toArea then
+        local moved, reason = InventoryService.MoveToFirstFreeSlot(fromFolder, fromCount, toFolder, toCount,
+            fromIndex, expectedFrom)
+        local destination = toArea == "Storage" and "warehouse" or "inventory"
+        local message = moved and ("Moved to " .. destination .. ".") or
+            reason == "DestinationFull" and ("Your " .. destination .. " is full.") or "Items changed. Try again."
+        storageEvent:FireClient(player, "MoveNotice", session.Id, message)
+        return moved, reason
+    end
 
-    return InventoryService.MoveBetweenSlots(fromFolder, fromArea == "Storage" and pageSize or 6, toFolder,
-        toArea == "Storage" and pageSize or 6, fromIndex, toIndex, expectedFrom, expectedTo)
+    return InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCount, fromIndex, toIndex,
+        expectedFrom, expectedTo)
 end
 
 function StorageService.CountReturns(player, matches)
