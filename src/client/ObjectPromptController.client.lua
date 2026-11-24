@@ -4,6 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local BedConfig = require(ReplicatedStorage.Configs.GardenBedConfig)
 local ConstructionDefinitions = require(ReplicatedStorage:WaitForChild("Configs")
     :WaitForChild("ConstructionDefinitions"))
 
@@ -336,6 +337,12 @@ local function updatePrompt(prompt)
             prompt.ObjectText = string.format("%s  %d/%d", crop and crop.DisplayName or definition.DisplayName, planted, capacity)
         end
         local step = player:GetAttribute("TutorialStep") or "Complete"
+        if not selectedDefinition or selectedDefinition.Type ~= "Seed" then
+            local bed = BedConfig.Types[itemName]
+            prompt.ActionText = "Expand bed"
+            setEnabled(prompt, step == "Complete" and bed ~= nil and bed.UpgradePrices[object:GetAttribute("BedLevel") or 1] ~= nil)
+            return
+        end
         setEnabled(prompt,
             amount > 0 and selectedDefinition ~= nil and selectedDefinition.Type == "Seed" and
                 (not crop or selectedDefinition.PlantId == object:GetAttribute("PlantType")) and (step == "Complete" or
@@ -488,6 +495,7 @@ RunService.Heartbeat:Connect(function(dt)
         player:GetAttribute("AnimalMenuOpen") == true or player:GetAttribute("StorageOpen") == true or
         player:GetAttribute("FeederOpen") == true or player:GetAttribute("ProductionMode") == true or
         player:GetAttribute("Milking") == true or player:GetAttribute("LaboratoryOpen") == true or
+        player:GetAttribute("BedUpgradeOpen") == true or
         (shop and shop.Enabled and shop.MainFrame.Visible) or (sell and sell.Enabled and sell.MainFrame.Visible)
     local scores = {}
     if not blocked then

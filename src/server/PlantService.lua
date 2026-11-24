@@ -9,7 +9,7 @@ local ItemDefinitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local Journal = require(ServerScriptService.FarmJournalService)
 local plots = workspace:WaitForChild("Plots")
 
-local function canUse(player, gardenBed)
+function PlantService.CanUse(player, gardenBed)
     if typeof(gardenBed) ~= "Instance" or not gardenBed:IsA("Model") or
         player:GetAttribute("DataLoaded") ~= true then return false end
     local definition = ItemDefinitions[gardenBed:GetAttribute("ItemName") or gardenBed.Name]
@@ -171,21 +171,21 @@ local function legacyBatch(saved, positions, settings, folder)
         Slots = slots}
 end
 
-function PlantService.Restore(object, saved)
+function PlantService.Restore(object, saved, legacyTemplate)
     local settings = config.Crops[saved.Type]
     local positions = getPositions(object)
     local folder = PlantsFolder:FindFirstChild(saved.Type)
     if not settings or not positions or not folder then return false, "Unknown crop" end
     object:SetAttribute("PlantingCapacity", #positions)
     local state = {Type = saved.Type, BaseRate = 1,
-        Batches = saved.Version == 4 and saved.Batches or {legacyBatch(saved, positions, settings, folder)}}
+        Batches = saved.Version == 4 and saved.Batches or {legacyBatch(saved, getPositions(legacyTemplate or object), settings, folder)}}
     growing[object] = state
     publish(object, state)
     return true
 end
 
 function PlantService.Plant(player, gardenBed)
-    if not canUse(player, gardenBed) then return false end
+    if not PlantService.CanUse(player, gardenBed) then return false end
     local slotIndex = player:GetAttribute("SelectedSlot") or 1
     local chosen = player.Inventory:FindFirstChild("Slot" .. slotIndex)
     if not chosen or chosen.Amount.Value < 1 then return false end
@@ -233,7 +233,7 @@ function PlantService.Plant(player, gardenBed)
 end
 
 function PlantService.Water(player, gardenBed)
-    if not canUse(player, gardenBed) then return false end
+    if not PlantService.CanUse(player, gardenBed) then return false end
     local chosen = player.Inventory:FindFirstChild("Slot" .. (player:GetAttribute("SelectedSlot") or 1))
     if not chosen or chosen.ItemName.Value ~= "WateringCan" or chosen.Amount.Value < 1 then return false end
     local state = growing[gardenBed]
@@ -246,7 +246,7 @@ function PlantService.Water(player, gardenBed)
 end
 
 function PlantService.Harvest(player, gardenBed)
-    if not canUse(player, gardenBed) or not gardenBed:GetAttribute("ReadyToHarvest") or not Journal.CanHarvest(player, gardenBed) then return false end
+    if not PlantService.CanUse(player, gardenBed) or not gardenBed:GetAttribute("ReadyToHarvest") or not Journal.CanHarvest(player, gardenBed) then return false end
     local state = growing[gardenBed]
     if not state then return false end
     local count, remaining = 0, {}

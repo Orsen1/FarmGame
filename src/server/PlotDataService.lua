@@ -11,6 +11,8 @@ local ConstructionService = require(ServerScriptService:WaitForChild("Constructi
 local AnimalService = require(ServerScriptService:WaitForChild("AnimalService"))
 local InventoryService = require(ServerScriptService.InventoryService)
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
+local BedConfig = require(ReplicatedStorage.Configs.GardenBedConfig)
+local BedLayout = require(ReplicatedStorage.PlacementScripts.GardenBedLayout)
 local StarterHouseLayout = require(ReplicatedStorage.PlacementScripts.StarterHouseLayout)
 local houseConfig = require(ReplicatedStorage.Configs.StarterHouseConfig)
 
@@ -28,6 +30,9 @@ local function savedPlacement(savedObject)
     local template = PlacementModels.getTemplate(savedObject.ItemName, savedObject.ConstructionStage)
     if not definition or not definition.Placeable or not template or not template:IsA("Model") then
         return nil, nil, "Missing definition or model: " .. savedObject.ItemName
+    end
+    if savedObject.BedLevel ~= nil and not BedConfig.ValidLevel(savedObject.ItemName, savedObject.BedLevel) then
+        return nil, nil, "Invalid saved garden bed level"
     end
     local pivot = savedObject.Pivot
     if typeof(pivot) ~= "table" or #pivot ~= 12 then return nil, nil, "Invalid saved pivot" end
@@ -121,12 +126,16 @@ function PlotDataService.getData(player)
         local savedObject = {
             ItemName = itemName,
             Pivot = {relativePivot:GetComponents()},
-            PurchaseCents = object:GetAttribute("PurchaseCents")
+            PurchaseCents = object:GetAttribute("PurchaseCents"),
+            BedLevel = object:GetAttribute("BedLevel")
         }
         if savedObject.PurchaseCents ~= nil and not InventoryService.IsPurchaseCost(savedObject.PurchaseCents) then
             return nil, "Invalid placed purchase cost"
         end
 
+        if savedObject.BedLevel ~= nil and not BedConfig.ValidLevel(itemName, savedObject.BedLevel) then
+            return nil, "Invalid garden bed level"
+        end
         savedObject.Plant = PlantDataService.getData(object)
 
         if definition.Recipes then
@@ -234,6 +243,9 @@ function PlotDataService.loadData(player, savedObjects)
         end
 
         object:PivotTo(ground.CFrame * pivot)
+        if savedObject.BedLevel and savedObject.BedLevel > 1 then
+            BedLayout.Expand(object, savedObject.ItemName, savedObject.BedLevel)
+        end
         object.Parent = objects
 
         if definition.Plantable then

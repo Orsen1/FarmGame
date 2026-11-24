@@ -7977,6 +7977,7 @@ local openEvent = remotes:WaitForChild("OpenBuyGuiEvent")
 local buyEvent = remotes:WaitForChild("BuyItemEvent")
 local definitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local levels = require(ReplicatedStorage.Configs.FarmLevelConfig)
+local bedConfig = require(ReplicatedStorage.Configs.GardenBedConfig)
 local tutorialConfig = require(ReplicatedStorage.Configs.FarmTutorialConfig)
 local HudMenu = require(ReplicatedStorage.HudMenu)
 local QuantityControls = require(ReplicatedStorage:WaitForChild("ShopQuantityControls"))
@@ -8178,7 +8179,17 @@ local function refresh()
     local capacity = player:GetAttribute("TutorialCapacity") or 1
     local canBought = player:GetAttribute("TutorialCanBought")
     local tutorialInfo = tutorialConfig.Steps[tutorialStep]
-    if tutorialInfo then catalogue.IntroLabel.Text = "Tutorial: " .. tutorialInfo.Title end
+    local farmLevel = player:GetAttribute("FarmLevel") or 1
+    local ownedBeds = player:GetAttribute("OwnedGardenBeds") or 0
+    local bedLimit = bedConfig.Limit(farmLevel)
+    local bedsLeft = math.max(0, bedLimit - ownedBeds)
+    local bedLabel = string.format("Beds %d/%d", ownedBeds, bedLimit)
+    local nextLevel = bedsLeft == 0 and bedConfig.NextLevel(farmLevel, ownedBeds)
+    if activeCategory == "Buildings" then
+        catalogue.IntroLabel.Text = nextLevel and bedLabel .. " | Next at farm level " .. nextLevel or bedLabel
+    elseif tutorialInfo then
+        catalogue.IntroLabel.Text = "Tutorial: " .. tutorialInfo.Title
+    end
     main.FooterFrame.MoneyLabel.Text = "Balance: " .. formatMoney(money.Value)
     for id, card in pairs(cards) do
         local owned, room = inventoryInfo(id)
@@ -8201,6 +8212,8 @@ local function refresh()
             else
                 reason = "After first sale"
             end
+        elseif bedConfig.Types[id] and bedsLeft == 0 then
+            reason = bedLabel
         elseif not room then
             reason = "Inventory full"
         elseif money.Value &lt; definitions[id].BuyPriceCents * (tutorialLimit or 1) then
@@ -8218,6 +8231,8 @@ local function refresh()
     local tutorialLimit = tutorialConfig.PurchaseAmount(tutorialStep, selectedId, item, capacity, canBought)
     local unlocked = (player:GetAttribute("FarmLevel") or 1) &gt;= required and tutorialLimit ~= 0
     local maximum = maximumAmount(price)
+    local isBed = bedConfig.Types[selectedId] ~= nil
+    if isBed then maximum = math.min(maximum, bedsLeft) end
     if tutorialLimit ~= nil then maximum = math.min(maximum, tutorialLimit);selectedAmount = maximum end
     local owned, room = inventoryInfo(selectedId)
     selectedAmount = math.clamp(selectedAmount, 0, maximum)
@@ -8243,6 +8258,8 @@ local function refresh()
     elseif tutorialLimit == 0 then text, color = "Follow the first harvest tutorial before buying other items.", MUTED
     elseif not unlocked then text, color = "Reach farm level " .. required .. " to buy this building.", RED
     elseif not room then text, color = "Inventory full. Free a slot to buy this item.", RED
+    elseif isBed and bedsLeft == 0 then
+        text, color = nextLevel and bedLabel .. " | Next at farm level " .. nextLevel or bedLabel .. " | Limit reached", RED
     elseif maximum == 0 then text, color = "Not enough money.", RED
     elseif tutorialLimit then text, color = "Tutorial: buy exactly " .. tutorialLimit .. ". Your watering budget is safe.", MUTED
     else text, color = "Choose an amount, then press Buy.", MUTED end
@@ -8414,6 +8431,7 @@ local errors = {
     FarmLevelRequired = "Reach the required farm level in My Farm first.",
     TutorialPurchaseRequired = "Follow the tutorial and buy the highlighted item in the shown amount.",
     InventoryFull = "Inventory full. Free a slot first.",
+    GardenBedLimit = "Garden bed limit reached. Check Buildings for your limit.",
     InventoryNotReady = "Inventory is loading. Try again shortly.",
     NotEnoughMoneyOrDataNotReady = "Not enough money, or data is still loading.",
     NotEnoughMoney = "Not enough money.",
@@ -8456,6 +8474,7 @@ inventory.DescendantRemoving:Connect(function(value)
 end)
 money.Changed:Connect(refresh)
 player:GetAttributeChangedSignal("FarmLevel"):Connect(refresh)
+player:GetAttributeChangedSignal("OwnedGardenBeds"):Connect(refresh)
 
 local shopButton = HudMenu.Add("ShopButton", "Shop", 1)
 local function openShop(category)

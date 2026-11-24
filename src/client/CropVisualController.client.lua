@@ -137,8 +137,9 @@ local function render(bed, state, now)
         return
     end
     if not state.Positions then
-        clear(state)
         state.Positions, state.Clearance = positionsFor(state.Spots)
+        state.PositionNames = {}
+        for _, position in ipairs(state.Positions) do state.PositionNames[position.Parent.Name] = true end
     end
     if #state.Positions == 0 then return end
     if state.Crop ~= crop or state.Visual.Parent ~= bed then
@@ -151,16 +152,20 @@ local function render(bed, state, now)
     local stages = stagesFor(crop)
     if #stages == 0 then return end
     local serverNow = workspace:GetServerTimeNow()
-    for index, position in ipairs(state.Positions) do
-        local clock = clocks[position.Parent.Name]
-        local plant = state.Plants[index]
-        if clock then
-            if not plant then plant = {};state.Plants[index] = plant end
-            renderPlant(plant, clock, state.Visual, index, position, stages, setting, state.Clearance, now, serverNow)
-        elseif plant then
+    for spot, plant in pairs(state.Plants) do
+        if not clocks[spot] or not state.PositionNames[spot] then
             plant.Model:Destroy()
             if plant.Previous then plant.Previous:Destroy() end
-            state.Plants[index] = nil
+            state.Plants[spot] = nil
+        end
+    end
+    for index, position in ipairs(state.Positions) do
+        local spot = position.Parent.Name
+        local clock = clocks[spot]
+        if clock then
+            local plant = state.Plants[spot]
+            if not plant then plant = {};state.Plants[spot] = plant end
+            renderPlant(plant, clock, state.Visual, index, position, stages, setting, state.Clearance, now, serverNow)
         end
     end
 end

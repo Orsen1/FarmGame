@@ -119,18 +119,19 @@ end
 
 function PlantDataService.loadData(template, object, savedObject)
     local plant = savedObject.Plant
-    local isValid, errorMessage = validateData(template, plant)
+    local source = typeof(plant) == "table" and plant.Version ~= 4 and template or object
+    local isValid, errorMessage = validateData(source, plant)
 
     if not isValid then
         return false, errorMessage
     end
 
-    if plant then return PlantService.Restore(object, plant) end
+    if plant then return PlantService.Restore(object, plant, template) end
     object:SetAttribute("Occupied", false)
     object:SetAttribute("PlantType", "")
     object:SetAttribute("ReadyToHarvest", false)
     object:SetAttribute("PlantedCount", 0)
-    object:SetAttribute("PlantingCapacity", #template.PlantingSpots:GetChildren())
+    object:SetAttribute("PlantingCapacity", #object.PlantingSpots:GetChildren())
     return true
 end
 

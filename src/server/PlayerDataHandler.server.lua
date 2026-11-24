@@ -17,6 +17,7 @@ local FarmStandService = plotModule and require(ServerScriptService:WaitForChild
 local Laboratory = plotModule and require(ServerScriptService:WaitForChild("LaboratoryService"))
 local StorageService = plotModule and require(ServerScriptService.StorageService)
 local WarehouseMigration = plotModule and require(ServerScriptService.WarehouseMigration)
+local GardenBeds = plotModule and require(ServerScriptService.GardenBedService)
 
 local Journal = require(ServerScriptService.FarmJournalService)
 local loadedData = {}
@@ -135,6 +136,7 @@ local function loadPlayerData(player)
     end
     if player.Parent ~= Players then return end
     loadedData[player] = data
+    if GardenBeds then GardenBeds.WatchOwnership(player) end
     player:SetAttribute("DataLoaded", true)
     if not PlayerPlotService then Journal.Record(player, "VisitResources") end
 end

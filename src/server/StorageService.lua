@@ -217,6 +217,14 @@ function StorageService.MoveSlot(player, sessionId, fromArea, toArea, fromIndex,
         toArea == "Storage" and pageSize or 6, fromIndex, toIndex, expectedFrom, expectedTo)
 end
 
+function StorageService.CountReturns(player, matches)
+    local count = 0
+    for _, row in ipairs(returns[player] or {}) do
+        if matches(row.ItemName) then count += row.Amount end
+    end
+    return count
+end
+
 function StorageService.PlanReturns(player, rows)
     if not returns[player] or player:GetAttribute("DataLoaded") ~= true then return nil end
     local warehouse = currentObject(ownedPlot(player))

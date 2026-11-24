@@ -4,6 +4,7 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
 local PlantService = require(script.Parent:WaitForChild("PlantService"))
+local GardenBeds = require(script.Parent:WaitForChild("GardenBedService"))
 local ProductionService = require(script.Parent:WaitForChild("ProductionService"))
 local ConstructionService = require(script.Parent:WaitForChild("ConstructionService"))
 local AnimalService = require(script.Parent:WaitForChild("AnimalService"))
@@ -16,6 +17,7 @@ local WarehouseSite = require(script.Parent.WarehouseSite)
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
 local state = remotes:WaitForChild("ProductionState")
+local bedUpgrade = remotes:WaitForChild("GardenBedUpgrade")
 local plots = workspace:WaitForChild("Plots")
 
 local function configurePrompt(prompt)
@@ -195,7 +197,12 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     end
 
     if definition.Plantable == true then
-        PlantService.Plant(player, object)
+        if selectedDefinition and selectedDefinition.Type == "Seed" then
+            PlantService.Plant(player, object)
+        else
+            local offer = GardenBeds.Offer(player, object)
+            if offer then bedUpgrade:FireClient(player, "Preview", object, offer.Level) end
+        end
     elseif definition.Recipes then
         local success, reason = ProductionService.Open(player, object)
 
@@ -205,6 +212,11 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
             })
         end
     end
+end)
+
+bedUpgrade.OnServerEvent:Connect(function(player, object, level)
+    local success, message = GardenBeds.Upgrade(player, object, level)
+    bedUpgrade:FireClient(player, "Result", object, level, success, message)
 end)
 
 command.OnServerEvent:Connect(function(player, action, sessionId, value)

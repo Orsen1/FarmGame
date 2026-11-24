@@ -6,6 +6,8 @@ local MoneyService = require(ServerScriptService:WaitForChild("MoneyService"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
 local Journal = require(ServerScriptService.FarmJournalService)
+local GardenBeds = require(ServerScriptService.GardenBedService)
+local BedConfig = require(ReplicatedStorage.Configs.GardenBedConfig)
 local BuyService = {}
 local MAX_INTEGER = 9007199254740991
 
@@ -31,6 +33,10 @@ function BuyService.BuyItem(player, itemName, amount)
 
 	local permitted, tutorialReason = Journal.CheckPurchase(player, itemName, amount)
 	if not permitted then return false, tutorialReason end
+
+	if BedConfig.Types[itemName] and amount > BedConfig.Limit(Journal.GetLevel(player)) - GardenBeds.CountOwned(player) then
+		return false, "GardenBedLimit"
+	end
 
 	local totalPrice = price * amount
 	if totalPrice > MAX_INTEGER then

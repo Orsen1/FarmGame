@@ -2,6 +2,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ItemDefinitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local PlacementModels = require(script.Parent.PlacementModels)
+local BedLayout = require(script.Parent.GardenBedLayout)
+local BedConfig = require(ReplicatedStorage.Configs.GardenBedConfig)
 local StarterHouseLayout = require(script.Parent.StarterHouseLayout)
 local PlacementRules = {}
 local footprints = {}
@@ -45,6 +47,40 @@ local function insideUnlockedLand(ground, sections, point, halfX, halfZ)
     return covered >= 4 * halfX * halfZ - 0.005
 end
 
+local function validateBounds(plot, ground, targetBox, boxSize, ignoredObject, character)
+    local box = ground.CFrame:ToObjectSpace(targetBox)
+    local halfX = (math.abs(box.RightVector.X) * boxSize.X + math.abs(box.ZVector.X) * boxSize.Z) / 2
+    local halfZ = (math.abs(box.RightVector.Z) * boxSize.X + math.abs(box.ZVector.Z) * boxSize.Z) / 2
+    local sections = plot:FindFirstChild("Sections")
+    if not insideUnlockedLand(ground, sections, box.Position, halfX, halfZ) then
+        return false, "Keep the whole object inside your unlocked land"
+    end
+
+    if StarterHouseLayout.Overlaps(plot, targetBox, boxSize) then
+        return false, "Leave room for the farmhouse"
+    end
+
+    local ignored = {ground}
+    for _, instance in pairs({sections, ignoredObject, character, plot:FindFirstChild("SpawnPoint")}) do
+        table.insert(ignored, instance)
+    end
+
+    local params = OverlapParams.new()
+    params.FilterType = Enum.RaycastFilterType.Exclude
+    params.FilterDescendantsInstances = ignored
+
+    local placedObjects = plot:FindFirstChild("PlacedObjects")
+    local querySize = Vector3.new(math.max(boxSize.X - 0.02, 0.001), math.max(boxSize.Y - 0.02, 0.001),
+        math.max(boxSize.Z - 0.02, 0.001))
+
+    for _, part in ipairs(workspace:GetPartBoundsInBox(targetBox, querySize, params)) do
+        if part.CanCollide or (placedObjects and part:IsDescendantOf(placedObjects)) then
+            return false, "This space is occupied"
+        end
+    end
+    return true, ""
+end
+
 function PlacementRules.getPlacement(plot, position, template, rotation, preview)
     if typeof(position) ~= "Vector3" then
         return nil, false, "Invalid position"
@@ -68,8 +104,6 @@ function PlacementRules.getPlacement(plot, position, template, rotation, preview
 
     local shape = footprint(template)
     local boxSize = shape.Size
-    local halfX, halfZ = getHalfSize(boxSize, rotation)
-
     local point = ground.CFrame:PointToObjectSpace(position)
 
     local targetBox = ground.CFrame * CFrame.new(point.X, ground.Size.Y / 2 + boxSize.Y / 2, point.Z)
@@ -77,47 +111,16 @@ function PlacementRules.getPlacement(plot, position, template, rotation, preview
         * CFrame.Angles(0, -rotation * math.pi / 2, 0)
     local targetPivot = targetBox * shape.BoxToPivot
 
-    local sections = plot:FindFirstChild("Sections")
-    if not insideUnlockedLand(ground, sections, point, halfX, halfZ) then
-        return targetPivot, false, "Keep the whole object inside your unlocked land"
-    end
+    local valid, reason = validateBounds(plot, ground, targetBox, boxSize, preview)
+    return targetPivot, valid, reason
+end
 
-    if StarterHouseLayout.Overlaps(plot, targetBox, boxSize) then
-        return targetPivot, false, "Leave room for the farmhouse"
-    end
-
-    local ignored = {ground}
-    if sections then
-        table.insert(ignored, sections)
-    end
-
-    if preview then
-        table.insert(ignored, preview)
-    end
-
-    local spawnPoint = plot:FindFirstChild("SpawnPoint")
-    if spawnPoint then
-        table.insert(ignored, spawnPoint)
-    end
-
-    local params = OverlapParams.new()
-    params.FilterType = Enum.RaycastFilterType.Exclude
-    params.FilterDescendantsInstances = ignored
-
-    local placedObjects = plot:FindFirstChild("PlacedObjects")
-
-    local querySize = Vector3.new(math.max(boxSize.X - 0.02, 0.001), math.max(boxSize.Y - 0.02, 0.001),
-        math.max(boxSize.Z - 0.02, 0.001))
-
-    local overlappingParts = workspace:GetPartBoundsInBox(targetBox, querySize, params)
-
-    for _, part in ipairs(overlappingParts) do
-        if part.CanCollide or (placedObjects and part:IsDescendantOf(placedObjects)) then
-            return targetPivot, false, "This space is occupied"
-        end
-    end
-
-    return targetPivot, true, ""
+function PlacementRules.getBedExpansion(plot, object, itemName, level, character)
+    local ground = plot:FindFirstChild("Ground")
+    local template = PlacementModels.getTemplate(itemName)
+    local box, size = BedLayout.Bounds(template, object:GetPivot(), BedConfig.Types[itemName], level)
+    local valid, reason = validateBounds(plot, ground, box, size, object, character)
+    return box, size, valid, reason
 end
 
 function PlacementRules.getSnapPosition(plot, position, template, rotation, itemName, preview)
@@ -156,9 +159,16 @@ function PlacementRules.getSnapPosition(plot, position, template, rotation, item
             continue
         end
         local shape = footprint(neighborTemplate)
-        local box = ground.CFrame:ToObjectSpace(object:GetPivot() * shape.BoxToPivot:Inverse())
+        local box = object:GetPivot() * shape.BoxToPivot:Inverse()
+        local size = shape.Size
+        local bed = BedConfig.Types[neighborId]
+        local level = object:GetAttribute("BedLevel")
+        if bed and level and level > 1 then
+            box, size = BedLayout.Bounds(neighborTemplate, object:GetPivot(), bed, level)
+        end
+        box = ground.CFrame:ToObjectSpace(box)
         local center = box.Position
-        local neighborX, neighborZ = getHalfSize(shape.Size, math.abs(box.RightVector.X) > 0.99 and 0 or 1)
+        local neighborX, neighborZ = getHalfSize(size, math.abs(box.RightVector.X) > 0.99 and 0 or 1)
         local sideX = halfX + neighborX + snapGap
         local sideZ = halfZ + neighborZ + snapGap
         local alignX = math.abs(halfX - neighborX)
