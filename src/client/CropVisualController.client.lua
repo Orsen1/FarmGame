@@ -62,9 +62,9 @@ local function changeStage(state, stage, template, name, now)
     state.Scale, state.Lift = nil, nil
 end
 
-local function positionsFor(bed)
+local function positionsFor(spots)
     local positions = {}
-    for _, spot in ipairs(bed.PlantingSpots:GetChildren()) do
+    for _, spot in ipairs(spots:GetChildren()) do
         local position = spot:FindFirstChild("PlantPosition")
         if position and position:IsA("BasePart") then table.insert(positions, position) end
     end
@@ -136,14 +136,18 @@ local function render(bed, state, now)
         if state.Visual then clear(state) end
         return
     end
-    if state.Crop ~= crop then
+    if not state.Positions then
+        clear(state)
+        state.Positions, state.Clearance = positionsFor(state.Spots)
+    end
+    if #state.Positions == 0 then return end
+    if state.Crop ~= crop or state.Visual.Parent ~= bed then
         clear(state)
         state.Crop, state.Plants = crop, {}
         local container = Instance.new("Model")
         container.Name, container.Parent = "CropVisuals", bed
         state.Visual = container
     end
-    if not state.Positions then state.Positions, state.Clearance = positionsFor(bed) end
     local stages = stagesFor(crop)
     if #stages == 0 then return end
     local serverNow = workspace:GetServerTimeNow()
@@ -161,12 +165,32 @@ local function render(bed, state, now)
     end
 end
 
-local function bind(bed)
-    if not bed:IsA("Model") or not bed:FindFirstChild("PlantingSpots") then return end
-    beds[bed] = {}
+local function unbind(state)
+    clear(state)
+    state.Added:Disconnect()
+    state.Removing:Disconnect()
 end
-for _, bed in ipairs(plots:GetDescendants()) do bind(bed) end
-plots.DescendantAdded:Connect(function(object) if object:IsA("Model") then task.defer(bind, object) end end)
+
+local function bind(spots)
+    if spots.Name ~= "PlantingSpots" or not spots:IsA("Folder") then return end
+    local bed = spots.Parent
+    if not bed or not bed:IsA("Model") then return end
+    local existing = beds[bed]
+    if existing and existing.Spots == spots then
+        existing.Positions, existing.NextRender = nil, nil
+        return
+    end
+    if existing then unbind(existing) end
+    local state = {Spots = spots}
+    local function invalidate()
+        state.Positions, state.NextRender = nil, nil
+    end
+    state.Added = spots.DescendantAdded:Connect(invalidate)
+    state.Removing = spots.DescendantRemoving:Connect(invalidate)
+    beds[bed] = state
+end
+plots.DescendantAdded:Connect(bind)
+for _, object in ipairs(plots:GetDescendants()) do bind(object) end
 local elapsed = 0
 RunService.Heartbeat:Connect(function(dt)
     elapsed += dt
@@ -175,7 +199,9 @@ RunService.Heartbeat:Connect(function(dt)
     local camera = workspace.CurrentCamera
     local now = os.clock()
     for bed, state in pairs(beds) do
-        if not bed:IsDescendantOf(plots) then clear(state);beds[bed] = nil
+        if not bed:IsDescendantOf(plots) or state.Spots.Parent ~= bed then
+            unbind(state)
+            beds[bed] = nil
         elseif camera and (bed:GetPivot().Position - camera.CFrame.Position).Magnitude < config.VisualDistance then
             if now >= (state.NextRender or 0) then
                 local distance = (bed:GetPivot().Position - camera.CFrame.Position).Magnitude
