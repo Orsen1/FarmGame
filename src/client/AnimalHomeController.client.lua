@@ -67,7 +67,7 @@ local function refreshWorkshop()
     local elapsed = workspace:GetServerTimeNow() - (object:GetAttribute("ProductionStartedAt") or 0)
     view:UpdateWorkshop({Title = definition.DisplayName, Icon = current.Icon,
         MilkIcon = definitions[definition.MilkTank.Item].Icon, Stock = object:GetAttribute("MilkStock") or 0,
-        Capacity = definition.MilkTank.Capacity, Owned = count(definition.MilkTank.Item), Outputs = outputs,
+        Capacity = definition.MilkTank.Capacity, Owned = count(definition.MilkTank.Item) + count(definition.MilkTank.RecoveredItem), Outputs = outputs,
         Busy = object:GetAttribute("Busy") == true, ResultName = result and result.DisplayName or "Working",
         ResultIcon = result and result.Icon, Remaining = math.max(0, math.ceil(duration - elapsed)),
         Progress = duration > 0 and math.clamp(elapsed / duration, 0, 1) or 0, Pending = current.Pending})

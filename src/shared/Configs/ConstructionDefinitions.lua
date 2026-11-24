@@ -1,4 +1,5 @@
 local ConstructionDefinitions = {
+    DemolitionRefundPercent = 50,
     LaboratoryBlueprint = {
         Stages = {
             {DisplayName = "Stone Foundation", Model = "Stage1_Foundation", Inputs = {Stone = 20}},

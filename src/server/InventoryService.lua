@@ -1,4 +1,5 @@
 local ItemDefinitions = require(game:GetService("ReplicatedStorage").Configs.ItemDefinitions)
+local HttpService = game:GetService("HttpService")
 local InventoryService = {}
 local SLOT_COUNT = 6
 local MAX_INTEGER = 9007199254740991
@@ -11,24 +12,89 @@ local function isValidItemName(itemName)
     return typeof(itemName) == "string" and ItemDefinitions[itemName] ~= nil
 end
 
+function InventoryService.IsPurchaseCost(cents)
+    return cents == 0 or isValidAmount(cents)
+end
+
+local function readPaidLots(row)
+    if row.PaidLots == nil then return {}, 0 end
+    if typeof(row.PaidLots) ~= "string" then return end
+    local ok, lots = pcall(HttpService.JSONDecode, HttpService, row.PaidLots)
+    if not ok or typeof(lots) ~= "table" or #lots == 0 then return end
+    local count = 0
+    for _, lot in ipairs(lots) do
+        if typeof(lot) ~= "table" or not isValidAmount(lot[1]) or not isValidAmount(lot[2]) or
+            lot[2] > row.Amount - count then return end
+        count += lot[2]
+    end
+    return lots, count
+end
+
+local function encodeLots(lots)
+    return #lots > 0 and HttpService:JSONEncode(lots) or nil
+end
+
+local function appendLot(lots, cents, count)
+    local last = lots[#lots]
+    if last and last[1] == cents then last[2] += count
+    else table.insert(lots, {cents, count}) end
+end
+
+local function takeRow(row, amount)
+    local taken = {ItemName = row.ItemName, Amount = amount, ObjectData = row.ObjectData}
+    if row.PaidLots then
+        local lots, paidCount = readPaidLots(row)
+        local remaining = math.max(0, amount - (row.Amount - paidCount))
+        local removed, left = {}, {}
+        for _, lot in ipairs(lots) do
+            local count = math.min(lot[2], remaining)
+            if count > 0 then appendLot(removed, lot[1], count);remaining -= count end
+            if lot[2] > count then appendLot(left, lot[1], lot[2] - count) end
+        end
+        taken.PaidLots, row.PaidLots = encodeLots(removed), encodeLots(left)
+    end
+    row.Amount -= amount
+    if row.Amount == 0 then row.ItemName, row.ObjectData = "", nil end
+    return taken
+end
+
+local function addRow(slot, row)
+    if row.PaidLots then
+        local lots = readPaidLots(slot)
+        for _, lot in ipairs(readPaidLots(row)) do appendLot(lots, lot[1], lot[2]) end
+        slot.PaidLots = encodeLots(lots)
+    end
+    slot.ItemName, slot.Amount, slot.ObjectData = row.ItemName, slot.Amount + row.Amount, row.ObjectData
+end
+
+local function paidForOne(row)
+    local lots = readPaidLots(row)
+    return lots[1] and lots[1][1] or 0
+end
+
 function InventoryService.IsValidObjectRow(row)
     if typeof(row) ~= "table" or typeof(row.ItemName) ~= "string" or typeof(row.Amount) ~= "number" then return false end
-    if row.ItemName == "" then return row.Amount == 0 and row.ObjectData == nil end
+    if row.ItemName == "" then return row.Amount == 0 and row.ObjectData == nil and row.PaidLots == nil end
     local definition = ItemDefinitions[row.ItemName]
     if not definition or not isValidAmount(row.Amount) then return false end
     if row.ObjectData ~= nil then
-        return definition.InstanceItem == true and row.Amount == 1 and
+        return (definition.InstanceItem == true or definition.Type == "Animal") and row.Amount == 1 and row.PaidLots == nil and
             typeof(row.ObjectData) == "string" and #row.ObjectData > 0 and #row.ObjectData <= 32768
     end
-    return definition.InstanceItem ~= true
+    return definition.InstanceItem ~= true and (row.PaidLots == nil or
+        ((definition.Placeable or definition.UpgradeFrom) and readPaidLots(row) ~= nil))
+end
+
+local function writeSlot(slot, row)
+    slot.ItemName.Value = row.ItemName
+    slot.Amount.Value = row.Amount
+    slot:SetAttribute("ObjectData", row.ObjectData)
+    slot:SetAttribute("PaidLots", row.PaidLots)
 end
 
 function InventoryService.WriteSlots(folder, data)
     for index, row in ipairs(data) do
-        local slot = folder["Slot" .. index]
-        slot.ItemName.Value = row.ItemName
-        slot.Amount.Value = row.Amount
-        slot:SetAttribute("ObjectData", row.ObjectData)
+        writeSlot(folder["Slot" .. index], row)
     end
 end
 
@@ -54,7 +120,7 @@ function InventoryService.CreateSlots(inventory, count)
     end
 end
 
-local function planExchange(player, inputs, outputs)
+local function planExchange(player, inputs, outputs, purchasePrice)
     if player:GetAttribute("DataLoaded") ~= true then return nil, "InventoryNotReady" end
     if typeof(inputs) ~= "table" or typeof(outputs) ~= "table" then
         return nil, "InvalidRecipeItems"
@@ -73,12 +139,11 @@ local function planExchange(player, inputs, outputs)
 
         local remaining = amount
         for _, slot in ipairs(data) do
-            if slot.ItemName == itemName then
-                if slot.ObjectData then return nil, "UseSelectedBuilding" end
+            if slot.ItemName == itemName and not slot.ObjectData then
                 local taken = math.min(slot.Amount, remaining)
-                slot.Amount -= taken
+                takeRow(slot, taken)
                 remaining -= taken
-                if slot.Amount == 0 then slot.ItemName = "" end
+                if remaining == 0 then break end
             end
         end
         if remaining > 0 then return nil, "NotEnoughItems: " .. itemName end
@@ -94,7 +159,7 @@ local function planExchange(player, inputs, outputs)
         local empty
 
         for _, slot in ipairs(data) do
-            if slot.ItemName == itemName then
+            if slot.ItemName == itemName and not slot.ObjectData then
                 target = slot
                 break
             end
@@ -111,8 +176,10 @@ local function planExchange(player, inputs, outputs)
         end
         if target.Amount > MAX_INTEGER - amount then return nil, "AmountTooLarge" end
 
-        target.ItemName = itemName
-        target.Amount = target.Amount + amount
+        local definition = ItemDefinitions[itemName]
+        local bought = purchasePrice and purchasePrice > 0 and (definition.Placeable or definition.UpgradeFrom)
+        addRow(target, {ItemName = itemName, Amount = amount,
+            PaidLots = bought and HttpService:JSONEncode({{purchasePrice, amount}}) or nil})
     end
 
     return data
@@ -124,8 +191,8 @@ function InventoryService.CanExchangeItems(player, inputs, outputs)
     return data ~= nil, reason
 end
 
-function InventoryService.ExchangeItems(player, inputs, outputs)
-    local data, reason = planExchange(player, inputs, outputs)
+function InventoryService.ExchangeItems(player, inputs, outputs, purchasePrice)
+    local data, reason = planExchange(player, inputs, outputs, purchasePrice)
 
     if not data then
         return false, reason
@@ -155,11 +222,11 @@ function InventoryService.CanAddItem(player, itemName, amount)
     return InventoryService.CanExchangeItems(player, {}, {[itemName] = amount})
 end
 
-function InventoryService.AddItem(player, itemName, amount)
+function InventoryService.AddItem(player, itemName, amount, purchasePrice)
     if not isValidItemName(itemName) or not isValidAmount(amount) then
         return false, "InvalidItemOrAmount"
     end
-    return InventoryService.ExchangeItems(player, {}, {[itemName] = amount})
+    return InventoryService.ExchangeItems(player, {}, {[itemName] = amount}, purchasePrice)
 end
 
 function InventoryService.RemoveItem(player, itemName, amount)
@@ -178,10 +245,22 @@ function InventoryService.RemoveFromSlot(player, slotIndex, itemName, amount)
     local row = data and data[slotIndex]
     if not row or row.ItemName ~= itemName or row.ObjectData or row.Amount < amount then return false end
 
-    row.Amount -= amount
-    if row.Amount == 0 then row.ItemName = "" end
+    local taken = takeRow(row, amount)
     InventoryService.WriteSlots(player.Inventory, data)
-    return true
+    return true, amount == 1 and paidForOne(taken) or 0
+end
+
+local function matchingSlot(data, itemName, preferred)
+    local selected = data[preferred]
+    if selected and selected.ItemName == itemName then return selected, preferred end
+    for index, row in ipairs(data) do
+        if row.ItemName == itemName then return row, index end
+    end
+end
+
+function InventoryService.FindItem(player, itemName)
+    local data = InventoryService.GetInventory(player)
+    if data then return matchingSlot(data, itemName, player:GetAttribute("SelectedSlot") or 1) end
 end
 
 function InventoryService.ReadSlots(folder, count)
@@ -208,7 +287,8 @@ function InventoryService.ReadSlots(folder, count)
         inventoryData[i] = {
             ItemName = nameValue.Value,
             Amount = amountValue.Value,
-            ObjectData = slot:GetAttribute("ObjectData")
+            ObjectData = slot:GetAttribute("ObjectData"),
+            PaidLots = slot:GetAttribute("PaidLots")
         }
         if not InventoryService.IsValidObjectRow(inventoryData[i]) then return nil end
     end
@@ -220,30 +300,34 @@ function InventoryService.GetInventory(player)
     return InventoryService.ReadSlots(player:FindFirstChild("Inventory"), SLOT_COUNT)
 end
 
-function InventoryService.ReceiveRow(folder, count, row, amount)
-    local data = InventoryService.ReadSlots(folder, count)
-    if not data or not InventoryService.IsValidObjectRow(row) or not isValidAmount(amount) or amount > row.Amount then
-        return 0
-    end
-
+function InventoryService.ReceiveInto(data, source, amount)
     local remaining = amount
     local empty
     for index, slot in ipairs(data) do
         if slot.ItemName == "" then
             empty = empty or index
-        elseif not row.ObjectData and slot.ItemName == row.ItemName then
+        elseif not source.ObjectData and not slot.ObjectData and slot.ItemName == source.ItemName then
             local added = math.min(remaining, MAX_INTEGER - slot.Amount)
-            slot.Amount += added
+            if added > 0 then addRow(slot, takeRow(source, added)) end
             remaining -= added
             if remaining == 0 then break end
         end
     end
     if remaining > 0 and empty then
-        data[empty] = {ItemName = row.ItemName, Amount = remaining, ObjectData = row.ObjectData}
+        data[empty] = takeRow(source, remaining)
         remaining = 0
     end
-    if remaining < amount then InventoryService.WriteSlots(folder, data) end
     return amount - remaining
+end
+
+function InventoryService.ReceiveRow(folder, count, row, amount)
+    local data = InventoryService.ReadSlots(folder, count)
+    if not data or not InventoryService.IsValidObjectRow(row) or not isValidAmount(amount) or amount > row.Amount then
+        return 0
+    end
+    local moved = InventoryService.ReceiveInto(data, row, amount)
+    if moved > 0 then InventoryService.WriteSlots(folder, data) end
+    return moved
 end
 
 function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCount, fromIndex, toIndex, expectedFrom,
@@ -279,7 +363,8 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
 
     if fromName.Value ~= expectedFrom.ItemName or fromAmount.Value ~= expectedFrom.Amount or toName.Value ~=
         expectedTo.ItemName or toAmount.Value ~= expectedTo.Amount or
-        from:GetAttribute("ObjectData") ~= expectedFrom.ObjectData or to:GetAttribute("ObjectData") ~= expectedTo.ObjectData then
+        from:GetAttribute("ObjectData") ~= expectedFrom.ObjectData or to:GetAttribute("ObjectData") ~= expectedTo.ObjectData or
+        from:GetAttribute("PaidLots") ~= expectedFrom.PaidLots or to:GetAttribute("PaidLots") ~= expectedTo.PaidLots then
         return false, "InventoryChanged"
     end
 
@@ -287,10 +372,11 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
         return false, "SourceSlotEmpty"
     end
 
-    if not InventoryService.IsValidObjectRow({ItemName = fromName.Value, Amount = fromAmount.Value,
-        ObjectData = from:GetAttribute("ObjectData")}) or
-        not InventoryService.IsValidObjectRow({ItemName = toName.Value, Amount = toAmount.Value,
-            ObjectData = to:GetAttribute("ObjectData")}) then
+    local a = {ItemName = fromName.Value, Amount = fromAmount.Value, ObjectData = from:GetAttribute("ObjectData"),
+        PaidLots = from:GetAttribute("PaidLots")}
+    local b = {ItemName = toName.Value, Amount = toAmount.Value, ObjectData = to:GetAttribute("ObjectData"),
+        PaidLots = to:GetAttribute("PaidLots")}
+    if not InventoryService.IsValidObjectRow(a) or not InventoryService.IsValidObjectRow(b) then
         return false, "InvalidSlot"
     end
 
@@ -298,24 +384,15 @@ function InventoryService.MoveBetweenSlots(fromFolder, fromCount, toFolder, toCo
         return true
     end
 
-    local aName, aAmount = fromName.Value, fromAmount.Value
-    local bName, bAmount = toName.Value, toAmount.Value
-    local aData, bData = from:GetAttribute("ObjectData"), to:GetAttribute("ObjectData")
-
-    if aName == bName and not aData and not bData then
-        if bAmount > MAX_INTEGER - aAmount then return false, "AmountTooLarge" end
-        aName, aAmount, bAmount = "", 0, bAmount + aAmount
+    if a.ItemName == b.ItemName and not a.ObjectData and not b.ObjectData then
+        if b.Amount > MAX_INTEGER - a.Amount then return false, "AmountTooLarge" end
+        addRow(b, takeRow(a, a.Amount))
     else
-        aName, aAmount, bName, bAmount = bName, bAmount, aName, aAmount
-        aData, bData = bData, aData
+        a, b = b, a
     end
 
-    fromName.Value = aName
-    fromAmount.Value = aAmount
-    toName.Value = bName
-    toAmount.Value = bAmount
-    from:SetAttribute("ObjectData", aData)
-    to:SetAttribute("ObjectData", bData)
+    writeSlot(from, a)
+    writeSlot(to, b)
 
     return true
 end
@@ -335,7 +412,7 @@ function InventoryService.DiscardSlot(player, slotIndex, expected)
     if not data then return false, "InventoryNotReady" end
     local row = data[slotIndex]
     if row.ItemName ~= expected.ItemName or row.Amount ~= expected.Amount or
-        row.ObjectData ~= expected.ObjectData then
+        row.ObjectData ~= expected.ObjectData or row.PaidLots ~= expected.PaidLots then
         return false, "InventoryChanged"
     end
     if row.Amount < 1 then return false, "SourceSlotEmpty" end
@@ -344,11 +421,15 @@ function InventoryService.DiscardSlot(player, slotIndex, expected)
     return true
 end
 
-function InventoryService.ExchangeForObject(player, inputs, itemName, objectData)
+function InventoryService.ExchangeForObject(player, purchaseItem, itemName, encode)
+    if player:GetAttribute("DataLoaded") ~= true then return false, "InventoryNotReady" end
+    local data = InventoryService.GetInventory(player)
+    local upgrade = data and matchingSlot(data, purchaseItem, player:GetAttribute("SelectedSlot") or 1)
+    if not upgrade or upgrade.ObjectData then return false, "You need the matching coop upgrade." end
+    local payment = paidForOne(takeRow(upgrade, 1))
+    local objectData = encode(payment)
     local row = {ItemName = itemName, Amount = 1, ObjectData = objectData}
     if not InventoryService.IsValidObjectRow(row) then return false, "Invalid object data." end
-    local data, reason = planExchange(player, inputs, {})
-    if not data then return false, reason end
     for index, slot in ipairs(data) do
         if slot.ItemName == "" then
             data[index] = row
@@ -360,13 +441,12 @@ function InventoryService.ExchangeForObject(player, inputs, itemName, objectData
 end
 
 function InventoryService.RemoveObject(player, slotIndex, objectData)
+    if player:GetAttribute("DataLoaded") ~= true then return false end
     local slot = player.Inventory:FindFirstChild("Slot" .. slotIndex)
     if not slot or slot.Amount.Value ~= 1 or not objectData or slot:GetAttribute("ObjectData") ~= objectData then
         return false
     end
-    slot:SetAttribute("ObjectData", nil)
-    slot.ItemName.Value = ""
-    slot.Amount.Value = 0
+    writeSlot(slot, {ItemName = "", Amount = 0})
     return true
 end
 

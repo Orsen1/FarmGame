@@ -138,7 +138,7 @@
           <int name="BorderSizePixel">0</int>
           <int name="ZIndex">3</int>
           <bool name="Visible">true</bool>
-          <string name="Text">Remove garden bed?</string>
+          <string name="Text">Remove this object?</string>
           <Color3 name="TextColor3">
             <R>1.0</R>
             <G>0.9803921568627451</G>
@@ -209,7 +209,7 @@
           <int name="BorderSizePixel">0</int>
           <int name="ZIndex">3</int>
           <bool name="Visible">true</bool>
-          <string name="Text">The garden bed and any crops will be permanently lost.</string>
+          <string name="Text">Contents will be returned to storage, inventory, or Returns.</string>
           <Color3 name="TextColor3">
             <R>0.49019607843137253</R>
             <G>0.29411764705882354</G>
@@ -525,6 +525,8 @@ local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
 local event = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("RemoveObjectEvent")
+local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
+local refundPercent = require(ReplicatedStorage.Configs.ConstructionDefinitions).DemolitionRefundPercent
 local gui = script.Parent
 local dialog = gui:WaitForChild("Dialog")
 local message = dialog:WaitForChild("Message")
@@ -536,6 +538,15 @@ local targetConnection
 local pending = false
 
 gui.Enabled = false
+
+local function resize()
+    local viewport = gui.AbsoluteSize
+    if viewport.X &gt; 20 and viewport.Y &gt; 20 then
+        dialog.UIScale.Scale = math.min(1, (viewport.X - 20) / 460, (viewport.Y - 20) / 296)
+    end
+end
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(resize)
+resize()
 
 local function closeDialog()
     gui.Enabled = false
@@ -566,18 +577,24 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, who)
         return
     end
 
-    local bed = prompt:FindFirstAncestorWhichIsA("Model")
+    local object = prompt:FindFirstAncestorWhichIsA("Model")
+    local definition = object and definitions[object:GetAttribute("ItemName") or object.Name]
 
-    if not bed or bed:GetAttribute("OwnerUserId") ~= player.UserId then
+    if not definition or not definition.Placeable or definition.FixedWarehouse or definition.BuildsInto or
+        object:GetAttribute("OwnerUserId") ~= player.UserId then
         return
     end
 
-    target = bed
-    message.Text = "The object and everything inside it will be permanently lost."
+    target = object
+    local paid = object:GetAttribute("PurchaseCents") or 0
+    local refund = math.floor(paid / 100) * refundPercent + math.floor((paid % 100) * refundPercent / 100)
+    dialog.Title.Text = "Remove " .. (definition.DisplayName or object.Name) .. "?"
+    local price = refund &gt; 0 and string.format("Refund: $%.2f.", refund / 100) or "No cash refund."
+    message.Text = price .. "\nContents go to storage, inventory, or Returns."
     gui.Enabled = true
 
-    targetConnection = bed.AncestryChanged:Connect(function()
-        if not bed:IsDescendantOf(workspace) then
+    targetConnection = object.AncestryChanged:Connect(function()
+        if not object:IsDescendantOf(workspace) then
             closeDialog()
         end
     end)

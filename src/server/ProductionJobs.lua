@@ -22,6 +22,15 @@ function Jobs.CanWrite(object, recipe)
     return true
 end
 
+function Jobs.Cancel(object)
+    active[object] = nil
+    object:SetAttribute("Busy", false)
+    object:SetAttribute("ProductionPhase", nil)
+    object:SetAttribute("ActiveRecipe", nil)
+    object:SetAttribute("ProductionStartedAt", nil)
+    object:SetAttribute("ProductionDuration", nil)
+end
+
 function Jobs.Advance(object)
     if not Jobs.IsRunning(object) then return end
     local now = workspace:GetServerTimeNow()
@@ -34,12 +43,7 @@ function Jobs.Advance(object)
         if not value then value = Instance.new("IntValue");value.Name = name;value.Parent = output end
         value.Value += amount
     end
-    active[object] = nil
-    object:SetAttribute("Busy", false)
-    object:SetAttribute("ProductionPhase", nil)
-    object:SetAttribute("ActiveRecipe", nil)
-    object:SetAttribute("ProductionStartedAt", nil)
-    object:SetAttribute("ProductionDuration", nil)
+    Jobs.Cancel(object)
 end
 
 function Jobs.Start(object, recipeId, remaining)

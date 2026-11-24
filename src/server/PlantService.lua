@@ -121,6 +121,31 @@ function PlantService.GetData(object)
     return {Version = 4, Type = state.Type, Batches = batches}
 end
 
+function PlantService.GetReturns(object)
+    local state = growing[object]
+    local rows = {}
+    if not state then return rows end
+    local grown, seeds = 0, 0
+    for _, batch in ipairs(state.Batches) do
+        if batch.Remaining == 0 then
+            for _, slot in ipairs(batch.Slots) do grown += slot.Yield end
+        else
+            seeds += #batch.Slots
+        end
+    end
+    if grown > 0 then table.insert(rows, {ItemName = state.Type, Amount = grown}) end
+    if seeds > 0 then
+        for item, definition in pairs(ItemDefinitions) do
+            if definition.Type == "Seed" and definition.PlantId == state.Type then
+                table.insert(rows, {ItemName = item, Amount = seeds})
+                return rows
+            end
+        end
+        return nil, "Missing seed definition."
+    end
+    return rows
+end
+
 local function legacyBatch(saved, positions, settings, folder)
     local duration, remaining = 0, saved.Remaining
     local segment = saved.Segment or 1

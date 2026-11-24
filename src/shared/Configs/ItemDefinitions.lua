@@ -296,6 +296,11 @@ local ItemDefinitions = {
         Icon = "rbxassetid://100619771486489",
         ShowShopIcon = true
     },
+    StoredMilk = {
+        DisplayName = "Recovered Milk",
+        Type = "Product",
+        Icon = "rbxassetid://100619771486489"
+    },
     DairyBlueprint = {
         DisplayName = "Dairy",
         Type = "Blueprint",
@@ -317,7 +322,7 @@ local ItemDefinitions = {
         InteractionMenu = true,
         InteractionDistance = 18,
         LoadingDuration = 3,
-        MilkTank = {Item = "MilkBucket", ReturnItem = "Bucket", Capacity = 10}
+        MilkTank = {Item = "MilkBucket", ReturnItem = "Bucket", RecoveredItem = "StoredMilk", Capacity = 10}
     },
     Cream = {
         DisplayName = "Cream",

@@ -14,7 +14,8 @@ local function settings()
     if tankMode then
         local definition = definitions[station:GetAttribute("ItemName") or station.Name]
         local tank = definition and definition.MilkTank
-        return tank and {FeedItem = tank.Item, FeedCapacity = tank.Capacity, Stock = "MilkStock", Label = "Milk"}
+        return tank and {FeedItem = tank.Item, RecoveredItem = tank.RecoveredItem, FeedCapacity = tank.Capacity,
+            Stock = "MilkStock", Label = "Milk"}
     end
     return config.Coops[station:GetAttribute("ItemName") or station.Name]
 end
@@ -75,7 +76,7 @@ local function refresh()
     local count = station:GetAttribute(settings.Stock or "FeedStock") or 0
     local wheat = 0
     for _, slot in ipairs(inventory:GetChildren()) do
-        if slot.ItemName.Value == settings.FeedItem then wheat += slot.Amount.Value end
+        if slot.ItemName.Value == settings.FeedItem or slot.ItemName.Value == settings.RecoveredItem then wheat += slot.Amount.Value end
     end
     stock.Text = string.format("%s: %d / %d", settings.Label or "Wheat", count, settings.FeedCapacity)
     owned.Text = string.format("In your inventory: %d", wheat)

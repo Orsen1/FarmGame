@@ -130,6 +130,7 @@ local function prepareNextObject(template, itemName, stage, player, oldObject)
     object:SetAttribute("ItemName", itemName)
     object:SetAttribute("OwnerUserId", player.UserId)
     object:SetAttribute("ConstructionStage", stage)
+    object:SetAttribute("PurchaseCents", oldObject:GetAttribute("PurchaseCents"))
     for _, part in ipairs(object:GetDescendants()) do
         if part:IsA("BasePart") then
             part.Anchored = true

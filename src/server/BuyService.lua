@@ -47,7 +47,7 @@ function BuyService.BuyItem(player, itemName, amount)
 		return false, "NotEnoughMoneyOrDataNotReady"
 	end
 
-	local added, addReason = InventoryService.AddItem(player, itemName, amount)
+	local added, addReason = InventoryService.AddItem(player, itemName, amount, price)
 	if not added then
 		MoneyService.AddMoney(player, totalPrice)
 		return false, addReason

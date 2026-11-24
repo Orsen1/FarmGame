@@ -316,7 +316,8 @@ local function readSlot(index, area)
     local name = slot and slot:FindFirstChild("ItemName")
     local amount = slot and slot:FindFirstChild("Amount")
     if name and amount then
-        return {ItemName = name.Value, Amount = amount.Value, ObjectData = slot:GetAttribute("ObjectData")}
+        return {ItemName = name.Value, Amount = amount.Value, ObjectData = slot:GetAttribute("ObjectData"),
+            PaidLots = slot:GetAttribute("PaidLots")}
     end
 end
 
@@ -604,7 +605,7 @@ local function updateDiscard()
     trash.Position = UDim2.fromOffset(origin.X + 4, math.max(8, origin.Y - 50))
     if discardSnapshot and (not discardAvailable() or discardIndex ~= selectedSlotNumber or not selected or
         selected.ItemName ~= discardSnapshot.ItemName or selected.Amount ~= discardSnapshot.Amount or
-        selected.ObjectData ~= discardSnapshot.ObjectData) then closeDiscard() end
+        selected.ObjectData ~= discardSnapshot.ObjectData or selected.PaidLots ~= discardSnapshot.PaidLots) then closeDiscard() end
 end
 trash.Activated:Connect(function()
     if not discardAvailable() or discardPending or dragging or pendingMove then return end
@@ -650,6 +651,7 @@ for _, slot in ipairs(inventory:GetChildren()) do
     slot.ItemName.Changed:Connect(updateDiscard)
     slot.Amount.Changed:Connect(updateDiscard)
     slot:GetAttributeChangedSignal("ObjectData"):Connect(updateDiscard)
+    slot:GetAttributeChangedSignal("PaidLots"):Connect(updateDiscard)
 end
 player.CharacterRemoving:Connect(closeDiscard)
 script.Destroying:Connect(function() closeDiscard();discardGui:Destroy();trash:Destroy() end)

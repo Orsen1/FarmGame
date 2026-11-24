@@ -228,7 +228,7 @@ end
 local function refreshCare(home, now)
     local egg = eggValue(home.Object)
     home.Production.Eggs = egg and egg.Value or 0
-    AnimalCare.advance(home.Production, home.Config, now - home.CareUpdatedAt)
+    if not home.Config.HoofCare then AnimalCare.advance(home.Production, home.Config, now - home.CareUpdatedAt) end
     home.CareUpdatedAt = now
     publishCare(home, now)
 end
@@ -406,12 +406,17 @@ local function nextActivity(home, record, now)
     end
 end
 
+local function careConfig(config)
+    return config.HoofCare and Config.Coops.CowPen or config
+end
+
 local function newRecord(home, folder, now, point, duration)
+    local care = careConfig(home.Config)
     local record = {Folder = folder, From = Vector3.zero, To = Vector3.zero, StartedAt = now,
         Duration = 0, YawFrom = 0, YawTo = 0, Activity = "Waiting", Phase = home.Random:NextNumber(0, math.pi * 2),
-        Care = {ItemName = home.Config.ItemName, WorkRemaining = folder:GetAttribute("WorkRemaining") or AnimalCare.workDuration(home.Config),
+        Care = {ItemName = home.Config.ItemName, WorkRemaining = folder:GetAttribute("WorkRemaining") or AnimalCare.workDuration(care),
             FoodRemaining = folder:GetAttribute("FoodRemaining") or 0}}
-    if home.Config.Milking then record.Care.MilkReady = folder:GetAttribute("MilkReady") == true end
+    if care.Milking then record.Care.MilkReady = folder:GetAttribute("MilkReady") == true end
     point = point or home.Config.FixedPosition or findPoint(home, record, nil, now)
     setState(record, point and "Idle" or "Waiting", point or Vector3.zero, point or Vector3.zero, duration or 2, 0, now)
     table.insert(home.Animals, record)
@@ -535,6 +540,11 @@ function AnimalService.CancelMilking(player, message)
     player:SetAttribute("Milking", nil)
     player:SetAttribute("ProductionMode", nil)
     if player.Parent == Players then milkEvent:FireClient(player, "Finished", message or "Cancelled.") end
+end
+
+function AnimalService.CancelWorkAt(player, object)
+    local session = milking[player]
+    if session and session.Home.Object == object then AnimalService.CancelMilking(player, "Animal home removed.") end
 end
 
 local function workFrame(home, record, now, humanoid, root, settings)
@@ -686,17 +696,33 @@ function AnimalService.Add(player, object)
     if not config.InteractionMenu and (not slot or slot.ItemName.Value ~= config.ItemName or slot.Amount.Value < 1) then
         return false, "Select " .. config.ItemName .. " in your inventory."
     end
+    local row, index = InventoryService.FindItem(player, config.ItemName)
+    if not row then return false, "You have no " .. config.PluralName:lower() .. " in your inventory." end
+    local state
+    if row.ObjectData then
+        local http = game:GetService("HttpService")
+        local ok, saved = pcall(http.JSONDecode, http, row.ObjectData)
+        local care = ok and AnimalCare.load({saved}, 0, 0, careConfig(config))
+        state = care and care.Animals[1]
+        if not state then return false, "Invalid saved animal." end
+    end
     AnimalService.Bind(object)
     local home = homes[object]
     if #home.Animals >= config.Capacity then return false, string.format("Home full: %d / %d.", config.Capacity, config.Capacity) end
     local now = workspace:GetServerTimeNow()
     local point = config.FixedPosition or findPoint(home, nil, nil, now)
     if not point then return false, "Clear some space in the animal home." end
-    local removed, reason = InventoryService.ExchangeItems(player, {[config.ItemName] = 1}, {})
-    if not removed then return false, reason end
+    local removed
+    if row.ObjectData then
+        removed = InventoryService.RemoveObject(player, index, row.ObjectData)
+    else
+        removed = InventoryService.RemoveFromSlot(player, index, config.ItemName, 1)
+    end
+    if not removed then return false, "Inventory changed." end
     local folder = Instance.new("Folder")
     folder.Name = "Animal" .. (#home.Animals + 1)
     folder:SetAttribute("ItemName", config.ItemName)
+    for name, value in pairs(state or {}) do folder:SetAttribute(name, value) end
     newRecord(home, folder, now, point, home.Random:NextNumber(home.Settings.IdleTime.X, home.Settings.IdleTime.Y))
     folder.Parent = animalFolder(object)
     object:SetAttribute("AnimalCount", #home.Animals)
@@ -803,7 +829,7 @@ function AnimalService.getData(object)
             MilkReady = entry:GetAttribute("MilkReady")})
     end
     local egg = eggValue(object)
-    local data, reason = AnimalCare.load(animals, egg and egg.Value or 0, object:GetAttribute("FeedStock") or 0, config)
+    local data, reason = AnimalCare.load(animals, egg and egg.Value or 0, object:GetAttribute("FeedStock") or 0, careConfig(config))
     return data and data.Animals, reason
 end
 
@@ -820,7 +846,8 @@ function AnimalService.loadData(object, animals, feedStock)
     for _, item in ipairs(output:GetChildren()) do if item ~= egg then return false, "Unknown saved coop output." end end
     if animals == nil then animals = {} end
     if feedStock == nil then feedStock = 0 end
-    local data, reason = AnimalCare.load(animals, egg and egg.Value or 0, feedStock, config)
+    if typeof(animals) ~= "table" or #animals > config.Capacity then return false, "Invalid saved animals." end
+    local data, reason = AnimalCare.load(animals, egg and egg.Value or 0, feedStock, careConfig(config))
     if not data then return false, reason end
     local folder = animalFolder(object)
     if #folder:GetChildren() > 0 then return false, "Animals are already loaded." end
@@ -868,31 +895,18 @@ function AnimalService.CanUse(player, object)
     return canUse(player, object, "ActionPrompt")
 end
 
-function AnimalService.Release(player, object)
-    local active = homes[object]
-    for _, record in ipairs(active and active.Animals or {}) do
-        if record.Milker then return false, "Finish caring for the cow first." end
-    end
-    if (object:GetAttribute("FeedStock") or 0) > 0 then return false, "Use the stored feed before removing this coop." end
-    local animals, reason = AnimalService.getData(object)
-    if not animals then return false, reason end
-    local outputs = {}
+function AnimalService.GetReturns(object)
+    local snapshot, reason = AnimalService.Snapshot(object)
+    if not snapshot then return nil, reason end
+    local rows = {}
     local config = getConfig(object)
-    for _, animal in ipairs(animals) do
-        outputs[animal.ItemName] = (outputs[animal.ItemName] or 0) + 1
+    local http = game:GetService("HttpService")
+    for _, animal in ipairs(snapshot.Animals) do
+        table.insert(rows, {ItemName = animal.ItemName, Amount = 1, ObjectData = http:JSONEncode(animal)})
     end
-    local egg = eggValue(object)
-    if egg and egg.Value > 0 then outputs[config.EggItem] = egg.Value end
-    local added = InventoryService.ExchangeItems(player, {}, outputs)
-    if not added then return false, "Free an inventory slot for the animals first." end
-    local home = homes[object]
-    if home then home.Animals = {};home.Production.Animals = {};home.Gate = nil end
-    local folder = object:FindFirstChild("Animals")
-    if folder then folder:Destroy() end
-    if egg then egg.Value = 0 end
-    object:SetAttribute("PendingEggs", 0)
-    object:SetAttribute("AnimalCount", 0)
-    return true
+    if snapshot.Eggs > 0 then table.insert(rows, {ItemName = config.EggItem, Amount = snapshot.Eggs}) end
+    if snapshot.FeedStock > 0 then table.insert(rows, {ItemName = config.FeedItem, Amount = snapshot.FeedStock}) end
+    return rows
 end
 
 return AnimalService

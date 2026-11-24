@@ -78,7 +78,10 @@ function PlacementService.placeItem(player, itemName, position, rotation)
         if not prepared then placedModel:Destroy();return false, encoded end
         removed = InventoryService.RemoveObject(player, index, encoded)
     else
-        removed = InventoryService.RemoveItem(player, itemName, 1)
+        local _, index = InventoryService.FindItem(player, itemName)
+        local price
+        removed, price = InventoryService.RemoveFromSlot(player, index, itemName, 1)
+        if removed then placedModel:SetAttribute("PurchaseCents", price) end
     end
     if not removed then
         placedModel:Destroy()

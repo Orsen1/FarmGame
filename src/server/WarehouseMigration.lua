@@ -10,9 +10,9 @@ local oldBlueprintPrice = 500
 local maxInteger = 9007199254740991
 
 local function addRow(rows, row, limit)
-    if not row.ObjectData then
+    if not row.ObjectData and not row.PaidLots then
         for _, existing in ipairs(rows) do
-            if existing.ItemName == row.ItemName and not existing.ObjectData and
+            if existing.ItemName == row.ItemName and not existing.ObjectData and not existing.PaidLots and
                 existing.Amount <= maxInteger - row.Amount then
                 existing.Amount += row.Amount
                 return true

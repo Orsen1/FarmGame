@@ -9,6 +9,7 @@ local PlantService = require(ServerScriptService:WaitForChild("PlantService"))
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 local ConstructionService = require(ServerScriptService:WaitForChild("ConstructionService"))
 local AnimalService = require(ServerScriptService:WaitForChild("AnimalService"))
+local InventoryService = require(ServerScriptService.InventoryService)
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
 local StarterHouseLayout = require(ReplicatedStorage.PlacementScripts.StarterHouseLayout)
 local houseConfig = require(ReplicatedStorage.Configs.StarterHouseConfig)
@@ -119,8 +120,12 @@ function PlotDataService.getData(player)
 
         local savedObject = {
             ItemName = itemName,
-            Pivot = {relativePivot:GetComponents()}
+            Pivot = {relativePivot:GetComponents()},
+            PurchaseCents = object:GetAttribute("PurchaseCents")
         }
+        if savedObject.PurchaseCents ~= nil and not InventoryService.IsPurchaseCost(savedObject.PurchaseCents) then
+            return nil, "Invalid placed purchase cost"
+        end
 
         savedObject.Plant = PlantDataService.getData(object)
 
@@ -182,12 +187,16 @@ function PlotDataService.loadData(player, savedObjects)
     for _, savedObject in ipairs(savedObjects) do
         local template, pivot, placementError = savedPlacement(savedObject)
         if not template then return false, placementError end
+        if savedObject.PurchaseCents ~= nil and not InventoryService.IsPurchaseCost(savedObject.PurchaseCents) then
+            return false, "Invalid saved purchase cost"
+        end
         local definition = ItemDefinitions[savedObject.ItemName]
 
         local object = template:Clone()
 
         object:SetAttribute("OwnerUserId", player.UserId)
         object:SetAttribute("ItemName", savedObject.ItemName)
+        object:SetAttribute("PurchaseCents", savedObject.PurchaseCents)
 
         object.Name = savedObject.ItemName
 

@@ -258,8 +258,9 @@ local function updatePrompt(prompt)
         return
     end
     if definition.BuildsInto then
+        if removing then setEnabled(prompt, false);hidePrompt(prompt);return end
         local step = getConstructionStep(object, itemName)
-        local custom = step ~= nil and step ~= false and not removing
+        local custom = step ~= nil and step ~= false
         local style = custom and Enum.ProximityPromptStyle.Custom or Enum.ProximityPromptStyle.Default
         if prompt.Style ~= style then
             setEnabled(prompt, false)
@@ -267,9 +268,9 @@ local function updatePrompt(prompt)
             prompt.Style = style
         end
 
-        prompt.ActionText = removing and "Remove" or "Add Materials"
+        prompt.ActionText = "Add Materials"
         local caring = home and (selectedItemName == home.FeedItem or selectedItemName == home.EggItem)
-        setEnabled(prompt, removing or (custom and not caring and player:GetAttribute("ProductionMode") ~= true))
+        setEnabled(prompt, custom and not caring and player:GetAttribute("ProductionMode") ~= true)
         if promptViews[prompt] then
             if prompt.Enabled and custom then
                 promptViews[prompt].update()

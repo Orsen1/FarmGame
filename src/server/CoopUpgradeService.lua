@@ -18,8 +18,12 @@ function CoopUpgradeService.Pack(player, object, upgradeItemName)
     if not Journal.CanBuild(player, itemName) then return false, "This upgrade requires a higher farm level" end
     local contents, message = AnimalService.Snapshot(object)
     if not contents then return false, message end
-    local data = HttpService:JSONEncode({Version = 1, ItemName = definition.PacksInto, Contents = contents})
-    local exchanged, errorMessage = InventoryService.ExchangeForObject(player, {[itemName] = 1}, definition.PacksInto, data)
+    local previous = object:GetAttribute("PurchaseCents") or 0
+    local exchanged, errorMessage = InventoryService.ExchangeForObject(player, itemName, definition.PacksInto, function(paid)
+        if not InventoryService.IsPurchaseCost(previous + paid) then return nil end
+        return HttpService:JSONEncode({Version = 1, ItemName = definition.PacksInto, Contents = contents,
+            PurchaseCents = previous + paid})
+    end)
     if not exchanged then return false, errorMessage end
     object:Destroy()
     return true, "Coop packed. Select its renovation blueprint to place it."
@@ -35,6 +39,9 @@ function CoopUpgradeService.Prepare(player, object, itemName)
     local ok, data = pcall(HttpService.JSONDecode, HttpService, encoded)
     if not ok or typeof(data) ~= "table" or data.Version ~= 1 or data.ItemName ~= itemName or
         typeof(data.Contents) ~= "table" then return false, "Invalid packed coop." end
+    if data.PurchaseCents ~= nil and not InventoryService.IsPurchaseCost(data.PurchaseCents) then
+        return false, "Invalid packed coop purchase cost."
+    end
     local captured = data.Contents.CapturedAt
     local now = workspace:GetServerTimeNow()
     if typeof(captured) ~= "number" or captured ~= captured or captured < 0 or captured > now + 5 then
@@ -42,6 +49,7 @@ function CoopUpgradeService.Prepare(player, object, itemName)
     end
     local restored, reason = AnimalService.Restore(object, data.Contents, math.max(0, now - captured))
     if not restored then return false, reason end
+    object:SetAttribute("PurchaseCents", data.PurchaseCents)
     return true, encoded, index
 end
 

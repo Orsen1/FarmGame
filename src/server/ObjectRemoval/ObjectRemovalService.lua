@@ -3,15 +3,30 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local plots = workspace:WaitForChild("Plots")
 local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
-local AnimalService = require(script.Parent.Parent.AnimalService)
-
-local Journal = require(script.Parent.Parent.FarmJournalService)
+local services = script.Parent.Parent
+local AnimalService = require(services.AnimalService)
+local PlantService = require(services.PlantService)
+local ProductionService = require(services.ProductionService)
+local ProductionDataService = require(services.ProductionDataService)
+local StorageService = require(services.StorageService)
+local InventoryService = require(services.InventoryService)
+local MoneyService = require(services.MoneyService)
+local Laboratory = require(services.LaboratoryService)
+local Journal = require(services.FarmJournalService)
+local refundPercent = require(ReplicatedStorage.Configs.ConstructionDefinitions).DemolitionRefundPercent
 local MAX_DISTANCE = 12
 
 local ObjectRemovalService = {}
 
+local function contents(object, itemName, definition)
+    if AnimalConfig.Coops[itemName] then return AnimalService.GetReturns(object) end
+    if definition.Recipes then return ProductionDataService.GetReturns(object) end
+    if definition.Plantable then return PlantService.GetReturns(object) end
+    return {}
+end
+
 function ObjectRemovalService.remove(player, object)
-    if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true then
+    if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true or player:GetAttribute("Teleporting") then
         return false, "Player data is not ready."
     end
 
@@ -31,9 +46,10 @@ function ObjectRemovalService.remove(player, object)
     local itemName = object:GetAttribute("ItemName") or object.Name
     local definition = ItemDefinitions[itemName]
 
-    if not definition or definition.Placeable ~= true then
+    if not definition or definition.Placeable ~= true or definition.FixedWarehouse then
         return false, "This object cannot be removed."
     end
+    if definition.BuildsInto then return false, "Finish building before removing it." end
 
     if not Journal.TutorialComplete(player) then return false, "Finish your first harvest before removing the bed." end
 
@@ -59,7 +75,7 @@ function ObjectRemovalService.remove(player, object)
     local attachment = prompt and prompt.Parent
 
     if not prompt or not prompt:IsA("ProximityPrompt") or not attachment or not attachment:IsA("Attachment") then
-        return false, " prompt is missing."
+        return false, "The removal prompt is missing."
     end
 
     local distance = (root.Position - attachment.WorldPosition).Magnitude
@@ -68,24 +84,27 @@ function ObjectRemovalService.remove(player, object)
         return false, "Move closer to the object."
     end
 
-    if AnimalConfig.Coops[itemName] then
-        if definition.InstanceItem then return false, "Finish this renovation before removing the coop." end
-        local released, message = AnimalService.Release(player, object)
-        if not released then return false, message end
+    local paid = object:GetAttribute("PurchaseCents") or 0
+    if not InventoryService.IsPurchaseCost(paid) then return false, "The recorded purchase cost is invalid." end
+    local refund = math.floor(paid / 100) * refundPercent + math.floor((paid % 100) * refundPercent / 100)
+    if refund > 0 and not MoneyService.CanAddMoney(player, refund) then
+        return false, "Your balance cannot accept the refund."
     end
 
-    if definition.AutomaticProduction then
-        if object:GetAttribute("Busy") or (object:GetAttribute("MilkStock") or 0) > 0 then
-            return false, "Use the milk and finish production first."
-        end
-        for _, value in ipairs(object.OutputInventory:GetChildren()) do
-            if value.Value > 0 then return false, "Collect the products first." end
-        end
-    end
+    local rows, reason = contents(object, itemName, definition)
+    if not rows then return false, reason or "The contents could not be recovered." end
+    local plan = StorageService.PlanReturns(player, rows)
+    if not plan then return false, "Your items could not be returned. Try again." end
 
+    if definition.Recipes then ProductionService.CloseStation(object) end
+    if AnimalConfig.Coops[itemName] then AnimalService.CancelWorkAt(player, object) end
+    if definition.Laboratory then Laboratory.Close(player) end
+    StorageService.CommitReturns(player, plan)
+    if refund > 0 then MoneyService.AddMoney(player, refund) end
     object:Destroy()
+    Journal.Update(player)
 
-    return true, "Object removed."
+    return true, refund > 0 and string.format("Removed. Refunded $%.2f.", refund / 100) or "Object removed."
 end
 
 return ObjectRemovalService

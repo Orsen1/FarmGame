@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
+local recipes = require(ReplicatedStorage.Configs.ProductionRecipes)
 local Jobs = require(script.Parent.ProductionJobs)
 
 local ProductionDataService = {}
@@ -33,6 +34,26 @@ function ProductionDataService.getData(object)
     end
 
     return data, nil, production
+end
+
+function ProductionDataService.GetReturns(object)
+    local output, reason, production = ProductionDataService.getData(object)
+    if not output then return nil, reason end
+    local rows = {}
+    local function add(item, amount)
+        if amount > 0 then table.insert(rows, {ItemName = item, Amount = amount}) end
+    end
+    for item, amount in pairs(output) do add(item, amount) end
+
+    local definition = ItemDefinitions[object:GetAttribute("ItemName") or object.Name]
+    local tank = definition.MilkTank
+    if tank then add(tank.RecoveredItem, production.MilkStock) end
+    if production and production.Job then
+        for item, amount in pairs(recipes[production.Job.RecipeId].Inputs) do
+            add(tank and item == tank.Item and tank.RecoveredItem or item, amount)
+        end
+    end
+    return rows
 end
 
 function ProductionDataService.loadData(object, savedObject)

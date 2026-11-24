@@ -83,6 +83,7 @@ local function loadPlayerData(player)
             slot.ItemName.Value = savedSlot.ItemName
             slot.Amount.Value = savedSlot.Amount
             slot:SetAttribute("ObjectData", savedSlot.ObjectData)
+            slot:SetAttribute("PaidLots", savedSlot.PaidLots)
         end
     end
 

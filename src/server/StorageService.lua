@@ -217,6 +217,38 @@ function StorageService.MoveSlot(player, sessionId, fromArea, toArea, fromIndex,
         toArea == "Storage" and pageSize or 6, fromIndex, toIndex, expectedFrom, expectedTo)
 end
 
+function StorageService.PlanReturns(player, rows)
+    if not returns[player] or player:GetAttribute("DataLoaded") ~= true then return nil end
+    local warehouse = currentObject(ownedPlot(player))
+    local inventory = InventoryService.GetInventory(player)
+    if not inventory or not warehouse or warehouse:GetAttribute("OwnerUserId") ~= player.UserId then return nil end
+    local storage
+    if warehouseReady(warehouse) then
+        storage = InventoryService.ReadSlots(player:FindFirstChild("StorageInventory"), pageSize)
+        if not storage then return nil end
+    end
+
+    local overflow = table.clone(returns[player])
+    for _, source in ipairs(rows) do
+        if not InventoryService.IsValidObjectRow(source) or source.Amount < 1 then return nil end
+        local row = table.clone(source)
+        if storage then InventoryService.ReceiveInto(storage, row, row.Amount) end
+        if row.Amount > 0 then InventoryService.ReceiveInto(inventory, row, row.Amount) end
+        if row.Amount > 0 then table.insert(overflow, row) end
+    end
+    return {Storage = storage, Inventory = inventory, Overflow = overflow}
+end
+
+function StorageService.CommitReturns(player, plan)
+    if plan.Storage then InventoryService.WriteSlots(player.StorageInventory, plan.Storage) end
+    InventoryService.WriteSlots(player.Inventory, plan.Inventory)
+    if #plan.Overflow > #returns[player] then
+        returns[player] = plan.Overflow
+        revisions[player] += 1
+        player:SetAttribute("StorageReturnCount", #plan.Overflow)
+    end
+end
+
 local function returnPage(player, page)
     local items = returns[player]
     local pages = math.max(1, math.ceil(#items / pageSize))
@@ -261,15 +293,14 @@ local function takeReturn(player, session, index, revision, amount, destination)
     if not toStorage and destination ~= "Player" then return 0, "Choose a destination." end
 
     local folder = player:FindFirstChild(toStorage and "StorageInventory" or "Inventory")
-    local moved = InventoryService.ReceiveRow(folder, toStorage and pageSize or 6, row, amount)
+    local remaining = table.clone(row)
+    local moved = InventoryService.ReceiveRow(folder, toStorage and pageSize or 6, remaining, amount)
     local name = toStorage and "storage" or "inventory"
     if moved == 0 then return 0, "Make room in your " .. name .. "." end
 
-    if moved == row.Amount then
+    if remaining.Amount == 0 then
         table.remove(items, index)
     else
-        local remaining = table.clone(row)
-        remaining.Amount -= moved
         items[index] = remaining
     end
     revisions[player] += 1

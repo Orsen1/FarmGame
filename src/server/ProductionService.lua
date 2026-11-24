@@ -197,6 +197,12 @@ function ProductionService.Close(player, reason)
     end
 end
 
+function ProductionService.CloseStation(station)
+    local session = operators[station]
+    if session then ProductionService.Close(session.Player, "Station removed") end
+    Jobs.Cancel(station)
+end
+
 local function positionCharacter(session, work)
     local humanoid, root = session.Humanoid, session.Root
     local height = humanoid.HipHeight + root.Size.Y / 2
@@ -507,18 +513,24 @@ function ProductionService.Deposit(player, station, amount)
     local tank = definition and definition.MilkTank
     if not tank or player:GetAttribute("ProductionMode") == true then return false, "Not available" end
     local stock = station:GetAttribute("MilkStock") or 0
-    local owned = 0
+    local owned, recovered = 0, 0
     for _, slot in ipairs(InventoryService.GetInventory(player)) do
         if slot.ItemName == tank.Item then owned += slot.Amount end
+        if slot.ItemName == tank.RecoveredItem then recovered += slot.Amount end
     end
-    local count = math.min(owned, tank.Capacity - stock, amount == "Max" and tank.Capacity or amount)
-    if count <= 0 then return false, owned == 0 and "You need milk buckets." or "Tank is full." end
-    local exchanged = InventoryService.ExchangeItems(player, {[tank.Item] = count}, {[tank.ReturnItem] = count})
+    local count = math.min(owned + recovered, tank.Capacity - stock, amount == "Max" and tank.Capacity or amount)
+    if count <= 0 then return false, owned + recovered == 0 and "You need milk." or "Tank is full." end
+    local recoveredUsed = math.min(count, recovered)
+    local buckets = count - recoveredUsed
+    local inputs, outputs = {}, {}
+    if recoveredUsed > 0 then inputs[tank.RecoveredItem] = recoveredUsed end
+    if buckets > 0 then inputs[tank.Item], outputs[tank.ReturnItem] = buckets, buckets end
+    local exchanged = InventoryService.ExchangeItems(player, inputs, outputs)
     if not exchanged then return false, "Make room for empty buckets." end
     station:SetAttribute("MilkStock", stock + count)
     station:SetAttribute("MilkDepositAmount", count)
     station:SetAttribute("MilkDepositAt", workspace:GetServerTimeNow())
-    return true, string.format("Added %d milk. Buckets returned.", count)
+    return true, string.format("Added %d milk.", count)
 end
 
 function ProductionService.GetSessionId(player)
