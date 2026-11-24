@@ -13,7 +13,7 @@ return {
                 {Id = "Ripen", Text = "Grow a garden bed", Goal = 1, Kind = "Action", Icon = "WateringCan", Hint = "Let your crops ripen. Watering speeds up growth."},
                 {Id = "Harvest", Text = "Harvest 10 crops", Goal = 10, Kind = "Action", Icon = "Carrot", Hint = "Collect ripe crops. Every fruit counts."},
                 {Id = "Sell", Text = "Make your first sale", Goal = 1, Kind = "Action", Icon = "Carrot", Hint = "Stock crops at the stand by your farm gate."},
-                {Id = "FirstBed", Text = "Place a garden bed", Goal = 1, Kind = "GardenBeds", Icon = "GardenBed", Hint = "Buy a five-spot Garden Bed and place it on your farm."},
+                {Id = "FirstBed", Text = "Place a garden bed", Goal = 1, Kind = "GardenBeds", Icon = "GardenBed", Hint = "Buy a three-spot Garden Bed and place it on your farm."},
             },
         },
         {

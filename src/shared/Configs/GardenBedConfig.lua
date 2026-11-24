@@ -2,9 +2,9 @@ local Config = {
     Limits = {3, 5, 7, 10, 15},
     Types = {
         GardenBed = {RowWidth = 5, SpotsPerRow = 1, UpgradePrices = {20, 35}},
-        FieldBed3 = {RowWidth = 3.6, SpotsPerRow = 3, UpgradePrices = {45, 70}},
+        FieldBed3 = {RowWidth = 2.2, SpotsPerRow = 3, Appearance = "FieldBed3", UpgradePrices = {45, 70}},
         FieldBed5 = {RowWidth = 3.6, SpotsPerRow = 5, UpgradePrices = {75, 110}},
-        FieldBed10 = {RowWidth = 3.6, SpotsPerRow = 10, UpgradePrices = {125, 180}},
+        FieldBed10 = {RowWidth = 2.2, SpotsPerRow = 10, Appearance = "FieldBed10", UpgradePrices = {125, 180}},
     },
 }
 

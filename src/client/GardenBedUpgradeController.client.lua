@@ -9,6 +9,7 @@ local money = player:WaitForChild("PlayerData"):WaitForChild("MoneyCents")
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
 local config = require(ReplicatedStorage.Configs.GardenBedConfig)
 local placement = require(ReplicatedStorage.PlacementScripts.PlacementRules)
+local layout = require(ReplicatedStorage.PlacementScripts.GardenBedLayout)
 local remote = ReplicatedStorage.RemoteEvents:WaitForChild("GardenBedUpgrade")
 local plots = workspace:WaitForChild("Plots")
 
@@ -103,7 +104,7 @@ local function refresh()
     confirm.BackgroundColor3 = confirm.Interactable and green or disabled
     confirm.Text = pending and "Expanding..." or string.format("Expand for $%.2f", offer.Price / 100)
     status.Text = pending and "Checking space..." or not valid and reason or message or not canPay and "Not enough money." or
-        "Your planted crops will keep growing."
+        offer.Hint
     status.TextColor3 = (not valid or not canPay or message) and red or ink
 end
 
@@ -113,7 +114,10 @@ remote.OnClientEvent:Connect(function(action, bed, level, success, result)
         local definition = config.Types[item]
         local price = definition and definition.UpgradePrices[level]
         if not price then return end
-        current, pending, message = {Bed = bed, Item = item, Level = level, Price = price}, nil, nil
+        local saved = layout.SpaceSaved(item, level + 1)
+        local hint = saved > 0 and string.format("%d%% less space than %d separate beds.", saved, level + 1) or
+            "Your planted crops will keep growing."
+        current, pending, message = {Bed = bed, Item = item, Level = level, Price = price, Hint = hint}, nil, nil
         title.Text = "Expand " .. definitions[item].DisplayName
         capacity.Text = string.format("%d to %d planting spots", level * definition.SpotsPerRow,
             (level + 1) * definition.SpotsPerRow)
