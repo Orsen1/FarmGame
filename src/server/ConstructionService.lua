@@ -8,6 +8,7 @@ local InventoryService = require(ServerScriptService:WaitForChild("InventoryServ
 local AnimalService = require(ServerScriptService.AnimalService)
 local AnimalConfig = require(configs.AnimalConfig)
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
+local WarehouseSite = require(script.Parent.WarehouseSite)
 
 local ConstructionService = {}
 local Journal = require(ServerScriptService.FarmJournalService)
@@ -110,7 +111,8 @@ end
 local function getNextTemplate(itemName, definition, nextStage, final)
     local nextItemName = final and definition.BuildsInto or itemName
     local nextDefinition = ItemDefinitions[nextItemName]
-    if not nextDefinition or nextDefinition.Placeable ~= true or (final and nextDefinition.BuildsInto) then
+    if not nextDefinition or not (nextDefinition.Placeable or nextDefinition.FixedWarehouse) or
+        (final and nextDefinition.BuildsInto) then
         return nil, "Invalid construction result"
     end
 
@@ -135,6 +137,9 @@ local function prepareNextObject(template, itemName, stage, player, oldObject)
         end
     end
     object:PivotTo(oldObject:GetPivot())
+    if ItemDefinitions[itemName].FixedWarehouse then
+        WarehouseSite.PrepareBuilding(object, stage == nil)
+    end
     return object
 end
 
@@ -149,6 +154,9 @@ function ConstructionService.Build(player, object)
     local step, stage, construction = getStage(object)
     if not definition or not definition.BuildsInto or not step then
         return false, "Invalid construction stage"
+    end
+    if definition.FixedWarehouse and object ~= WarehouseSite.GetBuilding(workspace.Plots:FindFirstChild(player:GetAttribute("PlotName") or "")) then
+        return false, "Use the warehouse site"
     end
 
     if not Journal.CanBuild(player, itemName) then return false, "This building requires a higher farm level" end

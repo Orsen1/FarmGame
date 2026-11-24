@@ -15,6 +15,8 @@ local HouseService = plotModule and require(ServerScriptService:WaitForChild("Ho
 local OrderService = plotModule and require(ServerScriptService:WaitForChild("OrderService"))
 local FarmStandService = plotModule and require(ServerScriptService:WaitForChild("FarmStandService"))
 local Laboratory = plotModule and require(ServerScriptService:WaitForChild("LaboratoryService"))
+local StorageService = plotModule and require(ServerScriptService.StorageService)
+local WarehouseMigration = plotModule and require(ServerScriptService.WarehouseMigration)
 
 local Journal = require(ServerScriptService.FarmJournalService)
 local loadedData = {}
@@ -27,7 +29,7 @@ local function loadPlayerData(player)
 
     player:SetAttribute("DataLoaded", false)
 
-    local data = PlayerDataService.loadData(player.UserId)
+    local data, newPlayer = PlayerDataService.loadData(player.UserId)
 
     if data == nil then
         player:Kick("Failed to load player data. Please try again later.")
@@ -43,7 +45,17 @@ local function loadPlayerData(player)
         return
     end
 
-    local houseMigrated = false
+    local originalData = data
+    local houseMigrated, warehouseMigrated = false, false
+    if WarehouseMigration then
+        local reason
+        data, warehouseMigrated, reason = WarehouseMigration.Apply(data)
+        if not data then
+            warn("[WAREHOUSE MIGRATION]", player.UserId, reason)
+            player:Kick("Failed to load your warehouse update. Your previous farm is safe.")
+            return
+        end
+    end
 
     if PlayerPlotService then
         PlayerPlotService.assignPlotToPlayer(player)
@@ -89,6 +101,9 @@ local function loadPlayerData(player)
         if success then
             success, reason = PlotDataService.loadData(player, data.PlacedObjects or {})
         end
+        if success then
+            success, reason = StorageService.Load(player, plot, data.Warehouse, data.StorageReturns)
+        end
 
         if not success then
             warn("[PLOT LOAD ERROR]", player.UserId, reason)
@@ -112,8 +127,9 @@ local function loadPlayerData(player)
     end
 
     if not Journal.Load(player, data.FarmJournal, data) then player:Kick("Failed to load your farm journal.");return end
-    if houseMigrated and not PlayerDataService.saveData(player.UserId, data) then
-        player:Kick("Could not save the farmhouse update. Your previous farm is safe. Please rejoin.")
+    if (houseMigrated or warehouseMigrated) and not newPlayer and
+        not PlayerDataService.saveData(player.UserId, data, originalData) then
+        player:Kick("Could not save the farm update. Please rejoin.")
         return
     end
     if player.Parent ~= Players then return end
@@ -172,9 +188,12 @@ local function savePlayerData(player, preparingTeleport)
                 return false
             end
             data.PlacedObjects = placedObjects
-            data.House = HouseService.GetData(workspace.Plots[player:GetAttribute("PlotName")].StarterHouse)
+            local plot = workspace.Plots[player:GetAttribute("PlotName")]
+            data.Warehouse, data.StorageReturns = StorageService.Snapshot(player, plot)
+            if not data.Warehouse then return false end
+            data.House = HouseService.GetData(plot.StarterHouse)
             if data.House == nil then return false end
-            data.UnlockedPlotSections = PlotSectionService.getData(workspace.Plots[player:GetAttribute("PlotName")])
+            data.UnlockedPlotSections = PlotSectionService.getData(plot)
         end
 
         if PlayerPlotService and not preparingTeleport then
@@ -227,6 +246,7 @@ Players.PlayerRemoving:Connect(function(player)
         OrderService.Clear(player)
     end
     if FarmStandService then FarmStandService.Clear(player) end
+    if StorageService then StorageService.Clear(player) end
     if PlayerPlotService then
         PlayerPlotService.releasePlot(player)
     end

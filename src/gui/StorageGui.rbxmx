@@ -11023,7 +11023,6 @@
         <bool name="Disabled">false</bool>
         <ProtectedString name="Source">local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ProximityPromptService = game:GetService("ProximityPromptService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
@@ -11044,8 +11043,13 @@ local PlacementController = require(ReplicatedStorage:WaitForChild("PlacementScr
 
 local HudMenu = require(ReplicatedStorage.HudMenu)
 local moneyGui, moneyEnabled
-local activePrompt = nil
-local pendingPrompt = nil
+local activeObject, activePrompt
+local opening = 0
+local ready = false
+local tab = "Storage"
+local returnPage
+local storageRows = {}
+local status
 local slotConnections = {}
 local elapsed = 0
 local storageEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("StorageEvent")
@@ -11053,7 +11057,37 @@ local storageObject = gui:FindFirstChild("StorageObject") or Instance.new("Objec
 storageObject.Name = "StorageObject"
 storageObject.Parent = gui
 
--- Берём размер ячеек из хотбара; на небольших экранах оставляем прокрутку.
+local cream = Color3.fromRGB(255, 236, 189)
+local ink = Color3.fromRGB(93, 56, 27)
+local green = Color3.fromRGB(83, 124, 57)
+
+local function button(name, caption)
+    local control = Instance.new("TextButton")
+    control.Name, control.Text = name, caption
+    control.Font, control.TextSize = Enum.Font.FredokaOne, 17
+    control.TextColor3, control.BackgroundColor3 = ink, cream
+    control.BorderSizePixel = 0
+    control.Parent = panel
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = control
+    local edge = Instance.new("UIStroke")
+    edge.ApplyStrokeMode, edge.Color = Enum.ApplyStrokeMode.Border, Color3.fromRGB(182, 130, 68)
+    edge.Parent = control
+    return control
+end
+
+local storageTab = button("StorageTab", "Storage")
+local returnsTab = button("ReturnsTab", "Returns")
+local previousPage = button("PreviousPage", "&lt;")
+local nextPage = button("NextPage", ">")
+local notice = Instance.new("TextLabel")
+notice.Name = "StorageNotice"
+notice.BackgroundTransparency = 1
+notice.Font, notice.TextSize = Enum.Font.GothamBold, 16
+notice.TextColor3, notice.TextWrapped = ink, true
+notice.Visible, notice.Parent = false, panel
+
 local function updateLayout()
     local viewport = gui.AbsoluteSize
     if viewport.X &lt;= 0 or viewport.Y &lt;= 0 then
@@ -11075,11 +11109,13 @@ local function updateLayout()
         columns = 4
     end
 
-    local rows = 24 / columns
+    local rows = math.ceil(24 / columns)
     local padding = compact and 14 or 20
     local gap = compact and 8 or 12
-    local header = compact and 54 or 68
-    local footer = compact and 28 or 38
+    local tabTop = compact and 48 or 61
+    local tabHeight = UserInputService.TouchEnabled and 44 or compact and 34 or 41
+    local header = tabTop + tabHeight + 9
+    local footer = UserInputService.TouchEnabled and 50 or compact and 38 or 46
     local maxWidth = math.min(1040, availableWidth)
     local bottom = math.min(viewport.Y - 14, hotbar.AbsolutePosition.Y - 16)
     if portrait then
@@ -11090,7 +11126,6 @@ local function updateLayout()
     end
     local targetCell = referenceSlot.AbsoluteSize.X
 
-    -- Удобная область нажатия на телефоне, даже если хотбар очень маленький.
     if UserInputService.TouchEnabled then
         targetCell = math.max(56, targetCell)
         if compact then
@@ -11121,78 +11156,54 @@ local function updateLayout()
     title.Size = UDim2.new(1, -padding * 2 - 64, 0, 34)
     title.TextSize = compact and 25 or 30
     closeButton.Position = UDim2.new(1, -padding - 44, 0, compact and 5 or 12)
-    message.Position = UDim2.new(0, padding + 4, 1, -footer)
-    message.Size = UDim2.new(1, -padding * 2 - 8, 0, footer)
+    storageTab.Position = UDim2.fromOffset(padding, tabTop)
+    returnsTab.Position = UDim2.new(0.5, 4, 0, tabTop)
+    storageTab.Size = UDim2.new(0.5, -padding - 4, 0, tabHeight)
+    returnsTab.Size = storageTab.Size
+    previousPage.Size = UDim2.fromOffset(44, footer - 6)
+    nextPage.Size = previousPage.Size
+    previousPage.Position = UDim2.new(0, padding, 1, -footer + 3)
+    nextPage.Position = UDim2.new(1, -padding - 44, 1, -footer + 3)
+    message.Position = UDim2.new(0, padding + 49, 1, -footer)
+    message.Size = UDim2.new(1, -padding * 2 - 98, 0, footer)
     message.TextSize = compact and 12 or 14
-    message.Text = UserInputService.TouchEnabled and "24 slots" or "24 slots  |  Q / Esc to close"
+    message.TextWrapped = true
+    notice.Position, notice.Size = grid.Position, grid.Size
     layout.FillDirectionMaxCells = columns
     layout.CellSize = UDim2.fromOffset(cell, cell)
     layout.CellPadding = UDim2.fromOffset(gap, gap)
 end
 
-local function getStorageObject(prompt)
-    if not prompt or not prompt:IsDescendantOf(plots) then
-        return nil
-    end
-
+local function canUse(object, prompt)
     local plotName = player:GetAttribute("PlotName")
     local plot = plotName and plots:FindFirstChild(plotName)
-    local objects = plot and plot:FindFirstChild("PlacedObjects")
-
-    if not objects or plot:GetAttribute("OwnerUserId") ~= player.UserId then
-        return nil
-    end
-
-    local object = prompt.Parent
-    while object and object.Parent ~= objects do
-        object = object.Parent
-    end
-
-    if not object or not object:IsA("Model")
-        or object:GetAttribute("OwnerUserId") ~= player.UserId then
-        return nil
-    end
-
-    local itemName = object:GetAttribute("ItemName") or object.Name
-    local definition = ItemDefinitions[itemName]
-
-    if not definition or definition.Placeable ~= true or definition.StorageSlots ~= 24 then
-        return nil
-    end
-
-    return object, definition
-end
-
-local function canUse(prompt)
-    if player:GetAttribute("DataLoaded") ~= true
-        or player:GetAttribute("ProductionMode") == true then
+    local site = plot and plot:FindFirstChild("WarehouseSite")
+    if not site or not object or object.Parent ~= site or plot:GetAttribute("OwnerUserId") ~= player.UserId or
+        object:GetAttribute("OwnerUserId") ~= player.UserId or player:GetAttribute("DataLoaded") ~= true or
+        player:GetAttribute("ProductionMode") or player:GetAttribute("Milking") or player:GetAttribute("Teleporting") then
         return false
     end
 
-    local object = getStorageObject(prompt)
     local character = player.Character
     local humanoid = character and character:FindFirstChildOfClass("Humanoid")
     local root = character and character:FindFirstChild("HumanoidRootPart")
-    local attachment = prompt and prompt.Parent
+    if not root or not humanoid or humanoid.Health &lt;= 0 then return false end
+    return not prompt or (prompt:IsDescendantOf(object) and
+        (root.Position - prompt.Parent.WorldPosition).Magnitude &lt;= prompt.MaxActivationDistance + 0.5)
+end
 
-    if not object or not humanoid or humanoid.Health &lt;= 0 or not root
-        or not attachment or not attachment:IsA("Attachment") then
-        return false
-    end
-
-    return (root.Position - attachment.WorldPosition).Magnitude &lt;= prompt.MaxActivationDistance
+local function disconnectRows()
+    for _, connection in ipairs(slotConnections) do connection:Disconnect() end
+    table.clear(slotConnections)
 end
 
 local function closeStorage()
+    if activeObject then storageEvent:FireServer("Close") end
+    opening += 1
     if moneyGui and moneyGui.Parent then moneyGui.Enabled = moneyEnabled end
-    moneyGui = nil
-    activePrompt = nil
-    pendingPrompt = nil
+    moneyGui, activeObject, activePrompt = nil, nil, nil
     storageObject.Value = nil
-    for _, connection in ipairs(slotConnections) do
-        connection:Disconnect()
-    end
-    slotConnections = {}
+    disconnectRows()
     panel.Visible = false
     player:SetAttribute("StorageOpen", false)
 end
@@ -11202,74 +11213,62 @@ closeMenu.Name = "CloseMenu"
 closeMenu.Parent = gui
 closeMenu.OnInvoke = closeStorage
 
-local function openStorage(prompt)
-    if not canUse(prompt) then
-        return
-    end
-
-    local object = getStorageObject(prompt)
-    pendingPrompt = prompt
-    storageEvent:FireServer(object)
+local function drawSlot(index)
+    local row = tab == "Storage" and storageRows[index] or tab == "Returns" and returnPage.Rows[index]
+    local definition = row and ItemDefinitions[row.ItemName]
+    local slot = grid["Slot" .. index]
+    slot.ItemIcon.Image = definition and definition.Icon or ""
+    slot.AmountText.Text = definition and tostring(row.Amount) or ""
 end
 
-storageEvent.OnClientEvent:Connect(function(object, success, reason)
-    local prompt = pendingPrompt
-    if not prompt or getStorageObject(prompt) ~= object then
-        return
-    end
-    if not success then
-        pendingPrompt = nil
-        warn("[STORAGE]", reason)
-        return
-    end
+local function render()
+    local storage = tab == "Storage"
+    storageTab.BackgroundColor3 = storage and green or cream
+    storageTab.TextColor3 = storage and cream or ink
+    returnsTab.BackgroundColor3 = storage and cream or green
+    returnsTab.TextColor3 = storage and ink or cream
+    local page = returnPage
+    grid.Visible = storage and ready or not storage and #page.Rows > 0
+    notice.Visible = not grid.Visible
+    local locked = activeObject.Name == "WarehouseMarker" and "Buy the blueprint at the warehouse sign to start." or
+        "Finish building your warehouse to store items."
+    notice.Text = storage and locked or "No items to collect."
+    previousPage.Visible = not storage and page.Page > 1
+    nextPage.Visible = not storage and page.Page &lt; page.Pages
+    message.Text = status or (storage and ready and "24 slots" or not storage and #page.Rows > 0 and
+        (page.Pages > 1 and string.format("Tap an item to take it · %d/%d", page.Page, page.Pages) or "Tap an item to take it") or "")
+    storageObject.Value = storage and ready and activeObject or nil
+    for index = 1, 24 do drawSlot(index) end
+    updateLayout()
+end
 
-    -- Содержимое папки может реплицироваться чуть позже ответа сервера.
-    local folder = object:WaitForChild("StorageInventory", 5)
-    local rows = {}
-    if folder then
-        for index = 1, 24 do
-            local slot = folder:WaitForChild("Slot" .. index, 5)
-            local name = slot and slot:WaitForChild("ItemName", 5)
-            local amount = slot and slot:WaitForChild("Amount", 5)
-            if not name or not amount then
-                break
-            end
-            rows[index] = {Name = name, Amount = amount}
-        end
-    end
-    if pendingPrompt ~= prompt then
-        return
-    end
-    if #rows ~= 24 or not canUse(prompt) then
-        closeStorage()
-        warn("[STORAGE] Storage inventory is not ready")
-        return
-    end
-
-    for _, connection in ipairs(slotConnections) do
-        connection:Disconnect()
-    end
-    slotConnections = {}
-    for index, row in ipairs(rows) do
-        local guiSlot = grid:FindFirstChild("Slot" .. index)
+local function bindRows(folder)
+    for index = 1, 24 do
+        local slot = folder:FindFirstChild("Slot" .. index)
+        if not slot then return false end
         local function refresh()
-            local definition = ItemDefinitions[row.Name.Value]
-            local icon = definition and definition.Icon
-            local occupied = row.Name.Value ~= "" and row.Amount.Value &gt; 0
-            guiSlot.ItemIcon.Image = occupied and typeof(icon) == "string" and icon or ""
-            guiSlot.AmountText.Text = occupied and tostring(row.Amount.Value) or ""
+            storageRows[index] = {ItemName = slot.ItemName.Value, Amount = slot.Amount.Value}
+            drawSlot(index)
         end
-        table.insert(slotConnections, row.Name.Changed:Connect(refresh))
-        table.insert(slotConnections, row.Amount.Changed:Connect(refresh))
+        table.insert(slotConnections, slot.ItemName.Changed:Connect(refresh))
+        table.insert(slotConnections, slot.Amount.Changed:Connect(refresh))
         refresh()
     end
+    return true
+end
 
-    pendingPrompt = nil
-    activePrompt = prompt
-    storageObject.Value = object
+local function openStorage(object, prompt, built, page)
+    opening += 1
+    local request = opening
+    local folder = built and object:WaitForChild("StorageInventory", 5)
+    if request ~= opening or not canUse(object, prompt) or built and not folder then return end
+    disconnectRows()
+    table.clear(storageRows)
+    activeObject, activePrompt, ready, returnPage = object, prompt, built, page
+    tab, status = built and "Storage" or "Returns", nil
+    if built and not bindRows(folder) then closeStorage();return end
     PlacementController.cancelPlacement()
     title.Text = "Warehouse"
-    updateLayout()
     grid.CanvasPosition = Vector2.new(0, 0)
     if not panel.Visible then
         moneyGui = player.PlayerGui:FindFirstChild("MoneyGui")
@@ -11277,28 +11276,50 @@ storageEvent.OnClientEvent:Connect(function(object, success, reason)
     end
     panel.Visible = true
     player:SetAttribute("StorageOpen", true)
+    render()
+end
+
+storageEvent.OnClientEvent:Connect(function(action, object, first, second, third)
+    if action == "Open" then openStorage(object, first, second, third)
+    elseif action == "Page" and activeObject == object and first.Revision &gt;= returnPage.Revision then
+        if first.Page ~= returnPage.Page then grid.CanvasPosition = Vector2.zero end
+        returnPage, status = first, second
+        render()
+    end
 end)
 
-ProximityPromptService.PromptTriggered:Connect(function(prompt, triggeringPlayer)
-    if triggeringPlayer and triggeringPlayer ~= player then
-        return
-    end
+local function selectTab(nextTab)
+    if not activeObject or tab == nextTab then return end
+    tab, status = nextTab, nil
+    grid.CanvasPosition = Vector2.zero
+    render()
+end
 
-    if prompt.Name == "StoragePrompt" then
-        openStorage(prompt)
-    end
+storageTab.Activated:Connect(function() selectTab("Storage") end)
+returnsTab.Activated:Connect(function() selectTab("Returns") end)
+previousPage.Activated:Connect(function()
+    if activeObject and returnPage.Page &gt; 1 then storageEvent:FireServer("Page", returnPage.Page - 1) end
 end)
+nextPage.Activated:Connect(function()
+    if activeObject and returnPage.Page &lt; returnPage.Pages then storageEvent:FireServer("Page", returnPage.Page + 1) end
+end)
+for index = 1, 24 do
+    grid["Slot" .. index].TextButton.Activated:Connect(function()
+        if activeObject and tab == "Returns" and returnPage.Rows[index] then
+            storageEvent:FireServer("Take", returnPage.Page, index, returnPage.Revision)
+        end
+    end)
+end
 
 closeButton.Activated:Connect(closeStorage)
 
 UserInputService.InputBegan:Connect(function(input)
-    if (activePrompt or pendingPrompt) and not UserInputService:GetFocusedTextBox()
+    if activeObject and not UserInputService:GetFocusedTextBox()
         and (input.KeyCode == Enum.KeyCode.Q or input.KeyCode == Enum.KeyCode.Escape) then
         closeStorage()
     end
 end)
 
--- Закрываем окно при смерти, уходе от коробок или удалении склада.
 RunService.Heartbeat:Connect(function(deltaTime)
     elapsed = elapsed + deltaTime
     if elapsed &lt; 0.25 then
@@ -11306,7 +11327,7 @@ RunService.Heartbeat:Connect(function(deltaTime)
     end
     elapsed = 0
 
-    if activePrompt and not canUse(activePrompt) then
+    if activeObject and not canUse(activeObject, activePrompt) then
         closeStorage()
     end
 end)

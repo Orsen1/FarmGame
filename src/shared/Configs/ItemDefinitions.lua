@@ -430,18 +430,17 @@ local ItemDefinitions = {
     WarehouseBlueprint = {
         DisplayName = "Warehouse",
         Type = "Blueprint",
-        BuyPriceCents = 500,
+        SitePriceCents = 5000,
         Icon = "rbxassetid://90973533858262",
-        Placeable = true,
+        FixedWarehouse = true,
         BuildsInto = "Warehouse",
-        ModelFolder = "WarehouseStages",
-        ShopCategory = "Buildings"
+        ModelFolder = "WarehouseStages"
     },
     Warehouse = {
         DisplayName = "Warehouse",
         Type = "Building",
         Icon = "rbxassetid://90973533858262",
-        Placeable = true,
+        FixedWarehouse = true,
         StorageSlots = 24
     },
     BirchWood = {

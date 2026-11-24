@@ -11,6 +11,7 @@ local AnimalConfig = require(ReplicatedStorage.Configs.AnimalConfig)
 local CoopUpgradeService = require(script.Parent.CoopUpgradeService)
 local InteractionConfig = require(ReplicatedStorage.Configs.InteractionConfig)
 local Laboratory = require(script.Parent.LaboratoryService)
+local WarehouseSite = require(script.Parent.WarehouseSite)
 
 local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
@@ -21,7 +22,7 @@ local function configurePrompt(prompt)
     if not prompt:IsA("ProximityPrompt") then return end
     local object = prompt:FindFirstAncestorOfClass("Model")
     local definition = object and ItemDefinitions[object:GetAttribute("ItemName") or object.Name]
-    if not definition or not (definition.Placeable or definition.PermanentHouse) then return end
+    if not definition or not (definition.Placeable or definition.PermanentHouse or definition.FixedWarehouse) then return end
     local building = definition.Type == "Building" or definition.StorageSlots or
         AnimalConfig.Coops[object:GetAttribute("ItemName") or object.Name]
     local distance = definition.BuildsInto and InteractionConfig.ConstructionDistance or
@@ -61,7 +62,9 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local plot = plotName and plots:FindFirstChild(plotName)
     local objects = plot and plot:FindFirstChild("PlacedObjects")
 
-    if not object or not objects or object.Parent ~= objects and object ~= plot:FindFirstChild("StarterHouse") or plot:GetAttribute("OwnerUserId") ~= player.UserId or
+    if not object or not objects or
+        (object.Parent ~= objects and object ~= plot:FindFirstChild("StarterHouse") and object ~= WarehouseSite.GetBuilding(plot)) or
+        plot:GetAttribute("OwnerUserId") ~= player.UserId or
         object:GetAttribute("OwnerUserId") ~= player.UserId then
         return
     end
@@ -84,7 +87,7 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local itemName = object:GetAttribute("ItemName") or object.Name
     local definition = ItemDefinitions[itemName]
 
-    if not definition or not (definition.Placeable or definition.PermanentHouse) then
+    if not definition or not (definition.Placeable or definition.PermanentHouse or definition.FixedWarehouse) then
         return
     end
 
@@ -130,7 +133,8 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local selectedItemName, selectedAmount = getSelectedItem(player)
     local tool = character:FindFirstChild("EquippedItem")
 
-    if selectedItemName == "Shovel" or (tool and tool:IsA("Tool") and tool:GetAttribute("ItemName") == "Shovel") then
+    if not definition.FixedWarehouse and (selectedItemName == "Shovel" or
+        (tool and tool:IsA("Tool") and tool:GetAttribute("ItemName") == "Shovel")) then
         return
     end
 

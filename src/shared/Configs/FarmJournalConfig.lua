@@ -22,7 +22,7 @@ return {
             Entry = "There is room here for more than crops.",
             Reward = levels.Levels[2].Reward,
             Objectives = {
-                {Id = "Warehouse", Text = "Finish a warehouse", Goal = 1, Kind = "Building", Item = "Warehouse", Icon = "WarehouseBlueprint", Hint = "Build a Warehouse, adding materials in small batches."},
+                {Id = "Warehouse", Text = "Finish your warehouse", Goal = 1, Kind = "Building", Item = "Warehouse", Icon = "WarehouseBlueprint", Hint = "Buy the blueprint at the warehouse sign beside your farm, then add materials."},
                 {Id = "FirstAnimal", Text = "House your first animal", Goal = 1, Kind = "Animals", Icon = "Chicken", Hint = "Add a bought animal to its finished home."},
                 {Id = "Expand", Text = "Open another plot section", Goal = 1, Kind = "Sections", Icon = "GardenBed", Hint = "Buy a closed section next to open land."},
                 {Id = "Sawmill", Text = "Place a sawmill", Goal = 1, Kind = "Building", Item = "Sawmill", Icon = "Sawmill", Hint = "Buy a Sawmill in Buildings."},

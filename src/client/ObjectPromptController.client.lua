@@ -51,7 +51,8 @@ end
 
 local function isSupportedPrompt(object)
     return object:IsA("ProximityPrompt") and
-               (object.Name == "FarmStandPrompt" or object.Name == "ActionPrompt" or object.Name == "CollectPrompt" or object.Name == "StoragePrompt" or
+               (object.Name == "FarmStandPrompt" or object.Name == "ActionPrompt" or object.Name == "CollectPrompt" or
+                   object.Name == "StoragePrompt" or object.Name == "ReturnsPrompt" or object.Name == "WarehouseBuyPrompt" or
                    object.Name == "FeedPrompt" or object.Name == "EggPrompt" or object.Name == "CarePrompt" or object.Name == "TankPrompt")
 end
 
@@ -99,7 +100,7 @@ local function updatePrompt(prompt)
     local itemName = object:GetAttribute("ItemName") or object.Name
     local definition = ItemDefinitions[itemName]
 
-    if not definition or not (definition.Placeable or definition.PermanentHouse) then
+    if not definition or not (definition.Placeable or definition.PermanentHouse or definition.FixedWarehouse) then
         setEnabled(prompt, false)
         hidePrompt(prompt)
         return
@@ -200,13 +201,26 @@ local function updatePrompt(prompt)
         return
     end
 
-    if prompt.Name == "StoragePrompt" then
-        local selectedItemName, selectedAmount = getSelectedItem()
+    if prompt.Name == "WarehouseBuyPrompt" then
+        prompt.ActionText = "Buy blueprint"
+        prompt:SetAttribute("Context", string.format("Warehouse  $%.2f", definition.SitePriceCents / 100))
+        prompt:SetAttribute("Icon", definition.Icon)
+        setEnabled(prompt, true)
+        if not prompt.Enabled then hidePrompt(prompt)
+        elseif promptViews[prompt] then promptViews[prompt].update() end
+        return
+    end
 
-        prompt.ActionText = "Открыть"
-        setEnabled(prompt, typeof(definition.StorageSlots) == "number" and definition.StorageSlots > 0 and
-                             not (selectedItemName == "Shovel" and selectedAmount > 0))
-
+    if prompt.Name == "StoragePrompt" or prompt.Name == "ReturnsPrompt" then
+        local returning = prompt.Name == "ReturnsPrompt"
+        prompt.ActionText = returning and "Open returns" or "Open warehouse"
+        prompt:SetAttribute("Compact", true)
+        prompt:SetAttribute("Icon", definition.Icon)
+        if returning then prompt:SetAttribute("StackSide", 1) end
+        setEnabled(prompt, definition.FixedWarehouse == true and
+            (not returning or (player:GetAttribute("StorageReturnCount") or 0) > 0))
+        if not prompt.Enabled then hidePrompt(prompt)
+        elseif promptViews[prompt] then promptViews[prompt].update() end
         return
     end
 
@@ -227,7 +241,7 @@ local function updatePrompt(prompt)
 
     local selectedItemName, selectedAmount = getSelectedItem()
 
-    local removing = selectedItemName == "Shovel" and selectedAmount > 0
+    local removing = selectedItemName == "Shovel" and selectedAmount > 0 and not definition.FixedWarehouse
     local home = AnimalConfig.Coops[itemName]
     local selectedDefinition = ItemDefinitions[selectedItemName]
     local upgrading = selectedDefinition and selectedDefinition.UpgradeFrom == itemName and selectedAmount > 0
@@ -398,7 +412,10 @@ local function bindPrompt(prompt)
 end
 
 ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
-    if not boundPrompts[prompt] or (prompt.Name ~= "FarmStandPrompt" and prompt.Name ~= "ActionPrompt" and prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt" and prompt.Name ~= "CarePrompt" and prompt.Name ~= "TankPrompt" and prompt.Name ~= "CollectPrompt") or
+    local warehouse = prompt.Name == "StoragePrompt" or prompt.Name == "ReturnsPrompt" or prompt.Name == "WarehouseBuyPrompt"
+    if not boundPrompts[prompt] or (not warehouse and prompt.Name ~= "FarmStandPrompt" and prompt.Name ~= "ActionPrompt" and
+        prompt.Name ~= "FeedPrompt" and prompt.Name ~= "EggPrompt" and prompt.Name ~= "CarePrompt" and
+        prompt.Name ~= "TankPrompt" and prompt.Name ~= "CollectPrompt") or
         prompt.Style ~= Enum.ProximityPromptStyle.Custom or not prompt.Enabled then
         return
     end
@@ -410,7 +427,7 @@ ProximityPromptService.PromptShown:Connect(function(prompt, inputType)
     local step = getConstructionStep(object, itemName)
     if prompt.Name ~= "ActionPrompt" or prompt:GetAttribute("CareAction") then step = nil end
     local definition = ItemDefinitions[itemName]
-    if prompt.Name ~= "FarmStandPrompt" and not step and not (definition and (definition.PermanentHouse or definition.Plantable or definition.ShopCategoryWhenEmpty or definition.Laboratory or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
+    if not warehouse and prompt.Name ~= "FarmStandPrompt" and not step and not (definition and (definition.PermanentHouse or definition.Plantable or definition.ShopCategoryWhenEmpty or definition.Laboratory or AnimalConfig.Coops[itemName] or definition.AutomaticProduction)) then return end
     hidePrompt(prompt)
     if step then
         promptViews[prompt] = ConstructionPromptView.show(playerGui, prompt, object, step, ItemDefinitions, inputType)
@@ -431,6 +448,7 @@ player:GetAttributeChangedSignal("ProductionMode"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("SelectedSlot"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("DataLoaded"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("StorageOpen"):Connect(updateAllPrompts)
+player:GetAttributeChangedSignal("StorageReturnCount"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("FeederOpen"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("AnimalMenuOpen"):Connect(updateAllPrompts)
 player:GetAttributeChangedSignal("LaboratoryOpen"):Connect(updateAllPrompts)

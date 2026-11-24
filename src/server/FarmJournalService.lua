@@ -221,6 +221,11 @@ function Journal.Refresh(player)
             if object:GetAttribute("Occupied") then raise(data, "Plant", 1) end
             if object:GetAttribute("ReadyToHarvest") then raise(data, "Ripen", 1) end
         end
+        local site = plot:FindFirstChild("WarehouseSite")
+        if site and site:FindFirstChild("Warehouse") then
+            counts.Warehouse = 1
+            buildings += 1
+        end
         local unlocked = 0
         for _, section in ipairs(plot.Sections:GetChildren()) do
             if section.Name ~= "Starter" and section:GetAttribute("Unlocked") then unlocked += 1 end
@@ -293,6 +298,10 @@ function Journal.Load(player, saved, playerData)
         local produced = 0
         local counts, beds, buildings, animals = {}, 0, 0, 0
         for _, row in ipairs(playerData.Inventory or {}) do levels.GrantLegacy(data.LegacyAccess, row.ItemName) end
+        for _, row in ipairs(playerData.StorageReturns or {}) do levels.GrantLegacy(data.LegacyAccess, row.ItemName) end
+        for _, row in ipairs(playerData.Warehouse and playerData.Warehouse.StorageInventory or {}) do
+            levels.GrantLegacy(data.LegacyAccess, row.ItemName)
+        end
         for _, object in ipairs(playerData.PlacedObjects or {}) do
             for _, row in ipairs(object.StorageInventory or {}) do levels.GrantLegacy(data.LegacyAccess, row.ItemName) end
             levels.GrantLegacy(data.LegacyAccess, object.ItemName)

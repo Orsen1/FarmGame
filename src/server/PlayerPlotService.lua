@@ -5,8 +5,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterHouseLayout = require(ReplicatedStorage.PlacementScripts.StarterHouseLayout)
 local houseTemplate = ReplicatedStorage:WaitForChild("FarmModels"):WaitForChild("StarterHouse")
 local HouseService = require(script.Parent.HouseService)
+local WarehouseSite = require(script.Parent.WarehouseSite)
 
 local PlayerPlotService = {}
+
+for plotNumber = 1, 4 do
+    WarehouseSite.Ensure(plotsFolder:WaitForChild("Plot" .. plotNumber))
+end
 
 function PlayerPlotService.ensureStarterHouse(plot)
     local house = plot:FindFirstChild("StarterHouse")
@@ -98,6 +103,9 @@ function PlayerPlotService.releasePlot(player)
     if placedObjects then
         placedObjects:ClearAllChildren()
     end
+    local warehouse = WarehouseSite.GetBuilding(plot)
+    if warehouse then warehouse:Destroy() end
+    WarehouseSite.SetMarkerOwner(plot, 0)
 
     local ownerSign = plot:FindFirstChild("OwnerSign")
 
