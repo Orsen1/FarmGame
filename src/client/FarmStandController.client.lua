@@ -51,6 +51,8 @@ local gui = make("ScreenGui", playerGui, {Name = "FarmStandGui", ResetOnSpawn = 
 local panel = make("CanvasGroup", gui, {Name = "MainFrame", AnchorPoint = Vector2.new(.5, .5),
     Position = UDim2.fromScale(.5, .5), BackgroundColor3 = paper, BorderSizePixel = 0})
 edge(panel, 16)
+make("Frame", panel, {Position = UDim2.fromOffset(14, 50), Size = UDim2.new(1, -28, 0, 2),
+    BackgroundColor3 = Color3.fromRGB(191, 155, 102), BorderSizePixel = 0})
 local title = label(panel, "Farm Stand", 24, UDim2.fromOffset(14, 4), UDim2.new(1, -72, 0, 44))
 local closeButton = button(panel, "×", UDim2.new(1, -52, 0, 7), UDim2.fromOffset(44, 44))
 closeButton.TextSize = 24
@@ -82,6 +84,7 @@ local refreshQueued = false
 local messageUntil = 0
 local hiddenInventory
 local visibleCount = 0
+local panelTween, statusTween
 local refresh
 local layout
 
@@ -101,10 +104,37 @@ local function setAmount(value)
     quantity.Text = value == "Max" and "Max" or tostring(math.clamp(math.floor(tonumber(value) or 1), 1, math.max(1, deposit, withdraw)))
 end
 
+local function animatePanel(open)
+    if panelTween then panelTween:Cancel() end
+    if open then
+        panel.GroupTransparency = 1
+        panel.Position = UDim2.new(.5, 0, .5, 8)
+        panel.Visible, gui.Enabled = true, true
+    end
+    local tween = TweenService:Create(panel, TweenInfo.new(open and .22 or .16, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        {GroupTransparency = open and 0 or 1, Position = UDim2.new(.5, 0, .5, open and 0 or 8)})
+    panelTween = tween
+    tween.Completed:Once(function(result)
+        if panelTween ~= tween or result ~= Enum.PlaybackState.Completed then return end
+        panelTween = nil
+        if not open then gui.Enabled = false end
+    end)
+    tween:Play()
+end
+
+local function showMessage(message)
+    if statusTween then statusTween:Cancel() end
+    status.Text = message
+    status.TextTransparency = .6
+    messageUntil = os.clock() + 4
+    statusTween = TweenService:Create(status, TweenInfo.new(.18), {TextTransparency = 0})
+    statusTween:Play()
+end
+
 local function close(tellServer)
     if not stand then return end
     stand = nil
-    gui.Enabled = false
+    animatePanel(false)
     if hiddenInventory then
         hiddenInventory.Enabled = true
         hiddenInventory = nil
@@ -184,13 +214,12 @@ player:GetAttributeChangedSignal("TutorialStep"):Connect(scheduleRefresh)
 player:GetAttributeChangedSignal("TutorialRemaining"):Connect(scheduleRefresh)
 
 local function send(action, takeBack)
-    if not selected then return end
+    if not stand or not selected then return end
     local deposit, withdraw = available(selected)
     local limit = takeBack and withdraw or deposit
     local value = quantity.Text == "Max" and limit or tonumber(quantity.Text)
     if not value or value < 1 or value % 1 ~= 0 or value > limit then
-        status.Text = "Choose an amount from 1 to " .. limit .. "."
-        messageUntil = os.clock() + 4
+        showMessage("Choose an amount from 1 to " .. limit .. ".")
         return
     end
     event:FireServer(action, selected, value)
@@ -229,16 +258,11 @@ event.OnClientEvent:Connect(function(action, data, info)
         stand, selected, messageUntil = info, nil, 0
         list.CanvasPosition = Vector2.zero
         player:SetAttribute("FarmStandOpen", true)
-        panel.Visible = true
-        gui.Enabled = true
-        layout()
-        panel.GroupTransparency = 1
-        TweenService:Create(panel, TweenInfo.new(.2), {GroupTransparency = 0}):Play()
+        animatePanel(true)
     elseif not stand then
         return
     elseif info then
-        status.Text = info
-        messageUntil = os.clock() + 4
+        showMessage(info)
     end
     stock = data
     refresh()

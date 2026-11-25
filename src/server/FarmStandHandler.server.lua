@@ -18,12 +18,12 @@ local function make(class, parent, properties)
 end
 
 local function addSign(model, displayName)
-    for _, side in ipairs({Enum.NormalId.Front, Enum.NormalId.Back}) do
-        local face = make("SurfaceGui", model.Nameboard, {Name = "StandSign", Face = side, CanvasSize = Vector2.new(760, 102), LightInfluence = 0.15})
-        make("TextLabel", face, {Size = UDim2.fromScale(.92, .92), Position = UDim2.fromScale(.04, .04),
-            BackgroundTransparency = 1, Font = Enum.Font.FredokaOne, TextSize = 80, TextScaled = true,
-            TextColor3 = Color3.fromRGB(255, 239, 192), Text = displayName .. "'s Farm Stand"})
-    end
+    local face = make("SurfaceGui", model.Nameboard, {Name = "StandSign", Face = Enum.NormalId.Front,
+        CanvasSize = Vector2.new(680, 88), LightInfluence = 0.2, MaxDistance = 95})
+    local label = make("TextLabel", face, {Size = UDim2.fromScale(.88, .84), Position = UDim2.fromScale(.06, .08),
+        BackgroundTransparency = 1, Font = Enum.Font.FredokaOne, TextScaled = true,
+        TextColor3 = Color3.fromRGB(255, 235, 184), Text = displayName .. "'s Farm Stand"})
+    make("UITextSizeConstraint", label, {MaxTextSize = 62})
 end
 
 local function update(player, model, message)
@@ -44,9 +44,10 @@ local function setup(player)
     local model = templates.FarmStand:Clone()
     model.Name = "FarmStand"
     model:SetAttribute("OwnerUserId", player.UserId)
-    model:PivotTo(ground.CFrame * CFrame.new(12, -ground.Size.Y / 2, ground.Size.Z / 2 + 8.5))
+    local gate = ground.CFrame * CFrame.new(12, -ground.Size.Y / 2, ground.Size.Z / 2 + 8.5)
+    model:PivotTo(gate * CFrame.Angles(0, math.pi, 0))
     addSign(model, player.DisplayName)
-    local anchor = make("Attachment", model.PrimaryPart, {Name = "StandAttachment", Position = Vector3.new(2.8, 2.7, -1.4)})
+    local anchor = model.PrimaryPart.OwnerInteraction
     local prompt = make("ProximityPrompt", anchor, {Name = "FarmStandPrompt", Style = Enum.ProximityPromptStyle.Custom,
         MaxActivationDistance = config.PromptDistance, RequiresLineOfSight = false, ActionText = "Stock your stand", ObjectText = "Farm stand"})
     prompt:SetAttribute("Context", "Farm stand")
