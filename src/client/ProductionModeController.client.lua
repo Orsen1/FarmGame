@@ -12,6 +12,9 @@ local remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
 local command = remotes:WaitForChild("ProductionCommand")
 local View = require(ReplicatedStorage:WaitForChild("Production"):WaitForChild("ProductionGuiView"))
 local HouseView = require(ReplicatedStorage.Production.HouseGuiView)
+if not player.Character then
+    player.CharacterAdded:Wait()
+end
 local view = View.new(playerGui:WaitForChild("ProductionGui"))
 local controls = require(player.PlayerScripts:WaitForChild("PlayerModule")):GetControls()
 local placement = require(ReplicatedStorage.PlacementScripts.PlacementController)

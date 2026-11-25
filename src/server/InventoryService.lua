@@ -239,15 +239,21 @@ function InventoryService.RemoveItem(player, itemName, amount)
     }, {})
 end
 
-function InventoryService.RemoveFromSlot(player, slotIndex, itemName, amount)
-    if player:GetAttribute("DataLoaded") ~= true or not isValidAmount(amount) then return false end
-    local data = InventoryService.GetInventory(player)
-    local row = data and data[slotIndex]
-    if not row or row.ItemName ~= itemName or row.ObjectData or row.Amount < amount then return false end
-
+function InventoryService.TakeFromSlot(slot, itemName, amount, expectedData)
+    if not slot or not isValidAmount(amount) or slot.ItemName.Value ~= itemName or slot.Amount.Value < amount or
+        slot:GetAttribute("ObjectData") ~= expectedData then return false end
+    local row = {ItemName = itemName, Amount = slot.Amount.Value, ObjectData = expectedData, PaidLots = slot:GetAttribute("PaidLots")}
+    if not InventoryService.IsValidObjectRow(row) then return false end
     local taken = takeRow(row, amount)
-    InventoryService.WriteSlots(player.Inventory, data)
+    writeSlot(slot, row)
     return true, amount == 1 and paidForOne(taken) or 0
+end
+
+function InventoryService.RemoveFromSlot(player, slotIndex, itemName, amount)
+    if player:GetAttribute("DataLoaded") ~= true or typeof(slotIndex) ~= "number" then return false end
+    local folder = player:FindFirstChild("Inventory")
+    local slot = folder and folder:FindFirstChild("Slot" .. slotIndex)
+    return InventoryService.TakeFromSlot(slot, itemName, amount)
 end
 
 local function matchingSlot(data, itemName, preferred)

@@ -18,7 +18,7 @@ local function projectedRadius(frame, size, axis)
         math.abs(frame.LookVector:Dot(axis)) * size.Z) / 2
 end
 
-local function overlaps(first, firstSize, second, secondSize)
+function Layout.BoxesOverlap(first, firstSize, second, secondSize)
     local delta = second.Position - first.Position
     for _, axis in ipairs({first.RightVector, first.LookVector, second.RightVector, second.LookVector}) do
         axis = Vector3.new(axis.X, 0, axis.Z)
@@ -34,7 +34,7 @@ end
 function Layout.Overlaps(plot, frame, size)
     local pivot = Layout.GetPivot(plot)
     for _, area in ipairs(config.Footprints) do
-        if overlaps(pivot * CFrame.new(area.Center), area.Size, frame, size) then return true end
+        if Layout.BoxesOverlap(pivot * CFrame.new(area.Center), area.Size, frame, size) then return true end
     end
     return false
 end

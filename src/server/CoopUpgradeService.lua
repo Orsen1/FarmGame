@@ -29,13 +29,8 @@ function CoopUpgradeService.Pack(player, object, upgradeItemName)
     return true, "Coop packed. Select its renovation blueprint to place it."
 end
 
-function CoopUpgradeService.Prepare(player, object, itemName)
-    local index = player:GetAttribute("SelectedSlot") or 1
-    local slot = player.Inventory:FindFirstChild("Slot" .. index)
-    local encoded = slot and slot:GetAttribute("ObjectData")
-    if not slot or slot.ItemName.Value ~= itemName or slot.Amount.Value ~= 1 or typeof(encoded) ~= "string" then
-        return false, "Select this packed coop first."
-    end
+function CoopUpgradeService.Prepare(object, itemName, encoded)
+    if typeof(encoded) ~= "string" then return false, "Choose a packed coop." end
     local ok, data = pcall(HttpService.JSONDecode, HttpService, encoded)
     if not ok or typeof(data) ~= "table" or data.Version ~= 1 or data.ItemName ~= itemName or
         typeof(data.Contents) ~= "table" then return false, "Invalid packed coop." end
@@ -50,7 +45,7 @@ function CoopUpgradeService.Prepare(player, object, itemName)
     local restored, reason = AnimalService.Restore(object, data.Contents, math.max(0, now - captured))
     if not restored then return false, reason end
     object:SetAttribute("PurchaseCents", data.PurchaseCents)
-    return true, encoded, index
+    return true
 end
 
 return CoopUpgradeService

@@ -11,13 +11,19 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitFo
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 local plots = workspace:WaitForChild("Plots")
 
+local Catalog = require(ReplicatedStorage.PlacementScripts.BuildCatalog)
 local PlacementService = {}
 
-function PlacementService.placeItem(player, itemName, position, rotation)
+function PlacementService.placeItem(player, itemName, position, rotation, area, index, expected)
     if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true then
         return false, "Player data is not ready"
     end
 
+    local character = player.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 or player:GetAttribute("Teleporting") or player:GetAttribute("ProductionMode")
+        or player:GetAttribute("Milking") then return false, "Building is unavailable" end
+    if typeof(itemName) ~= "string" then return false, "Invalid item" end
     local definition = ItemDefinitions[itemName]
     local template = PlacementModels.getTemplate(itemName)
 
@@ -39,6 +45,13 @@ function PlacementService.placeItem(player, itemName, position, rotation)
     if not placedObjects or not placedObjects:IsA("Folder") then
         return false, "PlacedObjects folder is missing"
     end
+
+    if area == nil then
+        local row, found = InventoryService.FindItem(player, itemName)
+        area, index, expected = "Inventory", found, row and row.ObjectData
+    end
+    local slot = Catalog.Resolve(player, itemName, area, index, expected)
+    if not slot then return false, "This item is no longer available" end
 
     local pivot, valid, reason = PlacementRules.getPlacement(plot, position, template, rotation)
 
@@ -72,21 +85,17 @@ function PlacementService.placeItem(player, itemName, position, rotation)
 
     placedModel:PivotTo(pivot)
 
-    local removed
+    local data = slot:GetAttribute("ObjectData")
     if definition.InstanceItem then
-        local prepared, encoded, index = CoopUpgradeService.Prepare(player, placedModel, itemName)
-        if not prepared then placedModel:Destroy();return false, encoded end
-        removed = InventoryService.RemoveObject(player, index, encoded)
-    else
-        local _, index = InventoryService.FindItem(player, itemName)
-        local price
-        removed, price = InventoryService.RemoveFromSlot(player, index, itemName, 1)
-        if removed then placedModel:SetAttribute("PurchaseCents", price) end
+        local prepared, message = CoopUpgradeService.Prepare(placedModel, itemName, data)
+        if not prepared then placedModel:Destroy(); return false, message end
     end
+    local removed, price = InventoryService.TakeFromSlot(slot, itemName, 1, data)
     if not removed then
         placedModel:Destroy()
-        return false, "You do not have this item"
+        return false, "This item is no longer available"
     end
+    if not data then placedModel:SetAttribute("PurchaseCents", price) end
 
     placedModel.Parent = placedObjects
     Journal.Update(player)

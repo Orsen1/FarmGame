@@ -7,6 +7,9 @@ local Debris = game:GetService("Debris")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
+if not player.Character then
+    player.CharacterAdded:Wait()
+end
 local gui = playerGui:WaitForChild("OrderGui")
 local panel = gui.Root.Panel
 local body = panel.Body
