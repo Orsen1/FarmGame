@@ -105,6 +105,7 @@ local inBag = {}
 local refreshQueued = false
 local messageUntil = 0
 local hiddenInventory
+local waitingChanged
 local visibleCount = 0
 local panelTween, statusTween
 local reputationTween, reputationGlow, noticeTween
@@ -114,8 +115,8 @@ local layout
 
 local function canStockCrop(item, step)
     if step ~= "Complete" then return item == player:GetAttribute("TutorialCropItem") end
-    local required = config.RequestLevels[item]
-    return required and (lastLevel or 1) >= required
+    local request = config.Requests[item]
+    return request and request.Weight > 0 and (lastLevel or 1) >= request.Level
 end
 
 local function available(item)
@@ -223,6 +224,7 @@ end
 local function close(tellServer)
     if not stand then return end
     stand = nil
+    if waitingChanged then waitingChanged:Disconnect(); waitingChanged = nil end
     animatePanel(false)
     if hiddenInventory then
         hiddenInventory.Enabled = true
@@ -281,10 +283,11 @@ refresh = function()
     stockButton.BackgroundColor3 = deposit > 0 and green or Color3.fromRGB(145, 135, 103)
     returnButton.BackgroundColor3 = withdraw > 0 and tan or Color3.fromRGB(215, 203, 172)
     if os.clock() >= messageUntil then
-        status.Text = #visible == 0 and "Harvest crops to stock your stand." or "Buyers shop while you farm."
-        if selected and player:GetAttribute("TutorialStep") == "Complete" and not canStockCrop(selected, "Complete") then
-            local required = config.RequestLevels[selected]
-            status.Text = required and "Buyers request this crop at market level " .. required .. "." or
+        local waiting = stand and stand:GetAttribute("MarketWaitingFor")
+        status.Text = waiting or (#visible == 0 and "Harvest crops to stock your stand." or "Buyers shop while you farm.")
+        if not waiting and selected and player:GetAttribute("TutorialStep") == "Complete" and not canStockCrop(selected, "Complete") then
+            local request = config.Requests[selected]
+            status.Text = request and request.Weight > 0 and "Buyers request this crop at market level " .. request.Level .. "." or
                 "Buyers do not request this crop."
         end
     end
@@ -366,6 +369,8 @@ event.OnClientEvent:Connect(function(action, data, info)
         local hotbar = playerGui:FindFirstChild("InventoryGui")
         if hotbar and hotbar.Enabled then hiddenInventory = hotbar;hotbar.Enabled = false end
         stand, selected, messageUntil = info, nil, 0
+        if waitingChanged then waitingChanged:Disconnect() end
+        waitingChanged = stand:GetAttributeChangedSignal("MarketWaitingFor"):Connect(scheduleRefresh)
         list.CanvasPosition = Vector2.zero
         player:SetAttribute("FarmStandOpen", true)
         animatePanel(true)
