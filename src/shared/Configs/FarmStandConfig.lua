@@ -2,9 +2,7 @@ local Config = {
     StockLimit = 10000,
     MaxDistance = 12,
     PromptDistance = 8,
-    VisitInterval = {6, 9},
     PausedVisitRetry = 1,
-    ArrivalBonusPerLevel = .01,
     Requests = {
         Carrot = {Level = 1, Weight = 1},
         Potato = {Level = 1, Weight = 1},
@@ -12,11 +10,11 @@ local Config = {
         Pumpkin = {Level = 5, Weight = 1},
     },
     ReputationLevels = {
-        {Sold = 0, OrderWeights = {15, 42, 33, 10}},
-        {Sold = 10, OrderWeights = {13, 39, 35, 13}},
-        {Sold = 20, OrderWeights = {11, 36, 36, 15, 2}},
-        {Sold = 30, OrderWeights = {9, 33, 37, 17, 4}},
-        {Sold = 40, OrderWeights = {8, 30, 38, 18, 6}},
+        {Sold = 0, VisitInterval = {6, 9}, MinOrder = 2, OrderWeights = {30, 45, 25}},
+        {Sold = 10, VisitInterval = {5.75, 8.5}, MinOrder = 2, OrderWeights = {17, 32, 34, 17}},
+        {Sold = 20, VisitInterval = {5.5, 8}, MinOrder = 3, OrderWeights = {23, 32, 31, 14}},
+        {Sold = 30, VisitInterval = {5.25, 7.5}, MinOrder = 3, OrderWeights = {12, 18, 23, 23, 16, 8}},
+        {Sold = 40, VisitInterval = {5, 7}, MinOrder = 4, OrderWeights = {13, 17, 19, 18, 16, 14, 3}},
     },
     FinalSoldGoal = 50,
     QueueLimit = 3,
@@ -50,18 +48,19 @@ function Config.ReputationLevel(total)
 end
 
 function Config.VisitDelay(level, random)
-    local interval = Config.VisitInterval
-    return random:NextNumber(interval[1], interval[2]) / (1 + (level - 1) * Config.ArrivalBonusPerLevel)
+    local interval = Config.ReputationLevels[level].VisitInterval
+    return random:NextNumber(interval[1], interval[2])
 end
 
 function Config.OrderAmount(level, random)
-    local weights = Config.ReputationLevels[level].OrderWeights
+    local reputation = Config.ReputationLevels[level]
+    local weights = reputation.OrderWeights
     local roll = random:NextInteger(1, 100)
-    for amount, weight in ipairs(weights) do
+    for index, weight in ipairs(weights) do
         roll -= weight
-        if roll <= 0 then return amount end
+        if roll <= 0 then return reputation.MinOrder + index - 1 end
     end
-    return #weights
+    return reputation.MinOrder + #weights - 1
 end
 
 return Config
