@@ -271,8 +271,8 @@ function Visitors.Run(player, model, changed)
             local last = queue[#queue]
             local room = not last or (arrival - last.Avatar.PrimaryPart.Position):Dot(side) >= config.QueueSpacing
             if room and #queue < config.QueueLimit and active < config.QueueLimit + 1 and os.clock() >= nextArrival then
-                nextArrival = os.clock() + random:NextNumber(config.VisitInterval[1], config.VisitInterval[2])
                 local ticket = Stand.Reserve(player, model)
+                nextArrival = os.clock() + (ticket and Stand.VisitDelay(player) or config.EmptyStandRetry)
                 if ticket then
                     local template = random:NextInteger(1, 2) == 1 and avatars.Visitor1 or avatars.Visitor2
                     local avatar = prepareAvatar(template, CFrame.lookAlong(arrival, -side), "Buyer")

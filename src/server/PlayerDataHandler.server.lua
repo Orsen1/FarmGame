@@ -142,7 +142,7 @@ local function loadPlayerData(player)
         end
     end
 
-    if FarmStandService and not FarmStandService.Load(player, data.StandStock) then
+    if FarmStandService and not FarmStandService.Load(player, data.StandStock, data.TotalUnitsSold) then
         player:Kick("Failed to load your farm stand. Please try again later.")
         return
     end
@@ -205,7 +205,7 @@ local function savePlayerData(player, preparingTeleport)
         end
 
         if FarmStandService then
-            data.StandStock = FarmStandService.GetData(player)
+            data.StandStock, data.TotalUnitsSold = FarmStandService.GetData(player)
             if not data.StandStock then return false end
         end
 

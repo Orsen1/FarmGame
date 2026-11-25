@@ -13,6 +13,10 @@ local Stand = {}
 local states = {}
 local random = Random.new()
 
+local function requestLevel(item)
+    return crops[item] and items[item].SellPriceCents and Config.RequestLevels[item]
+end
+
 function Stand.IsOpen(player, model)
     local plot = model.Parent
     return player.Parent == Players and player:GetAttribute("DataLoaded") == true and not player:GetAttribute("Teleporting") and
@@ -28,7 +32,9 @@ function Stand.CanReach(player, model)
     return root and humanoid and humanoid.Health > 0 and (root.Position - model.PrimaryPart.Position).Magnitude <= Config.MaxDistance
 end
 
-function Stand.Load(player, saved)
+function Stand.Load(player, saved, totalSold)
+    if totalSold == nil then totalSold = 0 end
+    if typeof(totalSold) ~= "number" or totalSold < 0 or totalSold % 1 ~= 0 then return false end
     local stock = {}
     if saved ~= nil then
         if typeof(saved) ~= "table" then return false end
@@ -38,13 +44,18 @@ function Stand.Load(player, saved)
             stock[item] = {ItemName = item, Amount = row.Amount}
         end
     end
-    states[player] = {Stock = stock, Tickets = {}, Reserved = {}}
+    states[player] = {Stock = stock, Tickets = {}, Reserved = {}, TotalUnitsSold = totalSold}
+    player:SetAttribute("MarketUnitsSold", totalSold)
     return true
 end
 
 function Stand.GetData(player)
     local state = states[player]
-    return state and table.clone(state.Stock)
+    if state then return table.clone(state.Stock), state.TotalUnitsSold end
+end
+
+function Stand.VisitDelay(player)
+    return Config.VisitDelay(Config.ReputationLevel(states[player].TotalUnitsSold), random)
 end
 
 function Stand.Clear(player)
@@ -78,6 +89,13 @@ function Stand.Transfer(player, model, action, item, amount)
         local total = (row and row.Amount or 0) + amount
         if total > Config.StockLimit then return false, "The stand is full for this crop." end
         if not Journal.CanSell(player, item, total) then return false, "Stock the rest of your first harvest." end
+        if Journal.TutorialComplete(player) then
+            local required = requestLevel(item)
+            if not required then return false, "Buyers do not request this crop." end
+            if Config.ReputationLevel(state.TotalUnitsSold) < required then
+                return false, "Buyers request this crop at market level " .. required .. "."
+            end
+        end
         local ok = Inventory.ExchangeItems(player, {[item] = amount}, {})
         if not ok then return false, "You don't have that many crops." end
         stock[item] = {ItemName = item, Amount = total}
@@ -94,24 +112,26 @@ end
 function Stand.Reserve(player, model)
     local state = states[player]
     if not state or not Stand.IsOpen(player, model) then return end
+    local level = Config.ReputationLevel(state.TotalUnitsSold)
+    local tutorial = not Journal.TutorialComplete(player)
+    local orderLimit = Config.OrderAmount(level, random)
     local available = {}
     for item, row in pairs(state.Stock) do
-        if row.Amount > (state.Reserved[item] or 0) and Journal.CanSell(player, item, 1) then
-            table.insert(available, row)
+        local reserved = state.Reserved[item] or 0
+        local amount = math.min(row.Amount - reserved, orderLimit)
+        if tutorial then
+            amount = math.min(amount, (player:GetAttribute("TutorialRemaining") or 0) - reserved)
+        elseif (requestLevel(item) or math.huge) > level then
+            continue
+        end
+        if amount > 0 and Journal.CanSell(player, item, amount) then
+            table.insert(available, {Item = item, Amount = amount})
         end
     end
     if #available == 0 then return end
-    local row = available[random:NextInteger(1, #available)]
-    local batch = row.Amount >= Config.BulkThreshold and Config.BulkBatchSize or Config.BatchSize
-    local reserved = state.Reserved[row.ItemName] or 0
-    local amount = math.min(row.Amount - reserved, random:NextInteger(batch[1], batch[2]))
-    if not Journal.TutorialComplete(player) then
-        amount = math.min(amount, (player:GetAttribute("TutorialRemaining") or 0) - reserved)
-    end
-    if amount <= 0 then return end
-    local ticket = {Item = row.ItemName, Amount = amount}
+    local ticket = available[random:NextInteger(1, #available)]
     state.Tickets[ticket] = true
-    state.Reserved[ticket.Item] = reserved + amount
+    state.Reserved[ticket.Item] = (state.Reserved[ticket.Item] or 0) + ticket.Amount
     return ticket
 end
 
@@ -130,6 +150,8 @@ function Stand.Finish(player, model, ticket)
     local cents = Sell.Price(ticket.Item, ticket.Amount)
     if not Money.AddMoney(player, cents) then return end
     debit(state.Stock, ticket.Item, ticket.Amount)
+    state.TotalUnitsSold += ticket.Amount
+    player:SetAttribute("MarketUnitsSold", state.TotalUnitsSold)
     Sell.RecordSale(player, ticket.Item, ticket.Amount, cents)
     return cents
 end

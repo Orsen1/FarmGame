@@ -18,6 +18,9 @@ local ink = Color3.fromRGB(91, 55, 30)
 local tan = Color3.fromRGB(247, 218, 159)
 local green = Color3.fromRGB(83, 123, 52)
 local white = Color3.fromRGB(255, 248, 220)
+local reputationBase = Color3.fromRGB(244, 222, 173)
+local reputationFlash = Color3.fromRGB(255, 235, 155)
+local reputationLevels = config.ReputationLevels
 
 local function make(class, parent, properties)
     local object = Instance.new(class)
@@ -51,11 +54,30 @@ local gui = make("ScreenGui", playerGui, {Name = "FarmStandGui", ResetOnSpawn = 
 local panel = make("CanvasGroup", gui, {Name = "MainFrame", AnchorPoint = Vector2.new(.5, .5),
     Position = UDim2.fromScale(.5, .5), BackgroundColor3 = paper, BorderSizePixel = 0})
 edge(panel, 16)
-make("Frame", panel, {Position = UDim2.fromOffset(14, 50), Size = UDim2.new(1, -28, 0, 2),
-    BackgroundColor3 = Color3.fromRGB(191, 155, 102), BorderSizePixel = 0})
 local title = label(panel, "Farm Stand", 24, UDim2.fromOffset(14, 4), UDim2.new(1, -72, 0, 44))
 local closeButton = button(panel, "×", UDim2.new(1, -52, 0, 7), UDim2.fromOffset(44, 44))
 closeButton.TextSize = 24
+
+local reputation = make("Frame", panel, {Name = "Reputation", BackgroundColor3 = reputationBase, BorderSizePixel = 0})
+edge(reputation, 10, Color3.fromRGB(175, 134, 80))
+label(reputation, "Market reputation", 16, UDim2.fromOffset(10, 1), UDim2.new(1, -100, 0, 21))
+local reputationRank = label(reputation, "", 15, UDim2.new(1, -87, 0, 1), UDim2.fromOffset(77, 21), green)
+reputationRank.TextXAlignment = Enum.TextXAlignment.Right
+local reputationDetail = label(reputation, "", 13, UDim2.fromOffset(10, 21), UDim2.new(1, -20, 0, 16))
+local track = make("Frame", reputation, {Name = "Progress", Position = UDim2.new(0, 10, 1, -8),
+    Size = UDim2.new(1, -20, 0, 5), BorderSizePixel = 0, BackgroundColor3 = Color3.fromRGB(216, 184, 128)})
+make("UICorner", track, {CornerRadius = UDim.new(1, 0)})
+local fill = make("Frame", track, {Name = "Fill", Size = UDim2.fromScale(0, 1),
+    BackgroundColor3 = green, BorderSizePixel = 0})
+make("UICorner", fill, {CornerRadius = UDim.new(1, 0)})
+
+local noticeGui = make("ScreenGui", playerGui, {Name = "MarketReputationNotice", ResetOnSpawn = false,
+    DisplayOrder = 28, Enabled = false, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets})
+local notice = make("CanvasGroup", noticeGui, {AnchorPoint = Vector2.new(.5, 0), Position = UDim2.new(.5, 0, 0, 12),
+    Size = UDim2.fromOffset(245, 42), BorderSizePixel = 0, BackgroundColor3 = reputationFlash})
+edge(notice, 12)
+local noticeText = label(notice, "", 16, UDim2.fromScale(0, 0), UDim2.fromScale(1, 1))
+noticeText.TextXAlignment = Enum.TextXAlignment.Center
 
 local list = make("ScrollingFrame", panel, {Name = "Crops", Position = UDim2.fromOffset(12, 54),
     Size = UDim2.new(1, -24, 1, -195), BackgroundTransparency = 1, BorderSizePixel = 0,
@@ -85,18 +107,85 @@ local messageUntil = 0
 local hiddenInventory
 local visibleCount = 0
 local panelTween, statusTween
+local reputationTween, reputationGlow, noticeTween
+local lastLevel
 local refresh
 local layout
+
+local function canStockCrop(item, step)
+    if step ~= "Complete" then return item == player:GetAttribute("TutorialCropItem") end
+    local required = config.RequestLevels[item]
+    return required and (lastLevel or 1) >= required
+end
 
 local function available(item)
     local row = item and stock[item]
     local onStand = row and row.Amount or 0
     local canStock = math.min(inBag[item] or 0, config.StockLimit - onStand)
-    if player:GetAttribute("TutorialStep") ~= "Complete" then
-        canStock = item == player:GetAttribute("TutorialCropItem") and
-            math.min(canStock, (player:GetAttribute("TutorialRemaining") or 0) - onStand) or 0
+    local step = player:GetAttribute("TutorialStep")
+    if not canStockCrop(item, step) then
+        canStock = 0
+    elseif step ~= "Complete" then
+        canStock = math.min(canStock, (player:GetAttribute("TutorialRemaining") or 0) - onStand)
     end
     return math.max(0, canStock), onStand - (row and row.Reserved or 0)
+end
+
+local function showLevelUp(level)
+    if reputationGlow then reputationGlow:Cancel() end
+    reputation.BackgroundColor3 = reputationFlash
+    reputationGlow = TweenService:Create(reputation, TweenInfo.new(.85), {BackgroundColor3 = reputationBase})
+    reputationGlow:Play()
+    if stand then return end
+
+    if noticeTween then noticeTween:Cancel() end
+    noticeGui.Enabled = true
+    noticeText.Text = string.format("Market reputation  ·  Level %d", level)
+    notice.GroupTransparency = 1
+    notice.Position = UDim2.new(.5, 0, 0, 4)
+    local enter = TweenService:Create(notice, TweenInfo.new(.24), {
+        GroupTransparency = 0, Position = UDim2.new(.5, 0, 0, 12)})
+    noticeTween = enter
+    enter:Play()
+    task.delay(2.8, function()
+        if noticeTween ~= enter then return end
+        local leave = TweenService:Create(notice, TweenInfo.new(.22), {GroupTransparency = 1})
+        noticeTween = leave
+        leave.Completed:Once(function()
+            if noticeTween == leave then noticeTween = nil; noticeGui.Enabled = false end
+        end)
+        leave:Play()
+    end)
+end
+
+local function updateReputation()
+    local units = player:GetAttribute("MarketUnitsSold")
+    local total = units or 0
+    local level = config.ReputationLevel(total)
+    local nextLevel = reputationLevels[level + 1]
+    local raised = units ~= nil and lastLevel ~= nil and level > lastLevel
+    local progress = 1
+    reputationRank.Text = string.format("Lv. %d / %d", level, #reputationLevels)
+    if nextLevel then
+        local start = reputationLevels[level].Sold
+        progress = (total - start) / (nextLevel.Sold - start)
+        reputationDetail.Text = string.format("%d sold  ·  %d to next level", total, nextLevel.Sold - total)
+    else
+        reputationDetail.Text = string.format("%d sold  ·  Max level  ·  %s", total,
+            total >= config.FinalSoldGoal and "Goal reached" or "Goal " .. config.FinalSoldGoal)
+    end
+    track.Visible = nextLevel ~= nil
+    if reputationTween then reputationTween:Cancel() end
+    if raised then fill.Size = UDim2.fromScale(0, 1) end
+    local size = UDim2.fromScale(progress, 1)
+    if stand and lastLevel then
+        reputationTween = TweenService:Create(fill, TweenInfo.new(.28, Enum.EasingStyle.Quad), {Size = size})
+        reputationTween:Play()
+    else
+        fill.Size = size
+    end
+    if raised then showLevelUp(level) end
+    lastLevel = units and level or lastLevel
 end
 
 local function setAmount(value)
@@ -193,6 +282,11 @@ refresh = function()
     returnButton.BackgroundColor3 = withdraw > 0 and tan or Color3.fromRGB(215, 203, 172)
     if os.clock() >= messageUntil then
         status.Text = #visible == 0 and "Harvest crops to stock your stand." or "Buyers shop while you farm."
+        if selected and player:GetAttribute("TutorialStep") == "Complete" and not canStockCrop(selected, "Complete") then
+            local required = config.RequestLevels[selected]
+            status.Text = required and "Buyers request this crop at market level " .. required .. "." or
+                "Buyers do not request this crop."
+        end
     end
 end
 
@@ -212,6 +306,11 @@ for i = 1, 6 do
 end
 player:GetAttributeChangedSignal("TutorialStep"):Connect(scheduleRefresh)
 player:GetAttributeChangedSignal("TutorialRemaining"):Connect(scheduleRefresh)
+player:GetAttributeChangedSignal("MarketUnitsSold"):Connect(function()
+    updateReputation()
+    scheduleRefresh()
+end)
+updateReputation()
 
 local function send(action, takeBack)
     if not stand or not selected then return end
@@ -239,10 +338,21 @@ end)
 
 layout = function()
     local bounds = gui.AbsoluteSize
-    local height = visibleCount == 0 and 128 or math.min(385, 209 + visibleCount * 58)
+    local compact = bounds.Y < 350
+    local listTop = compact and 103 or 116
+    local footer = compact and 124 or 141
+    local height = visibleCount == 0 and 156 or math.min(435, listTop + footer + 7 + visibleCount * 58)
     panel.Size = UDim2.fromOffset(math.min(470, math.max(0, bounds.X - 18)), math.min(height, math.max(0, bounds.Y - 14)))
-    status.Position = visibleCount == 0 and UDim2.fromOffset(14, 58) or UDim2.new(0, 14, 1, -141)
-    title.TextSize = bounds.Y < 400 and 21 or 24
+    reputation.Position = UDim2.fromOffset(12, compact and 50 or 56)
+    reputation.Size = UDim2.new(1, -24, 0, compact and 46 or 53)
+    list.Position = UDim2.fromOffset(12, listTop)
+    list.Size = UDim2.new(1, -24, 1, -listTop - footer)
+    list.Visible = visibleCount > 0
+    controls.Position = UDim2.new(0, 12, 1, compact and -98 or -111)
+    stockButton.Position = UDim2.fromOffset(0, compact and 48 or 52)
+    returnButton.Position = UDim2.new(.5, 4, 0, compact and 48 or 52)
+    status.Position = visibleCount == 0 and UDim2.fromOffset(14, listTop + 4) or UDim2.new(0, 14, 1, -footer)
+    title.TextSize = compact and 21 or 24
 end
 gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout)
 layout()
