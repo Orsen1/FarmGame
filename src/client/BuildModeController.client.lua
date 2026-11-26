@@ -89,19 +89,26 @@ local function visibility()
     launch.Visible = not session and canOpen() == true
 end
 
-local function selection()
+local function selection(message)
     local key = Placement.selection()
     moveHint.Visible = session ~= nil and key == nil
-    moveHint.Text = Input.PreferredInput == Enum.PreferredInput.Touch and "Tap a building to move it"
-        or "Click a building to move it"
+    local failure = typeof(message) == "string" and message or nil
+    moveHint.Text = failure or "Drag a building to move it"
+    moveHint.TextColor3 = failure and View.Red or View.Ink
     if not session then return end
+    if failure then
+        local current = session
+        task.delay(1.8, function()
+            if session == current and moveHint.Text == failure then selection() end
+        end)
+    end
     for id, row in pairs(session.Rows) do
         row.BackgroundColor3 = key == id and Color3.fromRGB(202,225,166) or Color3.fromRGB(247,221,166)
     end
 end
 
-local function selectBuilding(point, processed)
-    if processed or not session or Placement.selection() then return end
+local function startMove(point)
+    if not session or Placement.selection() then return end
     local camera = workspace.CurrentCamera
     local placed = session.Placed
     if not camera or placed.Parent ~= session.Plot then return end
@@ -110,7 +117,7 @@ local function selectBuilding(point, processed)
     local object = hit and hit.Instance
     if not object or not object:IsDescendantOf(placed) then return end
     while object.Parent ~= placed do object = object.Parent end
-    Placement.startMove(object, session.Plot)
+    return Placement.startMove(object, session.Plot, point)
 end
 
 local function refresh()
@@ -182,7 +189,12 @@ local function open()
     Actions:BindActionAtPriority("BuildBlockShortcuts",function() return Enum.ContextActionResult.Sink end,false,3200,
         Enum.KeyCode.One,Enum.KeyCode.Two,Enum.KeyCode.Three,Enum.KeyCode.Four,Enum.KeyCode.Five,Enum.KeyCode.Six,
         Enum.KeyCode.J,Enum.KeyCode.M)
-    s.Camera = Camera.open(plot,function() return panel.AbsoluteSize.X end)
+    s.Camera = Camera.open(plot, function() return panel.AbsoluteSize.X end, {
+        Start = startMove,
+        Aim = Placement.aimMove,
+        Drop = Placement.dropMove,
+        Cancel = Placement.cancelMove,
+    })
     launch.Visible,panel.Visible,zoom.Visible = false,true,true
     panel.Position = UDim2.new(1, panel.AbsoluteSize.X,0,6)
     TweenService:Create(panel,TweenInfo.new(.22,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
@@ -226,8 +238,6 @@ end
 launch.Activated:Connect(open)
 exit.Activated:Connect(close)
 Placement.Changed:Connect(selection)
-Input:GetPropertyChangedSignal("PreferredInput"):Connect(selection)
-Input.TouchTapInWorld:Connect(selectBuilding)
 gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout)
 Hud.Panel:GetPropertyChangedSignal("Visible"):Connect(visibility)
 Prompts:GetPropertyChangedSignal("Enabled"):Connect(visibility)
@@ -243,12 +253,7 @@ end
 player.CharacterRemoving:Connect(close)
 player.CharacterAdded:Connect(function(character) character:WaitForChild("Humanoid"); visibility() end)
 Input.InputBegan:Connect(function(input,processed)
-    if not session or processed then return end
-    if input.KeyCode == Enum.KeyCode.Escape then
-        close()
-    elseif input.UserInputType == Enum.UserInputType.MouseButton1 and Input.PreferredInput ~= Enum.PreferredInput.Touch then
-        selectBuilding(Input:GetMouseLocation(), false)
-    end
+    if session and not processed and input.KeyCode == Enum.KeyCode.Escape then close() end
 end)
 layout()
 visibility()

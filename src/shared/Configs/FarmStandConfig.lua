@@ -17,6 +17,13 @@ local Config = {
         {Sold = 40, VisitInterval = {5, 7}, MinOrder = 4, OrderWeights = {13, 17, 19, 18, 16, 14, 3}},
     },
     FinalSoldGoal = 50,
+    RequirementCategories = {
+        Vegetables = {Name = "Vegetables", IconItem = "Carrot"},
+        Grains = {Name = "Grains", IconItem = "Wheat"},
+        Livestock = {Name = "Animal products", IconItem = "Egg"},
+        Dairy = {Name = "Dairy products", IconItem = "MilkBucket"},
+        Bakery = {Name = "Baked goods", IconItem = "Bread"},
+    },
     QueueLimit = 3,
     QueueSpacing = 4,
     WaitWarning = 7,

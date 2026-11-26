@@ -19,7 +19,7 @@ local Controller = {Changed = changed.Event}
 local active, pending
 local green, red, blue = Color3.fromRGB(84, 195, 103), Color3.fromRGB(224, 83, 62), Color3.fromRGB(103, 171, 225)
 
-function Controller.cancelPlacement()
+function Controller.cancelPlacement(message)
     if not active then return end
     local state = active
     active = nil
@@ -28,7 +28,7 @@ function Controller.cancelPlacement()
     for _, strip in ipairs(state.Strips) do strip[2]:Destroy() end
     state.Scene:Destroy()
     state.Gui:Destroy()
-    changed:Fire()
+    changed:Fire(message)
 end
 
 function Controller.selection()
@@ -63,6 +63,14 @@ local function aim(ground, point)
     if distance > 0 and distance < 1400 then return ray.Origin + ray.Direction * distance end
 end
 
+local function overGui(point)
+    local guiPoint = point - GuiService:GetGuiInset()
+    for _, object in ipairs(playerGui:GetGuiObjectsAtPosition(guiPoint.X, guiPoint.Y)) do
+        if object:IsA("GuiButton") or object:IsA("ScrollingFrame") or object.Active then return true end
+    end
+    return false
+end
+
 local function actions(state, onRotate, onLevel, onMax, onConfirm)
     local gui = state.Gui
     local frame = View.make("Frame", gui, {Name = "Actions", AnchorPoint = Vector2.new(.5, 1),
@@ -85,7 +93,7 @@ local function actions(state, onRotate, onLevel, onMax, onConfirm)
         button("Max", "Max Lv.", View.Gold, onMax)
     end
     button("Cancel", "Cancel", View.Gold, Controller.cancelPlacement)
-    local place = button("Place", state.Source and "Move" or "Place", View.Green, onConfirm)
+    local place = not state.Source and button("Place", "Place", View.Green, onConfirm)
     for i, b in ipairs(buttons) do
         b.Position, b.Size = UDim2.new((i - 1) / #buttons, 4, 0, 38), UDim2.new(1 / #buttons, -8, 0, 44)
     end
@@ -133,7 +141,7 @@ local function showExtra(state, current, size, future, nextSize, color)
     strip(4, left, right, math.max(z0, size.Z/2), z1)
 end
 
-function Controller.startPlacement(item, slotNumber, catalogEntry, source)
+function Controller.startPlacement(item, slotNumber, catalogEntry, source, grabPoint)
     if pending or player:GetAttribute("BuildMode") and not (catalogEntry or source) then return end
     Controller.cancelPlacement()
     if not definitions[item] or not definitions[item].Placeable then return end
@@ -188,6 +196,39 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source)
             remote:FireServer(item, target, rotation, state.Overview and not e.Data and "Catalog" or e.Area, e.Index, e.Data)
         end
     end
+    if source then
+        local origin, originalRotation = target, rotation
+        local grabbed = aim(plot.Ground, grabPoint)
+        local offset = grabbed and origin - grabbed or Vector3.zero
+        local function dragPosition(point)
+            local position = aim(plot.Ground, point)
+            return position and position + offset
+        end
+        state.DragAim = function(point)
+            if not pending then pinned = dragPosition(point) end
+        end
+        state.Drop = function(point)
+            if pending then return end
+            local size = workspace.CurrentCamera.ViewportSize
+            if not remaining(state) or point.X < 0 or point.Y < 0 or point.X > size.X or point.Y > size.Y
+                or overGui(point) or rotation == originalRotation and (point - grabPoint).Magnitude < 3 then
+                Controller.cancelPlacement()
+                return
+            end
+            local position = dragPosition(point)
+            local destination, allowed, reason = Rules.getMovePlacement(plot, source, item, position, rotation)
+            if not allowed then
+                Controller.cancelPlacement(reason)
+                return
+            end
+            if rotation == originalRotation and destination == Rules.getMovePlacement(plot, source, item, origin, rotation) then
+                Controller.cancelPlacement()
+                return
+            end
+            pinned, target, valid = position, position, true
+            confirm()
+        end
+    end
     info, place, layout = actions(state, rotate, function()
         refreshLevel(level == max and first or level + 1)
     end, function() refreshLevel(max) end, confirm)
@@ -197,25 +238,27 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source)
             return Enum.ContextActionResult.Sink
         end, false, 3100, key)
     end
-    bind("ConfirmPlacement", Enum.KeyCode.E, confirm)
+    if not source then bind("ConfirmPlacement", Enum.KeyCode.E, confirm) end
     bind("CancelPlacement", Enum.KeyCode.Q, Controller.cancelPlacement)
     bind("RotatePlacement", Enum.KeyCode.R, rotate)
     local function listen(signal, callback)
         table.insert(state.Connections, signal:Connect(callback))
     end
-    listen(Input.TouchTapInWorld, function(point, processed)
-        if not processed and not pending then
-            pinned, failure, nextCheck, valid = aim(plot.Ground, point), nil, 0, false
-        end
-    end)
-    listen(Input.InputBegan, function(input, processed)
-        if processed or input.UserInputType ~= Enum.UserInputType.MouseButton1 or Input.PreferredInput == Enum.PreferredInput.Touch then return end
-        if state.Overview then
-            pinned, failure, nextCheck, valid = aim(plot.Ground, Input:GetMouseLocation()), nil, 0, false
-        else
-            confirm()
-        end
-    end)
+    if not source then
+        listen(Input.TouchTapInWorld, function(point, processed)
+            if not processed and not pending then
+                pinned, failure, nextCheck, valid = aim(plot.Ground, point), nil, 0, false
+            end
+        end)
+        listen(Input.InputBegan, function(input, processed)
+            if processed or input.UserInputType ~= Enum.UserInputType.MouseButton1 or Input.PreferredInput == Enum.PreferredInput.Touch then return end
+            if state.Overview then
+                pinned, failure, nextCheck, valid = aim(plot.Ground, Input:GetMouseLocation()), nil, 0, false
+            else
+                confirm()
+            end
+        end)
+    end
     listen(RunService.RenderStepped, function()
         if not plot.Parent or player:GetAttribute("PlotName") ~= plot.Name or plot:GetAttribute("OwnerUserId") ~= player.UserId
             or player:GetAttribute("DataLoaded") ~= true then Controller.cancelPlacement(); return end
@@ -226,13 +269,8 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source)
         local touch = Input.PreferredInput == Enum.PreferredInput.Touch
         local mouse = Input:GetMouseLocation()
         local point = pinned
-        if not point and not touch then
-            local over = false
-            local guiPoint = mouse - GuiService:GetGuiInset()
-            for _, v in ipairs(playerGui:GetGuiObjectsAtPosition(guiPoint.X, guiPoint.Y)) do
-                if v:IsA("GuiButton") or v:IsA("ScrollingFrame") or v.Active then over = true; break end
-            end
-            point = over and target or aim(plot.Ground, mouse)
+        if not source and not point and not touch then
+            point = overGui(mouse) and target or aim(plot.Ground, mouse)
         end
         local reason
         if point then
@@ -259,7 +297,7 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source)
                 local actionName = source and "Move" or "Place"
                 local caption = level ~= first and string.format("%s Lv.%d  •  Preview Lv.%d", actionName, first, level)
                     or definitions[item].DisplayName
-                local moveHint = touch and "Tap a new spot, then Move" or "Click a new spot  ·  R rotate  ·  E move"
+                local moveHint = touch and "Release to place" or "Release to place  ·  R rotate"
                 info.Text = caption .. "  ·  " .. sizes .. "\n" .. (pending and (source and "Moving…" or "Placing…") or failure or reason or
                     level ~= first and (futureOk and "Future size fits here" or "Future size is blocked") or
                     source and moveHint or
@@ -271,12 +309,15 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source)
                 level ~= first and ("  ·  Preview Lv." .. level) or "")
         end
         info.TextColor3 = (failure or reason) and View.Red or View.Ink
-        place.Interactable = valid == true and not pending
-        place.BackgroundColor3 = place.Interactable and View.Green or Color3.fromRGB(163, 150, 118)
+        if place then
+            place.Interactable = valid == true and not pending
+            place.BackgroundColor3 = place.Interactable and View.Green or Color3.fromRGB(163, 150, 118)
+        end
     end)
     state.Finish = function(success, message)
-        if not success then failure = message or "Unable to place here"
-        elseif source or not remaining(state) then Controller.cancelPlacement()
+        if source then Controller.cancelPlacement(not success and message or nil)
+        elseif not success then failure = message or "Unable to place here"
+        elseif not remaining(state) then Controller.cancelPlacement()
         else pinned, target, valid = nil, nil, false end
         nextCheck = 0
     end
@@ -284,10 +325,27 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source)
     changed:Fire()
 end
 
-function Controller.startMove(object, plot)
+function Controller.startMove(object, plot, point)
     if active or pending or not player:GetAttribute("BuildMode") then return end
+    if overGui(point) then return end
     local item = Rules.movableItem(plot, object, player.UserId)
-    if item then Controller.startPlacement(item, nil, nil, object) end
+    if not item then return end
+    Controller.startPlacement(item, nil, nil, object, point)
+    return active ~= nil
+end
+
+function Controller.aimMove(point)
+    if not active or not active.DragAim then return false end
+    active.DragAim(point)
+    return true
+end
+
+function Controller.dropMove(point)
+    if active and active.Drop then active.Drop(point) end
+end
+
+function Controller.cancelMove()
+    if active and active.Source and pending ~= active then Controller.cancelPlacement() end
 end
 
 remote.OnClientEvent:Connect(function(success, message)

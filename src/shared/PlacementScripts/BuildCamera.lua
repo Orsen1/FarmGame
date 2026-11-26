@@ -1,10 +1,11 @@
 local Players = game:GetService("Players")
+local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
 local Input = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local Camera = {}
 
-function Camera.open(plot, panelWidth)
+function Camera.open(plot, panelWidth, move)
     local camera = workspace.CurrentCamera
     local ground = plot.Ground
     local old = {Type = camera.CameraType, Subject = camera.CameraSubject, Frame = camera.CFrame,
@@ -49,8 +50,22 @@ function Camera.open(plot, panelWidth)
     end
     local held = {}
     local dragPoint
+    local buildingDrag
     local connections = {}
     local function on(signal, fn) table.insert(connections, signal:Connect(fn)) end
+    local function touchPoint(input)
+        return Vector2.new(input.Position.X, input.Position.Y) + GuiService:GetGuiInset()
+    end
+    local function endBuildingDrag(point)
+        if not buildingDrag then return end
+        buildingDrag = nil
+        if point then move.Drop(point) else move.Cancel() end
+    end
+    local function beginBuildingDrag(input, point)
+        if not buildingDrag and move.Start(point) then
+            buildingDrag = {Input = input, Point = point}
+        end
+    end
     local function touchPair()
         local sum, first, gap, count = Vector2.zero, nil, nil, 0
         for _, point in pairs(held) do
@@ -61,24 +76,54 @@ function Camera.open(plot, panelWidth)
         return count > 0 and sum/count or sum, gap
     end
     on(Input.InputBegan,function(input, processed)
+        local kind = input.UserInputType
         if processed then return end
-        if input.UserInputType == Enum.UserInputType.MouseButton2 then dragPoint = Input:GetMouseLocation()
-        elseif input.UserInputType == Enum.UserInputType.Touch then held[input] = Vector2.new(input.Position.X,input.Position.Y) end
+        if kind == Enum.UserInputType.MouseButton2 then
+            endBuildingDrag()
+            dragPoint = Input:GetMouseLocation()
+        elseif kind == Enum.UserInputType.MouseButton1 and not dragPoint and not next(held) then
+            beginBuildingDrag(input, Input:GetMouseLocation())
+        elseif kind == Enum.UserInputType.Touch then
+            local point = touchPoint(input)
+            if buildingDrag then
+                endBuildingDrag()
+            elseif not next(held) and not dragPoint then
+                beginBuildingDrag(input, point)
+            end
+            held[input] = point
+        end
     end)
     on(Input.InputEnded,function(input)
+        if buildingDrag and input == buildingDrag.Input then
+            local point = input.UserInputState ~= Enum.UserInputState.Cancel
+                and (input.UserInputType == Enum.UserInputType.Touch and touchPoint(input) or Input:GetMouseLocation())
+            endBuildingDrag(point)
+        end
         held[input] = nil
         if input.UserInputType == Enum.UserInputType.MouseButton2 then dragPoint = nil end
     end)
-    on(Input.WindowFocusReleased,function() dragPoint = nil; table.clear(held) end)
+    on(Input.WindowFocusReleased,function()
+        endBuildingDrag()
+        dragPoint = nil
+        table.clear(held)
+    end)
     on(Input.InputChanged,function(input,processed)
         if input.UserInputType == Enum.UserInputType.MouseWheel and not processed then zoom(.83^input.Position.Z)
         elseif dragPoint and input.UserInputType == Enum.UserInputType.MouseMovement then
             local point = Input:GetMouseLocation()
             pan(point - dragPoint)
             dragPoint = point
+        elseif buildingDrag and buildingDrag.Input.UserInputType == Enum.UserInputType.MouseButton1
+            and input.UserInputType == Enum.UserInputType.MouseMovement then
+            buildingDrag.Point = Input:GetMouseLocation()
         elseif held[input] then
             local before, oldGap = touchPair()
-            held[input] = Vector2.new(input.Position.X,input.Position.Y)
+            local point = touchPoint(input)
+            held[input] = point
+            if buildingDrag and buildingDrag.Input == input then
+                buildingDrag.Point = point
+                return
+            end
             local after, gap = touchPair()
             pan(after-before)
             if gap and oldGap and gap > 4 and oldGap > 4 then zoom(oldGap/gap) end
@@ -89,9 +134,9 @@ function Camera.open(plot, panelWidth)
         local function axis(a,b)
             return (Input:IsKeyDown(a) and 1 or 0) - (Input:IsKeyDown(b) and 1 or 0)
         end
-        local move = Vector2.new(axis(Enum.KeyCode.D,Enum.KeyCode.A),axis(Enum.KeyCode.S,Enum.KeyCode.W))
-        if move.Magnitude > 0 and not Input:GetFocusedTextBox() then
-            center = (center + move.Unit*height*dt*.7):Max(low):Min(high)
+        local direction = Vector2.new(axis(Enum.KeyCode.D,Enum.KeyCode.A),axis(Enum.KeyCode.S,Enum.KeyCode.W))
+        if direction.Magnitude > 0 and not Input:GetFocusedTextBox() then
+            center = (center + direction.Unit*height*dt*.7):Max(low):Min(high)
         end
         local newFit = fit(openHigh-openLow)
         if newFit ~= initialFit then
@@ -107,8 +152,10 @@ function Camera.open(plot, panelWidth)
         local alpha = 1 - (1 - math.min(1,elapsed/.32))^3
         camera.CFrame = old.Frame:Lerp(goal,alpha)
         camera.Focus = CFrame.new(focus)
+        if buildingDrag and not move.Aim(buildingDrag.Point) then buildingDrag = nil end
     end)
     return {Zoom = zoom, Close = function()
+        endBuildingDrag()
         for _, connection in ipairs(connections) do connection:Disconnect() end
         if camera.Parent then
             if old.Subject and old.Subject.Parent then camera.CameraSubject = old.Subject end

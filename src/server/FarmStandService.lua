@@ -1,5 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
 
 local Config = require(ReplicatedStorage.Configs.FarmStandConfig)
 local crops = require(ReplicatedStorage.Configs.CropConfig).Crops
@@ -23,6 +24,36 @@ for level = 1, #Config.ReputationLevels do
         end
     end
     assortments[level] = {Choices = choices, Weight = weight}
+end
+
+local function publishReputation(player, totalSold)
+    local levels = Config.ReputationLevels
+    local level = Config.ReputationLevel(totalSold)
+    local nextLevel = levels[level + 1]
+    local target = nextLevel and nextLevel.Sold or Config.FinalSoldGoal
+    local bonuses = {}
+    if nextLevel then
+        table.insert(bonuses, {Kind = "VisitInterval", Min = nextLevel.VisitInterval[1], Max = nextLevel.VisitInterval[2]})
+        table.insert(bonuses, {Kind = "OrderSize", Min = nextLevel.MinOrder,
+            Max = nextLevel.MinOrder + #nextLevel.OrderWeights - 1})
+        for _, choice in ipairs(assortments[level + 1].Choices) do
+            if Config.Requests[choice.Item].Level == level + 1 then
+                table.insert(bonuses, {Kind = "BuyerRequest", Item = choice.Item})
+            end
+        end
+    end
+    local complete = totalSold >= target
+    player:SetAttribute("MarketReputationState", HttpService:JSONEncode({
+        Level = level,
+        MaxLevel = #levels,
+        NextLevel = nextLevel and level + 1,
+        FinalGoal = nextLevel == nil and target ~= nil,
+        Goal = {Id = "units_sold", Metric = "Units", Unit = "Items", Scope = {Kind = "All"},
+            Value = totalSold, Target = target, Complete = complete},
+        Bonuses = bonuses,
+    }))
+    player:SetAttribute("MarketReputationLevel", level)
+    player:SetAttribute("MarketUnitsSold", totalSold)
 end
 
 function Stand.IsOpen(player, model)
@@ -53,7 +84,7 @@ function Stand.Load(player, saved, totalSold)
         end
     end
     states[player] = {Stock = stock, Tickets = {}, Reserved = {}, TotalUnitsSold = totalSold}
-    player:SetAttribute("MarketUnitsSold", totalSold)
+    publishReputation(player, totalSold)
     return true
 end
 
@@ -178,7 +209,7 @@ function Stand.Finish(player, model, ticket)
     if not Money.AddMoney(player, cents) then return end
     debit(state.Stock, ticket.Item, ticket.Amount)
     state.TotalUnitsSold += ticket.Amount
-    player:SetAttribute("MarketUnitsSold", state.TotalUnitsSold)
+    publishReputation(player, state.TotalUnitsSold)
     Sell.RecordSale(player, ticket.Item, ticket.Amount, cents)
     return cents
 end
