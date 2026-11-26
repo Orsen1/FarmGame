@@ -138,7 +138,7 @@
           <int name="BorderSizePixel">0</int>
           <int name="ZIndex">3</int>
           <bool name="Visible">true</bool>
-          <string name="Text">Remove this object?</string>
+          <string name="Text">Clear this bed?</string>
           <Color3 name="TextColor3">
             <R>1.0</R>
             <G>0.9803921568627451</G>
@@ -209,7 +209,7 @@
           <int name="BorderSizePixel">0</int>
           <int name="ZIndex">3</int>
           <bool name="Visible">true</bool>
-          <string name="Text">Contents will be returned to storage, inventory, or Returns.</string>
+          <string name="Text">Clearing the bed lowers the shop price of these seeds.</string>
           <Color3 name="TextColor3">
             <R>0.49019607843137253</R>
             <G>0.29411764705882354</G>
@@ -397,7 +397,7 @@
           <int name="BorderSizePixel">0</int>
           <int name="ZIndex">3</int>
           <bool name="Visible">true</bool>
-          <string name="Text">Remove</string>
+          <string name="Text">Clear</string>
           <Color3 name="TextColor3">
             <R>1.0</R>
             <G>0.9803921568627451</G>
@@ -526,7 +526,6 @@ local player = Players.LocalPlayer
 local inventory = player:WaitForChild("Inventory")
 local event = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("RemoveObjectEvent")
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
-local refundPercent = require(ReplicatedStorage.Configs.ConstructionDefinitions).DemolitionRefundPercent
 local gui = script.Parent
 local dialog = gui:WaitForChild("Dialog")
 local message = dialog:WaitForChild("Message")
@@ -580,17 +579,17 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, who)
     local object = prompt:FindFirstAncestorWhichIsA("Model")
     local definition = object and definitions[object:GetAttribute("ItemName") or object.Name]
 
-    if not definition or not definition.Placeable or definition.FixedWarehouse or definition.BuildsInto or
+    local count = object and (object:GetAttribute("PlantedCount") or 0) or 0
+    if not definition or not definition.Plantable or count == 0 or
         object:GetAttribute("OwnerUserId") ~= player.UserId then
         return
     end
 
     target = object
-    local paid = object:GetAttribute("PurchaseCents") or 0
-    local refund = math.floor(paid / 100) * refundPercent + math.floor((paid % 100) * refundPercent / 100)
-    dialog.Title.Text = "Remove " .. (definition.DisplayName or object.Name) .. "?"
-    local price = refund &gt; 0 and string.format("Refund: $%.2f.", refund / 100) or "No cash refund."
-    message.Text = price .. "\nContents go to storage, inventory, or Returns."
+    local crop = definitions[object:GetAttribute("PlantType")]
+    dialog.Title.Text = "Clear this bed?"
+    message.Text = string.format("Clear %d %s plants.\nThis lowers their seed price in the shop.",
+        count, crop and crop.DisplayName or "crop")
     gui.Enabled = true
 
     targetConnection = object.AncestryChanged:Connect(function()
@@ -613,7 +612,7 @@ confirm.Activated:Connect(function()
     pending = true
     confirm.Interactable = false
     cancel.Interactable = false
-    confirm.Text = "Removing..."
+    confirm.Text = "Clearing..."
     event:FireServer(target)
 end)
 
@@ -627,7 +626,7 @@ event.OnClientEvent:Connect(function(success, text)
     pending = false
     confirm.Interactable = true
     cancel.Interactable = true
-    confirm.Text = "Remove"
+    confirm.Text = "Clear"
 
     if success then
         closeDialog()

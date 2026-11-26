@@ -108,6 +108,17 @@ local function updatePrompt(prompt)
     end
 
     prompt.ObjectText = definition.DisplayName or itemName
+    local selectedItemName, selectedAmount = getSelectedItem()
+    if definition.Plantable and selectedItemName == "Shovel" and selectedAmount > 0 then
+        local count = object:GetAttribute("PlantedCount") or 0
+        local step = player:GetAttribute("TutorialStep")
+        prompt.Style = Enum.ProximityPromptStyle.Default
+        prompt.ActionText = "Clear crops"
+        prompt.ObjectText = string.format("%d planted", count)
+        setEnabled(prompt, prompt.Name == "ActionPrompt" and count > 0 and (step == nil or step == "Complete"))
+        hidePrompt(prompt)
+        return
+    end
     if definition.PermanentHouse then
         prompt.Style = Enum.ProximityPromptStyle.Custom
         prompt.ActionText = "Open home"
@@ -120,24 +131,20 @@ local function updatePrompt(prompt)
     end
     local home = AnimalConfig.Coops[itemName]
     if home and home.InteractionMenu or definition.InteractionMenu or definition.Laboratory then
-        local selected = getSelectedItem()
-        if selected ~= "Shovel" then
-            if prompt.Name ~= "ActionPrompt" then setEnabled(prompt, false);hidePrompt(prompt);return end
-            if prompt.Style ~= Enum.ProximityPromptStyle.Custom then
-                setEnabled(prompt, false)
-                hidePrompt(prompt)
-                prompt.Style = Enum.ProximityPromptStyle.Custom
-            end
-            prompt.ActionText = "Open"
-            prompt:SetAttribute("Compact", true)
-            prompt:SetAttribute("Icon", definition.Icon or home and ItemDefinitions[home.ItemName].Icon or "")
-            prompt:SetAttribute("Context", definition.DisplayName)
-            setEnabled(prompt, player:GetAttribute("ProductionMode") ~= true and player:GetAttribute("Milking") ~= true)
-            if not prompt.Enabled then hidePrompt(prompt)
-            elseif promptViews[prompt] then promptViews[prompt].update() end
-            return
+        if prompt.Name ~= "ActionPrompt" then setEnabled(prompt, false);hidePrompt(prompt);return end
+        if prompt.Style ~= Enum.ProximityPromptStyle.Custom then
+            setEnabled(prompt, false)
+            hidePrompt(prompt)
+            prompt.Style = Enum.ProximityPromptStyle.Custom
         end
-        prompt:SetAttribute("Compact", nil)
+        prompt.ActionText = "Open"
+        prompt:SetAttribute("Compact", true)
+        prompt:SetAttribute("Icon", definition.Icon or home and ItemDefinitions[home.ItemName].Icon or "")
+        prompt:SetAttribute("Context", definition.DisplayName)
+        setEnabled(prompt, player:GetAttribute("ProductionMode") ~= true and player:GetAttribute("Milking") ~= true)
+        if not prompt.Enabled then hidePrompt(prompt)
+        elseif promptViews[prompt] then promptViews[prompt].update() end
+        return
     end
     if definition.AutomaticProduction then
         prompt:SetAttribute("PairedPrompt", prompt.Name == "CollectPrompt" and "ActionPrompt" or "CollectPrompt")
@@ -147,8 +154,7 @@ local function updatePrompt(prompt)
     end
 
     if prompt.Name == "TankPrompt" then
-        local selected = getSelectedItem()
-        setEnabled(prompt, definition.MilkTank ~= nil and selected ~= "Shovel" and player:GetAttribute("ProductionMode") ~= true)
+        setEnabled(prompt, definition.MilkTank ~= nil and player:GetAttribute("ProductionMode") ~= true)
         prompt.ActionText = "Fill milk tank"
         prompt:SetAttribute("Context", string.format("Milk: %d / %d", object:GetAttribute("MilkStock") or 0, definition.MilkTank.Capacity))
         if not prompt.Enabled then hidePrompt(prompt)
@@ -158,9 +164,8 @@ local function updatePrompt(prompt)
 
     if prompt.Name == "CarePrompt" then
         local home = AnimalConfig.Coops[itemName]
-        local selected = getSelectedItem()
         setEnabled(prompt, home ~= nil and home.HoofCare ~= nil and (object:GetAttribute("AnimalCount") or 0) > 0 and
-            object:GetAttribute("AnimalBusy") ~= true and selected ~= "Shovel" and selected ~= home.ItemName and
+            object:GetAttribute("AnimalBusy") ~= true and selectedItemName ~= home.ItemName and
             player:GetAttribute("ProductionMode") ~= true)
         prompt.ActionText = "Clean hooves"
         prompt:SetAttribute("Context", "Ready for a little spa?")
@@ -173,7 +178,6 @@ local function updatePrompt(prompt)
     if prompt.Name == "FeedPrompt" or prompt.Name == "EggPrompt" then
         local home = AnimalConfig.Coops[itemName]
         if not home then setEnabled(prompt, false);hidePrompt(prompt);return end
-        local selectedItemName = getSelectedItem()
         local selected = ItemDefinitions[selectedItemName]
         local caring = (not selected or selected.UpgradeFrom ~= itemName) and
             (not definition.BuildsInto or selectedItemName == home.FeedItem or selectedItemName == home.EggItem) and
@@ -182,7 +186,7 @@ local function updatePrompt(prompt)
         local hungry = (object:GetAttribute("HungryCount") or 0) > 0
         local refilling = home.FeedCapacity > 0 and selectedItemName == home.FeedItem and
             (object:GetAttribute("FeedStock") or 0) < home.FeedCapacity
-        setEnabled(prompt, selectedItemName ~= home.ItemName and selectedItemName ~= "Shovel" and
+        setEnabled(prompt, selectedItemName ~= home.ItemName and
             player:GetAttribute("ProductionMode") ~= true and caring and
             (prompt.Name == "FeedPrompt" and (hungry or refilling) or
                 prompt.Name == "EggPrompt" and amount > 0))
@@ -242,15 +246,11 @@ local function updatePrompt(prompt)
         return
     end
 
-    local selectedItemName, selectedAmount = getSelectedItem()
-
-    local removing = selectedItemName == "Shovel" and selectedAmount > 0 and not definition.FixedWarehouse
-    local home = AnimalConfig.Coops[itemName]
     local selectedDefinition = ItemDefinitions[selectedItemName]
     local upgrading = selectedDefinition and selectedDefinition.UpgradeFrom == itemName and selectedAmount > 0
     local adding = home and selectedItemName == home.ItemName and selectedAmount > 0
     prompt:SetAttribute("CareAction", adding or upgrading or false)
-    if home and (adding or upgrading) and not removing then
+    if home and (adding or upgrading) then
         if prompt.Style ~= Enum.ProximityPromptStyle.Custom then hidePrompt(prompt);prompt.Style = Enum.ProximityPromptStyle.Custom end
         local count = object:GetAttribute("AnimalCount") or 0
         prompt.ActionText = upgrading and "Pack for upgrade" or count < home.Capacity and
@@ -261,7 +261,6 @@ local function updatePrompt(prompt)
         return
     end
     if definition.BuildsInto then
-        if removing then setEnabled(prompt, false);hidePrompt(prompt);return end
         local step = getConstructionStep(object, itemName)
         local custom = step ~= nil and step ~= false
         local style = custom and Enum.ProximityPromptStyle.Custom or Enum.ProximityPromptStyle.Default
@@ -285,7 +284,7 @@ local function updatePrompt(prompt)
     end
 
     if definition.ShopCategoryWhenEmpty then
-        local style = removing and Enum.ProximityPromptStyle.Default or Enum.ProximityPromptStyle.Custom
+        local style = Enum.ProximityPromptStyle.Custom
         if prompt.Style ~= style then
             setEnabled(prompt, false)
             hidePrompt(prompt)
@@ -294,10 +293,10 @@ local function updatePrompt(prompt)
         local home = AnimalConfig.Coops[itemName]
         local count = object:GetAttribute("AnimalCount") or 0
         local adding = home and selectedItemName == home.ItemName and selectedAmount > 0
-        prompt.ActionText = removing and "Remove" or adding and
+        prompt.ActionText = adding and
             (count < home.Capacity and "Add " .. home.ItemName:lower() or "Home full") or definition.ShopPromptText
         prompt:SetAttribute("Context", home and string.format("%s: %d / %d", home.PluralName, count, home.Capacity) or prompt.ObjectText)
-        setEnabled(prompt, removing or ((adding or count == 0) and player:GetAttribute("ProductionMode") ~= true))
+        setEnabled(prompt, (adding or count == 0) and player:GetAttribute("ProductionMode") ~= true)
         if not prompt.Enabled then hidePrompt(prompt)
         elseif promptViews[prompt] then promptViews[prompt].update() end
         return
@@ -310,12 +309,6 @@ local function updatePrompt(prompt)
             hidePrompt(prompt)
             prompt.Style = style
         end
-    end
-
-    if removing then
-        prompt.ActionText = "Remove"
-        setEnabled(prompt, true)
-        return
     end
 
     if definition.Plantable == true then

@@ -295,6 +295,23 @@ function PlantService.Harvest(player, gardenBed)
     return true
 end
 
+function PlantService.Clear(player, gardenBed)
+    if not PlantService.CanUse(player, gardenBed) then return false, "Move closer to your garden bed." end
+    local state = growing[gardenBed]
+    if not state then return false, "This bed is already empty." end
+
+    local count = 0
+    for _, batch in ipairs(state.Batches) do count += #batch.Slots end
+    local counter = config.SeedPurchaseAttribute(state.Type)
+    local bought = player:GetAttribute(counter) or 0
+
+    growing[gardenBed] = nil
+    table.clear(state.Batches)
+    publish(gardenBed, state)
+    player:SetAttribute(counter, math.max(0, bought - count))
+    return true, string.format("Cleared %d planting spots.", count)
+end
+
 local elapsed = 0
 RunService.Heartbeat:Connect(function(dt)
     elapsed += dt

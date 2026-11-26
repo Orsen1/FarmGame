@@ -17,7 +17,12 @@ PlaceEvent.OnServerEvent:Connect(function(player, itemName, position, rotation, 
 
     lastRequest[player] = now
 
-    local success, reason = PlacementService.placeItem(player, itemName, position, rotation, area, index, expected)
+    local success, reason
+    if typeof(itemName) == "Instance" then
+        success, reason = PlacementService.moveObject(player, itemName, position, rotation)
+    else
+        success, reason = PlacementService.placeItem(player, itemName, position, rotation, area, index, expected)
+    end
     PlaceEvent:FireClient(player, success, reason)
 end)
 

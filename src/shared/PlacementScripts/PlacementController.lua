@@ -35,8 +35,8 @@ function Controller.selection()
     return active and active.Entry.Key
 end
 
-local function makeGhost(item, level, parent)
-    local model = Rules.LevelTemplate(item, level):Clone()
+local function makeGhost(item, level, parent, template)
+    local model = (template or Rules.LevelTemplate(item, level)):Clone()
     if BedConfig.Types[item] and level > 1 then BedLayout.Expand(model, item, level) end
     for _, object in ipairs(model:GetDescendants()) do
         if object:IsA("LuaSourceContainer") or object:IsA("ProximityPrompt") or object:IsA("LayerCollector") then
@@ -85,7 +85,7 @@ local function actions(state, onRotate, onLevel, onMax, onConfirm)
         button("Max", "Max Lv.", View.Gold, onMax)
     end
     button("Cancel", "Cancel", View.Gold, Controller.cancelPlacement)
-    local place = button("Place", "Place", View.Green, onConfirm)
+    local place = button("Place", state.Source and "Move" or "Place", View.Green, onConfirm)
     for i, b in ipairs(buttons) do
         b.Position, b.Size = UDim2.new((i - 1) / #buttons, 4, 0, 38), UDim2.new(1 / #buttons, -8, 0, 44)
     end
@@ -107,6 +107,10 @@ local function actions(state, onRotate, onLevel, onMax, onConfirm)
 end
 
 local function remaining(state)
+    if state.Source then
+        return Rules.movableItem(state.Plot, state.Source, player.UserId)
+            and state.Source:GetAttribute("BedLevel") == state.BedLevel
+    end
     local e = state.Entry
     if state.Overview and not e.Data then return Catalog.Resolve(player, e.Item, "Catalog") end
     return Catalog.Resolve(player, e.Item, e.Area, e.Index, e.Data)
@@ -129,24 +133,27 @@ local function showExtra(state, current, size, future, nextSize, color)
     strip(4, left, right, math.max(z0, size.Z/2), z1)
 end
 
-function Controller.startPlacement(item, slotNumber, catalogEntry)
-    if pending or player:GetAttribute("BuildMode") and not catalogEntry then return end
+function Controller.startPlacement(item, slotNumber, catalogEntry, source)
+    if pending or player:GetAttribute("BuildMode") and not (catalogEntry or source) then return end
     Controller.cancelPlacement()
     if not definitions[item] or not definitions[item].Placeable then return end
     local plot = workspace.Plots:FindFirstChild(player:GetAttribute("PlotName") or "")
-    local template = Models.getTemplate(item)
+    local template = Models.getTemplate(item, source and source:GetAttribute("ConstructionStage"))
     if not plot or not plot:FindFirstChild("Ground") or not template then return end
-    local slot = not catalogEntry and player.Inventory:FindFirstChild("Slot" .. slotNumber)
+    local slot = not (catalogEntry or source) and player.Inventory:FindFirstChild("Slot" .. slotNumber)
+    local bedLevel = source and source:GetAttribute("BedLevel")
     local first, max = Rules.Levels(item)
+    first = bedLevel or first
     local state = {Entry = catalogEntry or {Item = item, Area = "Inventory", Index = slotNumber,
-        Data = slot and slot:GetAttribute("ObjectData"), Key = item}, Overview = catalogEntry ~= nil,
-        Scene = Instance.new("Folder"), Connections = {}, First = first, Max = max, Strips = {}}
+        Data = slot and slot:GetAttribute("ObjectData"), Key = source or item}, Overview = catalogEntry ~= nil or source ~= nil,
+        Source = source, Plot = plot, BedLevel = bedLevel, Scene = Instance.new("Folder"), Connections = {},
+        First = first, Max = max, Strips = {}}
     state.Scene.Name = "BuildPreview"
     state.Gui = View.make("ScreenGui", playerGui, {Name = "PlacementControls", ResetOnSpawn = false,
         DisplayOrder = 53, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets})
     active = state
     local rotation, level, nextCheck = 0, first, 0
-    local ghost, highlight = makeGhost(item, level, state.Scene)
+    local ghost, highlight = makeGhost(item, level, state.Scene, template)
     local draw = View.grid("OccupiedCells", state.Scene, green, .25)
     for i = 1, 4 do
         state.Strips[i] = {View.grid("FutureCells", state.Scene, blue, .22)}
@@ -154,14 +161,19 @@ function Controller.startPlacement(item, slotNumber, catalogEntry)
         state.Strips[i][2].Size = Vector3.new(.01,.01,.01)
     end
     local target = state.Overview and plot.Ground.Position or nil
-    local pinned = Input.PreferredInput == Enum.PreferredInput.Touch and target or nil
+    if source then
+        target, rotation = Rules.moveOrigin(plot, source, item, first)
+        View.make("Highlight", state.Scene, {Adornee = source, FillTransparency = 1, OutlineColor = View.Gold,
+            DepthMode = Enum.HighlightDepthMode.Occluded})
+    end
+    local pinned = (source or Input.PreferredInput == Enum.PreferredInput.Touch) and target or nil
     local valid, failure
     local info, place, layout
     local function refreshLevel(new)
         if pending then return end
         level, nextCheck = new, 0
         ghost:Destroy()
-        ghost, highlight = makeGhost(item, level, state.Scene)
+        ghost, highlight = makeGhost(item, level, state.Scene, level == first and template or nil)
     end
     local function rotate()
         if not pending then rotation, valid, nextCheck, failure = (rotation + 1) % 4, false, 0, nil end
@@ -170,7 +182,11 @@ function Controller.startPlacement(item, slotNumber, catalogEntry)
         if not valid or not target or pending then return end
         pending, failure = state, nil
         local e = state.Entry
-        remote:FireServer(item, target, rotation, state.Overview and not e.Data and "Catalog" or e.Area, e.Index, e.Data)
+        if source then
+            remote:FireServer(source, target, rotation)
+        else
+            remote:FireServer(item, target, rotation, state.Overview and not e.Data and "Catalog" or e.Area, e.Index, e.Data)
+        end
     end
     info, place, layout = actions(state, rotate, function()
         refreshLevel(level == max and first or level + 1)
@@ -222,7 +238,12 @@ function Controller.startPlacement(item, slotNumber, catalogEntry)
         if point then
             if target and (point-target).Magnitude > .1 then failure = nil end
             target = point
-            local pivot, ok, message, cells, extent = Rules.getPlacement(plot, target, template, rotation, state.Scene)
+            local pivot, ok, message, cells, extent
+            if source then
+                pivot, ok, message, cells, extent = Rules.getMovePlacement(plot, source, item, target, rotation)
+            else
+                pivot, ok, message, cells, extent = Rules.getPlacement(plot, target, template, rotation, state.Scene)
+            end
             valid, reason = ok, not ok and message
             if pivot then
                 ghost:PivotTo(pivot)
@@ -230,14 +251,18 @@ function Controller.startPlacement(item, slotNumber, catalogEntry)
                 local base = cells * CFrame.new(0, -extent.Y / 2 + .055, 0)
                 draw(base, extent, Rules.CellSize, ok and green or red)
                 local other, area, futureOk = cells, extent, ok
-                if level ~= first then other, area, futureOk = Rules.levelArea(plot, item, pivot, level, state.Scene) end
+                if level ~= first then other, area, futureOk = Rules.levelArea(plot, item, pivot, level, source or state.Scene) end
                 showExtra(state, base, extent, other, area, futureOk and blue or red)
                 highlight.FillColor = level == first and (ok and green or red) or (futureOk and blue or red)
                 highlight.OutlineColor = highlight.FillColor
                 local sizes = string.format("%d × %d", math.round(area.X / Rules.CellSize), math.round(area.Z / Rules.CellSize))
-                local caption = level ~= first and string.format("Place Lv.%d  •  Preview Lv.%d",first,level) or definitions[item].DisplayName
-                info.Text = caption .. "  ·  " .. sizes .. "\n" .. (pending and "Placing…" or failure or reason or
+                local actionName = source and "Move" or "Place"
+                local caption = level ~= first and string.format("%s Lv.%d  •  Preview Lv.%d", actionName, first, level)
+                    or definitions[item].DisplayName
+                local moveHint = touch and "Tap a new spot, then Move" or "Click a new spot  ·  R rotate  ·  E move"
+                info.Text = caption .. "  ·  " .. sizes .. "\n" .. (pending and (source and "Moving…" or "Placing…") or failure or reason or
                     level ~= first and (futureOk and "Future size fits here" or "Future size is blocked") or
+                    source and moveHint or
                     (touch and "Tap land to aim" or state.Overview and "Click to aim  ·  R rotate  ·  E place" or "R rotate  ·  E place  ·  Q cancel"))
             end
         else
@@ -251,12 +276,18 @@ function Controller.startPlacement(item, slotNumber, catalogEntry)
     end)
     state.Finish = function(success, message)
         if not success then failure = message or "Unable to place here"
-        elseif not remaining(state) then Controller.cancelPlacement()
+        elseif source or not remaining(state) then Controller.cancelPlacement()
         else pinned, target, valid = nil, nil, false end
         nextCheck = 0
     end
     layout()
     changed:Fire()
+end
+
+function Controller.startMove(object, plot)
+    if active or pending or not player:GetAttribute("BuildMode") then return end
+    local item = Rules.movableItem(plot, object, player.UserId)
+    if item then Controller.startPlacement(item, nil, nil, object) end
 end
 
 remote.OnClientEvent:Connect(function(success, message)

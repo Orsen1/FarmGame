@@ -135,7 +135,7 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
     local selectedItemName, selectedAmount = getSelectedItem(player)
     local tool = character:FindFirstChild("EquippedItem")
 
-    if not definition.FixedWarehouse and (selectedItemName == "Shovel" or
+    if definition.Plantable and (selectedItemName == "Shovel" or
         (tool and tool:IsA("Tool") and tool:GetAttribute("ItemName") == "Shovel")) then
         return
     end

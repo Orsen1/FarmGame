@@ -247,7 +247,11 @@ RunService.Heartbeat:Connect(function()
         end
         nextBed += 1
         if not state.HasGrowth and not state.Visual then continue end
-        local distance = (bed:GetPivot().Position - eye).Magnitude
+        local pivot = bed:GetPivot()
+        if pivot ~= state.Pivot then
+            state.Pivot, state.Cursor, state.NextRender = pivot, nil, 0
+        end
+        local distance = (pivot.Position - eye).Magnitude
         if distance <= config.VisualDistance + (state.Visual and 10 or 0) then
             if now >= state.NextRender then
                 local interval = distance <= 60 and nearUpdateInterval or farUpdateInterval

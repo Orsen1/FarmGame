@@ -14,15 +14,39 @@ local plots = workspace:WaitForChild("Plots")
 local Catalog = require(ReplicatedStorage.PlacementScripts.BuildCatalog)
 local PlacementService = {}
 
-function PlacementService.placeItem(player, itemName, position, rotation, area, index, expected)
+local function ownedPlot(player)
     if player.Parent ~= Players or player:GetAttribute("DataLoaded") ~= true then
-        return false, "Player data is not ready"
+        return nil, "Player data is not ready"
     end
 
     local character = player.Character
     local humanoid = character and character:FindFirstChildOfClass("Humanoid")
     if not humanoid or humanoid.Health <= 0 or player:GetAttribute("Teleporting") or player:GetAttribute("ProductionMode")
-        or player:GetAttribute("Milking") then return false, "Building is unavailable" end
+        or player:GetAttribute("Milking") then return nil, "Building is unavailable" end
+    local plot = plots:FindFirstChild(player:GetAttribute("PlotName") or "")
+    if not plot or plot:GetAttribute("OwnerUserId") ~= player.UserId then
+        return nil, "You do not own this plot"
+    end
+    return plot
+end
+
+function PlacementService.moveObject(player, object, position, rotation)
+    local plot, reason = ownedPlot(player)
+    if not plot then return false, reason end
+    local item = PlacementRules.movableItem(plot, object, player.UserId)
+    if not item then return false, "Choose a building on your farm" end
+    if object:GetAttribute("OperatorUserId") then return false, "This building is in use" end
+
+    local pivot, valid, conflict = PlacementRules.getMovePlacement(plot, object, item, position, rotation)
+    if not valid then return false, conflict end
+
+    object:PivotTo(pivot)
+    return true, "Building moved"
+end
+
+function PlacementService.placeItem(player, itemName, position, rotation, area, index, expected)
+    local plot, reason = ownedPlot(player)
+    if not plot then return false, reason end
     if typeof(itemName) ~= "string" then return false, "Invalid item" end
     local definition = ItemDefinitions[itemName]
     local template = PlacementModels.getTemplate(itemName)
@@ -32,13 +56,6 @@ function PlacementService.placeItem(player, itemName, position, rotation, area, 
     end
 
     if not Journal.CanBuild(player, itemName) then return false, "This building requires a higher farm level" end
-
-    local plotName = player:GetAttribute("PlotName")
-    local plot = plotName and plots:FindFirstChild(plotName)
-
-    if not plot or plot:GetAttribute("OwnerUserId") ~= player.UserId then
-        return false, "You do not own this plot"
-    end
 
     local placedObjects = plot:FindFirstChild("PlacedObjects")
 

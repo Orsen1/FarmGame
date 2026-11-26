@@ -48,6 +48,9 @@ local zoom = View.make("Frame",gui,{Name = "Zoom",Visible = false,BackgroundTran
     Position = UDim2.fromOffset(7,7),Size = UDim2.fromOffset(99,46)})
 local panHint = View.text("TextLabel",zoom,"PanHint","Drag to pan",13,View.Paper)
 panHint.Position,panHint.Size = UDim2.fromOffset(102,3),UDim2.fromOffset(90,38)
+local moveHint = View.text("TextLabel", gui, "MoveHint", "", 14, View.Paper)
+moveHint.AnchorPoint, moveHint.Position = Vector2.new(.5, 1), UDim2.new(.5, 0, 1, -8)
+moveHint.Size, moveHint.Visible = UDim2.fromOffset(245, 34), false
 local session
 for index, sign in ipairs({"+","−"}) do
     local b = View.text("TextButton",zoom,"Zoom"..index,sign,23,View.Paper)
@@ -87,11 +90,27 @@ local function visibility()
 end
 
 local function selection()
-    if not session then return end
     local key = Placement.selection()
+    moveHint.Visible = session ~= nil and key == nil
+    moveHint.Text = Input.PreferredInput == Enum.PreferredInput.Touch and "Tap a building to move it"
+        or "Click a building to move it"
+    if not session then return end
     for id, row in pairs(session.Rows) do
         row.BackgroundColor3 = key == id and Color3.fromRGB(202,225,166) or Color3.fromRGB(247,221,166)
     end
+end
+
+local function selectBuilding(point, processed)
+    if processed or not session or Placement.selection() then return end
+    local camera = workspace.CurrentCamera
+    local placed = session.Placed
+    if not camera or placed.Parent ~= session.Plot then return end
+    local ray = camera:ViewportPointToRay(point.X, point.Y)
+    local hit = workspace:Raycast(ray.Origin, ray.Direction * 1400, session.PickParams)
+    local object = hit and hit.Instance
+    if not object or not object:IsDescendantOf(placed) then return end
+    while object.Parent ~= placed do object = object.Parent end
+    Placement.startMove(object, session.Plot)
 end
 
 local function refresh()
@@ -133,6 +152,7 @@ local function close()
     s.Grid:Destroy()
     for _,row in pairs(s.Rows) do row:Destroy() end
     panel.Visible,zoom.Visible = false,false
+    moveHint.Visible = false
     Prompts.Enabled = s.Prompts
     for element,enabled in pairs(s.Hidden) do if element.Parent then element.Enabled = enabled end end
     player:SetAttribute("BuildMode",false)
@@ -142,9 +162,14 @@ end
 local function open()
     if session or not canOpen() then return end
     local plot = workspace.Plots:FindFirstChild(player:GetAttribute("PlotName") or "")
-    if not plot or plot:GetAttribute("OwnerUserId") ~= player.UserId then return end
+    local placed = plot and plot:FindFirstChild("PlacedObjects")
+    if not placed or plot:GetAttribute("OwnerUserId") ~= player.UserId then return end
     Placement.cancelPlacement()
-    local s = {Rows = {}, Hidden = {}, Connections = {}, Prompts = Prompts.Enabled, Grid = Instance.new("Folder")}
+    local s = {Plot = plot, Placed = placed, Rows = {}, Hidden = {}, Connections = {}, Prompts = Prompts.Enabled,
+        Grid = Instance.new("Folder")}
+    s.PickParams = RaycastParams.new()
+    s.PickParams.FilterType = Enum.RaycastFilterType.Include
+    s.PickParams.FilterDescendantsInstances = {placed}
     s.Grid.Name,s.Grid.Parent = "BuildPlotGrid",workspace
     session = s
     player:SetAttribute("BuildMode",true)
@@ -201,6 +226,8 @@ end
 launch.Activated:Connect(open)
 exit.Activated:Connect(close)
 Placement.Changed:Connect(selection)
+Input:GetPropertyChangedSignal("PreferredInput"):Connect(selection)
+Input.TouchTapInWorld:Connect(selectBuilding)
 gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout)
 Hud.Panel:GetPropertyChangedSignal("Visible"):Connect(visibility)
 Prompts:GetPropertyChangedSignal("Enabled"):Connect(visibility)
@@ -216,7 +243,12 @@ end
 player.CharacterRemoving:Connect(close)
 player.CharacterAdded:Connect(function(character) character:WaitForChild("Humanoid"); visibility() end)
 Input.InputBegan:Connect(function(input,processed)
-    if session and not processed and input.KeyCode == Enum.KeyCode.Escape then close() end
+    if not session or processed then return end
+    if input.KeyCode == Enum.KeyCode.Escape then
+        close()
+    elseif input.UserInputType == Enum.UserInputType.MouseButton1 and Input.PreferredInput ~= Enum.PreferredInput.Touch then
+        selectBuilding(Input:GetMouseLocation(), false)
+    end
 end)
 layout()
 visibility()

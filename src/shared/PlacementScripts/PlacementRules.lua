@@ -63,6 +63,23 @@ local function bounds(item, pivot, level)
     return pivot * s.Frame, s.Size
 end
 
+function Rules.movableItem(plot, object, owner)
+    local placed = plot:FindFirstChild("PlacedObjects")
+    if not placed or typeof(object) ~= "Instance" or not object:IsA("Model") or object.Parent ~= placed
+        or object:GetAttribute("OwnerUserId") ~= owner then return end
+    local item = object:GetAttribute("ItemName") or object.Name
+    local definition = Definitions[item]
+    if definition and definition.Placeable and not definition.PermanentHouse and not definition.FixedWarehouse
+        and Models.getTemplate(item) then return item end
+end
+
+function Rules.moveOrigin(plot, object, item, level)
+    local box = bounds(item, object:GetPivot(), level)
+    local forward = plot.Ground.CFrame:VectorToObjectSpace(box.LookVector)
+    local rotation = math.round(math.atan2(forward.X, -forward.Z) / (math.pi / 2)) % 4
+    return box.Position, rotation
+end
+
 local function radii(frame, size)
     return (math.abs(frame.RightVector.X) * size.X + math.abs(frame.ZVector.X) * size.Z) / 2,
         (math.abs(frame.RightVector.Z) * size.X + math.abs(frame.ZVector.Z) * size.Z) / 2
@@ -129,7 +146,7 @@ local function validate(plot, frame, size, ignore, character)
     return true, ""
 end
 
-function Rules.getPlacement(plot, position, template, rotation, ignore)
+local function snapPlacement(plot, position, frame, size, rotation, ignore, pivotHeight)
     if typeof(position) ~= "Vector3" or not (position.Magnitude < 1000000) then return nil, false, "Invalid position" end
     if rotation == nil then rotation = 0 end
     if typeof(rotation) ~= "number" or rotation % 1 ~= 0 or rotation < 0 or rotation > 3 then
@@ -137,19 +154,31 @@ function Rules.getPlacement(plot, position, template, rotation, ignore)
     end
     local ground = plot:FindFirstChild("Ground")
     if not ground then return nil, false, "Ground is missing" end
-    local s = shape(template)
     local point = ground.CFrame:PointToObjectSpace(position)
-    local width, depth = s.Size.X, s.Size.Z
+    local width, depth = size.X, size.Z
     if rotation % 2 == 1 then width, depth = depth, width end
     local function snap(value, length)
         local half = math.ceil((length - epsilon) / step) * step / 2
         return math.round((value - half) / step) * step + half
     end
-    local box = ground.CFrame * CFrame.new(snap(point.X, width), (ground.Size.Y + s.Size.Y) / 2, snap(point.Z, depth))
+    local height = pivotHeight and pivotHeight + frame.Y or (ground.Size.Y + size.Y) / 2
+    local box = ground.CFrame * CFrame.new(snap(point.X, width), height, snap(point.Z, depth))
         * CFrame.Angles(0, -rotation * math.pi / 2, 0)
-    local cells, extent = cellBox(ground, box, s.Size)
+    local cells, extent = cellBox(ground, box, size)
     local valid, reason = validate(plot, cells, extent, ignore)
-    return box * s.Frame:Inverse(), valid, reason, cells, extent
+    return box * frame:Inverse(), valid, reason, cells, extent
+end
+
+function Rules.getPlacement(plot, position, template, rotation, ignore)
+    local s = shape(template)
+    return snapPlacement(plot, position, s.Frame, s.Size, rotation, ignore)
+end
+
+function Rules.getMovePlacement(plot, object, item, position, rotation)
+    local level = object:GetAttribute("BedLevel") or Rules.Levels(item)
+    local frame, size = bounds(item, CFrame.identity, level)
+    local height = plot.Ground.CFrame:PointToObjectSpace(object:GetPivot().Position).Y
+    return snapPlacement(plot, position, frame, size, rotation, object, height)
 end
 
 function Rules.levelArea(plot, item, pivot, level, ignore, character)
