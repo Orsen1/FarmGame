@@ -61,7 +61,8 @@ local function setup(player)
     Visitors.Run(player, model, function(message) update(player, model, message) end)
 end
 
-event.OnServerEvent:Connect(function(player, action, item, amount)
+event.OnServerEvent:Connect(function(player, action, item, amount, previous)
+    if action == "ChooseDirection" then Stand.Choose(player, item, amount, previous);return end
     local model = opened[player]
     if action == "Close" then opened[player] = nil;return end
     if not model or action ~= "Stock" and action ~= "Return" then return end
@@ -73,6 +74,10 @@ local function watch(player)
     player:GetAttributeChangedSignal("DataLoaded"):Connect(function() setup(player) end)
     task.defer(setup, player)
 end
+
+task.spawn(function()
+    while task.wait(1) do Stand.Tick() end
+end)
 
 Players.PlayerAdded:Connect(watch)
 Players.PlayerRemoving:Connect(function(player) opened[player] = nil end)

@@ -9,7 +9,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 local inventory = player:WaitForChild("Inventory")
 local config = require(ReplicatedStorage.Configs.FarmStandConfig)
 local definitions = require(ReplicatedStorage.Configs.ItemDefinitions)
-local crops = require(ReplicatedStorage.Configs.CropConfig).Crops
+local goods = config.Requests
 local menu = require(ReplicatedStorage.HudMenu)
 local event = ReplicatedStorage.RemoteEvents:WaitForChild("FarmStandEvent")
 
@@ -170,10 +170,10 @@ refresh = function()
     table.clear(inBag)
     for _, slot in ipairs(inventory:GetChildren()) do
         local name = slot.ItemName.Value
-        if crops[name] then inBag[name] = (inBag[name] or 0) + slot.Amount.Value end
+        if goods[name] then inBag[name] = (inBag[name] or 0) + slot.Amount.Value end
     end
     local visible = {}
-    for item in pairs(crops) do
+    for item in pairs(goods) do
         if (inBag[item] or 0) > 0 or stock[item] then table.insert(visible, item) end
     end
     table.sort(visible, function(a, b) return definitions[a].DisplayName < definitions[b].DisplayName end)
@@ -200,11 +200,11 @@ refresh = function()
     returnButton.BackgroundColor3 = withdraw > 0 and tan or Color3.fromRGB(215, 203, 172)
     if os.clock() >= messageUntil then
         local waiting = stand and stand:GetAttribute("MarketWaitingFor")
-        status.Text = waiting or (#visible == 0 and "Harvest crops to stock your stand." or "Buyers shop while you farm.")
+        status.Text = waiting or (#visible == 0 and "Bring products to stock your stand." or "Buyers shop while you farm.")
         if not waiting and selected and player:GetAttribute("TutorialStep") == "Complete" and not canStockCrop(selected, "Complete") then
             local request = config.Requests[selected]
-            status.Text = request and request.Weight > 0 and "Buyers request this crop at market level " .. request.Level .. "." or
-                "Buyers do not request this crop."
+            status.Text = request and request.Weight > 0 and "Buyers request this product at market level " .. request.Level .. "." or
+                "Buyers do not request this product."
         end
     end
 end

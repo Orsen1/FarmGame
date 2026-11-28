@@ -3,11 +3,30 @@ local Config = {
     MaxDistance = 12,
     PromptDistance = 8,
     PausedVisitRetry = 1,
+    Goals = require(script.Parent.MarketGoals),
+    WindowSeconds = 60,
+    ChapterLength = 5,
+    FirstChoice = 20,
+    FocusChance = .70,
+    StockChance = .15,
+    DoubleRareChance = .30,
+    IntervalStep = {.01, .02},
+    PartyBonusStep = .05,
+    Directions = {"Crops", "Livestock", "Dairy", "Bakery", "Mixed"},
     Requests = {
-        Carrot = {Level = 1, Weight = 1},
-        Potato = {Level = 1, Weight = 1},
-        Wheat = {Level = 1, Weight = 1},
-        Pumpkin = {Level = 5, Weight = 1},
+        Carrot = {Level = 1, Weight = 1, Group = "Vegetables"},
+        Potato = {Level = 1, Weight = 1, Group = "Vegetables"},
+        Wheat = {Level = 1, Weight = 1, Group = "Grains"},
+        Pumpkin = {Level = 5, Weight = 1, Group = "Vegetables"},
+        Egg = {Level = 6, Weight = 1, Group = "Livestock", Max = 2},
+        Flour = {Level = 7, Weight = 1, Group = "Bakery", Max = 3},
+        Strawberry = {Level = 10, Weight = 1, Group = "Berries"},
+        Corn = {Level = 10, Weight = 1, Group = "Grains"},
+        BellPepper = {Level = 15, Weight = 1, Group = "Vegetables"},
+        Cream = {Level = 15, Weight = 1, Group = "Dairy", Max = 2},
+        Bread = {Level = 15, Weight = 1, Group = "Bakery", Max = 2},
+        Butter = {Level = 20, Weight = 1, Group = "Dairy", Max = 2},
+        Blueberry = {Level = 20, Weight = 1, Group = "Berries"},
     },
     ReputationLevels = {
         {Sold = 0, VisitInterval = {6, 9}, MinOrder = 2, OrderWeights = {30, 45, 25}},
@@ -16,8 +35,11 @@ local Config = {
         {Sold = 30, VisitInterval = {5.25, 7.5}, MinOrder = 3, OrderWeights = {12, 18, 23, 23, 16, 8}},
         {Sold = 40, VisitInterval = {5, 7}, MinOrder = 4, OrderWeights = {13, 17, 19, 18, 16, 14, 3}},
     },
-    FinalSoldGoal = 50,
     RequirementCategories = {
+        Crops = {Name = "Crops", IconItem = "Carrot"},
+        Berries = {Name = "Berries", IconItem = "Blueberry"},
+        Processed = {Name = "Processed goods", IconItem = "Flour"},
+        Mixed = {Name = "Mixed trade", IconItem = "Wheat"},
         Vegetables = {Name = "Vegetables", IconItem = "Carrot"},
         Grains = {Name = "Grains", IconItem = "Wheat"},
         Livestock = {Name = "Animal products", IconItem = "Egg"},
@@ -54,18 +76,44 @@ function Config.ReputationLevel(total)
     return 1
 end
 
-function Config.VisitDelay(level, random)
-    local interval = Config.ReputationLevels[level].VisitInterval
-    return random:NextNumber(interval[1], interval[2])
+Config.MaxLevel = #Config.ReputationLevels
+while Config.Goals[Config.MaxLevel + 1] do Config.MaxLevel += 1 end
+
+function Config.Matches(scope, item)
+    local group = Config.Requests[item].Group
+    if scope == "Crops" then return group == "Vegetables" or group == "Grains" or group == "Berries" end
+    if scope == "Processed" then return group == "Dairy" or group == "Bakery" end
+    return scope == "All" or scope == group or scope == item
 end
 
-function Config.OrderAmount(level, random)
-    local reputation = Config.ReputationLevels[level]
+function Config.Interval(level)
+    local base = Config.ReputationLevels[math.min(level, #Config.ReputationLevels)].VisitInterval
+    local steps = math.max(0, level - #Config.ReputationLevels)
+    return base[1] - steps * Config.IntervalStep[1], base[2] - steps * Config.IntervalStep[2]
+end
+
+function Config.VisitDelay(level, random)
+    local low, high = Config.Interval(level)
+    return random:NextNumber(low, high)
+end
+
+function Config.PartyBonus(level)
+    return math.max(0, math.floor(level / 5) - 1) * Config.PartyBonusStep
+end
+
+function Config.OrderAmount(level, random, item)
+    local cap = item and Config.Requests[item].Max
+    if cap == 2 then return random:NextNumber() < Config.DoubleRareChance and 2 or 1 end
+    if cap then return random:NextInteger(1, cap) end
+    local reputation = Config.ReputationLevels[math.min(level, #Config.ReputationLevels)]
     local weights = reputation.OrderWeights
     local roll = random:NextInteger(1, 100)
     for index, weight in ipairs(weights) do
         roll -= weight
-        if roll <= 0 then return reputation.MinOrder + index - 1 end
+        if roll <= 0 then
+            local extra = level > 5 and random:NextNumber() < Config.PartyBonus(level) and 1 or 0
+            return reputation.MinOrder + math.min(#weights, index + extra) - 1
+        end
     end
     return reputation.MinOrder + #weights - 1
 end
