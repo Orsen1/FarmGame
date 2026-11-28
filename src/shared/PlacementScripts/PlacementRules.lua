@@ -181,6 +181,11 @@ function Rules.getMovePlacement(plot, object, item, position, rotation)
     return snapPlacement(plot, position, frame, size, rotation, object, height)
 end
 
+function Rules.getStoredPlacement(plot, item, position, rotation, bedLevel, ignore)
+    local frame, size = bounds(item, CFrame.identity, bedLevel or Rules.Levels(item))
+    return snapPlacement(plot, position, frame, size, rotation, ignore)
+end
+
 function Rules.levelArea(plot, item, pivot, level, ignore, character)
     local box, size = bounds(item, pivot, level)
     local cells, extent = cellBox(plot.Ground, box, size)

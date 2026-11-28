@@ -18,7 +18,9 @@ PlaceEvent.OnServerEvent:Connect(function(player, itemName, position, rotation, 
     lastRequest[player] = now
 
     local success, reason
-    if typeof(itemName) == "Instance" then
+    if itemName == "StoreBuilding" then
+        success, reason = PlacementService.storeObject(player, position)
+    elseif typeof(itemName) == "Instance" then
         success, reason = PlacementService.moveObject(player, itemName, position, rotation)
     else
         success, reason = PlacementService.placeItem(player, itemName, position, rotation, area, index, expected)

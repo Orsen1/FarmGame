@@ -146,10 +146,12 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source, grabP
     Controller.cancelPlacement()
     if not definitions[item] or not definitions[item].Placeable then return end
     local plot = workspace.Plots:FindFirstChild(player:GetAttribute("PlotName") or "")
-    local template = Models.getTemplate(item, source and source:GetAttribute("ConstructionStage"))
+    local stored = catalogEntry and catalogEntry.Kind == "StoredBuilding"
+    local stage = source and source:GetAttribute("ConstructionStage") or stored and catalogEntry.ConstructionStage
+    local template = Models.getTemplate(item, stage or nil)
     if not plot or not plot:FindFirstChild("Ground") or not template then return end
     local slot = not (catalogEntry or source) and player.Inventory:FindFirstChild("Slot" .. slotNumber)
-    local bedLevel = source and source:GetAttribute("BedLevel")
+    local bedLevel = source and source:GetAttribute("BedLevel") or stored and catalogEntry.BedLevel or nil
     local first, max = Rules.Levels(item)
     first = bedLevel or first
     local state = {Entry = catalogEntry or {Item = item, Area = "Inventory", Index = slotNumber,
@@ -279,6 +281,9 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source, grabP
             local pivot, ok, message, cells, extent
             if source then
                 pivot, ok, message, cells, extent = Rules.getMovePlacement(plot, source, item, target, rotation)
+            elseif stored then
+                pivot, ok, message, cells, extent = Rules.getStoredPlacement(plot, item, target, rotation,
+                    bedLevel, state.Scene)
             else
                 pivot, ok, message, cells, extent = Rules.getPlacement(plot, target, template, rotation, state.Scene)
             end
@@ -325,6 +330,13 @@ function Controller.startPlacement(item, slotNumber, catalogEntry, source, grabP
     changed:Fire()
 end
 
+function Controller.storeObject(object, finish)
+    if pending or active or not player:GetAttribute("BuildMode") then return false end
+    pending = {Store = true, Finish = finish}
+    remote:FireServer("StoreBuilding", object)
+    return true
+end
+
 function Controller.startMove(object, plot, point)
     if active or pending or not player:GetAttribute("BuildMode") then return end
     if overGui(point) then return end
@@ -351,7 +363,7 @@ end
 remote.OnClientEvent:Connect(function(success, message)
     local request = pending
     pending = nil
-    if request and request == active then request.Finish(success, message) end
+    if request and (request == active or request.Store) then request.Finish(success, message) end
 end)
 player.CharacterRemoving:Connect(Controller.cancelPlacement)
 

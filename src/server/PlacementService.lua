@@ -1,3 +1,4 @@
+local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -5,6 +6,8 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local Journal = require(ServerScriptService.FarmJournalService)
 local CoopUpgradeService = require(ServerScriptService.CoopUpgradeService)
+local PlotDataService = require(ServerScriptService.PlotDataService)
+local StorageService = require(ServerScriptService.StorageService)
 local PlacementRules = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementRules"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 
@@ -44,6 +47,44 @@ function PlacementService.moveObject(player, object, position, rotation)
     return true, "Building moved"
 end
 
+function PlacementService.storeObject(player, object)
+    local plot, reason = ownedPlot(player)
+    if not plot then return false, reason end
+    local item = PlacementRules.movableItem(plot, object, player.UserId)
+    if not item then return false, "Choose a building on your farm" end
+    if object:GetAttribute("OperatorUserId") or object:GetAttribute("AnimalBusy") then
+        return false, "Finish the current action before storing this building"
+    end
+    local snapshot, serialError = PlotDataService.snapshotObject(object)
+    if not snapshot then return false, serialError end
+    snapshot.StoredBuildingVersion = 1
+    snapshot.BuildingId = snapshot.BuildingId or HttpService:GenerateGUID(false)
+    local stored, message = StorageService.StoreBuilding(player, plot,
+        {ItemName = item, Amount = 1, ObjectData = HttpService:JSONEncode(snapshot)})
+    if not stored then return false, message end
+    object:Destroy()
+    Journal.Update(player)
+    return true, "Building stored in your warehouse"
+end
+
+local function restoreStored(player, plot, slot, stored, encoded, position, rotation)
+    local template, reason = PlotDataService.getTemplate(stored)
+    if not template then return false, reason end
+    local item = stored.ItemName
+    local pivot, valid, conflict = PlacementRules.getStoredPlacement(plot, item, position, rotation,
+        stored.BedLevel)
+    if not valid then return false, conflict end
+    local object, restoreError = PlotDataService.restoreObject(player, stored, template, pivot, true)
+    if not object then return false, restoreError end
+    if not InventoryService.TakeFromSlot(slot, item, 1, encoded) then
+        object:Destroy()
+        return false, "This building is no longer in the warehouse"
+    end
+    object.Parent = plot.PlacedObjects
+    Journal.Update(player)
+    return true, "Building placed"
+end
+
 function PlacementService.placeItem(player, itemName, position, rotation, area, index, expected)
     local plot, reason = ownedPlot(player)
     if not plot then return false, reason end
@@ -54,8 +95,6 @@ function PlacementService.placeItem(player, itemName, position, rotation, area, 
     if not definition or definition.Placeable ~= true or not template then
         return false, "Missing placeable definition or model"
     end
-
-    if not Journal.CanBuild(player, itemName) then return false, "This building requires a higher farm level" end
 
     local placedObjects = plot:FindFirstChild("PlacedObjects")
 
@@ -69,6 +108,11 @@ function PlacementService.placeItem(player, itemName, position, rotation, area, 
     end
     local slot = Catalog.Resolve(player, itemName, area, index, expected)
     if not slot then return false, "This item is no longer available" end
+    local data = slot:GetAttribute("ObjectData")
+    local stored = area == "StorageInventory" and Catalog.StoredBuilding(itemName, data)
+    if stored then return restoreStored(player, plot, slot, stored, data, position, rotation) end
+    if data and not definition.InstanceItem then return false, "Invalid stored building" end
+    if not Journal.CanBuild(player, itemName) then return false, "This building requires a higher farm level" end
 
     local pivot, valid, reason = PlacementRules.getPlacement(plot, position, template, rotation)
 
@@ -102,7 +146,6 @@ function PlacementService.placeItem(player, itemName, position, rotation, area, 
 
     placedModel:PivotTo(pivot)
 
-    local data = slot:GetAttribute("ObjectData")
     if definition.InstanceItem then
         local prepared, message = CoopUpgradeService.Prepare(placedModel, itemName, data)
         if not prepared then placedModel:Destroy(); return false, message end

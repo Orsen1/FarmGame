@@ -56,7 +56,7 @@ function ProductionDataService.GetReturns(object)
     return rows
 end
 
-function ProductionDataService.loadData(object, savedObject)
+function ProductionDataService.loadData(object, savedObject, fromStorage)
     if not Jobs.Validate(object, savedObject.Production) then return false, "Invalid saved production" end
     local outputInventory = object:FindFirstChild("OutputInventory")
 
@@ -98,7 +98,7 @@ function ProductionDataService.loadData(object, savedObject)
     object:SetAttribute("ProductionStartedAt", nil)
     object:SetAttribute("ProductionDuration", nil)
     object:SetAttribute("ProductionAngle", 0)
-    Jobs.Load(object, savedObject.Production)
+    Jobs.Load(object, savedObject.Production, fromStorage)
 
     return true
 end

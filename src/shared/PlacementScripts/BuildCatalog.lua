@@ -1,3 +1,4 @@
+local HttpService = game:GetService("HttpService")
 local definitions = require(script.Parent.Parent.Configs.ItemDefinitions)
 local Catalog = {}
 local areas = {"Inventory", "StorageInventory"}
@@ -6,6 +7,13 @@ local function available(player, area)
     if area == "Inventory" or area == "StorageInventory" and player:GetAttribute("WarehouseReady") then
         return player:FindFirstChild(area)
     end
+end
+
+function Catalog.StoredBuilding(item, encoded)
+    if typeof(encoded) ~= "string" then return end
+    local ok, data = pcall(HttpService.JSONDecode, HttpService, encoded)
+    if ok and typeof(data) == "table" and data.StoredBuildingVersion == 1 and data.ItemName == item and
+        typeof(data.BuildingId) == "string" and #data.BuildingId > 0 then return data end
 end
 
 function Catalog.Entries(player)
@@ -25,8 +33,11 @@ function Catalog.Entries(player)
             if entry then
                 entry.Amount += amount.Value
             else
+                local stored = area == "StorageInventory" and Catalog.StoredBuilding(item, data)
                 entry = {Item = item, Amount = amount.Value, Area = area, Index = index, Data = data,
-                    Kind = data and "Relocation" or "Stack", Key = data and area .. ":" .. index or item}
+                    Kind = stored and "StoredBuilding" or data and "Relocation" or "Stack",
+                    Key = stored and stored.BuildingId or data and area .. ":" .. index or item,
+                    BedLevel = stored and stored.BedLevel or nil, ConstructionStage = stored and stored.ConstructionStage or nil}
                 table.insert(entries, entry)
                 if not data then stacks[item] = entry end
             end

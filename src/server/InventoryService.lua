@@ -78,7 +78,7 @@ function InventoryService.IsValidObjectRow(row)
     local definition = ItemDefinitions[row.ItemName]
     if not definition or not isValidAmount(row.Amount) then return false end
     if row.ObjectData ~= nil then
-        return (definition.InstanceItem == true or definition.Type == "Animal") and row.Amount == 1 and row.PaidLots == nil and
+        return (definition.Placeable == true or definition.Type == "Animal") and row.Amount == 1 and row.PaidLots == nil and
             typeof(row.ObjectData) == "string" and #row.ObjectData > 0 and #row.ObjectData <= 32768
     end
     return definition.InstanceItem ~= true and (row.PaidLots == nil or

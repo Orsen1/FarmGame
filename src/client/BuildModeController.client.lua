@@ -50,7 +50,9 @@ local panHint = View.text("TextLabel",zoom,"PanHint","Drag to pan",13,View.Paper
 panHint.Position,panHint.Size = UDim2.fromOffset(102,3),UDim2.fromOffset(90,38)
 local moveHint = View.text("TextLabel", gui, "MoveHint", "", 14, View.Paper)
 moveHint.AnchorPoint, moveHint.Position = Vector2.new(.5, 1), UDim2.new(.5, 0, 1, -8)
-moveHint.Size, moveHint.Visible = UDim2.fromOffset(245, 34), false
+moveHint.Size, moveHint.Visible, moveHint.TextWrapped = UDim2.fromOffset(245, 36), false, true
+local storeButton = View.text("TextButton", gui, "StoreBuilding", "Store in Warehouse", 15, View.Gold)
+storeButton.AnchorPoint, storeButton.Visible, storeButton.TextWrapped = Vector2.new(.5,1), false, true
 local session
 for index, sign in ipairs({"+","−"}) do
     local b = View.text("TextButton",zoom,"Zoom"..index,sign,23,View.Paper)
@@ -83,6 +85,12 @@ local function layout()
     panHint.Visible = size.X-width > 213
     if not session then panel.Position = UDim2.new(1,-6,0,6) end
     heading.TextSize = width < 180 and 16 or 20
+    local space = size.X - width - 6
+    local actionWidth = math.clamp(space - 12, 0, 245)
+    storeButton.Size = UDim2.fromOffset(actionWidth, 44)
+    storeButton.Position = UDim2.fromOffset(space / 2, size.Y - 8)
+    moveHint.Size = UDim2.fromOffset(actionWidth, 42)
+    moveHint.Position = UDim2.fromOffset(space / 2, size.Y - (storeButton.Visible and 56 or 8))
 end
 
 local function visibility()
@@ -91,18 +99,28 @@ end
 
 local function selection(message)
     local key = Placement.selection()
-    moveHint.Visible = session ~= nil and key == nil
-    local failure = typeof(message) == "string" and message or nil
-    moveHint.Text = failure or "Drag a building to move it"
-    moveHint.TextColor3 = failure and View.Red or View.Ink
-    if not session then return end
-    if failure then
-        local current = session
-        task.delay(1.8, function()
-            if session == current and moveHint.Text == failure then selection() end
+    local s = session
+    if not s then return end
+    if typeof(message) == "string" then
+        local notice = {Text = message}
+        s.Notice = notice
+        task.delay(3, function()
+            if session == s and s.Notice == notice then s.Notice = nil; selection() end
         end)
     end
-    for id, row in pairs(session.Rows) do
+    local selected = s.Selected
+    if selected and not Rules.movableItem(s.Plot, selected, player.UserId) then s.Selected, selected = nil, nil end
+    local item = selected and (selected:GetAttribute("ItemName") or selected.Name)
+    s.Highlight.Adornee = selected
+    s.Highlight.Enabled = selected ~= nil and key == nil
+    moveHint.Visible = key == nil
+    storeButton.Visible = selected ~= nil and key == nil
+    storeButton.Interactable = not s.Storing
+    storeButton.Text = s.Storing and "Storing…" or "Store in Warehouse"
+    moveHint.Text = s.Notice and s.Notice.Text or item and definitions[item].DisplayName or "Tap to select · Drag to move"
+    moveHint.TextColor3 = s.Notice and View.Red or View.Ink
+    layout()
+    for id, row in pairs(s.Rows) do
         row.BackgroundColor3 = key == id and Color3.fromRGB(202,225,166) or Color3.fromRGB(247,221,166)
     end
 end
@@ -115,9 +133,16 @@ local function startMove(point)
     local ray = camera:ViewportPointToRay(point.X, point.Y)
     local hit = workspace:Raycast(ray.Origin, ray.Direction * 1400, session.PickParams)
     local object = hit and hit.Instance
-    if not object or not object:IsDescendantOf(placed) then return end
-    while object.Parent ~= placed do object = object.Parent end
-    return Placement.startMove(object, session.Plot, point)
+    if object and object:IsDescendantOf(placed) then
+        while object.Parent ~= placed do object = object.Parent end
+        if Rules.movableItem(session.Plot, object, player.UserId) then
+            session.Selected, session.Notice = object, nil
+            local started = Placement.startMove(object, session.Plot, point)
+            selection()
+            return started
+        end
+    end
+    if not session.Storing then session.Selected, session.Notice = nil, nil; selection() end
 end
 
 local function refresh()
@@ -139,10 +164,15 @@ local function refresh()
         local name = View.text("TextLabel",row,"ItemName",definition.DisplayName,14)
         name.Position,name.Size,name.TextWrapped = UDim2.fromOffset(46,2),UDim2.new(1,-49,0,34),true
         name.TextXAlignment = Enum.TextXAlignment.Left
-        local detail = entry.Kind == "Relocation" and ("Packed · "..(entry.Area == "Inventory" and "Bag " or "Store ")..entry.Index)
+        local level = entry.BedLevel or Rules.Levels(entry.Item)
+        local detail = entry.Kind == "StoredBuilding" and ("Stored · Lv." .. level ..
+            (entry.ConstructionStage and (" · Stage " .. (entry.ConstructionStage + 1)) or ""))
+            or entry.Kind == "Relocation" and ("Packed · "..(entry.Area == "Inventory" and "Bag " or "Store ")..entry.Index)
             or ("×"..entry.Amount.." owned")
         local count = View.text("TextLabel",row,"Amount",detail,12)
         count.Position,count.Size,count.TextXAlignment = UDim2.fromOffset(46,36),UDim2.new(1,-47,0,21),Enum.TextXAlignment.Left
+        count.TextWrapped = true
+        if entry.Kind == "StoredBuilding" then count.Position, count.Size = UDim2.fromOffset(46,32), UDim2.new(1,-47,0,25) end
         row.Activated:Connect(function() Placement.startPlacement(entry.Item,nil,entry) end)
     end
     selection()
@@ -159,7 +189,7 @@ local function close()
     s.Grid:Destroy()
     for _,row in pairs(s.Rows) do row:Destroy() end
     panel.Visible,zoom.Visible = false,false
-    moveHint.Visible = false
+    moveHint.Visible,storeButton.Visible = false,false
     Prompts.Enabled = s.Prompts
     for element,enabled in pairs(s.Hidden) do if element.Parent then element.Enabled = enabled end end
     player:SetAttribute("BuildMode",false)
@@ -178,6 +208,8 @@ local function open()
     s.PickParams.FilterType = Enum.RaycastFilterType.Include
     s.PickParams.FilterDescendantsInstances = {placed}
     s.Grid.Name,s.Grid.Parent = "BuildPlotGrid",workspace
+    s.Highlight = View.make("Highlight", s.Grid, {Enabled = false, FillTransparency = 1, OutlineColor = View.Gold,
+        DepthMode = Enum.HighlightDepthMode.Occluded})
     session = s
     player:SetAttribute("BuildMode",true)
     Prompts.Enabled = false
@@ -227,6 +259,7 @@ local function open()
         if section:GetAttribute("Unlocked") then grid(section.Ground)
         else on(section:GetAttributeChangedSignal("Unlocked"),function() if section:GetAttribute("Unlocked") then grid(section.Ground) end end) end
     end
+    on(placed.ChildRemoved,queue)
     on(player:GetAttributeChangedSignal("WarehouseReady"),queue)
     on(plot:GetAttributeChangedSignal("OwnerUserId"),close)
     on(plot.AncestryChanged,close)
@@ -234,6 +267,19 @@ local function open()
     on(workspace:GetPropertyChangedSignal("CurrentCamera"),close)
     refresh()
 end
+
+storeButton.Activated:Connect(function()
+    local s = session
+    if not s or not s.Selected or s.Storing then return end
+    s.Notice = nil
+    s.Storing = Placement.storeObject(s.Selected, function(success, message)
+        if session ~= s then return end
+        s.Storing = false
+        if success then s.Selected = nil end
+        selection(not success and message or nil)
+    end)
+    selection()
+end)
 
 launch.Activated:Connect(open)
 exit.Activated:Connect(close)

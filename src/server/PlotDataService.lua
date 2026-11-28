@@ -5,7 +5,6 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitFo
 
 local PlantDataService = require(ServerScriptService:WaitForChild("PlantDataService"))
 local ProductionDataService = require(ServerScriptService:WaitForChild("ProductionDataService"))
-local PlantService = require(ServerScriptService:WaitForChild("PlantService"))
 local PlacementModels = require(ReplicatedStorage:WaitForChild("PlacementScripts"):WaitForChild("PlacementModels"))
 local ConstructionService = require(ServerScriptService:WaitForChild("ConstructionService"))
 local AnimalService = require(ServerScriptService:WaitForChild("AnimalService"))
@@ -16,24 +15,31 @@ local BedLayout = require(ReplicatedStorage.PlacementScripts.GardenBedLayout)
 local StarterHouseLayout = require(ReplicatedStorage.PlacementScripts.StarterHouseLayout)
 local houseConfig = require(ReplicatedStorage.Configs.StarterHouseConfig)
 
-local models = ReplicatedStorage:WaitForChild("PlaceableModels")
-local plants = ReplicatedStorage:WaitForChild("Plants")
 local plots = workspace:WaitForChild("Plots")
 
 local PlotDataService = {}
 
-local function savedPlacement(savedObject)
+function PlotDataService.getTemplate(savedObject)
     if typeof(savedObject) ~= "table" or typeof(savedObject.ItemName) ~= "string" then
-        return nil, nil, "Invalid saved object"
+        return nil, "Invalid saved object"
     end
     local definition = ItemDefinitions[savedObject.ItemName]
     local template = PlacementModels.getTemplate(savedObject.ItemName, savedObject.ConstructionStage)
     if not definition or not definition.Placeable or not template or not template:IsA("Model") then
-        return nil, nil, "Missing definition or model: " .. savedObject.ItemName
+        return nil, "Missing definition or model: " .. savedObject.ItemName
     end
     if savedObject.BedLevel ~= nil and not BedConfig.ValidLevel(savedObject.ItemName, savedObject.BedLevel) then
-        return nil, nil, "Invalid saved garden bed level"
+        return nil, "Invalid saved garden bed level"
     end
+    if savedObject.BuildingId ~= nil and (typeof(savedObject.BuildingId) ~= "string" or #savedObject.BuildingId == 0) then
+        return nil, "Invalid saved building identity"
+    end
+    return template
+end
+
+local function savedPlacement(savedObject)
+    local template, reason = PlotDataService.getTemplate(savedObject)
+    if not template then return nil, nil, reason end
     local pivot = savedObject.Pivot
     if typeof(pivot) ~= "table" or #pivot ~= 12 then return nil, nil, "Invalid saved pivot" end
     for index = 1, 12 do
@@ -114,70 +120,77 @@ function PlotDataService.getData(player)
     local result = {}
 
     for _, object in ipairs(objects:GetChildren()) do
-        local itemName = object:GetAttribute("ItemName") or object.Name
-        local definition = ItemDefinitions[itemName]
+        local snapshot, reason = PlotDataService.snapshotObject(object)
+        if not snapshot then return nil, reason end
+        snapshot.Pivot = {ground.CFrame:ToObjectSpace(object:GetPivot()):GetComponents()}
+        table.insert(result, snapshot)
+    end
+    return result
+end
 
-        if not object:IsA("Model") or not definition or definition.Placeable ~= true then
-            return nil, "Unknown placed object: " .. object.Name
-        end
+function PlotDataService.snapshotObject(object)
+    local itemName = object:GetAttribute("ItemName") or object.Name
+    local definition = ItemDefinitions[itemName]
 
-        local relativePivot = ground.CFrame:ToObjectSpace(object:GetPivot())
-
-        local savedObject = {
-            ItemName = itemName,
-            Pivot = {relativePivot:GetComponents()},
-            PurchaseCents = object:GetAttribute("PurchaseCents"),
-            BedLevel = object:GetAttribute("BedLevel")
-        }
-        if savedObject.PurchaseCents ~= nil and not InventoryService.IsPurchaseCost(savedObject.PurchaseCents) then
-            return nil, "Invalid placed purchase cost"
-        end
-
-        if savedObject.BedLevel ~= nil and not BedConfig.ValidLevel(itemName, savedObject.BedLevel) then
-            return nil, "Invalid garden bed level"
-        end
-        savedObject.Plant = PlantDataService.getData(object)
-
-        if definition.Recipes then
-            local outputData, outputError, production = ProductionDataService.getData(object)
-            if not outputData then
-                return nil, outputError
-            end
-            savedObject.OutputInventory = outputData
-            savedObject.Production = production
-        end
-
-        if definition.BuildsInto then
-            local stage = object:GetAttribute("ConstructionStage")
-            if stage == nil then
-                stage = 0
-            end
-            if not PlacementModels.getTemplate(itemName, stage) then
-                return nil, "Invalid construction stage in " .. itemName
-            end
-            local deposits, reason = ConstructionService.getData(object)
-            if not deposits then
-                return nil, reason
-            end
-            savedObject.ConstructionStage = stage
-            if next(deposits) then
-                savedObject.ConstructionDeposits = deposits
-            end
-        end
-
-        if AnimalConfig.Coops[itemName] then
-            local contents, reason = AnimalService.Snapshot(object)
-            if not contents then return nil, reason end
-            savedObject.Animals = contents.Animals
-            savedObject.AnimalFeedStock = contents.FeedStock
-            local outputItem = AnimalConfig.Coops[itemName].EggItem
-            savedObject.OutputInventory = outputItem and {[outputItem] = contents.Eggs} or {}
-        end
-
-        table.insert(result, savedObject)
+    if not object:IsA("Model") or not definition or definition.Placeable ~= true then
+        return nil, "Unknown placed object: " .. object.Name
     end
 
-    return result
+    local savedObject = {
+        ItemName = itemName,
+        PurchaseCents = object:GetAttribute("PurchaseCents"),
+        BedLevel = object:GetAttribute("BedLevel"),
+        BuildingId = object:GetAttribute("BuildingId")
+    }
+    if savedObject.PurchaseCents ~= nil and not InventoryService.IsPurchaseCost(savedObject.PurchaseCents) then
+        return nil, "Invalid placed purchase cost"
+    end
+
+    if savedObject.BedLevel ~= nil and not BedConfig.ValidLevel(itemName, savedObject.BedLevel) then
+        return nil, "Invalid garden bed level"
+    end
+    savedObject.Plant = PlantDataService.getData(object)
+    if definition.Plantable and object:GetAttribute("Occupied") and not savedObject.Plant then
+        return nil, "Plant progress is unavailable"
+    end
+
+    if definition.Recipes then
+        local outputData, outputError, production = ProductionDataService.getData(object)
+        if not outputData then
+            return nil, outputError
+        end
+        savedObject.OutputInventory = outputData
+        savedObject.Production = production
+    end
+
+    if definition.BuildsInto then
+        local stage = object:GetAttribute("ConstructionStage")
+        if stage == nil then
+            stage = 0
+        end
+        if not PlacementModels.getTemplate(itemName, stage) then
+            return nil, "Invalid construction stage in " .. itemName
+        end
+        local deposits, reason = ConstructionService.getData(object)
+        if not deposits then
+            return nil, reason
+        end
+        savedObject.ConstructionStage = stage
+        if next(deposits) then
+            savedObject.ConstructionDeposits = deposits
+        end
+    end
+
+    if AnimalConfig.Coops[itemName] then
+        local contents, reason = AnimalService.Snapshot(object)
+        if not contents then return nil, reason end
+        savedObject.Animals = contents.Animals
+        savedObject.AnimalFeedStock = contents.FeedStock
+        local outputItem = AnimalConfig.Coops[itemName].EggItem
+        savedObject.OutputInventory = outputItem and {[outputItem] = contents.Eggs} or {}
+    end
+
+    return savedObject
 end
 
 function PlotDataService.loadData(player, savedObjects)
@@ -194,70 +207,75 @@ function PlotDataService.loadData(player, savedObjects)
     end
 
     for _, savedObject in ipairs(savedObjects) do
-        local template, pivot, placementError = savedPlacement(savedObject)
-        if not template then return false, placementError end
-        if savedObject.PurchaseCents ~= nil and not InventoryService.IsPurchaseCost(savedObject.PurchaseCents) then
-            return false, "Invalid saved purchase cost"
-        end
-        local definition = ItemDefinitions[savedObject.ItemName]
-
-        local object = template:Clone()
-
-        object:SetAttribute("OwnerUserId", player.UserId)
-        object:SetAttribute("ItemName", savedObject.ItemName)
-        object:SetAttribute("PurchaseCents", savedObject.PurchaseCents)
-
-        object.Name = savedObject.ItemName
-
-        if definition.BuildsInto then
-            local stage = savedObject.ConstructionStage
-            if stage == nil then
-                stage = 0
-            end
-            object:SetAttribute("ConstructionStage", stage)
-            local success, reason = ConstructionService.loadData(object, savedObject.ConstructionDeposits)
-            if not success then
-                object:Destroy()
-                return false, reason
-            end
-        end
-
-        if definition.Recipes or AnimalConfig.Coops[savedObject.ItemName] then
-            local success, errorMessage = ProductionDataService.loadData(object, savedObject)
-            if not success then
-                object:Destroy()
-                return false, errorMessage
-            end
-        end
-
-        if AnimalConfig.Coops[savedObject.ItemName] then
-            local success, reason = AnimalService.loadData(object, savedObject.Animals, savedObject.AnimalFeedStock)
-            if not success then object:Destroy();return false, reason end
-        end
-
-        for _, part in ipairs(object:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.Anchored = true
-                part.CanQuery = true
-            end
-        end
-
-        object:PivotTo(ground.CFrame * pivot)
-        if savedObject.BedLevel and savedObject.BedLevel > 1 then
-            BedLayout.Expand(object, savedObject.ItemName, savedObject.BedLevel)
-        end
+        local template, pivot, reason = savedPlacement(savedObject)
+        if not template then return false, reason end
+        local object, restoreError = PlotDataService.restoreObject(player, savedObject, template, ground.CFrame * pivot)
+        if not object then return false, restoreError end
         object.Parent = objects
+    end
+    return true
+end
 
-        if definition.Plantable then
-            local isValid, errorMessage = PlantDataService.loadData(template, object, savedObject)
-            if not isValid then
-                object:Destroy()
-                return false, errorMessage
-            end
+function PlotDataService.restoreObject(player, savedObject, template, pivot, fromStorage)
+    if savedObject.PurchaseCents ~= nil and not InventoryService.IsPurchaseCost(savedObject.PurchaseCents) then
+        return nil, "Invalid saved purchase cost"
+    end
+    local definition = ItemDefinitions[savedObject.ItemName]
+
+    local object = template:Clone()
+
+    object:SetAttribute("OwnerUserId", player.UserId)
+    object:SetAttribute("ItemName", savedObject.ItemName)
+    object:SetAttribute("PurchaseCents", savedObject.PurchaseCents)
+    object:SetAttribute("BuildingId", savedObject.BuildingId)
+
+    object.Name = savedObject.ItemName
+
+    if definition.BuildsInto then
+        local stage = savedObject.ConstructionStage
+        if stage == nil then
+            stage = 0
+        end
+        object:SetAttribute("ConstructionStage", stage)
+        local success, reason = ConstructionService.loadData(object, savedObject.ConstructionDeposits)
+        if not success then
+            object:Destroy()
+            return nil, reason
         end
     end
 
-    return true
+    if definition.Recipes or AnimalConfig.Coops[savedObject.ItemName] then
+        local success, errorMessage = ProductionDataService.loadData(object, savedObject, fromStorage)
+        if not success then
+            object:Destroy()
+            return nil, errorMessage
+        end
+    end
+
+    if AnimalConfig.Coops[savedObject.ItemName] then
+        local success, reason = AnimalService.loadData(object, savedObject.Animals, savedObject.AnimalFeedStock)
+        if not success then object:Destroy();return nil, reason end
+    end
+
+    for _, part in ipairs(object:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Anchored = true
+            part.CanQuery = true
+        end
+    end
+
+    object:PivotTo(pivot)
+    if savedObject.BedLevel and savedObject.BedLevel > 1 then
+        BedLayout.Expand(object, savedObject.ItemName, savedObject.BedLevel)
+    end
+    if definition.Plantable then
+        local isValid, errorMessage = PlantDataService.loadData(template, object, savedObject)
+        if not isValid then
+            object:Destroy()
+            return nil, errorMessage
+        end
+    end
+    return object
 end
 
 return PlotDataService

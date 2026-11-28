@@ -6,6 +6,7 @@ local InventoryService = require(script.Parent:WaitForChild("InventoryService"))
 local MoneyService = require(script.Parent.MoneyService)
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("Configs"):WaitForChild("ItemDefinitions"))
 local PlacementModels = require(ReplicatedStorage.PlacementScripts.PlacementModels)
+local Catalog = require(ReplicatedStorage.PlacementScripts.BuildCatalog)
 local ConstructionService = require(script.Parent.ConstructionService)
 local WarehouseSite = require(script.Parent.WarehouseSite)
 local stages = require(ReplicatedStorage.Configs.ConstructionDefinitions).WarehouseBlueprint.Stages
@@ -200,6 +201,18 @@ function StorageService.BuyBlueprint(player, prompt)
     return true
 end
 
+function StorageService.StoreBuilding(player, plot, row)
+    local warehouse = WarehouseSite.GetBuilding(plot)
+    if not warehouse or not warehouseReady(warehouse) or warehouse:GetAttribute("OwnerUserId") ~= player.UserId then
+        return false, "Finish building your warehouse first."
+    end
+    local folder = player:FindFirstChild("StorageInventory")
+    if InventoryService.ReceiveRow(folder, pageSize, row, 1) ~= 1 then
+        return false, "Free a warehouse slot first."
+    end
+    return true
+end
+
 function StorageService.MoveSlot(player, sessionId, fromArea, toArea, fromIndex, toIndex, expectedFrom, expectedTo)
     local session = sessions[player]
     if (fromArea ~= "Player" and fromArea ~= "Storage") or (toArea ~= "Player" and toArea ~= "Storage") or not session or
@@ -214,6 +227,15 @@ function StorageService.MoveSlot(player, sessionId, fromArea, toArea, fromIndex,
     local toFolder = toArea == "Storage" and folder or player:FindFirstChild("Inventory")
     local fromCount = fromArea == "Storage" and pageSize or 6
     local toCount = toArea == "Storage" and pageSize or 6
+    if fromArea ~= toArea then
+        local index = fromArea == "Storage" and fromIndex or toIndex
+        local slot = isInteger(index, 1, pageSize) and folder:FindFirstChild("Slot" .. index)
+        if slot and Catalog.StoredBuilding(slot.ItemName.Value, slot:GetAttribute("ObjectData")) then
+            local message = "Place stored buildings from the Build catalog."
+            storageEvent:FireClient(player, "MoveNotice", session.Id, message)
+            return false, message
+        end
+    end
     if toIndex == "FirstFree" and fromArea ~= toArea then
         local moved, reason = InventoryService.MoveToFirstFreeSlot(fromFolder, fromCount, toFolder, toCount,
             fromIndex, expectedFrom)

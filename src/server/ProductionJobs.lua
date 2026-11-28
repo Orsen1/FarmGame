@@ -94,14 +94,15 @@ function Jobs.GetData(object)
     return data
 end
 
-function Jobs.Load(object, saved)
+function Jobs.Load(object, saved, fromStorage)
     active[object] = nil
     local item = definition(object)
     if not item or not item.AutomaticProduction then return end
     if item.MilkTank then object:SetAttribute("MilkStock", saved and saved.MilkStock or 0) end
     if saved and saved.Job then
         local job = saved.Job
-        local remaining = math.max(0, job.Remaining - math.max(0, os.time() - job.SavedAt))
+        local elapsed = fromStorage and 0 or math.max(0, os.time() - job.SavedAt)
+        local remaining = math.max(0, job.Remaining - elapsed)
         Jobs.Start(object, job.RecipeId, remaining)
         Jobs.Advance(object)
     end

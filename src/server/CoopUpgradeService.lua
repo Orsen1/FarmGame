@@ -22,7 +22,7 @@ function CoopUpgradeService.Pack(player, object, upgradeItemName)
     local exchanged, errorMessage = InventoryService.ExchangeForObject(player, itemName, definition.PacksInto, function(paid)
         if not InventoryService.IsPurchaseCost(previous + paid) then return nil end
         return HttpService:JSONEncode({Version = 1, ItemName = definition.PacksInto, Contents = contents,
-            PurchaseCents = previous + paid})
+            PurchaseCents = previous + paid, BuildingId = object:GetAttribute("BuildingId")})
     end)
     if not exchanged then return false, errorMessage end
     object:Destroy()
@@ -45,6 +45,7 @@ function CoopUpgradeService.Prepare(object, itemName, encoded)
     local restored, reason = AnimalService.Restore(object, data.Contents, math.max(0, now - captured))
     if not restored then return false, reason end
     object:SetAttribute("PurchaseCents", data.PurchaseCents)
+    object:SetAttribute("BuildingId", data.BuildingId)
     return true
 end
 
